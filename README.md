@@ -33,7 +33,7 @@ Angular.js の開発者ガイドラインに書いてあるルールに従う。
 - OK: `🐛 メールアドレス認証のバグ修正`
 - NG: `🐛 メールアドレス認証のバグ修正。`
 
-https://github.com/angular/angular.js/blob/master/DEVELOPERS.md#type
+<https://github.com/angular/angular.js/blob/master/DEVELOPERS.md#type>
 
 > feat: 機能追加
 > fix: バグ修正
