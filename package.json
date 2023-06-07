@@ -8,11 +8,19 @@
     "start": "next start",
     "lint": "next lint",
     "format": "prettier --write .",
-    "preinstall": "npx only-allow pnpm"
+    "preinstall": "npx only-allow pnpm",
+    "start-local-db": "pnpx supabase start --workdir src",
+    "stop-local-db": "pnpx supabase stop --workdir src",
+    "status-local-db": "pnpx supabase status --workdir src",
+    "prisma-migrate": "pnpx prisma migrate dev",
+    "supabase-types": "pnpx supabase gen --workdir src types typescript --local --schema public > src/types/SupabaseTypes.ts",
+    "migrate-and-gen": "pnpm run prisma-migrate && pnpm run supabase-types"
   },
   "dependencies": {
+    "@prisma/client": "4.15.0",
     "@radix-ui/react-label": "^2.0.2",
     "@radix-ui/react-slot": "^1.0.2",
+    "@supabase/supabase-js": "^2.24.0",
     "@types/node": "20.2.5",
     "@types/react": "18.2.8",
     "@types/react-dom": "18.2.4",
@@ -37,6 +45,10 @@
     "@typescript-eslint/parser": "^5.59.8",
     "eslint-config-prettier": "^8.8.0",
     "prettier": "^2.8.8",
-    "prettier-plugin-tailwindcss": "^0.3.0"
+    "prettier-plugin-tailwindcss": "^0.3.0",
+    "prisma": "4.15.0"
+  },
+  "prisma": {
+    "schema": "src/prisma/schema.prisma"
   }
 }
