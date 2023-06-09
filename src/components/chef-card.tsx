@@ -12,7 +12,7 @@ export const ChefCard = (props: Props) => {
   return (
     <div className="w-36 h-56 relative">
       <Link href={routingUrl}>
-        <img className="w-full h-full" src={imageUrl} alt="chef" />
+        <img className="w-full h-full rounded-md" src={imageUrl} alt="chef" />
         <p className="text-xl text-slate-100 font-semibold absolute left-3 bottom-3">{imageText}</p>
       </Link>
     </div>
