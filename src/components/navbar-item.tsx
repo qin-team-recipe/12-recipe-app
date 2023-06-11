@@ -4,14 +4,14 @@ import { LucideIcon } from "lucide-react";
 
 import { cn } from "../lib/utils";
 
-interface SidebarItemProps {
+type Props = {
   icon: LucideIcon;
   label: string;
   active?: boolean;
   href: string;
-}
+};
 
-const NavbarItem: React.FC<SidebarItemProps> = ({ icon: Icon, label, active, href }) => {
+const NavbarItem: React.FC<Props> = ({ icon: Icon, label, active, href }) => {
   return (
     <Link
       href={href}
