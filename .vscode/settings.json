@@ -1,3 +1,15 @@
 {
-  "cSpell.words": ["callees", "clsx", "gitmoji", "ianvs", "lucide", "preinstall", "tailwindcss"]
+  "cSpell.words": [
+    "callees",
+    "clsx",
+    "gitmoji",
+    "ianvs",
+    "lucide",
+    "nextjs",
+    "pnpx",
+    "preinstall",
+    "SUPABASE",
+    "tailwindcss",
+    "workdir"
+  ]
 }
