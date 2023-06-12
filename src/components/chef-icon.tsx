@@ -6,7 +6,7 @@ type Props = {
   chefName: string;
 };
 
-export const FavChef = ({ routingUrl, imageUrl, chefName }: Props) => {
+export const ChefIcon = ({ routingUrl, imageUrl, chefName }: Props) => {
   return (
     <div className="relative">
       <Link href={routingUrl} className="inline-block rounded-full h-[68px] w-[68px] overflow-hidden">
