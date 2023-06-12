@@ -19,8 +19,6 @@ const page = () => {
           recipeName={"レシピ名レシピ名レシピ名レシピ名レシピ名レシピ名レシピ名レシピ名レシピ名"}
           comment={"コメントコメントコメントコメントコメントコメントコメントコメントコメントコメント"}
           recipeId={1}
-          imageHeight="h-40"
-          textWidth="w-40"
           favorites={2}
         />
       </div>
