@@ -20,7 +20,7 @@ export const metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="ja">
       <body className={inter.className}>
         <div className="flex h-full max-w-6xl mx-auto">
           <SideNavbar />
