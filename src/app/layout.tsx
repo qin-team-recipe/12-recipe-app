@@ -6,6 +6,7 @@ import { Inter } from "next/font/google";
 
 import BottomNavbar from "../components/bottom-navbar";
 import SideNavbar from "../components/side-navbar";
+import { Separator } from "../components/ui/separator";
 import { Toaster } from "../components/ui/toaster";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -22,9 +23,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="ja">
       <body className={inter.className}>
-        <div className="flex h-full max-w-6xl mx-auto">
+        <div className="flex h-full md:max-w-6xl mx-auto">
           <SideNavbar />
-          <main className="flex-1 overflow-y-auto py-2 md:py-4 mb-20 md:mb-0">{children}</main>
+          <Separator className="w-[1px] h-screen hidden md:block" />
+          <main className="flex-1 overflow-y-auto mb-20 md:mb-0">{children}</main>
+          <Separator className="w-[1px] h-screen hidden md:block" />
         </div>
         <BottomNavbar />
         <Toaster />

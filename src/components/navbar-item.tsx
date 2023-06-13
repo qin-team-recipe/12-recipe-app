@@ -22,7 +22,8 @@ const NavbarItem: React.FC<Props> = ({ icon: Icon, label, active, href }) => {
         md:flex-row 
         h-auto 
         items-center 
-        w-full
+        w-24
+        md:w-auto
         gap-x-4 
         text-md 
         font-medium
@@ -37,7 +38,7 @@ const NavbarItem: React.FC<Props> = ({ icon: Icon, label, active, href }) => {
       )}
     >
       <Icon size={24} />
-      <p className="truncate w-100 text-lg md:text-2lg">{label}</p>
+      <p className={cn(`truncate w-100 text-base md:text-lg`, active && "font-bold")}>{label}</p>
     </Link>
   );
 };
