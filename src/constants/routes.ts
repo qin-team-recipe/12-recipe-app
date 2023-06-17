@@ -14,6 +14,6 @@ export const sideBarRoutes = (pathname: string) => [
 
 export const bottomBarRoutes = (pathname: string) => [
   { href: "/", label: "検索", icon: Search, active: pathname === "/" || pathname.includes(searchBasePath) },
-  { href: "/favorite", label: "お気に入り", icon: Heart, active: pathname === favoriteBasePath },
-  { href: "/shopping", label: "お買い物", icon: ShoppingCart, active: pathname === shoppingBasePath },
+  { href: favoriteBasePath, label: "お気に入り", icon: Heart, active: pathname === favoriteBasePath },
+  { href: shoppingBasePath, label: "お買い物", icon: ShoppingCart, active: pathname === shoppingBasePath },
 ];
