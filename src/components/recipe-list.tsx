@@ -7,7 +7,7 @@ type Props = {
 // レシピリスト
 export const RecipeListItem = ({ recipeText, annotation, orderNum }: Props) => {
   return (
-    <div className="flex px-[12px] py-[8px]">
+    <div className="flex px-[12px] py-[8px] border-b-[1px]">
       <div className="mr-[8px]">
         <span className="flex justify-center w-[18px] h-[18px] rounded-full bg-[#CA3214] text-white text-[12px]">{orderNum}</span>
       </div>
