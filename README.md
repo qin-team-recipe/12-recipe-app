@@ -19,3 +19,4 @@ pnpm dev
 - [Git 開発ルール](src/_documents/git_development_rule.md)
 - [コード規約](src/_documents/coding_guideline.md)
 - [globals.css の設定](src/_documents/globals_css.md)
+- [ディレクトリ構成](src/_documents/directory_structure.md)
