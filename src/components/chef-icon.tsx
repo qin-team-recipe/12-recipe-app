@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Avatar, AvatarImage } from "./ui/avatar";
 
 type Props = {
   routingUrl: string;
@@ -9,11 +10,13 @@ type Props = {
 // お気に入りシェフアイコン
 export const ChefIcon = ({ routingUrl, imageUrl, chefName }: Props) => {
   return (
-    <div className="relative w-[68px] h-[87px]">
-      <Link href={routingUrl} className="inline-block rounded-full h-[68px] w-[68px] overflow-hidden">
-        <img src={imageUrl} alt="Icon" className="object-cover w-full h-full" />
+    <div className="flex flex-col items-center w-[68px]">
+      <Link href={routingUrl}>
+        <Avatar className="h-[68px] w-[68px]">
+          <AvatarImage src={imageUrl} alt={chefName} />
+        </Avatar>
       </Link>
-      <p className="text-[12px] text-black absolute left-[4px] bottom-[-12px] line-clamp-2 leading-[14px]">{chefName}</p>
+      <p className="text-base text-primary mt-1 line-clamp-2 leading-[14px] text-center">{chefName}</p>
     </div>
   );
 };
