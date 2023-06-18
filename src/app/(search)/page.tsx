@@ -1,5 +1,6 @@
 import { ChefCard } from "@/src/components/chef-card";
 import RecipeCard from "@/src/components/recipe-card";
+import { RecipeListItem } from "@/src/components/recipe-list";
 import { Button } from "@/src/components/ui/button";
 
 const page = () => {
@@ -22,6 +23,11 @@ const page = () => {
           favorites={2}
         />
       </div>
+      <RecipeListItem
+        recipeText="用意するメインの材料は、マカロニ、牛乳、鶏もも肉、玉ねぎ、椎茸で、バター、小麦粉、塩、こしょうも使用します。"
+        annotation="椎茸はなしでも作れますし、しめじやマッシュルームなどでも。きのこ系が入っていた方が食感と香りがよいので、ぜひ入れて作ってみてください。鶏肉等の代用については下記補足に。"
+        orderNum={1}
+      />
     </div>
   );
 };
