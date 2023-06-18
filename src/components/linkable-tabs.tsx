@@ -12,25 +12,28 @@ type Tab = {
   link: string;
 };
 
-interface Props {
+type Props = {
   tabs: Tab[];
   children: React.ReactNode;
-}
+};
 
 const LinkableTabs = ({ tabs, children }: Props) => {
   const pathname = usePathname();
 
-  const [activeTab, setActiveTab] = useState(() => {
+  const getActiveTab = (): string => {
     const currentTab = tabs.find((tab) => tab.link === pathname);
     return currentTab ? currentTab.value : tabs[0].value;
-  });
+  };
+
+  const [activeTab, setActiveTab] = useState(getActiveTab);
 
   useEffect(() => {
-    const currentTab = tabs.find((tab) => tab.link === pathname);
-    if (currentTab && currentTab.value !== activeTab) {
-      setActiveTab(currentTab.value);
+    const currentTabValue = getActiveTab();
+
+    if (currentTabValue !== activeTab) {
+      setActiveTab(currentTabValue);
     }
-  }, [pathname, activeTab]);
+  }, [pathname]);
 
   return (
     <Tabs value={activeTab} onValueChange={setActiveTab}>
@@ -39,12 +42,12 @@ const LinkableTabs = ({ tabs, children }: Props) => {
           <TabsTrigger
             key={tab.value}
             value={tab.value}
-            className={`flex-grow p-1 ${
+            className={`flex-grow ${
               activeTab === tab.value ? "border-b-2 border-black font-bold" : "border-b-2 border-border"
             }`}
           >
             <Link href={tab.link}>
-              <div className="text-base inline-block w-full py-2">{tab.label}</div>
+              <div className="text-base py-2">{tab.label}</div>
             </Link>
           </TabsTrigger>
         ))}
