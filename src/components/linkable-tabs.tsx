@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -26,14 +26,6 @@ const LinkableTabs = ({ tabs, children }: Props) => {
   };
 
   const [activeTab, setActiveTab] = useState(getActiveTab);
-
-  useEffect(() => {
-    const currentTabValue = getActiveTab();
-
-    if (currentTabValue !== activeTab) {
-      setActiveTab(currentTabValue);
-    }
-  }, [pathname]);
 
   return (
     <Tabs value={activeTab} onValueChange={setActiveTab}>
