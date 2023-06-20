@@ -4,8 +4,8 @@ import "./globals.css";
 
 import { Inter } from "next/font/google";
 
-import BottomNavbar from "../components/bottom-navbar";
-import SideNavbar from "../components/side-navbar";
+import BottomNavbar from "../components/layout/bottom-navbar";
+import SideNavbar from "../components/layout/side-navbar";
 import { Separator } from "../components/ui/separator";
 import { Toaster } from "../components/ui/toaster";
 
