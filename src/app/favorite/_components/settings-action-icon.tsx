@@ -5,7 +5,12 @@ import { Settings } from "lucide-react";
 const SettingsActionIcon = () => {
   return (
     <>
-      <Settings size={16} />
+      <Settings
+        size={16}
+        onClick={() => {
+          // TODO: 画面遷移
+        }}
+      />
     </>
   );
 };
