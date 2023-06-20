@@ -9,15 +9,15 @@ type Props = {
   name: string;
 };
 
-const AvatarName = ({ chefId, avatar, name }: Props) => {
+const ProfileLink = ({ chefId, avatar, name }: Props) => {
   return (
     <Link className="flex items-center gap-x-1 cursor-pointer hover:underline" href={`/chef/${chefId}`}>
-      <Avatar className="h-5 w-5 rounded-full">
-        <AvatarImage src={avatar} alt={avatar} />
+      <Avatar className="h-5 w-5">
+        <AvatarImage src={avatar} alt="profile" />
       </Avatar>
       <span>{name}</span>
     </Link>
   );
 };
 
-export default AvatarName;
+export default ProfileLink;

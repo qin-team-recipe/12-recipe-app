@@ -13,8 +13,10 @@ const DetailHeaderImage = ({ imageUrl }: Props) => {
   const router = useRouter();
   return (
     <div className="relative aspect-square">
-      <img className=" aspect-square" src={imageUrl} alt={imageUrl} />
-      <ArrowLeft className="absolute top-5 left-5 text-white cursor-pointer" size={32} onClick={() => router.back()} />
+      <img className="aspect-square" src={imageUrl} alt="chef or recipe image" />
+      <button className="absolute top-5 left-5 text-white cursor-pointer" onClick={() => router.back()}>
+        <ArrowLeft size={32} />
+      </button>
     </div>
   );
 };
