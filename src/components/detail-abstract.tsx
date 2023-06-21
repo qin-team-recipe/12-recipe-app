@@ -1,5 +1,3 @@
-import React from "react";
-
 type Props = {
   name: string; // シェフ名orレシピ名
   abstract: string; // 概要
@@ -8,8 +6,8 @@ type Props = {
 const DetailAbstract = ({ name, abstract }: Props) => {
   return (
     <div className="grid gap-4">
-      <h6 className="font-bold text-xl">{name}</h6>
-      <p>{abstract}</p>
+      <h6 className="font-bold text-xl text-mauve12">{name}</h6>
+      <p className="text-mauve12">{abstract}</p>
     </div>
   );
 };

@@ -1,6 +1,5 @@
 "use client";
 
-import React from "react";
 import { useRouter } from "next/navigation";
 
 import { ArrowLeft } from "lucide-react";
@@ -14,7 +13,7 @@ const DetailHeaderImage = ({ imageUrl }: Props) => {
   return (
     <div className="relative aspect-square">
       <img className="aspect-square" src={imageUrl} alt="chef or recipe image" />
-      <button className="absolute top-5 left-5 text-white cursor-pointer" onClick={() => router.back()}>
+      <button className="absolute top-5 left-5 text-mauve1 cursor-pointer" onClick={() => router.back()}>
         <ArrowLeft size={32} />
       </button>
     </div>

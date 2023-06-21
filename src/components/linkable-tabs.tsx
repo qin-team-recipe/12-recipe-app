@@ -29,17 +29,17 @@ const LinkableTabs = ({ tabs, children }: Props) => {
 
   return (
     <Tabs value={activeTab} onValueChange={setActiveTab}>
-      <TabsList className="flex justify-between border-b-1 border-border">
+      <TabsList className="flex justify-between border-b-1 border-mauve6">
         {tabs.map((tab) => (
           <TabsTrigger
             key={tab.value}
             value={tab.value}
             className={`flex-grow ${
-              activeTab === tab.value ? "border-b-2 border-black font-bold" : "border-b-2 border-border"
+              activeTab === tab.value ? "border-b-2 border-mauve12 font-bold" : "border-b-2 border-mauve6"
             }`}
           >
             <Link href={tab.link}>
-              <div className="text-base py-2">{tab.label}</div>
+              <div className="text-mauve12 py-2">{tab.label}</div>
             </Link>
           </TabsTrigger>
         ))}

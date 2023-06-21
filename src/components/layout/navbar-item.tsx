@@ -31,10 +31,10 @@ const NavbarItem: React.FC<Props> = ({ icon: Icon, label, active, href }) => {
         hover:bg-neutral-100
         hover:rounded-2xl
         transition
-        text-neutral-400
+        text-mauve11
         px-2
         py-1`,
-        active && "text-accent"
+        active && "text-tomato9"
       )}
     >
       <Icon size={24} />
