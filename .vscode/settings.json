@@ -14,5 +14,9 @@
     "SUPABASE",
     "tailwindcss",
     "workdir"
-  ]
+  ],
+  "[prisma]": {
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "Prisma.prisma"
+  }
 }
