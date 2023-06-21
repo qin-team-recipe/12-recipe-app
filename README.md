@@ -2,7 +2,31 @@
 
 ## 開発環境
 
-環境構築は以下のコマンドで行う。
+volta をインストールする。
+
+```bash
+# Linux and macOS (Bash)
+curl https://get.volta.sh | bash
+# macOS (Homebrew)
+brew install volta
+
+# Windows
+choco install volta
+# or
+scoop install volta
+# or
+Invoke-Expression (New-Object System.Net.WebClient).DownloadString('https://get.volta.sh')
+# or
+iwr https://get.volta.sh | iex
+```
+
+Node.js をインストールする。
+
+```bash
+volta install node
+```
+
+pnpm で依存パッケージをインストールする。
 
 ```bash
 pnpm install

@@ -3,7 +3,7 @@
 import { useMemo } from "react";
 import { usePathname } from "next/navigation";
 
-import { bottomBarRoutes } from "../constants/routes";
+import { bottomBarRoutes } from "../../constants/routes";
 import NavbarItem from "./navbar-item";
 
 const BottomNavbar = () => {
