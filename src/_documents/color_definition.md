@@ -4,6 +4,9 @@
 
 figma からカラーを取得して、shadcn-plugin に指定した`tomato`や`mauve`などの色を取得します。
 
+![Monosnap 一流レシピ 2023-06-22 00-10-39](https://github.com/qin-team-recipe/12-recipe-app/assets/63396451/1a02e86f-a178-49b5-97c4-31f2a1e941d5)
+
+
 <details>
 <summary>
    <strong>shadcn/uiのカラー設定一覧（基本使用しない方針）</strong>
