@@ -1,7 +1,7 @@
 import { ChefCard } from "@/src/components/chef-card";
 import TopBar from "@/src/components/layout/top-bar";
 import RecipeCard from "@/src/components/recipe-card";
-import { RecipeListItem } from "@/src/components/recipe-list";
+import { RecipeStep } from "@/src/components/recipe-list";
 import { Button } from "@/src/components/ui/button";
 
 const page = () => {
@@ -29,6 +29,10 @@ const page = () => {
           />
         </div>
       </div>
+      <RecipeStep
+        recipeText="用意するメインの材料は、マカロニ、牛乳、鶏もも肉、玉ねぎ、椎茸で、バター、小麦粉、塩、こしょうも使用します。"
+        stepNumber={1}
+      />
     </>
   );
 };

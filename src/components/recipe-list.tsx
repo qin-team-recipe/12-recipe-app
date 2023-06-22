@@ -1,20 +1,16 @@
 type Props = {
   recipeText: string;
-  annotation: string;
-  orderNum: number;
+  stepNumber: number;
 };
 
 // レシピリスト
-export const RecipeListItem = ({ recipeText, annotation, orderNum }: Props) => {
+export const RecipeStep = ({ recipeText, stepNumber }: Props) => {
   return (
-    <div className="flex px-[12px] py-[8px] border-b-[1px]">
-      <div className="mr-[8px]">
-        <span className="flex justify-center w-[18px] h-[18px] rounded-full bg-[#CA3214] text-white text-[12px]">{orderNum}</span>
+    <div className="flex items-start gap-x-2 py-2 border-y px-2">
+      <div className="mt-px flex items-center justify-center h-5 w-5 text-sm shrink-0 select-none rounded-full bg-tomato11 text-mauve1">
+        {stepNumber}
       </div>
-      <div>
-        <p className="text-[14px] leading-4 mb-[8px]">{recipeText}</p>
-        <p className="text-[10px] text-[#86848D]">※{annotation}</p>
-      </div>
+      <div className="flex-1 leading-snug text-mauve12">{recipeText}</div>
     </div>
   );
 };
