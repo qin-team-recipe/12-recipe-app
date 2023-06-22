@@ -1,6 +1,6 @@
-# shadcn-plugin の設定
+# [shadcn-plugin](../lib/shadcn-plugin.ts) の設定
 
-### [shadcn-plugin](../lib/shadcn-plugin.ts) の色設定一覧
+## カラーの設定方法
 
 figma からカラーを取得して、shadcn-plugin に指定した`tomato`や`mauve`などの色を取得します。
 
@@ -49,7 +49,7 @@ className = "text-mauve9";
 
 * * *
 
-### 参考
+## 参考
 
 * [Radix Colors](https://www.radix-ui.com/docs/colors/palette-composition/the-scales)
 * [Tailwind CSS を使った ダークモード実装の効率的なアプローチ](https://zenn.dev/deer/articles/d3b104ac97711d)
