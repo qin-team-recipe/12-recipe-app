@@ -24,13 +24,14 @@ export default async function NewRecipe() {
     "use server";
 
     const title = String(formData.get("title"));
-    const content = String(formData.get("content"));
+    const description = String(formData.get("description"));
 
     await prisma.recipe.create({
       data: {
         title,
-        content,
+        description,
         userId: session.user.id,
+        servingCount: 1,
       },
     });
 
@@ -47,7 +48,7 @@ export default async function NewRecipe() {
       </div>
       <div className="grid w-full max-w-screen-sm items-center gap-1.5">
         <Label htmlFor="email-2">Content</Label>
-        <Textarea name="content" placeholder="content" />
+        <Textarea name="description" placeholder="content" />
       </div>
       <Button type="submit" className="self-end">
         Add

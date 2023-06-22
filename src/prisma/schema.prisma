@@ -7,37 +7,63 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum RoleType {
+  ADMIN
+  USER
+  CHEF
+}
+
 model User {
-  id        String   @id @default(uuid())
-  name      String
-  email     String   @unique
-  password  String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  likes     Like[]
-  recipes   Recipe[]
+  id           String         @id @default(uuid())
+  role         RoleType       @default(USER)
+  name         String         @db.Text
+  profile      String?        @db.Text
+  profileImage String?        @db.Text
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+  Recipe       Recipe[]
+  Favorite     Favorite[]
+  followed     UserFollower[] @relation("FollowerToFollowed")
+  followers    UserFollower[] @relation("FollowedToFollower")
 }
 
 model Recipe {
-  id        Int      @id @default(autoincrement())
-  title     String
-  content   String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  likes     Like[]
-  user      User     @relation(fields: [userId], references: [id])
-  userId    String
+  id           Int        @id @default(autoincrement())
+  title        String
+  //* 説明文は場合によっては非常に長いテキストになる可能性があるので、@db.Textを指定しておく
+  description  String     @db.Text
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+  likes        Favorite[]
+  user         User       @relation(fields: [userId], references: [id])
+  //* mapを用いて、データベースへの保存は「user_id」で
+  //* プログラム上では「userId」でアクセスできるようにしている
+  userId       String     @map("user_id")
+  servingCount Int
 }
 
-model Like {
+model Favorite {
   id        Int      @id @default(autoincrement())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   user      User     @relation(fields: [userId], references: [id])
+  userId    String   @map("user_id")
   recipe    Recipe   @relation(fields: [recipeId], references: [id])
-  userId    String
-  recipeId  Int
+  recipeId  Int      @map("recipe_id")
 
-  // 同じユーザーが同じレシピに対して複数の「いいね」をつけることを防ぐ
+  //* 同じユーザーが同じレシピに対して複数の「いいね」をつけることを防ぐ
   @@unique([userId, recipeId])
+}
+
+model UserFollower {
+  id         Int      @id @default(autoincrement())
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  follower   User     @relation("FollowerToFollowed", fields: [followerId], references: [id])
+  followerId String   @map("follower_id")
+  followed   User     @relation("FollowedToFollower", fields: [followedId], references: [id])
+  followedId String   @map("followed_id")
+
+  //* 同じユーザーが同じユーザーを複数回フォローすることを防ぐ
+  @@unique([followerId, followedId])
 }
