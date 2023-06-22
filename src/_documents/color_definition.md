@@ -1,6 +1,19 @@
-# globals.css の設定
+# shadcn-plugin の設定
 
-### [globals.css](../app/globals.css) の色設定一覧
+### [shadcn-plugin](../lib/shadcn-plugin.ts) の色設定一覧
+
+figma からカラーを取得して、shadcn-plugin に指定した`tomato`や`mauve`などの色を取得します。
+
+```ts
+className = "text-mauve9";
+```
+
+![Monosnap 一流レシピ 2023-06-22 00-10-39](https://github.com/qin-team-recipe/12-recipe-app/assets/63396451/1a02e86f-a178-49b5-97c4-31f2a1e941d5)
+
+<details>
+<summary>
+   <strong>shadcn/uiのカラー設定一覧（基本使用しない方針）</strong>
+</summary>
 
 1. **--background** と **--foreground**  
    これらは、一般的な背景色と前景色（通常はテキスト）を定義します。これらの色は、ページ全体の主要な配色を決定します。
@@ -32,6 +45,11 @@
 10. **--ring**  
     一般的に、要素にフォーカスがあたったときの色を定義します。フォームフィールドやボタンなど、ユーザーが直接対話する要素に使われます。
 
-## 参考
+</details>
 
-- [Tailwind CSS を使った ダークモード実装の効率的なアプローチ](https://zenn.dev/deer/articles/d3b104ac97711d)
+* * *
+
+### 参考
+
+* [Radix Colors](https://www.radix-ui.com/docs/colors/palette-composition/the-scales)
+* [Tailwind CSS を使った ダークモード実装の効率的なアプローチ](https://zenn.dev/deer/articles/d3b104ac97711d)

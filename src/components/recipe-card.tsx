@@ -10,7 +10,7 @@ type Props = {
   recipeName: string;
   comment: string;
   recipeId: number;
-  favorites: number | null;
+  favorites: number;
 };
 
 /**
@@ -25,18 +25,18 @@ const RecipeCard: React.FC<Props> = ({ imageUrl, recipeName, comment, recipeId, 
       <Link href={`${PATH_ITEMS.RECIPE.PATH}/${recipeId}`}>
         <div className="relative">
           <img className="rounded-2xl aspect-square" src={imageUrl} alt="recipe-card" />
-          {favorites && (
-            <div className="flex absolute h-7 rounded-2xl bg-slate-600 bg-opacity-50 items-center p-1 top-2 right-2">
-              <Heart className="text-white mr-1" size={14} />
-              <label className="text-white text-sm" htmlFor="favorite">
+          {favorites > 0 && (
+            <div className="flex absolute h-7 rounded-2xl bg-mauve10 bg-opacity-50 items-center p-1 top-2 right-2">
+              <Heart className="text-mauve1 mr-1" size={14} />
+              <label className="text-mauve1 text-sm" htmlFor="favorite">
                 {favorites}
               </label>
             </div>
           )}
         </div>
         <div className="grid">
-          <h6 className="text-xs font-bold mt-1 text-ellipsis line-clamp-2">{recipeName}</h6>
-          <p className="text-extend-ss mt-1 text-gray-400 text-ellipsis overflow-hidden whitespace-nowrap">{comment}</p>
+          <h6 className="text-xs font-bold mt-1 text-mauve12 text-ellipsis line-clamp-2">{recipeName}</h6>
+          <p className="text-extend-ss mt-1 text-mauve11 text-ellipsis overflow-hidden whitespace-nowrap">{comment}</p>
         </div>
       </Link>
     </div>

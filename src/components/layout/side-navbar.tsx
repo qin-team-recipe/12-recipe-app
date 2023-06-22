@@ -14,7 +14,7 @@ const SideNavbar = () => {
   return (
     <div className="hidden md:flex gap-y-2 bg-background h-full md:w-[240px]  p-2 overflow-auto sticky top-0 justify-center">
       <div className="flex flex-col gap-y-4 px-4 py-4 items-start">
-        <span className="text-2xl font-bold mb-4">LOGO</span>
+        <span className="text-2xl font-bold mb-4 text-mauve12">LOGO</span>
         {routes.map((route) => (
           <div key={route.label}>
             <NavbarItem {...route} />

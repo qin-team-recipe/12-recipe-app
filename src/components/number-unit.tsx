@@ -1,5 +1,3 @@
-import React from "react";
-
 type Props = {
   numbers: number;
   unit: string;
@@ -8,8 +6,8 @@ type Props = {
 const NumberUnit = ({ numbers, unit }: Props) => {
   return (
     <div className="flex">
-      <span className="font-bold mr-0.5">{numbers.toLocaleString()}</span>
-      <span>{unit}</span>
+      <span className="font-bold mr-0.5 text-mauve12">{numbers.toLocaleString()}</span>
+      <span className="text-mauve11">{unit}</span>
     </div>
   );
 };
