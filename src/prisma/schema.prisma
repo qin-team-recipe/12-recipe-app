@@ -13,6 +13,7 @@ enum RoleType {
   CHEF
 }
 
+/// ユーザー
 model User {
   id           String         @id @default(uuid())
   role         RoleType       @default(USER)
@@ -26,20 +27,87 @@ model User {
   followed     UserFollower[] @relation("FollowerToFollowed")
   followers    UserFollower[] @relation("FollowedToFollower")
   ChefLink     ChefLink[]
+  CartList     CartList[]
+  Memo         Memo[]
 }
 
-model Recipe {
+/// レシピ・材料の中間テーブル
+model RecipeIngredient {
   id           Int        @id @default(autoincrement())
-  title        String
-  //* 説明文は場合によっては非常に長いテキストになる可能性があるので、@db.Textを指定しておく
-  description  String     @db.Text
+  recipe       Recipe     @relation(fields: [recipeId], references: [id])
+  recipeId     Int        @map("recipe_id")
+  ingredient   Ingredient @relation(fields: [ingredientId], references: [id])
+  ingredientId Int        @map("ingredient_id")
   createdAt    DateTime   @default(now()) @map("created_at")
   updatedAt    DateTime   @updatedAt @map("updated_at")
-  likes        Favorite[]
-  user         User       @relation(fields: [userId], references: [id])
-  userId       String     @map("user_id")
+
+  //* 同じレシピに同じ材料を複数回登録することを防ぐ
+  @@unique([recipeId, ingredientId])
+}
+
+/// レシピ
+model Recipe {
+  id               Int                @id @default(autoincrement())
+  title            String
+  //* 説明文は場合によっては非常に長いテキストになる可能性があるので、@db.Textを指定しておく
+  description      String             @db.Text
+  createdAt        DateTime           @default(now()) @map("created_at")
+  updatedAt        DateTime           @updatedAt @map("updated_at")
+  likes            Favorite[]
+  user             User               @relation(fields: [userId], references: [id])
+  userId           String             @map("user_id")
   //* レシピの材料は複数あるので、@relationを用いて、RecipeIngredientとの関連を定義する
-  servingCount Int        @map("serving_count")
+  servingCount     Int                @map("serving_count")
+  RecipeIngredient RecipeIngredient[]
+  RecipeImage      RecipeImage[]
+  CartList         CartList[]
+  Instruction      Instruction[]
+  RecipeLink       RecipeLink[]
+}
+
+/// レシピの画像
+model RecipeImage {
+  id          String   @id @default(uuid())
+  recipe      Recipe   @relation(fields: [recipeId], references: [id])
+  recipeId    Int      @map("recipe_id")
+  recipeImage String   @map("recipe_image") @db.Text
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+}
+
+/// レシピのリンク
+model RecipeLink {
+  id        String   @id @default(uuid())
+  recipe    Recipe   @relation(fields: [recipeId], references: [id])
+  recipeId  Int      @map("recipe_id")
+  linkUrl   String   @map("link_url") @db.Text
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+}
+
+/// 作り方
+model Instruction {
+  id              String   @id @default(uuid())
+  recipe          Recipe   @relation(fields: [recipeId], references: [id])
+  recipeId        Int      @map("recipe_id")
+  stepOrder       BigInt   @map("step_order")
+  stepDescription String   @map("step_description") @db.Text
+  createdAt       DateTime @default(now()) @map("created_at")
+  updatedAt       DateTime @updatedAt @map("updated_at")
+
+  //* 同じレシピに同じ手順を複数回登録することを防ぐ
+  @@unique([recipeId, stepOrder])
+}
+
+/// 材料
+model Ingredient {
+  id               Int                @id @default(autoincrement())
+  ingredientName   String             @map("ingredient_name") @db.Text
+  isCustom         Boolean            @default(false) @map("is_custom")
+  createdAt        DateTime           @default(now()) @map("created_at")
+  updatedAt        DateTime           @updatedAt @map("updated_at")
+  RecipeIngredient RecipeIngredient[]
+  CartListItem     CartListItem[]
 }
 
 /// レシピのお気に入り
@@ -56,6 +124,7 @@ model Favorite {
   @@unique([userId, recipeId])
 }
 
+/// ユーザーのフォロー
 model UserFollower {
   id         Int      @id @default(autoincrement())
   createdAt  DateTime @default(now()) @map("created_at")
@@ -69,6 +138,7 @@ model UserFollower {
   @@unique([followerId, followedId])
 }
 
+/// シェフのリンク
 model ChefLink {
   id        Int      @id @default(autoincrement())
   createdAt DateTime @default(now()) @map("created_at")
@@ -76,4 +146,40 @@ model ChefLink {
   user      User     @relation(fields: [chefId], references: [id])
   chefId    String   @map("chef_id")
   url       String
+}
+
+/// 自分メモ
+model Memo {
+  id          Int      @id @default(autoincrement())
+  user        User     @relation(fields: [userId], references: [id])
+  userId      String   @map("user_id")
+  title       String   @db.Text
+  isCompleted Boolean  @default(false)
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+}
+
+/// お買い物リスト
+model CartList {
+  id           Int            @id @default(autoincrement())
+  displayOrder Int            @default(0) @map("display_order")
+  createdAt    DateTime       @default(now()) @map("created_at")
+  updatedAt    DateTime       @updatedAt @map("updated_at")
+  user         User           @relation(fields: [userId], references: [id])
+  userId       String         @map("user_id")
+  recipe       Recipe         @relation(fields: [recipeId], references: [id])
+  recipeId     Int            @map("recipe_id")
+  CartListItem CartListItem[]
+}
+
+/// お買い物リストの材料
+model CartListItem {
+  id           Int        @id @default(autoincrement())
+  isCompleted  Boolean    @default(false) @map("is_completed")
+  createdAt    DateTime   @default(now()) @map("created_at")
+  updatedAt    DateTime   @updatedAt @map("updated_at")
+  cartList     CartList   @relation(fields: [cartListId], references: [id])
+  cartListId   Int        @map("cart_list_id")
+  ingredient   Ingredient @relation(fields: [ingredientId], references: [id])
+  ingredientId Int        @map("ingredient_id")
 }
