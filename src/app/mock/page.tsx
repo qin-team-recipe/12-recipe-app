@@ -1,5 +1,5 @@
-import getAuthenticatedUser from "@/src/actions/get-authenticated-user";
-import getRecipes from "@/src/actions/get-recipes";
+import getAuthenticatedUser from "@/src/actions/getAuthenticatedUser";
+import getRecipes from "@/src/actions/getRecipes";
 import RecipeCard from "@/src/components/recipe-card";
 import { Separator } from "@/src/components/ui/separator";
 

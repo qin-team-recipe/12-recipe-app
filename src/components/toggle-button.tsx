@@ -1,22 +1,21 @@
+import { cn } from "../lib/utils";
 import { Button } from "./ui/button";
 
 type Props = {
-  isFavorite: boolean; // レシピまたはシェフをフォローしているかしていないかの判定
-  activeLabel: string; // フォローしている際のボタン名
-  inactiveLabel: string; // フォローしてない時のボタン名
+  isActive: boolean;
+  activeLabel: string;
+  inactiveLabel: string;
   // handleClick: () => void; // フォローやお気に入りをする/外すのクリックイベントを渡す(一旦コメントアウト)
 };
 
-const ToggleButton = ({ isFavorite, activeLabel, inactiveLabel }: Props) => {
+const ToggleButton = ({ isActive, activeLabel, inactiveLabel }: Props) => {
   return (
     <>
       <Button
-        variant={!isFavorite ? "destructive" : "outline"}
-        className={
-          !isFavorite ? "bg-tomato9 w-fit" : "text-tomato9 bg-mauve1 border-accent w-fit hover:bg-inherit hover:shadow"
-        }
+        variant={isActive ? "outline" : "destructive"}
+        className={cn("w-fit", "hover:shadow", isActive ? "text-tomato9 bg-mauve1 border-accent" : "bg-tomato9")}
       >
-        {isFavorite ? activeLabel : inactiveLabel}
+        {isActive ? activeLabel : inactiveLabel}
       </Button>
     </>
   );
