@@ -20,22 +20,27 @@ const SearchInput = () => {
   const [isPending, startTransition] = useTransition();
 
   // 検索パラメータを処理する
-  const handleSearchParams = useCallback((debouncedValue: string) => {
-    let params = new URLSearchParams(window.location.search);
-    const currentSearchValue = params.get("search");
-    if (debouncedValue !== currentSearchValue) {
-      if (debouncedValue.length > 0) {
-        params.set("search", debouncedValue);
-      } else {
-        params.delete("search");
-      }
+  const handleSearchParams = useCallback(
+    (debouncedValue: string) => {
+      let params = new URLSearchParams(window.location.search);
+      const currentSearchValue = params.get("search");
+      if (debouncedValue !== currentSearchValue) {
+        if (debouncedValue.length > 0) {
+          params.set("search", debouncedValue);
+        } else {
+          params.delete("search");
+        }
 
-      startTransition(() => {
-        if (pathname === "/") router.replace(`${searchBasePath}/recipe/?${params.toString()}`);
-        else router.replace(`${pathname}/?${params.toString()}`);
-      });
-    }
-  }, []);
+        startTransition(() => {
+          const newPath =
+            pathname === "/" ? `${searchBasePath}/recipe/?${params.toString()}` : `${pathname}/?${params.toString()}`;
+
+          router.replace(newPath);
+        });
+      }
+    },
+    [router, pathname]
+  );
 
   // URLのクエリパラメータを取得してinputValueにセットする
   useEffect(() => {
