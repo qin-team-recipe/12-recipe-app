@@ -2,14 +2,13 @@ import { ChefCard } from "@/src/components/chef-card";
 import TopBar from "@/src/components/layout/top-bar";
 import RecipeCard from "@/src/components/recipe-card";
 import { RecipeStep } from "@/src/components/recipe-list";
+import SearchInput from "@/src/components/search-input";
 import { Button } from "@/src/components/ui/button";
 
 const page = () => {
   return (
     <>
-      <TopBar
-      // TODO: centerComponentを検索バーにする
-      />
+      <TopBar centerComponent={<SearchInput />} />
       <div className="p-8">
         <Button>Search</Button>
         {/* map処理をして横スクロールできるようにする */}
