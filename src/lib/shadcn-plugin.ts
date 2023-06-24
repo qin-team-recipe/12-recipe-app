@@ -210,6 +210,9 @@ export const shadcnPlugin = plugin(
         fontSize: {
           "extend-ss": "0.625rem",
         },
+        height: {
+          "extend-22": "5.5rem"
+        }
       },
     },
     plugins: [],
