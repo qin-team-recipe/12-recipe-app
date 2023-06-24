@@ -1,5 +1,3 @@
-import React from "react";
-
 import DetailAbstract from "@/src/components/detail-abstract";
 import DetailHeaderImage from "@/src/components/detail-header-image";
 import NumberUnit from "@/src/components/number-unit";
@@ -17,7 +15,7 @@ const page = () => {
           <NumberUnit numbers={1234} unit={CONSTANTS.RECIPE} />
           <NumberUnit numbers={500} unit={CONSTANTS.FOLLOWER} />
         </div>
-        <ToggleButton isFavorite={true} activeLabel={BUTTON_NAMES.IS_FOLLOW} inactiveLabel={BUTTON_NAMES.UN_FOLLOW} />
+        <ToggleButton isActive={true} activeLabel={BUTTON_NAMES.UN_FOLLOW} inactiveLabel={BUTTON_NAMES.IS_FOLLOW} />
       </div>
     </>
   );
