@@ -19,12 +19,13 @@ model User {
   name         String         @db.Text
   profile      String?        @db.Text
   profileImage String?        @db.Text
-  createdAt    DateTime       @default(now())
-  updatedAt    DateTime       @updatedAt
+  createdAt    DateTime       @default(now()) @map("created_at")
+  updatedAt    DateTime       @updatedAt @map("updated_at")
   Recipe       Recipe[]
   Favorite     Favorite[]
   followed     UserFollower[] @relation("FollowerToFollowed")
   followers    UserFollower[] @relation("FollowedToFollower")
+  ChefLink     ChefLink[]
 }
 
 model Recipe {
@@ -32,20 +33,20 @@ model Recipe {
   title        String
   //* 説明文は場合によっては非常に長いテキストになる可能性があるので、@db.Textを指定しておく
   description  String     @db.Text
-  createdAt    DateTime   @default(now())
-  updatedAt    DateTime   @updatedAt
+  createdAt    DateTime   @default(now()) @map("created_at")
+  updatedAt    DateTime   @updatedAt @map("updated_at")
   likes        Favorite[]
   user         User       @relation(fields: [userId], references: [id])
-  //* mapを用いて、データベースへの保存は「user_id」で
-  //* プログラム上では「userId」でアクセスできるようにしている
   userId       String     @map("user_id")
-  servingCount Int
+  //* レシピの材料は複数あるので、@relationを用いて、RecipeIngredientとの関連を定義する
+  servingCount Int        @map("serving_count")
 }
 
+/// レシピのお気に入り
 model Favorite {
   id        Int      @id @default(autoincrement())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
   user      User     @relation(fields: [userId], references: [id])
   userId    String   @map("user_id")
   recipe    Recipe   @relation(fields: [recipeId], references: [id])
@@ -57,8 +58,8 @@ model Favorite {
 
 model UserFollower {
   id         Int      @id @default(autoincrement())
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @updatedAt @map("updated_at")
   follower   User     @relation("FollowerToFollowed", fields: [followerId], references: [id])
   followerId String   @map("follower_id")
   followed   User     @relation("FollowedToFollower", fields: [followedId], references: [id])
@@ -66,4 +67,13 @@ model UserFollower {
 
   //* 同じユーザーが同じユーザーを複数回フォローすることを防ぐ
   @@unique([followerId, followedId])
+}
+
+model ChefLink {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  user      User     @relation(fields: [chefId], references: [id])
+  chefId    String   @map("chef_id")
+  url       String
 }
