@@ -4,5 +4,5 @@
  */
 
 export const PATH_ITEMS = {
-  RECIPE: {PATH: '/recipe', label: 'レシピ詳細'}
-}
+  RECIPE: { PATH: "/recipe", label: "レシピ詳細" },
+};

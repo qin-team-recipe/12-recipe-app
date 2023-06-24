@@ -1,7 +1,7 @@
+import { FavoriteChefList } from "@/src/components/favorite-chef-list";
 import TopBar from "@/src/components/layout/top-bar";
 
 import SettingsActionIcon from "./_components/settings-action-icon";
-import { FavoriteChefList } from "@/src/components/favorite-chef-list";
 
 const page = () => {
   return (

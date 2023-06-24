@@ -1,4 +1,5 @@
 import Link from "next/link";
+
 import { Avatar, AvatarImage } from "./ui/avatar";
 
 type Props = {
