@@ -14,7 +14,7 @@ const page = () => {
         <Button>Search</Button>
         {/* map処理をして横スクロールできるようにする */}
         <ChefCard
-          routingUrl="/"
+          routingUrl="/chef/1"
           imageUrl="https://images.unsplash.com/photo-1492633423870-43d1cd2775eb?&w=128&h=128&dpr=2&q=80"
           imageText="山田シェフ"
         />
