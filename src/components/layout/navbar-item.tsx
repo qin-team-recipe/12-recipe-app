@@ -38,7 +38,7 @@ const NavbarItem: React.FC<Props> = ({ icon: Icon, label, active, href }) => {
       )}
     >
       <Icon size={24} />
-      <p className={cn(`truncate w-100 text-base md:text-lg`, active && "font-bold")}>{label}</p>
+      <p className={cn(`truncate w-100 text-sm md:text-lg`, active && "font-bold")}>{label}</p>
     </Link>
   );
 };
