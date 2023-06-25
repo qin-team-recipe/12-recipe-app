@@ -3,6 +3,7 @@ import getRecipes from "@/src/actions/getRecipes";
 import RecipeCard from "@/src/components/recipe-card";
 import { Separator } from "@/src/components/ui/separator";
 
+import FavoriteRecipe from "./_components/favorite-recipe";
 import NewRecipe from "./_components/new-recipe";
 
 const page = async () => {
@@ -15,6 +16,7 @@ const page = async () => {
       <h4 className="text-xl font-medium leading-none">🙌 Hello {user?.name} 🙌</h4>
       <Separator className="my-2" />
       <NewRecipe />
+      <FavoriteRecipe />
       <Separator className="my-2" />
       <h2 className="text-2xl font-extrabold pt-2">レシピ一覧</h2>
       <div className="pt-4 grid grid-cols-2 gap-4">
