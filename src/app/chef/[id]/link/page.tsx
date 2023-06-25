@@ -1,9 +1,13 @@
 import React from "react";
 
-import OuterLink from "@/src/components/outer-link";
+import ExternalLinkList from "@/src/components/external-link-list";
 
 const page = () => {
-  return <OuterLink siteName={"ツイッター"} siteUrl={"https://twitter.com"} />;
+  return (
+    <>
+      <ExternalLinkList siteName={"ツイッター"} siteUrl={"https://twitter.com"} />
+    </>
+  );
 };
 
 export default page;

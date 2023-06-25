@@ -14,30 +14,24 @@ type Props = {
   siteUrl: string;
 };
 
-const OuterLink = ({ siteName, siteUrl }: Props) => {
+const ExternalLinkList = ({ siteName, siteUrl }: Props) => {
   const includeTwitter = siteUrl.includes(POPULAR_SNS.TWITTER);
   const includeInstagram = siteUrl.includes(POPULAR_SNS.INSTAGRAM);
-  const unincludePopularSns = useMemo(() => {
-    if (includeTwitter || includeInstagram) {
-      return false;
-    } else {
-      return true;
-    }
-  }, [includeTwitter, includeInstagram]);
+  const includedPopularSns = !(includeTwitter || includeInstagram);
   return (
-    <div className="flex items-center h-extend-22 gap-x-4 p-4 border-b-2">
+    <div className="flex items-center h-extend-22 justify-between gap-x-4 p-4 border-b-2">
       {includeTwitter && <TwitterLogo className="rounded-2xl" width={56} height={56} />}
       {includeInstagram && <InstagramLogo className="rounded-2xl" width={56} height={56} />}
-      {unincludePopularSns && <SNSLogo className="rounded-2xl" width={56} height={56} />}
-      <div className="grid">
-        <p className="text-base">{siteName}</p>
-        <p className="text-sm text-mauve6">{siteUrl}</p>
+      {includedPopularSns && <SNSLogo className="rounded-2xl" width={56} height={56} />}
+      <div className="flex flex-col flex-1">
+        <p className="text-mauve12">{siteName}</p>
+        <p className="text-sm text-mauve11">{siteUrl}</p>
       </div>
       <a href={siteUrl} target="_blank" rel="noopener noreferrer">
-        <ExternalLink size={24} />
+        <ExternalLink size={24} className="text-mauve11" />
       </a>
     </div>
   );
 };
 
-export default OuterLink;
+export default ExternalLinkList;
