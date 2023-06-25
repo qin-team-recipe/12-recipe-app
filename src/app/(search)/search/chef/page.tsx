@@ -4,7 +4,7 @@ import SearchInput from "@/src/components/search-input";
 
 import { tabs } from "../_constants/tabs";
 
-const page = ({ searchParams }: { searchParams: { search?: string } }) => {
+const page = async ({ searchParams }: { searchParams: { search?: string } }) => {
   const searchQuery = searchParams.search ?? "";
 
   return (
@@ -14,7 +14,7 @@ const page = ({ searchParams }: { searchParams: { search?: string } }) => {
         <div className="p-2">
           {searchQuery && <div className="text-lg font-bold text-mauve12">「{searchQuery}」で検索</div>}
           <div>シェフ一覧</div>
-        </div>{" "}
+        </div>
       </LinkableTabs>
     </>
   );

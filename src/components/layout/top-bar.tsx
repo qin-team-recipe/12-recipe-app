@@ -30,7 +30,7 @@ const TopBar = ({
       {TrailingComponent ? (
         <div className="flex items-center justify-end flex-1">{TrailingComponent}</div>
       ) : (
-        <div className="flex-1"></div>
+        <div className="flex-1" />
       )}
     </div>
   );

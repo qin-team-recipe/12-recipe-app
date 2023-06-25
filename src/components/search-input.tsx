@@ -22,7 +22,10 @@ const SearchInput = () => {
   // 検索パラメータを処理する
   const handleSearchParams = useCallback(
     (debouncedValue: string) => {
-      let params = new URLSearchParams(window.location.search);
+      // TODO: window.location.searchが必要かどうかを再検証する
+      const params = new URLSearchParams(window.location.search);
+      console.log(params.get("search"));
+
       const currentSearchValue = params.get("search");
       if (debouncedValue !== currentSearchValue) {
         if (debouncedValue.length > 0) {
@@ -53,10 +56,10 @@ const SearchInput = () => {
 
   // デバウンスされた値がある場合、マウントされたことを示す
   useEffect(() => {
-    if (debouncedValue.length > 0 && !mounted) {
+    if (debouncedValue.length > 0) {
       setMounted(true);
     }
-  }, [debouncedValue, mounted]);
+  }, [debouncedValue]);
 
   // 入力デバウンスを処理する
   useEffect(() => {
