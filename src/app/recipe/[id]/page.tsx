@@ -1,5 +1,3 @@
-import React from "react";
-
 import DetailAbstract from "@/src/components/detail-abstract";
 import DetailHeaderImage from "@/src/components/detail-header-image";
 import NumberUnit from "@/src/components/number-unit";
@@ -19,7 +17,7 @@ const page = () => {
           <NumberUnit numbers={100000000} unit={CONSTANTS.FAVORITE} />
         </div>
         <ToggleButton
-          isFavorite={false}
+          isActive={false}
           activeLabel={BUTTON_NAMES.IS_FAVORITE}
           inactiveLabel={BUTTON_NAMES.UN_FAVORITE}
         />

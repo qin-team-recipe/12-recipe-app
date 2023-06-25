@@ -12,6 +12,7 @@
     "start-local-db": "pnpx supabase start --workdir src",
     "stop-local-db": "pnpx supabase stop --workdir src",
     "status-local-db": "pnpx supabase status --workdir src",
+    "reset-local-db": "pnpx supabase db reset --workdir src",
     "prisma-migrate": "pnpx prisma migrate dev",
     "supabase-types": "pnpx supabase gen --workdir src types typescript --local --schema public > src/types/SupabaseTypes.ts",
     "migrate-and-gen": "pnpm run prisma-migrate && pnpm run supabase-types"
