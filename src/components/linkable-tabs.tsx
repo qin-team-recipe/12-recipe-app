@@ -15,9 +15,10 @@ type Tab = {
 type Props = {
   tabs: Tab[];
   children: React.ReactNode;
+  searchQuery?: string;
 };
 
-const LinkableTabs = ({ tabs, children }: Props) => {
+const LinkableTabs = ({ tabs, children, searchQuery }: Props) => {
   const pathname = usePathname();
 
   const getActiveTab = (): string => {
@@ -38,7 +39,7 @@ const LinkableTabs = ({ tabs, children }: Props) => {
               activeTab === tab.value ? "border-b-2 border-mauve12 font-bold" : "border-b-2 border-mauve6"
             }`}
           >
-            <Link href={tab.link}>
+            <Link href={searchQuery ? `${tab.link}?search=${searchQuery}` : tab.link}>
               <div className="text-mauve12 py-2">{tab.label}</div>
             </Link>
           </TabsTrigger>
