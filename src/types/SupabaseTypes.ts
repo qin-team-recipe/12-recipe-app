@@ -44,27 +44,27 @@ export interface Database {
       }
       CartList: {
         Row: {
-          created_at: string
+          created_at: string | null
           display_order: number
           id: number
           recipe_id: number
-          updated_at: string
+          updated_at: string | null
           user_id: string
         }
         Insert: {
-          created_at?: string
+          created_at?: string | null
           display_order?: number
           id?: number
           recipe_id: number
-          updated_at: string
+          updated_at?: string | null
           user_id: string
         }
         Update: {
-          created_at?: string
+          created_at?: string | null
           display_order?: number
           id?: number
           recipe_id?: number
-          updated_at?: string
+          updated_at?: string | null
           user_id?: string
         }
         Relationships: [
@@ -85,27 +85,27 @@ export interface Database {
       CartListItem: {
         Row: {
           cart_list_id: number
-          created_at: string
+          created_at: string | null
           id: number
           ingredient_id: number
           is_completed: boolean
-          updated_at: string
+          updated_at: string | null
         }
         Insert: {
           cart_list_id: number
-          created_at?: string
+          created_at?: string | null
           id?: number
           ingredient_id: number
           is_completed?: boolean
-          updated_at: string
+          updated_at?: string | null
         }
         Update: {
           cart_list_id?: number
-          created_at?: string
+          created_at?: string | null
           id?: number
           ingredient_id?: number
           is_completed?: boolean
-          updated_at?: string
+          updated_at?: string | null
         }
         Relationships: [
           {
@@ -122,57 +122,26 @@ export interface Database {
           }
         ]
       }
-      ChefLink: {
-        Row: {
-          chef_id: string
-          created_at: string
-          id: number
-          updated_at: string
-          url: string
-        }
-        Insert: {
-          chef_id: string
-          created_at?: string
-          id?: number
-          updated_at: string
-          url: string
-        }
-        Update: {
-          chef_id?: string
-          created_at?: string
-          id?: number
-          updated_at?: string
-          url?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "ChefLink_chef_id_fkey"
-            columns: ["chef_id"]
-            referencedRelation: "User"
-            referencedColumns: ["id"]
-          }
-        ]
-      }
       Favorite: {
         Row: {
-          created_at: string
+          created_at: string | null
           id: number
           recipe_id: number
-          updated_at: string
+          updated_at: string | null
           user_id: string
         }
         Insert: {
-          created_at?: string
+          created_at?: string | null
           id?: number
           recipe_id: number
-          updated_at: string
+          updated_at?: string | null
           user_id: string
         }
         Update: {
-          created_at?: string
+          created_at?: string | null
           id?: number
           recipe_id?: number
-          updated_at?: string
+          updated_at?: string | null
           user_id?: string
         }
         Relationships: [
@@ -192,52 +161,52 @@ export interface Database {
       }
       Ingredient: {
         Row: {
-          created_at: string
+          created_at: string | null
           id: number
           ingredient_name: string
           is_custom: boolean
-          updated_at: string
+          updated_at: string | null
         }
         Insert: {
-          created_at?: string
+          created_at?: string | null
           id?: number
           ingredient_name: string
           is_custom?: boolean
-          updated_at: string
+          updated_at?: string | null
         }
         Update: {
-          created_at?: string
+          created_at?: string | null
           id?: number
           ingredient_name?: string
           is_custom?: boolean
-          updated_at?: string
+          updated_at?: string | null
         }
         Relationships: []
       }
       Instruction: {
         Row: {
-          created_at: string
-          id: string
+          created_at: string | null
+          id: number
           recipe_id: number
           step_description: string
           step_order: number
-          updated_at: string
+          updated_at: string | null
         }
         Insert: {
-          created_at?: string
-          id: string
+          created_at?: string | null
+          id?: number
           recipe_id: number
           step_description: string
           step_order: number
-          updated_at: string
+          updated_at?: string | null
         }
         Update: {
-          created_at?: string
-          id?: string
+          created_at?: string | null
+          id?: number
           recipe_id?: number
           step_description?: string
           step_order?: number
-          updated_at?: string
+          updated_at?: string | null
         }
         Relationships: [
           {
@@ -250,27 +219,30 @@ export interface Database {
       }
       Memo: {
         Row: {
-          created_at: string
+          created_at: string | null
+          deleted_at: string | null
           id: number
           isCompleted: boolean
           title: string
-          updated_at: string
+          updated_at: string | null
           user_id: string
         }
         Insert: {
-          created_at?: string
+          created_at?: string | null
+          deleted_at?: string | null
           id?: number
           isCompleted?: boolean
           title: string
-          updated_at: string
+          updated_at?: string | null
           user_id: string
         }
         Update: {
-          created_at?: string
+          created_at?: string | null
+          deleted_at?: string | null
           id?: number
           isCompleted?: boolean
           title?: string
-          updated_at?: string
+          updated_at?: string | null
           user_id?: string
         }
         Relationships: [
@@ -284,30 +256,33 @@ export interface Database {
       }
       Recipe: {
         Row: {
-          created_at: string
+          created_at: string | null
+          deleted_at: string | null
           description: string
           id: number
           serving_count: number
           title: string
-          updated_at: string
+          updated_at: string | null
           user_id: string
         }
         Insert: {
-          created_at?: string
+          created_at?: string | null
+          deleted_at?: string | null
           description: string
           id?: number
           serving_count: number
           title: string
-          updated_at: string
+          updated_at?: string | null
           user_id: string
         }
         Update: {
-          created_at?: string
+          created_at?: string | null
+          deleted_at?: string | null
           description?: string
           id?: number
           serving_count?: number
           title?: string
-          updated_at?: string
+          updated_at?: string | null
           user_id?: string
         }
         Relationships: [
@@ -321,25 +296,25 @@ export interface Database {
       }
       RecipeImage: {
         Row: {
-          created_at: string
+          created_at: string | null
           id: string
           recipe_id: number
           recipe_image: string
-          updated_at: string
+          updated_at: string | null
         }
         Insert: {
-          created_at?: string
+          created_at?: string | null
           id: string
           recipe_id: number
           recipe_image: string
-          updated_at: string
+          updated_at?: string | null
         }
         Update: {
-          created_at?: string
+          created_at?: string | null
           id?: string
           recipe_id?: number
           recipe_image?: string
-          updated_at?: string
+          updated_at?: string | null
         }
         Relationships: [
           {
@@ -352,25 +327,25 @@ export interface Database {
       }
       RecipeIngredient: {
         Row: {
-          created_at: string
+          created_at: string | null
           id: number
           ingredient_id: number
           recipe_id: number
-          updated_at: string
+          updated_at: string | null
         }
         Insert: {
-          created_at?: string
+          created_at?: string | null
           id?: number
           ingredient_id: number
           recipe_id: number
-          updated_at: string
+          updated_at?: string | null
         }
         Update: {
-          created_at?: string
+          created_at?: string | null
           id?: number
           ingredient_id?: number
           recipe_id?: number
-          updated_at?: string
+          updated_at?: string | null
         }
         Relationships: [
           {
@@ -389,25 +364,25 @@ export interface Database {
       }
       RecipeLink: {
         Row: {
-          created_at: string
+          created_at: string | null
           id: string
           link_url: string
           recipe_id: number
-          updated_at: string
+          updated_at: string | null
         }
         Insert: {
-          created_at?: string
+          created_at?: string | null
           id: string
           link_url: string
           recipe_id: number
-          updated_at: string
+          updated_at?: string | null
         }
         Update: {
-          created_at?: string
+          created_at?: string | null
           id?: string
           link_url?: string
           recipe_id?: number
-          updated_at?: string
+          updated_at?: string | null
         }
         Relationships: [
           {
@@ -420,55 +395,55 @@ export interface Database {
       }
       User: {
         Row: {
-          created_at: string
+          created_at: string | null
           id: string
           name: string
           profile: string | null
           profileImage: string | null
           role: Database["public"]["Enums"]["RoleType"]
-          updated_at: string
+          updated_at: string | null
         }
         Insert: {
-          created_at?: string
+          created_at?: string | null
           id: string
           name: string
           profile?: string | null
           profileImage?: string | null
           role?: Database["public"]["Enums"]["RoleType"]
-          updated_at: string
+          updated_at?: string | null
         }
         Update: {
-          created_at?: string
+          created_at?: string | null
           id?: string
           name?: string
           profile?: string | null
           profileImage?: string | null
           role?: Database["public"]["Enums"]["RoleType"]
-          updated_at?: string
+          updated_at?: string | null
         }
         Relationships: []
       }
       UserFollower: {
         Row: {
-          created_at: string
+          created_at: string | null
           followed_id: string
           follower_id: string
           id: number
-          updated_at: string
+          updated_at: string | null
         }
         Insert: {
-          created_at?: string
+          created_at?: string | null
           followed_id: string
           follower_id: string
           id?: number
-          updated_at: string
+          updated_at?: string | null
         }
         Update: {
-          created_at?: string
+          created_at?: string | null
           followed_id?: string
           follower_id?: string
           id?: number
-          updated_at?: string
+          updated_at?: string | null
         }
         Relationships: [
           {
@@ -480,6 +455,37 @@ export interface Database {
           {
             foreignKeyName: "UserFollower_follower_id_fkey"
             columns: ["follower_id"]
+            referencedRelation: "User"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
+      UserLink: {
+        Row: {
+          chef_id: string
+          created_at: string | null
+          id: number
+          updated_at: string | null
+          url: string
+        }
+        Insert: {
+          chef_id: string
+          created_at?: string | null
+          id?: number
+          updated_at?: string | null
+          url: string
+        }
+        Update: {
+          chef_id?: string
+          created_at?: string | null
+          id?: number
+          updated_at?: string | null
+          url?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "UserLink_chef_id_fkey"
+            columns: ["chef_id"]
             referencedRelation: "User"
             referencedColumns: ["id"]
           }
