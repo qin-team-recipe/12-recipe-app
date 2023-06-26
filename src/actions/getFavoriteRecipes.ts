@@ -1,9 +1,16 @@
 import { prisma } from "../lib/prisma";
+import getAuthenticatedUser from "./getAuthenticatedUser";
 
-const getFavoriteRecipes = async (userId: string | undefined) => {
+const getFavoriteRecipes = async () => {
+  const user = await getAuthenticatedUser();
+
+  if (!user) {
+    return [];
+  }
+
   const favoriteRecipes = await prisma.favorite.findMany({
     where: {
-      userId,
+      userId: user.id,
     },
     include: {
       recipe: true,
