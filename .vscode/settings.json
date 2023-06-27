@@ -5,6 +5,7 @@
     "clsx",
     "gitmoji",
     "ianvs",
+    "kumabiko",
     "lucide",
     "nextjs",
     "pnpx",
@@ -13,6 +14,7 @@
     "shadcn",
     "SUPABASE",
     "tailwindcss",
+    "tsuboi",
     "workdir"
   ],
   "[prisma]": {

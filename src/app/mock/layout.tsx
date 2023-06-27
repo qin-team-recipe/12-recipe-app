@@ -7,7 +7,7 @@ export const metadata = {
 
 export default function layout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="p-8">
+    <div className="p-8 mb-20">
       <Login />
       {children}
     </div>
