@@ -40,7 +40,7 @@ export default async function NewRecipe() {
 
   return (
     <form action={addRecipe} className="flex flex-col items-center justify-center gap-2 pt-2">
-      <h2 className="text-2xl font-extrabold self-start">レシピ追加</h2>
+      <h2 className="self-start text-2xl font-extrabold">レシピ追加</h2>
 
       <div className="grid w-full max-w-screen-sm items-center gap-1.5">
         <Label htmlFor="email-2">Title</Label>

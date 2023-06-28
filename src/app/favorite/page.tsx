@@ -7,7 +7,7 @@ const page = () => {
   return (
     <>
       <TopBar
-        centerComponent={<h1 className="md:text-xl text-mauve12 font-bold">お気に入り</h1>}
+        centerComponent={<h1 className="font-bold text-mauve12 md:text-xl">お気に入り</h1>}
         trailingComponent={<SettingsActionIcon />}
       />
       <FavoriteChefList />

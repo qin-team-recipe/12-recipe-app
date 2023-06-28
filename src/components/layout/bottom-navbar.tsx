@@ -12,7 +12,7 @@ const BottomNavbar = () => {
   const routes = useMemo(() => bottomBarRoutes(pathname), [pathname]);
 
   return (
-    <div className="md:hidden flex gap-x-2 bg-gray-50 pb-2 w-full p-2 fixed bottom-0 justify-around shadow-extend-y-top z-10 translate-y-px">
+    <div className="fixed bottom-0 z-10 flex w-full translate-y-px justify-around gap-x-2 bg-gray-50 p-2 pb-2 shadow-extend-y-top md:hidden">
       {routes.map((route) => (
         <div key={route.label}>
           <NavbarItem {...route} />

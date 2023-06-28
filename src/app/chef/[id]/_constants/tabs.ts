@@ -5,12 +5,12 @@ export const chefTabs = (chefId: number) => {
     {
       label: CONSTANTS.RECIPE,
       link: `/chef/${chefId}`,
-      value: CONSTANTS.RECIPE
+      value: CONSTANTS.RECIPE,
     },
     {
       label: CONSTANTS.LINK,
       link: `/chef/${chefId}/link`,
-      value: CONSTANTS.LINK
-    }
-  ]
-}
+      value: CONSTANTS.LINK,
+    },
+  ];
+};

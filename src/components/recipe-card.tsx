@@ -24,19 +24,19 @@ const RecipeCard: React.FC<Props> = ({ imageUrl, recipeName, comment, recipeId, 
     <div>
       <Link href={`${PATH_ITEMS.RECIPE.PATH}/${recipeId}`}>
         <div className="relative">
-          <img className="rounded-2xl aspect-square" src={imageUrl} alt="recipe-card" />
+          <img className="aspect-square rounded-2xl" src={imageUrl} alt="recipe-card" />
           {favorites > 0 && (
-            <div className="flex absolute h-7 rounded-2xl bg-mauve10 bg-opacity-50 items-center p-1 top-2 right-2">
-              <Heart className="text-mauve1 mr-1" size={14} />
-              <label className="text-mauve1 text-sm" htmlFor="favorite">
+            <div className="absolute right-2 top-2 flex h-7 items-center rounded-2xl bg-mauve10 bg-opacity-50 p-1">
+              <Heart className="mr-1 text-mauve1" size={14} />
+              <label className="text-sm text-mauve1" htmlFor="favorite">
                 {favorites}
               </label>
             </div>
           )}
         </div>
         <div className="grid">
-          <h6 className="text-xs font-bold mt-1 text-mauve12 text-ellipsis line-clamp-2">{recipeName}</h6>
-          <p className="text-extend-ss mt-1 text-mauve11 text-ellipsis overflow-hidden whitespace-nowrap">{comment}</p>
+          <h6 className="mt-1 line-clamp-2 text-ellipsis text-xs font-bold text-mauve12">{recipeName}</h6>
+          <p className="mt-1 overflow-hidden text-ellipsis whitespace-nowrap text-extend-ss text-mauve11">{comment}</p>
         </div>
       </Link>
     </div>

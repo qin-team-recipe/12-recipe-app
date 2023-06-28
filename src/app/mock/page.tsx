@@ -16,8 +16,8 @@ const page = async () => {
       <Separator className="my-2" />
       <NewRecipe />
       <Separator className="my-2" />
-      <h2 className="text-2xl font-extrabold pt-2">レシピ一覧</h2>
-      <div className="pt-4 grid grid-cols-2 gap-4">
+      <h2 className="pt-2 text-2xl font-extrabold">レシピ一覧</h2>
+      <div className="grid grid-cols-2 gap-4 pt-4">
         {myRecipes?.map((recipe) => (
           <div key={recipe.id}>
             <RecipeCard

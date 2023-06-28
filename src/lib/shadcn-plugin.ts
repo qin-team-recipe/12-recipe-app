@@ -211,8 +211,8 @@ export const shadcnPlugin = plugin(
           "extend-ss": "0.625rem",
         },
         height: {
-          "extend-22": "5.5rem"
-        }
+          "extend-22": "5.5rem",
+        },
       },
     },
     plugins: [],

@@ -1,4 +1,4 @@
-import React, { ReactNode } from "react";
+import { ReactNode } from "react";
 
 import DetailAbstract from "@/src/components/detail-abstract";
 import DetailHeaderImage from "@/src/components/detail-header-image";
@@ -18,9 +18,9 @@ const ChefLayout = ({ children }: Props) => {
   return (
     <>
       <DetailHeaderImage imageUrl={"https://images.unsplash.com/photo-1492633423870-43d1cd2775eb"} />
-      <div className="grid p-4 gap-4">
+      <div className="grid gap-4 p-4">
         <DetailAbstract name={"シェフ名"} abstract={"シェフ概要"} />
-        <div className="flex gap-x-4 items-center">
+        <div className="flex items-center gap-x-4">
           <NumberUnit numbers={1234} unit={CONSTANTS.RECIPE} />
           <NumberUnit numbers={500} unit={CONSTANTS.FOLLOWER} />
         </div>

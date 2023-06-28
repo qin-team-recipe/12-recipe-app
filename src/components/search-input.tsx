@@ -91,7 +91,7 @@ const SearchInput = () => {
       )}
 
       <div className="relative flex-1">
-        <Search className="absolute top-1/2 left-2 transform -translate-y-1/2" size={16} />
+        <Search className="absolute left-2 top-1/2 -translate-y-1/2 transform" size={16} />
         <Input
           value={inputValue}
           onChange={(e) => {
@@ -101,14 +101,14 @@ const SearchInput = () => {
           className="pl-10"
         />
         {isPending && (
-          <div className="absolute top-1/2 right-2 transform -translate-y-1/2">
+          <div className="absolute right-2 top-1/2 -translate-y-1/2 transform">
             <Spinner />
           </div>
         )}
         {!(pathname === "/") && inputValue && !isPending && (
           <button
             onClick={() => setInputValue("")}
-            className="absolute top-1/2 right-2 transform -translate-y-1/2"
+            className="absolute right-2 top-1/2 -translate-y-1/2 transform"
             aria-label="Clear"
           >
             <X size={16} />

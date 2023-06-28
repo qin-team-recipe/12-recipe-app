@@ -11,7 +11,7 @@ type Props = {
 
 const ProfileLink = ({ chefId, avatar, name }: Props) => {
   return (
-    <Link className="flex items-center gap-x-1 cursor-pointer hover:underline" href={`/chef/${chefId}`}>
+    <Link className="flex cursor-pointer items-center gap-x-1 hover:underline" href={`/chef/${chefId}`}>
       <Avatar className="h-5 w-5">
         <AvatarImage src={avatar} alt="profile" />
       </Avatar>

@@ -16,7 +16,10 @@
     "workdir"
   ],
   "[prisma]": {
-    "editor.formatOnSave": true,
     "editor.defaultFormatter": "Prisma.prisma"
+  },
+  "editor.formatOnSave": true,
+  "[javascript][typescript][typescriptreact][json]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
   }
 }

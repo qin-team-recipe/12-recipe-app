@@ -12,9 +12,9 @@ const SideNavbar = () => {
   const routes = useMemo(() => sideBarRoutes(pathname), [pathname]);
 
   return (
-    <div className="hidden md:flex gap-y-2 bg-background h-full md:w-[240px]  p-2 overflow-auto sticky top-0 justify-center">
-      <div className="flex flex-col gap-y-4 px-4 py-4 items-start">
-        <span className="text-2xl font-bold mb-4 text-mauve12">LOGO</span>
+    <div className="sticky top-0 hidden h-full justify-center gap-y-2  overflow-auto bg-background p-2 md:flex md:w-[240px]">
+      <div className="flex flex-col items-start gap-y-4 px-4 py-4">
+        <span className="mb-4 text-2xl font-bold text-mauve12">LOGO</span>
         {routes.map((route) => (
           <div key={route.label}>
             <NavbarItem {...route} />

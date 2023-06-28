@@ -17,28 +17,28 @@ const NavbarItem: React.FC<Props> = ({ icon: Icon, label, active, href }) => {
       href={href}
       className={cn(
         `
-        flex 
-        flex-col 
-        md:flex-row 
-        h-auto 
-        items-center 
-        w-24
-        md:w-auto
-        gap-x-4 
         text-md 
+        flex 
+        h-auto 
+        w-24 
+        cursor-pointer 
+        flex-col
+        items-center
+        gap-x-4 
+        px-2 
+        py-1
         font-medium
-        cursor-pointer
-        hover:bg-neutral-100
-        hover:rounded-2xl
-        transition
         text-mauve11
-        px-2
-        py-1`,
+        transition
+        hover:rounded-2xl
+        hover:bg-neutral-100
+        md:w-auto
+        md:flex-row`,
         active && "text-tomato9"
       )}
     >
       <Icon size={24} />
-      <p className={cn(`truncate w-100 text-sm md:text-lg`, active && "font-bold")}>{label}</p>
+      <p className={cn(`w-100 truncate text-sm md:text-lg`, active && "font-bold")}>{label}</p>
     </Link>
   );
 };
