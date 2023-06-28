@@ -23,11 +23,11 @@ export const metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="ja" className={cn(inter.className)}>
-      <body className="h-screen md:flex md:justify-center md:max-w-6xl mx-auto">
+      <body className="mx-auto h-screen md:flex md:max-w-6xl md:justify-center">
         <SideNavbar />
-        <Separator className="w-[1px] h-full hidden md:block" />
-        <main className="flex-1 overflow-y-auto mb-20 md:mb-0">{children}</main>
-        <Separator className="w-[1px] h-full hidden md:block" />
+        <Separator className="hidden h-full w-[1px] md:block" />
+        <main className="mb-20 flex-1 overflow-y-auto md:mb-0">{children}</main>
+        <Separator className="hidden h-full w-[1px] md:block" />
         <BottomNavbar />
         <Toaster />
       </body>

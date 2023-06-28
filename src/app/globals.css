@@ -3,6 +3,6 @@
 @tailwind utilities;
 
 /* スクロールバー非表示 */
-* ::-webkit-scrollbar{
+* ::-webkit-scrollbar {
   display: none;
 }

@@ -4,26 +4,26 @@
 
 export const CONSTANTS = {
   /** お気に入り */
-  FAVORITE: 'お気に入り',
+  FAVORITE: "お気に入り",
 
   /** シェフ */
-  CHEF: 'シェフ',
+  CHEF: "シェフ",
 
   /** レシピ */
-  RECIPE: 'レシピ',
+  RECIPE: "レシピ",
 
   /** レシピ */
-  LINK: 'リンク',
+  LINK: "リンク",
 
   /** フォロワー */
-  FOLLOWER: 'フォロワー',
+  FOLLOWER: "フォロワー",
 
   /** 注目のシェフ */
-  TOPIC_CHEF: '注目のシェフ',
+  TOPIC_CHEF: "注目のシェフ",
 
   /** 話題のレシピ */
-  TOPIC_RECIPE: '話題のレシピ',
-}
+  TOPIC_RECIPE: "話題のレシピ",
+};
 
 /**
  * 有名SNSの定数
@@ -31,6 +31,6 @@ export const CONSTANTS = {
  */
 
 export const POPULAR_SNS = {
-  INSTAGRAM: 'instagram',
-  TWITTER: 'twitter'
+  INSTAGRAM: "instagram",
+  TWITTER: "twitter",
 };

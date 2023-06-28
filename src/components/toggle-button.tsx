@@ -13,7 +13,7 @@ const ToggleButton = ({ isActive, activeLabel, inactiveLabel }: Props) => {
     <>
       <Button
         variant={isActive ? "outline" : "destructive"}
-        className={cn("w-fit", "hover:shadow", isActive ? "text-tomato9 bg-mauve1 border-accent" : "bg-tomato9")}
+        className={cn("w-fit", "hover:shadow", isActive ? "border-accent bg-mauve1 text-tomato9" : "bg-tomato9")}
       >
         {isActive ? activeLabel : inactiveLabel}
       </Button>

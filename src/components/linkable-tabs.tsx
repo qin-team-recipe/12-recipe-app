@@ -30,7 +30,7 @@ const LinkableTabs = ({ tabs, children, searchQuery }: Props) => {
 
   return (
     <Tabs value={activeTab} onValueChange={setActiveTab}>
-      <TabsList className="flex justify-between border-b-1 border-mauve6">
+      <TabsList className="border-b-1 flex justify-between border-mauve6">
         {tabs.map((tab) => (
           <TabsTrigger
             key={tab.value}
@@ -40,7 +40,7 @@ const LinkableTabs = ({ tabs, children, searchQuery }: Props) => {
             }`}
           >
             <Link href={searchQuery ? `${tab.link}?search=${searchQuery}` : tab.link}>
-              <div className="text-mauve12 py-2">{tab.label}</div>
+              <div className="py-2 text-mauve12">{tab.label}</div>
             </Link>
           </TabsTrigger>
         ))}

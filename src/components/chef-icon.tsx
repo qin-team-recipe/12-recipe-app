@@ -11,13 +11,13 @@ type Props = {
 // お気に入りシェフアイコン
 export const ChefIcon = ({ routingUrl, imageUrl, chefName }: Props) => {
   return (
-    <div className="flex flex-col items-center w-[68px]">
+    <div className="flex w-[68px] flex-col items-center">
       <Link href={routingUrl}>
         <Avatar className="h-[68px] w-[68px]">
           <AvatarImage src={imageUrl} alt={chefName} />
         </Avatar>
       </Link>
-      <p className="text-base text-primary mt-1 line-clamp-2 leading-[14px] text-center">{chefName}</p>
+      <p className="mt-1 line-clamp-2 text-center text-base leading-[14px] text-primary">{chefName}</p>
     </div>
   );
 };

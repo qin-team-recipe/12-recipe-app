@@ -9,10 +9,10 @@ type Props = {
 // 注目シェフ用のカード
 export const ChefCard = ({ routingUrl, imageUrl, imageText }: Props) => {
   return (
-    <div className="w-36 h-56 relative">
+    <div className="relative h-56 w-36">
       <Link href={routingUrl}>
-        <img className="w-full h-full rounded-2xl" src={imageUrl} alt="chef" />
-        <p className="text-xl text-slate-100 font-semibold absolute left-3 bottom-3">{imageText}</p>
+        <img className="h-full w-full rounded-2xl" src={imageUrl} alt="chef" />
+        <p className="absolute bottom-3 left-3 text-xl font-semibold text-slate-100">{imageText}</p>
       </Link>
     </div>
   );
