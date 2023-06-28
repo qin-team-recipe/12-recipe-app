@@ -1,4 +1,4 @@
-export const recipeCardLists = [
+export const recipeLists = [
   {
     imageUrl: 'https://images.unsplash.com/photo-1492633423870-43d1cd2775eb',
     recipeName: 'レシピ名',
