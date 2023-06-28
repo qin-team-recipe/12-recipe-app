@@ -8,7 +8,7 @@ const getChefById = async (id: string) => {
     include: {
       Recipe: true,
       followers: true,
-      ChefLink: true,
+      UserLink: true,
     },
   });
 
