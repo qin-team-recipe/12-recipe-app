@@ -1,27 +1,24 @@
 import { revalidatePath } from "next/cache";
-import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
 
+import getAuthenticatedUser from "@/src/actions/getAuthenticatedUser";
 import { Button } from "@/src/components/ui/button";
 import { Input } from "@/src/components/ui/input";
 import { Label } from "@/src/components/ui/label";
 import { Textarea } from "@/src/components/ui/textarea";
 import { prisma } from "@/src/lib/prisma";
-import { Database } from "@/src/types/SupabaseTypes";
-import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 
 export default async function NewRecipe() {
-  const supabase = createServerComponentClient<Database>({ cookies });
-  const {
-    data: { session },
-  } = await supabase.auth.getSession();
-
-  if (!session) {
-    redirect("/mock/unauthenticated");
-  }
-
   const addRecipe = async (formData: FormData) => {
     "use server";
+    const user = await getAuthenticatedUser();
+
+    if (!user) {
+      throw new Error("認証に失敗しました");
+    }
+
+    if (user.role !== "ADMIN") {
+      throw new Error("権限がありません");
+    }
 
     const title = String(formData.get("title"));
     const description = String(formData.get("description"));
@@ -30,7 +27,8 @@ export default async function NewRecipe() {
       data: {
         title,
         description,
-        userId: session.user.id,
+        // TODO: シェフを指定できるようにする
+        userId: user.id,
         servingCount: 1,
       },
     });
