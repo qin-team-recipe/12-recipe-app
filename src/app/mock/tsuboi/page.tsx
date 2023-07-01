@@ -13,12 +13,10 @@ const page = async ({ searchParams }: { searchParams: { search?: string } }) => 
 
   const user = await getAuthenticatedUser();
 
-  const { searchedChefs, searchedRecipes } = await searchRecipesAndChefs(searchQuery);
-
-  console.log(searchedChefs);
+  const { searchedRecipes } = await searchRecipesAndChefs(searchQuery);
 
   return (
-    <div className="pt-4">
+    <div className="p-4">
       <NewRecipe />
       <Separator className="my-2" />
       <h2 className="pt-2 text-2xl font-extrabold">レシピ一覧</h2>
