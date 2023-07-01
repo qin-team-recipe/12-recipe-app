@@ -22,23 +22,26 @@ const page = async ({ searchParams }: { searchParams: { search?: string } }) => 
       <NewRecipe />
       <Separator className="my-2" />
       <h2 className="pt-2 text-2xl font-extrabold">レシピ一覧</h2>
-      <TopBar centerComponent={<SearchInput />} />
-      {searchedRecipes && searchedRecipes.length > 0 ? (
-        <div className="grid grid-cols-2 gap-4 pt-4">
-          {searchedRecipes.map((recipe) => (
-            <div key={recipe.id} className="flex flex-col gap-2">
-              <RecipeCard
-                favorites={recipe.likes.length}
-                comment={recipe.description}
-                recipeName={recipe.title}
-                imageUrl="https://images.unsplash.com/photo-1595295333158-4742f28fbd85?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=320&q=80"
-                recipeId={recipe.id}
-              />
-              {user?.role === "ADMIN" && <DeleteRecipeButton recipeId={recipe.id} />}
-            </div>
-          ))}
-        </div>
-      ) : (
+      {searchedRecipes && searchedRecipes.length > 0 && (
+        <>
+          <TopBar centerComponent={<SearchInput />} />
+          <div className="grid grid-cols-2 gap-4 pt-4">
+            {searchedRecipes.map((recipe) => (
+              <div key={recipe.id} className="flex flex-col gap-2">
+                <RecipeCard
+                  favorites={recipe.likes.length}
+                  comment={recipe.description}
+                  recipeName={recipe.title}
+                  imageUrl="https://images.unsplash.com/photo-1595295333158-4742f28fbd85?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=320&q=80"
+                  recipeId={recipe.id}
+                />
+                {user?.role === "ADMIN" && <DeleteRecipeButton recipeId={recipe.id} />}
+              </div>
+            ))}
+          </div>
+        </>
+      )}
+      {searchQuery.length > 0 && searchedRecipes.length === 0 && (
         <div className="flex flex-col items-center justify-center pt-4">
           <img
             className="mx-auto mb-4 h-80 w-80"
