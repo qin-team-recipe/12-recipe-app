@@ -8,7 +8,7 @@ const page = async () => {
   const user = await getAuthenticatedUser();
 
   return (
-    <div className="pt-4">
+    <div className="mb-20 p-8 pt-4">
       <h4 className="text-xl font-medium leading-none">🙌 Hello {user?.name} 🙌</h4>
       <Separator className="my-4" />
       <div className="flex gap-4">

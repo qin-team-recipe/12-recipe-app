@@ -36,7 +36,7 @@ export default function Login() {
   };
 
   return (
-    <div className="flex gap-2">
+    <div className="flex gap-2 p-4">
       <Button onClick={handleSignUp}>Sign up</Button>
       <Button onClick={handleSignIn}>Sign in</Button>
       <Button onClick={handleSignOut}>Sign out</Button>
