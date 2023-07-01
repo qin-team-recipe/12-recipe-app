@@ -6,20 +6,18 @@ import SearchInput from "@/src/components/search-input";
 import { Separator } from "@/src/components/ui/separator";
 
 import DeleteRecipeButton from "../_components/delete-recipe-button";
-import NewRecipe from "../_components/new-recipe";
+import NewRecipeForm from "../_components/new-recipe-form";
 
 const page = async ({ searchParams }: { searchParams: { search?: string } }) => {
   const searchQuery = searchParams.search ?? "";
 
   const user = await getAuthenticatedUser();
 
-  const { searchedChefs, searchedRecipes } = await searchRecipesAndChefs(searchQuery);
-
-  console.log(searchedChefs);
+  const { searchedRecipes } = await searchRecipesAndChefs(searchQuery);
 
   return (
-    <div className="pt-4">
-      <NewRecipe />
+    <div className="p-4">
+      <NewRecipeForm />
       <Separator className="my-2" />
       <h2 className="pt-2 text-2xl font-extrabold">レシピ一覧</h2>
       <TopBar centerComponent={<SearchInput />} />
