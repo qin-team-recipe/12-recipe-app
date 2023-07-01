@@ -1,35 +1,56 @@
 import getAuthenticatedUser from "@/src/actions/getAuthenticatedUser";
-import getRecipes from "@/src/actions/getRecipes";
+import { searchRecipesAndChefs } from "@/src/actions/searchRecipesAndChefs";
+import TopBar from "@/src/components/layout/top-bar";
 import RecipeCard from "@/src/components/recipe-card";
+import SearchInput from "@/src/components/search-input";
 import { Separator } from "@/src/components/ui/separator";
 
 import DeleteRecipeButton from "../_components/delete-recipe-button";
 import NewRecipe from "../_components/new-recipe";
 
-const page = async () => {
-  const recipes = await getRecipes();
+const page = async ({ searchParams }: { searchParams: { search?: string } }) => {
+  const searchQuery = searchParams.search ?? "";
 
   const user = await getAuthenticatedUser();
+
+  const { searchedChefs, searchedRecipes } = await searchRecipesAndChefs(searchQuery);
+
+  console.log(searchedChefs);
 
   return (
     <div className="pt-4">
       <NewRecipe />
       <Separator className="my-2" />
-      <h2 className="text-2xl font-extrabold pt-2">レシピ一覧</h2>
-      <div className="pt-4 grid grid-cols-2 gap-4 ">
-        {recipes?.map((recipe) => (
-          <div key={recipe.id} className="flex flex-col gap-2">
-            <RecipeCard
-              favorites={recipe.likes.length}
-              comment={recipe.description}
-              recipeName={recipe.title}
-              imageUrl="https://images.unsplash.com/photo-1595295333158-4742f28fbd85?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=320&q=80"
-              recipeId={recipe.id}
-            />
-            {user?.role === "ADMIN" && <DeleteRecipeButton recipeId={recipe.id} />}
+      <h2 className="pt-2 text-2xl font-extrabold">レシピ一覧</h2>
+      {searchedRecipes && searchedRecipes.length > 0 && (
+        <>
+          <TopBar centerComponent={<SearchInput />} />
+          <div className="grid grid-cols-2 gap-4 pt-4">
+            {searchedRecipes.map((recipe) => (
+              <div key={recipe.id} className="flex flex-col gap-2">
+                <RecipeCard
+                  favorites={recipe.likes.length}
+                  comment={recipe.description}
+                  recipeName={recipe.title}
+                  imageUrl="https://images.unsplash.com/photo-1595295333158-4742f28fbd85?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=320&q=80"
+                  recipeId={recipe.id}
+                />
+                {user?.role === "ADMIN" && <DeleteRecipeButton recipeId={recipe.id} />}
+              </div>
+            ))}
           </div>
-        ))}
-      </div>
+        </>
+      )}
+      {searchQuery.length > 0 && searchedRecipes.length === 0 && (
+        <div className="flex flex-col items-center justify-center pt-4">
+          <img
+            className="mx-auto mb-4 h-80 w-80"
+            src="https://uploads-ssl.webflow.com/603c87adb15be3cb0b3ed9b5/61bf07d2cce98fb122df3dd3_1.png"
+            alt="No result"
+          />
+          <p className="font-bold text-mauve12">該当する検索結果がありませんでした。</p>
+        </div>
+      )}
     </div>
   );
 };
