@@ -17,7 +17,7 @@ export const ChefIcon = ({ routingUrl, imageUrl, chefName }: Props) => {
           <AvatarImage src={imageUrl} alt={chefName} />
         </Avatar>
       </Link>
-      <p className="mt-1 line-clamp-2 text-center text-base leading-[14px] text-primary">{chefName}</p>
+      <p className="mt-1 line-clamp-1 text-center text-sm leading-[14px] text-primary">{chefName}</p>
     </div>
   );
 };
