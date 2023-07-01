@@ -38,10 +38,14 @@ const getChefById = async (id: string) => {
     })
   );
 
+  // 取得するシェフが自分自身であるかどうかを確認
+  const isMe = authenticatedUser.id === chef.id;
+
   return {
     ...chef,
     followersCount,
     isFollowing: isFollowing,
+    isMe: isMe,
   };
 };
 

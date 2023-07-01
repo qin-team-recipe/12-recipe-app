@@ -13,6 +13,8 @@ const page = async ({ params }: { params: { id: string } }) => {
 
   if (!chef) return notFound();
 
+  const { id, name, followersCount, isFollowing, Recipe, isMe } = chef;
+
   return (
     <div className="mb-20">
       <DetailHeaderImage
@@ -22,15 +24,15 @@ const page = async ({ params }: { params: { id: string } }) => {
       />
       <div className="grid gap-4 p-4">
         <DetailAbstract
-          name={chef.name}
+          name={name}
           // TODO: 実データを入れる
           abstract={"シェフ概要"}
         />
         <div className="flex items-center gap-x-4">
-          {chef.Recipe && <NumberUnit numbers={chef.Recipe.length} unit={CONSTANTS.RECIPE} />}
-          <NumberUnit numbers={chef.followersCount} unit={CONSTANTS.FOLLOWER} />
+          {Recipe && <NumberUnit numbers={Recipe.length} unit={CONSTANTS.RECIPE} />}
+          <NumberUnit numbers={followersCount} unit={CONSTANTS.FOLLOWER} />
         </div>
-        <FollowButton followedId={chef.id} isActive={chef.isFollowing} />
+        {!isMe && <FollowButton followedId={id} isActive={isFollowing} />}
       </div>
     </div>
   );

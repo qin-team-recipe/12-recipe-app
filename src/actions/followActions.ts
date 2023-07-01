@@ -13,6 +13,9 @@ const followChef = async (formData: FormData) => {
 
   const followedId = String(formData.get("followedId"));
 
+  // 自身をフォローするのを防ぐ
+  if (authenticatedUser.id === followedId) throw new Error("自分自身をフォローすることはできません😡");
+
   await prisma.userFollower.create({
     data: {
       followerId: authenticatedUser.id,
@@ -31,6 +34,9 @@ const unFollowChef = async (formData: FormData) => {
   if (!authenticatedUser) throw new Error("認証に失敗しました🥲");
 
   const followedId = String(formData.get("followedId"));
+
+  // 自身をフォローするのを防ぐ
+  if (authenticatedUser.id === followedId) throw new Error("自分自身をフォローすることはできません😡");
 
   await prisma.userFollower.delete({
     where: {
