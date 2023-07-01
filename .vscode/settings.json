@@ -4,6 +4,7 @@
     "calt",
     "clsx",
     "gitmoji",
+    "hookform",
     "ianvs",
     "kumabiko",
     "lucide",
@@ -15,7 +16,8 @@
     "SUPABASE",
     "tailwindcss",
     "tsuboi",
-    "workdir"
+    "workdir",
+    "zact"
   ],
   "[prisma]": {
     "editor.defaultFormatter": "Prisma.prisma"
