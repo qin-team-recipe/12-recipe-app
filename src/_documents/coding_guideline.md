@@ -1,17 +1,9 @@
 # コード規約
 
-## ファイル名
-
-- ファイル名は全て`ケバブケース`で記述する
-
-```bash
-# 例
-# ファイル名: sample-file.tsx
-```
-
 ## UI コンポーネント
 
 - UI コンポーネントは全て`パスカルケース`で記述する
+- ファイル名は`ケバブケース`で記述する
 
 ```tsx
 // 例
@@ -22,7 +14,7 @@ const SampleComponent = () => {
 ```
 
 - 関数式コンポーネントを使用する
-- エクスポートは`default`で行う
+- エクスポートは`デフォルトエクスポート`で行う
 
 ```tsx
 // 例
@@ -48,6 +40,20 @@ const SampleComponent = ({ sampleProps }: Props) => {
 };
 
 export default SampleComponent;
+```
+
+## API
+
+- API メソッドは全て`キャメルケース`で記述する
+- ファイル名も`キャメルケース`で記述する
+- エクスポートは`名前付きエクスポート`で行う
+
+```ts
+// 例
+// ファイル名: sampleApi.ts
+export const sampleApi = () => {
+  return "sample";
+};
 ```
 
 ## スタイル
