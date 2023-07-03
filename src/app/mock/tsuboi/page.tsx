@@ -22,9 +22,9 @@ const page = async ({ searchParams }: { searchParams: { search?: string } }) => 
       <NewRecipe />
       <Separator className="my-2" />
       <h2 className="pt-2 text-2xl font-extrabold">レシピ一覧</h2>
+      <TopBar centerComponent={<SearchInput />} />
       {searchedRecipes && searchedRecipes.length > 0 && (
         <>
-          <TopBar centerComponent={<SearchInput />} />
           <div className="grid grid-cols-2 gap-4 pt-4">
             {searchedRecipes.map((recipe) => (
               <div key={recipe.id} className="flex flex-col gap-2">
