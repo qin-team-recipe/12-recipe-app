@@ -1,4 +1,5 @@
 import { ChefCard } from "@/src/components/chef-card";
+import { ChefList } from "@/src/components/chef-list";
 import TopBar from "@/src/components/layout/top-bar";
 import RecipeCard from "@/src/components/recipe-card";
 import { RecipeStep } from "@/src/components/recipe-list";
@@ -25,6 +26,17 @@ const page = () => {
             comment={"コメントコメントコメントコメントコメントコメントコメントコメントコメントコメント"}
             recipeId={1}
             favorites={2}
+          />
+        </div>
+        <div className="h-32 w-full">
+          <ChefList
+            routingUrl="/"
+            imageUrl={"https://images.unsplash.com/photo-1492633423870-43d1cd2775eb?&w=128&h=128&dpr=2&q=80"}
+            cockName={"ひふみシェフ"}
+            comment={
+              "白ごはん.comを運営しています。アップしたレシピの紹介や、youtube動画、日々の食のこと、オリジナル商品の案内等をブログでやっています。"
+            }
+            recipeName={"123 レシピ"}
           />
         </div>
       </div>
