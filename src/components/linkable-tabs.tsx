@@ -4,16 +4,11 @@ import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
+import { LinkableTab } from "../types/LinkableTab";
 import { Tabs, TabsList, TabsTrigger } from "./ui/tabs";
 
-type Tab = {
-  value: string;
-  label: string;
-  link: string;
-};
-
 type Props = {
-  tabs: Tab[];
+  tabs: LinkableTab[];
   children: React.ReactNode;
   searchQuery?: string;
 };
@@ -40,7 +35,7 @@ const LinkableTabs = ({ tabs, children, searchQuery }: Props) => {
             }`}
           >
             <Link href={searchQuery ? `${tab.link}?search=${searchQuery}` : tab.link}>
-              <div className="py-2 text-mauve12">{tab.label}</div>
+              <div className="py-2 text-mauve12">{tab.value}</div>
             </Link>
           </TabsTrigger>
         ))}
