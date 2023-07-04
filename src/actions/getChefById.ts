@@ -7,9 +7,23 @@ const getChefById = async (id: string) => {
       id: id,
     },
     include: {
-      Recipe: true,
+      Recipe: {
+        include: {
+          _count: {
+            select: {
+              likes: true,
+            },
+          },
+        },
+      },
       followers: true,
       UserLink: true,
+      _count: {
+        select: {
+          Recipe: true,
+          followers: true,
+        },
+      },
     },
   });
 
@@ -46,6 +60,10 @@ const getChefById = async (id: string) => {
     followersCount,
     isFollowing: isFollowing,
     isMe: isMe,
+    Recipe: chef.Recipe.map((recipe) => ({
+      ...recipe,
+      likesCount: recipe._count.likes,
+    })),
   };
 };
 
