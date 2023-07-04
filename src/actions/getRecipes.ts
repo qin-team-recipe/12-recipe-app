@@ -1,11 +1,7 @@
 import { prisma } from "../lib/prisma";
+import { PaginationParams } from "../types/PaginationParams";
 
-type GetRecipesParams = {
-  page?: number;
-  limit?: number;
-};
-
-const getRecipes = async ({ page = 1, limit = 10 }: GetRecipesParams = {}) => {
+const getRecipes = async ({ offset = 0, limit = 10 }: PaginationParams = {}) => {
   const recipe = await prisma.recipe.findMany({
     include: {
       RecipeImage: true,
@@ -17,7 +13,7 @@ const getRecipes = async ({ page = 1, limit = 10 }: GetRecipesParams = {}) => {
     where: {
       deletedAt: null,
     },
-    skip: (page - 1) * limit,
+    skip: offset,
     take: limit,
   });
 
