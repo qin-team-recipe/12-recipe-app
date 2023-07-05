@@ -14,15 +14,16 @@ import { formSchema } from "./schema";
 export default function NewRecipeForm() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
+    defaultValues: {
+      title: "",
+      description: "",
+    },
   });
 
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
     await createRecipe(data);
 
-    form.reset({
-      title: "",
-      description: "",
-    });
+    form.reset();
   };
 
   return (
