@@ -6,6 +6,7 @@ const page = () => {
     <div className="grid grid-cols-2 gap-4 p-4">
       {recipeLists.map((list) => (
         <RecipeCard
+          key={list.recipeId}
           imageUrl={list.imageUrl}
           title={list.recipeName}
           description={list.comment}
