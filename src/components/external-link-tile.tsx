@@ -13,7 +13,7 @@ type Props = {
   siteUrl: string;
 };
 
-const ExternalLinkList = ({ siteName, siteUrl }: Props) => {
+const ExternalLinkTile = ({ siteName, siteUrl }: Props) => {
   const includeTwitter = siteUrl.includes(POPULAR_SNS.TWITTER);
   const includeInstagram = siteUrl.includes(POPULAR_SNS.INSTAGRAM);
   const includeYoutube = siteUrl.includes(POPULAR_SNS.YOUTUBE);
@@ -34,4 +34,4 @@ const ExternalLinkList = ({ siteName, siteUrl }: Props) => {
   );
 };
 
-export default ExternalLinkList;
+export default ExternalLinkTile;
