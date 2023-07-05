@@ -33,4 +33,5 @@ export const CONSTANTS = {
 export const POPULAR_SNS = {
   INSTAGRAM: "instagram",
   TWITTER: "twitter",
+  YOUTUBE: "youtube",
 };

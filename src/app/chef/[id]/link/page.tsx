@@ -1,11 +1,12 @@
-import React from "react";
-
 import ExternalLinkList from "@/src/components/external-link-list";
+import { linkLists } from "@/src/constants/dummy/link-list";
 
 const page = () => {
   return (
     <>
-      <ExternalLinkList siteName={"ツイッター"} siteUrl={"https://twitter.com"} />
+      {linkLists.map((list) => (
+        <ExternalLinkList key={list.site} siteName={list.site} siteUrl={list.url} />
+      ))}
     </>
   );
 };

@@ -1,4 +1,3 @@
-import React from "react";
 import Link from "next/link";
 
 import { Heart } from "lucide-react";
@@ -19,9 +18,9 @@ type Props = {
  * このカードを押下時にレシピ詳細ページへ飛ぶ等になる。URLは「https://{domain}/recipe/{recipeId}」という形。
  * @returns
  */
-const RecipeCard: React.FC<Props> = ({ imageUrl, title, description, id, favorites }) => {
+const RecipeCard = ({ imageUrl, title, description, id, favorites }: Props) => {
   return (
-    <div>
+    <>
       <Link href={`${PATH_ITEMS.RECIPE.PATH}/${id}`}>
         <div className="relative">
           <img className="aspect-square rounded-2xl" src={imageUrl} alt="recipe-card" />
@@ -41,7 +40,7 @@ const RecipeCard: React.FC<Props> = ({ imageUrl, title, description, id, favorit
           </p>
         </div>
       </Link>
-    </div>
+    </>
   );
 };
 
