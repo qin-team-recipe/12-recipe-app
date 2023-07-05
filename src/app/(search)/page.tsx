@@ -9,8 +9,8 @@ const page = () => {
   return (
     <>
       <TopBar centerComponent={<SearchInput />} />
-      <div className="p-8">
-        <Button>Search</Button>
+      <div className="flex flex-col gap-3">
+        <Button className="w-fit">Search</Button>
         {/* map処理をして横スクロールできるようにする */}
         <ChefCard
           routingUrl="/chef/1"
@@ -18,20 +18,22 @@ const page = () => {
           imageText="山田シェフ"
         />
         {/* map処理をして横スクロールできるようにする */}
-        <div className="flex h-52 w-40 gap-4">
+        <div className="flex h-56 w-40 gap-4">
           <RecipeCard
-            imageUrl={"https://images.unsplash.com/photo-1492633423870-43d1cd2775eb?&w=128&h=128&dpr=2&q=80"}
-            recipeName={"レシピ名レシピ名レシピ名レシピ名レシピ名レシピ名レシピ名レシピ名レシピ名"}
-            comment={"コメントコメントコメントコメントコメントコメントコメントコメントコメントコメント"}
-            recipeId={1}
+            imageUrl={
+              "https://images.unsplash.com/photo-1595295333158-4742f28fbd85?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=320&q=80"
+            }
+            title={"レシピ名レシピ名レシピ名レシピ名レシピ名レシピ名レシピ名レシピ名レシピ名"}
+            description={"コメントコメントコメントコメントコメントコメントコメントコメントコメントコメント"}
+            id={1}
             favorites={2}
           />
         </div>
+        <RecipeStep
+          recipeText="用意するメインの材料は、マカロニ、牛乳、鶏もも肉、玉ねぎ、椎茸で、バター、小麦粉、塩、こしょうも使用します。"
+          stepNumber={1}
+        />
       </div>
-      <RecipeStep
-        recipeText="用意するメインの材料は、マカロニ、牛乳、鶏もも肉、玉ねぎ、椎茸で、バター、小麦粉、塩、こしょうも使用します。"
-        stepNumber={1}
-      />
     </>
   );
 };

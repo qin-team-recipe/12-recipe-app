@@ -9,7 +9,7 @@ import { CONSTANTS } from "@/src/constants/constants";
 const page = () => {
   return (
     <>
-      <DetailHeaderImage imageUrl={"https://images.unsplash.com/photo-1492633423870-43d1cd2775eb"} />
+      <DetailHeaderImage imageUrl={"https://images.unsplash.com/photo-1492633423870-43d1cd2775eb"} path="/" />
       <div className="grid gap-4 p-4">
         <DetailAbstract name={"レシピ名"} abstract={"レシピ概要"} />
         <div className="flex gap-x-4">

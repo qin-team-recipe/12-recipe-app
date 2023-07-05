@@ -7,9 +7,9 @@ const page = () => {
       {recipeLists.map((list) => (
         <RecipeCard
           imageUrl={list.imageUrl}
-          recipeName={list.recipeName}
-          comment={list.comment}
-          recipeId={list.recipeId}
+          title={list.recipeName}
+          description={list.comment}
+          id={list.recipeId}
           favorites={list.favorites}
         />
       ))}
