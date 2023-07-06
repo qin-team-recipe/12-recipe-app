@@ -31,39 +31,24 @@ model User {
   updatedAt    DateTime?      @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(3)
 }
 
-/// レシピ・材料の中間テーブル
-model RecipeIngredient {
-  id           Int        @id @default(autoincrement())
-  recipe       Recipe     @relation(fields: [recipeId], references: [id])
-  recipeId     Int        @map("recipe_id")
-  ingredient   Ingredient @relation(fields: [ingredientId], references: [id])
-  ingredientId Int        @map("ingredient_id")
-  createdAt    DateTime?  @default(now()) @map("created_at") @db.Timestamptz(3)
-  updatedAt    DateTime?  @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(3)
-
-  //* 同じレシピに同じ材料を複数回登録することを防ぐ
-  @@unique([recipeId, ingredientId])
-}
-
+/// レシピ
 /// レシピ
 model Recipe {
-  id               Int                @id @default(autoincrement())
-  title            String
-  //* 説明文は場合によっては非常に長いテキストになる可能性があるので、@db.Textを指定しておく
-  description      String             @db.Text
-  likes            Favorite[]
-  user             User               @relation(fields: [userId], references: [id])
-  userId           String             @map("user_id")
-  //* レシピの材料は複数あるので、@relationを用いて、RecipeIngredientとの関連を定義する
-  servingCount     Int                @map("serving_count")
-  RecipeIngredient RecipeIngredient[]
-  RecipeImage      RecipeImage[]
-  CartList         CartList[]
-  Instruction      Instruction[]
-  RecipeLink       RecipeLink[]
-  createdAt        DateTime?          @default(now()) @map("created_at") @db.Timestamptz(3)
-  updatedAt        DateTime?          @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(3)
-  deletedAt        DateTime?          @map("deleted_at") @db.Timestamptz(3)
+  id           Int           @id @default(autoincrement())
+  title        String
+  description  String        @db.Text
+  likes        Favorite[]
+  user         User          @relation(fields: [userId], references: [id])
+  userId       String        @map("user_id")
+  servingCount Int           @map("serving_count")
+  RecipeImage  RecipeImage[]
+  CartList     CartList[]
+  Instruction  Instruction[]
+  RecipeLink   RecipeLink[]
+  createdAt    DateTime?     @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt    DateTime?     @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(3)
+  deletedAt    DateTime?     @map("deleted_at") @db.Timestamptz(3)
+  ingredients  Ingredient[]  @relation("RecipeIngredients")
 }
 
 /// レシピの画像
@@ -102,13 +87,13 @@ model Instruction {
 
 /// 材料
 model Ingredient {
-  id               Int                @id @default(autoincrement())
-  ingredientName   String             @map("ingredient_name") @db.Text
-  isCustom         Boolean            @default(false) @map("is_custom")
-  RecipeIngredient RecipeIngredient[]
-  CartListItem     CartListItem[]
-  createdAt        DateTime?          @default(now()) @map("created_at") @db.Timestamptz(3)
-  updatedAt        DateTime?          @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(3)
+  id             Int            @id @default(autoincrement())
+  ingredientName String         @map("ingredient_name") @db.Text
+  isCustom       Boolean        @default(false) @map("is_custom")
+  CartListItem   CartListItem[]
+  createdAt      DateTime?      @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt      DateTime?      @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(3)
+  recipes        Recipe[]       @relation("RecipeIngredients")
 }
 
 /// レシピのお気に入り
@@ -142,8 +127,9 @@ model UserFollower {
 /// ユーザーのリンク
 model UserLink {
   id        Int       @id @default(autoincrement())
-  user      User      @relation(fields: [chefId], references: [id])
-  chefId    String    @map("chef_id")
+  user      User      @relation(fields: [userId], references: [id])
+  userId    String    @map("user_id")
+  siteName  String    @map("site_name")
   url       String
   createdAt DateTime? @default(now()) @map("created_at") @db.Timestamptz(3)
   updatedAt DateTime? @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(3)
