@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-import getAuthenticatedUser from "@/src/actions/getAuthenticatedUser";
+import { getAuthenticatedUser } from "@/src/actions/getAuthenticatedUser";
 import { Button } from "@/src/components/ui/button";
 import { Separator } from "@/src/components/ui/separator";
 

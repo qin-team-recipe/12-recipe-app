@@ -1,7 +1,7 @@
 import { prisma } from "../lib/prisma";
-import getAuthenticatedUser from "./getAuthenticatedUser";
+import { getAuthenticatedUser } from "./getAuthenticatedUser";
 
-const getChefById = async (id: string) => {
+export const getChefById = async (id: string) => {
   const chef = await prisma.user.findUnique({
     where: {
       id: id,
@@ -66,5 +66,3 @@ const getChefById = async (id: string) => {
     })),
   };
 };
-
-export default getChefById;

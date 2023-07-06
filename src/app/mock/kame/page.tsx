@@ -1,4 +1,4 @@
-import getFavoriteRecipes from "@/src/actions/getFavoriteRecipes";
+import { getFavoriteRecipes } from "@/src/actions/getFavoriteRecipes";
 
 const page = async () => {
   const favoriteRecipes = await getFavoriteRecipes();

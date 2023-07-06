@@ -6,7 +6,7 @@ import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { prisma } from "../lib/prisma";
 import { Database } from "../types/SupabaseTypes";
 
-const getAuthenticatedUser = async () => {
+export const getAuthenticatedUser = async () => {
   const supabaseServerClient = createServerComponentClient<Database>({ cookies });
 
   const {
@@ -25,5 +25,3 @@ const getAuthenticatedUser = async () => {
 
   return user;
 };
-
-export default getAuthenticatedUser;

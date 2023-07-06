@@ -3,7 +3,7 @@
 import { revalidatePath } from "next/cache";
 
 import { prisma } from "../lib/prisma";
-import getAuthenticatedUser from "./getAuthenticatedUser";
+import { getAuthenticatedUser } from "./getAuthenticatedUser";
 
 export const restoreRecipe = async (formData: FormData) => {
   const id = Number(formData.get("recipeId"));

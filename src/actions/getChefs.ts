@@ -1,6 +1,6 @@
 import { prisma } from "../lib/prisma";
 
-const getChefs = async () => {
+export const getChefs = async () => {
   const chefs = await prisma.user.findMany({
     select: {
       id: true,
@@ -23,5 +23,3 @@ const getChefs = async () => {
 
   return chefs;
 };
-
-export default getChefs;

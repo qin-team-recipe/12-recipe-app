@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 
-import getChefById from "@/src/actions/getChefById";
+import { getChefById } from "@/src/actions/getChefById";
 import DetailAbstract from "@/src/components/detail-abstract";
 import DetailHeaderImage from "@/src/components/detail-header-image";
 import LinkableTabs from "@/src/components/linkable-tabs";
@@ -24,6 +24,7 @@ const page = async ({ params }: { params: { id: string } }) => {
         imageUrl={
           "https://images.unsplash.com/photo-1577219491135-ce391730fb2c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=667&q=80"
         }
+        path={"/mock/tsuboi/chefs/"}
       />
       <div className="grid gap-4 p-4">
         <DetailAbstract
@@ -43,10 +44,10 @@ const page = async ({ params }: { params: { id: string } }) => {
             <div key={recipe.id} className="flex flex-col gap-2">
               <RecipeCard
                 favorites={recipe.likesCount}
-                comment={recipe.description}
-                recipeName={recipe.title}
+                description={recipe.description}
+                title={recipe.title}
                 imageUrl="https://images.unsplash.com/photo-1595295333158-4742f28fbd85?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=320&q=80"
-                recipeId={recipe.id}
+                id={recipe.id}
               />
             </div>
           ))}
