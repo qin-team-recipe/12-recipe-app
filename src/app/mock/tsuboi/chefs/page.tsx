@@ -20,7 +20,7 @@ const page = async ({ searchParams }: { searchParams: { search?: string } }) => 
         <div className="grid grid-cols-2 gap-4 px-2 pt-4">
           {searchedChefs.map((chef) => (
             <div key={chef.id} className="flex flex-col gap-2">
-              <Link href={`mock/tsuboi/chefs/${chef.id}`}>
+              <Link href={`/mock/tsuboi/chefs/${chef.id}`}>
                 <Card className="w-full lg:max-w-md">
                   <CardHeader>
                     <CardTitle>{chef.name}</CardTitle>
