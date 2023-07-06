@@ -1,14 +1,13 @@
 import { CONSTANTS } from "@/src/constants/constants";
+import { LinkableTab } from "@/src/types/LinkableTab";
 
-export const chefTabs = (chefId: number) => {
+export const chefTabs = (chefId: number): LinkableTab[] => {
   return [
     {
-      label: CONSTANTS.RECIPE,
       link: `/chef/${chefId}`,
       value: CONSTANTS.RECIPE,
     },
     {
-      label: CONSTANTS.LINK,
       link: `/chef/${chefId}/link`,
       value: CONSTANTS.LINK,
     },

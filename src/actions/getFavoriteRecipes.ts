@@ -1,7 +1,7 @@
 import { prisma } from "../lib/prisma";
-import getAuthenticatedUser from "./getAuthenticatedUser";
+import { getAuthenticatedUser } from "./getAuthenticatedUser";
 
-const getFavoriteRecipes = async () => {
+export const getFavoriteRecipes = async () => {
   const user = await getAuthenticatedUser();
 
   if (!user) {
@@ -22,5 +22,3 @@ const getFavoriteRecipes = async () => {
 
   return favoriteRecipes;
 };
-
-export default getFavoriteRecipes;

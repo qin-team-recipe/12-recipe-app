@@ -2,11 +2,11 @@
 
 import { revalidatePath } from "next/cache";
 
-import getAuthenticatedUser from "@/src/actions/getAuthenticatedUser";
 import { prisma } from "@/src/lib/prisma";
 import { zact } from "zact/server";
 
 import { formSchema } from "../app/mock/_components/new-recipe-form/schema";
+import { getAuthenticatedUser } from "./getAuthenticatedUser";
 
 export const createRecipe = zact(formSchema)(async ({ title, description }) => {
   const user = await getAuthenticatedUser();

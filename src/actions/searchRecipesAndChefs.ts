@@ -1,7 +1,7 @@
 import { prisma } from "../lib/prisma";
 import { PaginationParams } from "../types/PaginationParams";
-import getChefs from "./getChefs";
-import getRecipes from "./getRecipes";
+import { getChefs } from "./getChefs";
+import { getRecipes } from "./getRecipes";
 
 export const searchRecipesAndChefs = async (searchQuery: string, { offset = 0, limit = 10 }: PaginationParams = {}) => {
   const search = searchQuery.toLowerCase();

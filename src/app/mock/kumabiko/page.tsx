@@ -1,4 +1,4 @@
-import getChefs from "@/src/actions/getChefs";
+import { getChefs } from "@/src/actions/getChefs";
 
 const page = async () => {
   const chefs = await getChefs();

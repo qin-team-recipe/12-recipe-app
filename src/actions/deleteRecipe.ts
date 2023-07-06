@@ -4,7 +4,7 @@ import { revalidatePath } from "next/cache";
 
 import { prisma } from "@/src/lib/prisma";
 
-import getAuthenticatedUser from "./getAuthenticatedUser";
+import { getAuthenticatedUser } from "./getAuthenticatedUser";
 
 export const deleteRecipe = async (formData: FormData) => {
   const id = Number(formData.get("recipeId"));

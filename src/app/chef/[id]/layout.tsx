@@ -24,7 +24,12 @@ const ChefLayout = ({ children }: Props) => {
           <NumberUnit numbers={1234} unit={CONSTANTS.RECIPE} />
           <NumberUnit numbers={500} unit={CONSTANTS.FOLLOWER} />
         </div>
-        <ToggleButton isActive={true} activeLabel={BUTTON_NAMES.IS_FOLLOW} inactiveLabel={BUTTON_NAMES.UN_FOLLOW} />
+        <ToggleButton
+          isActive={true}
+          activeLabel={BUTTON_NAMES.IS_FOLLOW}
+          inactiveLabel={BUTTON_NAMES.UN_FOLLOW}
+          formAction={undefined}
+        />
       </div>
       <LinkableTabs tabs={chefTabs(1)}>{children}</LinkableTabs>
     </>

@@ -20,6 +20,7 @@ const page = () => {
           isActive={false}
           activeLabel={BUTTON_NAMES.IS_FAVORITE}
           inactiveLabel={BUTTON_NAMES.UN_FAVORITE}
+          formAction={undefined}
         />
       </div>
     </>
