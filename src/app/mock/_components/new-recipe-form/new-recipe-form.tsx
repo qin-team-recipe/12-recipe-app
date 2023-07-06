@@ -9,9 +9,9 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 
-import { formSchema } from "./schema";
+import { formSchema } from ".";
 
-export default function NewRecipeForm() {
+const NewRecipeForm = () => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -61,4 +61,6 @@ export default function NewRecipeForm() {
       </form>
     </Form>
   );
-}
+};
+
+export default NewRecipeForm;

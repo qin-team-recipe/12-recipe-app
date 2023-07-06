@@ -5,7 +5,7 @@ import { revalidatePath } from "next/cache";
 import { prisma } from "@/src/lib/prisma";
 import { zact } from "zact/server";
 
-import { formSchema } from "../app/mock/_components/new-recipe-form/schema";
+import { formSchema } from "../app/mock/_components/new-recipe-form";
 import { getAuthenticatedUser } from "./getAuthenticatedUser";
 
 export const createRecipe = zact(formSchema)(async ({ title, description }) => {

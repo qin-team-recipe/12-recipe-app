@@ -6,7 +6,7 @@ import SearchInput from "@/src/components/search-input";
 import { Separator } from "@/src/components/ui/separator";
 
 import DeleteRecipeButton from "../_components/delete-recipe-button";
-import NewRecipeForm from "../_components/new-recipe-form";
+import { NewRecipeForm } from "../_components/new-recipe-form";
 
 const page = async ({ searchParams }: { searchParams: { search?: string } }) => {
   const searchQuery = searchParams.search ?? "";
