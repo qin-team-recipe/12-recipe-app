@@ -38,7 +38,7 @@ const page = async ({ params }: { params: { id: string } }) => {
         {!isMe && <FollowButton followedId={id} isActive={isFollowing} />}
       </div>
       <LinkableTabs tabs={tabs(id)}>
-        {UserLink.map(({id,siteName,url}) => (
+        {UserLink.map(({ id, siteName, url }) => (
           <div key={id} className="flex flex-col gap-2">
             <ExternalLinkTile siteName={siteName} siteUrl={url} />
           </div>
