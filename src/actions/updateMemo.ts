@@ -5,7 +5,7 @@ import { revalidatePath } from "next/cache";
 import { prisma } from "../lib/prisma";
 import { getAuthenticatedUser } from "./getAuthenticatedUser";
 
-const doneMemo = async (id: number, isCompleted: boolean) => {
+export const doneMemo = async (id: number, isCompleted: boolean) => {
   const user = await getAuthenticatedUser();
 
   if (!user) {
@@ -23,5 +23,3 @@ const doneMemo = async (id: number, isCompleted: boolean) => {
   // TODO: 適切なパスを指定する
   revalidatePath("/mock");
 };
-
-export default doneMemo;

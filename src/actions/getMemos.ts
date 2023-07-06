@@ -1,7 +1,7 @@
 import { prisma } from "../lib/prisma";
 import { getAuthenticatedUser } from "./getAuthenticatedUser";
 
-const getMemos = async () => {
+export const getMemos = async () => {
   const user = await getAuthenticatedUser();
 
   if (!user) {
@@ -26,5 +26,3 @@ const getMemos = async () => {
 
   return memos;
 };
-
-export default getMemos;

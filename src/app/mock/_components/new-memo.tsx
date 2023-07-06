@@ -2,7 +2,7 @@
 
 import { useRef } from "react";
 
-import addMemo from "@/src/actions/addMemo";
+import { addMemo } from "@/src/actions/addMemo";
 import { Button } from "@/src/components/ui/button";
 import { Input } from "@/src/components/ui/input";
 import { Label } from "@/src/components/ui/label";
