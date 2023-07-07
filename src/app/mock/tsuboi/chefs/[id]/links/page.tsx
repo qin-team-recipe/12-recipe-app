@@ -16,11 +16,12 @@ const page = async ({ params }: { params: { id: string } }) => {
 
   if (!chef) return notFound();
 
-  const { id, name, followersCount, isFollowing, UserLink, isMe, Recipe } = chef;
+  const { id, name, followersCount, isFollowing, UserLink, isMe, _count } = chef;
+
   return (
     <div className="mb-20">
       <DetailHeaderImage
-        path="/mock/tsuboi/chefs"
+        path={"/mock/tsuboi/chefs"}
         imageUrl={
           "https://images.unsplash.com/photo-1577219491135-ce391730fb2c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=667&q=80"
         }
@@ -32,7 +33,7 @@ const page = async ({ params }: { params: { id: string } }) => {
           abstract={"シェフ概要"}
         />
         <div className="flex items-center gap-x-4">
-          {Recipe && <NumberUnit numbers={Recipe.length} unit={CONSTANTS.RECIPE} />}
+          {_count.Recipe > 0 && <NumberUnit numbers={_count.Recipe} unit={CONSTANTS.RECIPE} />}
           <NumberUnit numbers={followersCount} unit={CONSTANTS.FOLLOWER} />
         </div>
         {!isMe && <FollowButton followedId={id} isActive={isFollowing} />}
