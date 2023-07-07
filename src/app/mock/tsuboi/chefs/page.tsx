@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import Link from "next/link";
 
 import { searchRecipesAndChefs } from "@/src/actions/searchRecipesAndChefs";
@@ -5,6 +6,9 @@ import TopBar from "@/src/components/layout/top-bar";
 import SearchInput from "@/src/components/search-input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/src/components/ui/card";
 import { Separator } from "@/src/components/ui/separator";
+import Spinner from "@/src/components/ui/spinner";
+
+import FollowingChefs from "../../_components/following-chefs";
 
 const page = async ({ searchParams }: { searchParams: { search?: string } }) => {
   const searchQuery = searchParams.search ?? "";
@@ -13,6 +17,17 @@ const page = async ({ searchParams }: { searchParams: { search?: string } }) => 
 
   return (
     <div className="p-2">
+      <Separator className="my-2" />
+      <h2 className="pt-2 text-2xl font-extrabold">フォロー中のシェフ一覧</h2>
+      <Suspense
+        fallback={
+          <div className="flex items-center justify-center">
+            <Spinner />
+          </div>
+        }
+      >
+        <FollowingChefs />
+      </Suspense>
       <Separator className="my-2" />
       <h2 className="pt-2 text-2xl font-extrabold">シェフ一覧</h2>
       <TopBar centerComponent={<SearchInput />} />

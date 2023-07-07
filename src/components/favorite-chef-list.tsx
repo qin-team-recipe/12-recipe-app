@@ -9,7 +9,7 @@ export const FavoriteChefList = () => {
         {favChefList.map((favChef) => (
           <ChefIcon
             key={favChef.chefId}
-            routingUrl={favChef.routingUrl}
+            path={favChef.routingUrl}
             imageUrl={favChef.imageUrl}
             chefName={favChef.chefName}
           />
