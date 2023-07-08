@@ -1,0 +1,13 @@
+{
+  "Nextjs Dynamic Route Page Component": {
+    "prefix": ["drpc", "dynamic route page compoent"],
+    "body": [
+      "const page = async ({ params }: { params: { id: string } }) => {",
+      "\treturn <>page</>;",
+      "};",
+      "",
+      "export default page;"
+    ],
+    "description": "Create a Next.js dynamic route component"
+  }
+}

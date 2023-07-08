@@ -1,0 +1,15 @@
+{
+  "Nextjs Server Component": {
+    "prefix": ["server component", "sc"],
+    "body": [
+      "type Props = {};",
+      "",
+      "const $1 = async ({}: Props) => {",
+      "\treturn <div>$1</div>;",
+      "};",
+      "",
+      "export default $1;"
+    ],
+    "description": "Create a Next.js server component with props"
+  }
+}

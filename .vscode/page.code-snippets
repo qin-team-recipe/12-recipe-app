@@ -1,0 +1,13 @@
+{
+  "Nextjs Page Component": {
+    "prefix": ["page component", "pc"],
+    "body": [
+      "const page = async () => {",
+      "\treturn <div>${1:page}</div>;",
+      "};",
+      "",
+      "export default page;"
+    ],
+    "description": "Create a Next.js page component"
+  }
+}

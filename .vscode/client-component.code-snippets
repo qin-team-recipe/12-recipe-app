@@ -1,0 +1,17 @@
+{
+  "Nextjs Client Component": {
+    "prefix": ["client component", "cc"],
+    "body": [
+      "\"use client\";",
+      "",
+      "type Props = {};",
+      "",
+      "const $1 = ({}: Props) => {",
+      "\treturn <div>$1</div>;",
+      "};",
+      "",
+      "export default $1;"
+    ],
+    "description": "Create a Next.js client component with props"
+  }
+}
