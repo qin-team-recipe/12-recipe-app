@@ -17,7 +17,7 @@ type Props = {
 const ChefLayout = ({ children }: Props) => {
   return (
     <>
-      <DetailHeaderImage imageUrl={"https://images.unsplash.com/photo-1492633423870-43d1cd2775eb"} path="/" />
+      <DetailHeaderImage imageUrl={"https://images.unsplash.com/photo-1492633423870-43d1cd2775eb"} path="/chef" />
       <div className="grid gap-4 p-4">
         <DetailAbstract name={"シェフ名"} abstract={"シェフ概要"} />
         <div className="flex items-center gap-x-4">
