@@ -32,9 +32,8 @@ model User {
 }
 
 /// レシピ
-/// レシピ
 model Recipe {
-  id           Int           @id @default(autoincrement())
+  id           String        @id @default(cuid())
   title        String
   description  String        @db.Text
   likes        Favorite[]
@@ -45,17 +44,17 @@ model Recipe {
   CartList     CartList[]
   Instruction  Instruction[]
   RecipeLink   RecipeLink[]
+  Ingredient   Ingredient[]
   createdAt    DateTime?     @default(now()) @map("created_at") @db.Timestamptz(3)
   updatedAt    DateTime?     @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(3)
   deletedAt    DateTime?     @map("deleted_at") @db.Timestamptz(3)
-  ingredients  Ingredient[]  @relation("RecipeIngredients")
 }
 
 /// レシピの画像
 model RecipeImage {
   id          String    @id @default(uuid())
   recipe      Recipe    @relation(fields: [recipeId], references: [id])
-  recipeId    Int       @map("recipe_id")
+  recipeId    String    @map("recipe_id")
   recipeImage String    @map("recipe_image") @db.Text
   createdAt   DateTime? @default(now()) @map("created_at") @db.Timestamptz(3)
   updatedAt   DateTime? @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(3)
@@ -64,8 +63,8 @@ model RecipeImage {
 /// レシピのリンク
 model RecipeLink {
   id        String    @id @default(uuid())
-  recipe    Recipe    @relation(fields: [recipeId], references: [id])
-  recipeId  Int       @map("recipe_id")
+  recipe    Recipe?   @relation(fields: [recipeId], references: [id])
+  recipeId  String    @map("recipe_id")
   linkUrl   String    @map("link_url") @db.Text
   createdAt DateTime? @default(now()) @map("created_at") @db.Timestamptz(3)
   updatedAt DateTime? @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(3)
@@ -75,8 +74,8 @@ model RecipeLink {
 model Instruction {
   id              Int       @id @default(autoincrement())
   recipe          Recipe    @relation(fields: [recipeId], references: [id])
-  recipeId        Int       @map("recipe_id")
-  stepOrder       BigInt    @map("step_order")
+  recipeId        String    @map("recipe_id")
+  stepOrder       Int       @map("step_order")
   stepDescription String    @map("step_description") @db.Text
   createdAt       DateTime? @default(now()) @map("created_at") @db.Timestamptz(3)
   updatedAt       DateTime? @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(3)
@@ -87,13 +86,14 @@ model Instruction {
 
 /// 材料
 model Ingredient {
-  id             Int            @id @default(autoincrement())
-  ingredientName String         @map("ingredient_name") @db.Text
-  isCustom       Boolean        @default(false) @map("is_custom")
-  CartListItem   CartListItem[]
-  createdAt      DateTime?      @default(now()) @map("created_at") @db.Timestamptz(3)
-  updatedAt      DateTime?      @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(3)
-  recipes        Recipe[]       @relation("RecipeIngredients")
+  id           Int            @id @default(autoincrement())
+  title        String         @db.Text
+  recipe       Recipe         @relation(fields: [recipeId], references: [id])
+  recipeId     String         @map("recipe_id")
+  isCustom     Boolean        @default(false) @map("is_custom")
+  CartListItem CartListItem[]
+  createdAt    DateTime?      @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt    DateTime?      @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(3)
 }
 
 /// レシピのお気に入り
@@ -102,7 +102,7 @@ model Favorite {
   user      User      @relation(fields: [userId], references: [id])
   userId    String    @map("user_id")
   recipe    Recipe    @relation(fields: [recipeId], references: [id])
-  recipeId  Int       @map("recipe_id")
+  recipeId  String    @map("recipe_id")
   createdAt DateTime? @default(now()) @map("created_at") @db.Timestamptz(3)
   updatedAt DateTime? @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(3)
 
@@ -154,7 +154,7 @@ model CartList {
   user         User           @relation(fields: [userId], references: [id])
   userId       String         @map("user_id")
   recipe       Recipe         @relation(fields: [recipeId], references: [id])
-  recipeId     Int            @map("recipe_id")
+  recipeId     String         @map("recipe_id")
   CartListItem CartListItem[]
   createdAt    DateTime?      @default(now()) @map("created_at") @db.Timestamptz(3)
   updatedAt    DateTime?      @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(3)
