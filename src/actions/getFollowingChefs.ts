@@ -1,7 +1,7 @@
 import { prisma } from "../lib/prisma";
 import { getAuthenticatedUser } from "./getAuthenticatedUser";
 
-const getFollowingChefs = async () => {
+export const getFollowingChefs = async () => {
   const authenticatedUser = await getAuthenticatedUser();
 
   if (!authenticatedUser) throw new Error("認証に失敗しました🥲");
@@ -27,5 +27,3 @@ const getFollowingChefs = async () => {
 
   return followingChefs;
 };
-
-export default getFollowingChefs;

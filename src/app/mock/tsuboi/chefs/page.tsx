@@ -8,7 +8,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/src/components/ui/ca
 import { Separator } from "@/src/components/ui/separator";
 import Spinner from "@/src/components/ui/spinner";
 
-import FollowingChefs from "../../_components/following-chefs";
+import HorizontalFollowingChefsList from "../../_components/horizontal-following-chefs-list";
 
 const page = async ({ searchParams }: { searchParams: { search?: string } }) => {
   const searchQuery = searchParams.search ?? "";
@@ -26,7 +26,7 @@ const page = async ({ searchParams }: { searchParams: { search?: string } }) => 
           </div>
         }
       >
-        <FollowingChefs />
+        <HorizontalFollowingChefsList />
       </Suspense>
       <Separator className="my-2" />
       <h2 className="pt-2 text-2xl font-extrabold">シェフ一覧</h2>

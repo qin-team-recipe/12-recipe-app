@@ -1,7 +1,7 @@
-import getFollowingChefs from "@/src/actions/getFollowingChefs";
+import { getFollowingChefs } from "@/src/actions/getFollowingChefs";
 import { ChefIcon } from "@/src/components/chef-icon";
 
-const FollowingChefs = async () => {
+const HorizontalFollowingChefsList = async () => {
   const chefs = await getFollowingChefs();
 
   return (
@@ -21,4 +21,4 @@ const FollowingChefs = async () => {
   );
 };
 
-export default FollowingChefs;
+export default HorizontalFollowingChefsList;
