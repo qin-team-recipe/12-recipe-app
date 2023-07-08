@@ -7,10 +7,10 @@ const page = () => {
       {recipeLists.map((list) => (
         <RecipeCard
           key={list.recipeId}
+          path={`/recipe/${list.recipeId}`}
           imageUrl={list.imageUrl}
           title={list.recipeName}
           description={list.comment}
-          id={list.recipeId}
           favorites={list.favorites}
         />
       ))}

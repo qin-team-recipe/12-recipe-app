@@ -2,13 +2,11 @@ import Link from "next/link";
 
 import { Heart } from "lucide-react";
 
-import { PATH_ITEMS } from "../constants/path-items";
-
 type Props = {
+  path: string;
   imageUrl: string;
   title: string;
   description: string;
-  id: number;
   favorites: number;
 };
 
@@ -18,10 +16,10 @@ type Props = {
  * このカードを押下時にレシピ詳細ページへ飛ぶ等になる。URLは「https://{domain}/recipe/{recipeId}」という形。
  * @returns
  */
-const RecipeCard = ({ imageUrl, title, description, id, favorites }: Props) => {
+const RecipeCard = ({ path, imageUrl, title, description, favorites }: Props) => {
   return (
     <>
-      <Link href={`${PATH_ITEMS.RECIPE.PATH}/${id}`}>
+      <Link href={path}>
         <div className="relative">
           <img className="aspect-square rounded-2xl" src={imageUrl} alt="recipe-card" />
           {favorites > 0 && (

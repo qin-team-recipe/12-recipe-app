@@ -13,7 +13,7 @@ const page = () => {
       <div className="grid gap-4 p-4">
         <DetailAbstract name={"レシピ名"} abstract={"レシピ概要"} />
         <div className="flex gap-x-4">
-          <ProfileLink chefId={1} avatar={"https://github.com/shadcn.png"} name={"シェフ名"} />
+          <ProfileLink id={"1"} avatar={"https://github.com/shadcn.png"} name={"シェフ名"} />
           <NumberUnit numbers={100000000} unit={CONSTANTS.FAVORITE} />
         </div>
         <ToggleButton

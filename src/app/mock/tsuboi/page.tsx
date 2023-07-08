@@ -16,7 +16,7 @@ const page = async ({ searchParams }: { searchParams: { search?: string } }) => 
   const { searchedRecipes } = await searchRecipesAndChefs(searchQuery);
 
   return (
-    <div className="p-4">
+    <div className="mb-20 p-4">
       <NewRecipeForm />
       <Separator className="my-2" />
       <h2 className="pt-2 text-2xl font-extrabold">レシピ一覧</h2>
@@ -27,13 +27,13 @@ const page = async ({ searchParams }: { searchParams: { search?: string } }) => 
             {searchedRecipes.map((recipe) => (
               <div key={recipe.id} className="flex flex-col gap-2">
                 <RecipeCard
+                  path={`/mock/tsuboi/${recipe.id}`}
                   favorites={recipe.likes.length}
                   description={recipe.description}
                   title={recipe.title}
                   imageUrl="https://images.unsplash.com/photo-1595295333158-4742f28fbd85?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=320&q=80"
-                  id={recipe.id}
                 />
-                {user?.role === "ADMIN" && <DeleteRecipeButton recipeId={recipe.id} />}
+                {user?.role !== "USER" && <DeleteRecipeButton recipeId={recipe.id} />}
               </div>
             ))}
           </div>

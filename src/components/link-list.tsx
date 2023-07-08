@@ -18,10 +18,7 @@ export const LinkListItem = () => {
     <div>
       <div className="text-md my-1 ml-4 font-bold">リンク（任意）</div>
       {[...Array(inputCount)].map((_, index) => (
-        <Input
-          key={index}
-          className={cn(`border-x-none rounded-none`, index > 0 && "border-t-0")}
-        />
+        <Input key={index} className={cn(`border-x-none rounded-none`, index > 0 && "border-t-0")} />
       ))}
       <button className="ml-4 mt-2 flex items-center text-sm text-tomato9 md:text-base" onClick={increaseInput}>
         <Plus className="h-4 w-4" />

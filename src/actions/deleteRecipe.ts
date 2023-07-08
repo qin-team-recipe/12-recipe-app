@@ -7,7 +7,7 @@ import { prisma } from "@/src/lib/prisma";
 import { getAuthenticatedUser } from "./getAuthenticatedUser";
 
 export const deleteRecipe = async (formData: FormData) => {
-  const id = Number(formData.get("recipeId"));
+  const id = String(formData.get("recipeId"));
 
   const user = await getAuthenticatedUser();
 

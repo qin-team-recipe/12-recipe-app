@@ -3,7 +3,6 @@ type Props = {
   stepNumber: number;
 };
 
-// レシピリスト
 export const RecipeStep = ({ recipeText, stepNumber }: Props) => {
   return (
     <div className="flex items-start gap-x-2 border-y px-2 py-2">
