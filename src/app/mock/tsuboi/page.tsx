@@ -17,6 +17,7 @@ const page = async ({ searchParams }: { searchParams: { search?: string } }) => 
 
   return (
     <div className="mb-20 p-4">
+      <h2 className="pt-2 text-2xl font-extrabold">レシピ作成</h2>
       <NewRecipeForm />
       <Separator className="my-2" />
       <h2 className="pt-2 text-2xl font-extrabold">レシピ一覧</h2>
