@@ -14,8 +14,8 @@ const page = async ({ params }: { params: { id: string } }) => {
         <div className="flex flex-col gap-2 p-4">
           <h2 className="text-xl font-bold">{servingCount}人前</h2>
           <div className="flex flex-col">
-            {ingredients.map(({ title }) => (
-              <div>{title}</div>
+            {ingredients.map(({ title, id }) => (
+              <div key={id}>{title}</div>
             ))}
           </div>
         </div>

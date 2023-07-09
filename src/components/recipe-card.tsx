@@ -33,9 +33,7 @@ const RecipeCard = ({ path, imageUrl, title, description, favorites }: Props) =>
         </div>
         <div className="grid">
           <h6 className="mt-1 line-clamp-2 text-ellipsis text-xs font-bold text-mauve12">{title}</h6>
-          <p className="mt-1 overflow-hidden text-ellipsis whitespace-nowrap text-extend-ss text-mauve11">
-            {description}
-          </p>
+          <p className="mt-1 truncate text-extend-ss text-mauve11">{description}</p>
         </div>
       </Link>
     </>

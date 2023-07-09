@@ -52,7 +52,7 @@ const SearchInput = () => {
     if (searchQuery !== inputValue) {
       setInputValue(searchQuery);
     }
-  }, [router]);
+  }, [inputValue, router]);
 
   // デバウンスされた値がある場合、マウントされたことを示す
   useEffect(() => {
@@ -91,7 +91,7 @@ const SearchInput = () => {
       )}
 
       <div className="relative flex-1">
-        <Search className="absolute left-2 top-1/2 -translate-y-1/2 transform" size={16} />
+        <Search className="absolute left-2 top-1/2 -translate-y-1/2" size={16} />
         <Input
           value={inputValue}
           onChange={(e) => {
@@ -101,14 +101,14 @@ const SearchInput = () => {
           className="bg-mauve4 pl-10 placeholder:text-mauve9 focus:border"
         />
         {isPending && (
-          <div className="absolute right-2 top-1/2 -translate-y-1/2 transform">
+          <div className="absolute right-2 top-1/2 -translate-y-1/2">
             <Spinner />
           </div>
         )}
         {!(pathname === "/") && inputValue && !isPending && (
           <button
             onClick={() => setInputValue("")}
-            className="absolute right-2 top-1/2 -translate-y-1/2 transform"
+            className="absolute right-2 top-1/2 -translate-y-1/2"
             aria-label="Clear"
           >
             <X size={16} />
