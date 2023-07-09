@@ -29,10 +29,7 @@ export const EditableChecklistItem = ({ text: name }: Props) => {
           {checked && <Check />}
         </button>
         <div
-          className={cn(
-            `overflow-hidden overflow-ellipsis text-sm text-mauve12 md:text-base`,
-            checked && "text-mauve8"
-          )}
+          className={cn(`overflow-hidden text-ellipsis text-sm text-mauve12 md:text-base`, checked && "text-mauve8")}
         >
           {name}
         </div>

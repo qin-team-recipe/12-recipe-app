@@ -5,7 +5,7 @@
   "plugins": ["tailwindcss"],
   "rules": { "@next/next/no-img-element": "off" },
   "settings": {
-    "tailwindcss": { "callees": ["cn"], "config": "tailwind.config.mjs" },
+    "tailwindcss": { "callees": ["cn"], "config": "tailwind.config.ts" },
     "next": { "rootDir": true }
   },
   "overrides": [{ "files": ["*.ts", "*.tsx"], "parser": "@typescript-eslint/parser" }]

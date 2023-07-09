@@ -1,7 +1,7 @@
 import { ChefCard } from "@/src/components/chef-card";
 import TopBar from "@/src/components/layout/top-bar";
 import RecipeCard from "@/src/components/recipe-card";
-import { RecipeStep } from "@/src/components/recipe-list";
+import { RecipeStep } from "@/src/components/recipe-step";
 import SearchInput from "@/src/components/search-input";
 import { Button } from "@/src/components/ui/button";
 
@@ -20,12 +20,12 @@ const page = () => {
         {/* map処理をして横スクロールできるようにする */}
         <div className="flex h-56 w-40 gap-4">
           <RecipeCard
+            path="/recipe/1"
             imageUrl={
               "https://images.unsplash.com/photo-1595295333158-4742f28fbd85?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=320&q=80"
             }
             title={"レシピ名レシピ名レシピ名レシピ名レシピ名レシピ名レシピ名レシピ名レシピ名"}
             description={"コメントコメントコメントコメントコメントコメントコメントコメントコメントコメント"}
-            id={1}
             favorites={2}
           />
         </div>

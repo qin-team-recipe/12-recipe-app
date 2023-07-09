@@ -40,14 +40,14 @@ const page = async ({ params }: { params: { id: string } }) => {
       </div>
       <LinkableTabs tabs={tabs(id)}>
         <div className="grid grid-cols-2 gap-4 p-4">
-          {Recipe.map((recipe) => (
-            <div key={recipe.id} className="flex flex-col gap-2">
+          {Recipe.map(({ id, likesCount, description, title }) => (
+            <div key={id} className="flex flex-col gap-2">
               <RecipeCard
-                favorites={recipe.likesCount}
-                description={recipe.description}
-                title={recipe.title}
+                path={`/mock/tsuboi/${id}`}
+                favorites={likesCount}
+                description={description}
+                title={title}
                 imageUrl="https://images.unsplash.com/photo-1595295333158-4742f28fbd85?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=320&q=80"
-                id={recipe.id}
               />
             </div>
           ))}

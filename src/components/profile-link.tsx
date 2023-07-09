@@ -1,18 +1,17 @@
-import React from "react";
 import Link from "next/link";
 
 import { Avatar, AvatarImage } from "./ui/avatar";
 
 type Props = {
-  chefId: number;
+  id: string;
   avatar: string;
   name: string;
 };
 
-const ProfileLink = ({ chefId, avatar, name }: Props) => {
+const ProfileLink = ({ id, avatar, name }: Props) => {
   return (
-    <Link className="flex cursor-pointer items-center gap-x-1 hover:underline" href={`/chef/${chefId}`}>
-      <Avatar className="h-5 w-5">
+    <Link className="flex cursor-pointer items-center gap-x-1 hover:underline" href={`/chef/${id}`}>
+      <Avatar className="h-6 w-6">
         <AvatarImage src={avatar} alt="profile" />
       </Avatar>
       <span>{name}</span>
