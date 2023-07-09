@@ -1,7 +1,7 @@
 import { prisma } from "../lib/prisma";
 import { getAuthenticatedUser } from "./getAuthenticatedUser";
 
-const getMyRecipes = async () => {
+export const getMyRecipes = async () => {
   const user = await getAuthenticatedUser();
 
   if (!user) {
@@ -15,7 +15,11 @@ const getMyRecipes = async () => {
     },
     include: {
       RecipeImage: true,
-      likes: true,
+      _count: {
+        select: {
+          likes: true,
+        },
+      },
     },
     orderBy: {
       createdAt: "desc",
@@ -24,5 +28,3 @@ const getMyRecipes = async () => {
 
   return myRecipe;
 };
-
-export default getMyRecipes;
