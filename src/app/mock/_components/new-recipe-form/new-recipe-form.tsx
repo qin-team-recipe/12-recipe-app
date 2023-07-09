@@ -130,7 +130,7 @@ const NewRecipeForm = () => {
                         type="button"
                         disabled={ingredientsFields.length === 1}
                         onClick={() => removeIngredients(index)}
-                        className="absolute right-2 top-1/2 -translate-y-1/2 transform"
+                        className="absolute right-2 top-1/2 -translate-y-1/2"
                       >
                         <X size={16} />
                       </button>
@@ -170,7 +170,7 @@ const NewRecipeForm = () => {
                         type="button"
                         disabled={instructionsFields.length === 1}
                         onClick={() => removeInstructions(index)}
-                        className="absolute right-2 top-1/2 -translate-y-1/2 transform"
+                        className="absolute right-2 top-1/2 -translate-y-1/2"
                       >
                         <X size={16} />
                       </button>
@@ -226,7 +226,7 @@ const NewRecipeForm = () => {
                         type="button"
                         disabled={urlsFields.length === 1}
                         onClick={() => removeUrls(index)}
-                        className="absolute right-2 top-1/2 -translate-y-1/2 transform"
+                        className="absolute right-2 top-1/2 -translate-y-1/2"
                       >
                         <X size={16} />
                       </button>
