@@ -5,7 +5,7 @@ export const getMyRecipes = async () => {
   const user = await getAuthenticatedUser();
 
   if (!user) {
-    return null;
+    throw new Error("認証に失敗しました");
   }
 
   const myRecipe = await prisma.recipe.findMany({
