@@ -2,7 +2,7 @@
 
 import { useTransition } from "react";
 
-import { addFavoriteRecipe } from "@/src/actions/addFavoriteRecipe";
+import { addFavoriteRecipe } from "@/src/actions/favoriteRecipeActions";
 import { Button } from "@/src/components/ui/button";
 import Spinner from "@/src/components/ui/spinner";
 

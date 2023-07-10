@@ -1,7 +1,7 @@
 import { getFavoriteRecipes } from "@/src/actions/getFavoriteRecipes";
 import { getRecipes } from "@/src/actions/getRecipes";
 
-import AddFavoriteRecipeButton from "./_components/add-favorite-recipe-button copy";
+import AddFavoriteRecipeButton from "./_components/add-favorite-recipe-button";
 import DeleteFavoriteRecipeButton from "./_components/delete-favorite-recipe-button";
 
 const page = async () => {
