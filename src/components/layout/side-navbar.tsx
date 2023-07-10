@@ -13,7 +13,7 @@ const SideNavbar = () => {
 
   return (
     <div className="sticky top-0 hidden h-full justify-center gap-y-2  overflow-auto bg-background p-2 md:flex md:w-[240px]">
-      <div className="flex flex-col items-start gap-y-4 px-4 py-4">
+      <div className="flex flex-col items-start gap-y-4 p-4">
         <span className="mb-4 text-2xl font-bold text-mauve12">LOGO</span>
         {routes.map((route) => (
           <div key={route.label}>

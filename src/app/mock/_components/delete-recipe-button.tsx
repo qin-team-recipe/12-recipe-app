@@ -6,7 +6,7 @@ import { Button } from "@/src/components/ui/button";
 import { useToast } from "@/src/components/ui/use-toast";
 
 type Props = {
-  recipeId: number;
+  recipeId: string;
 };
 
 const DeleteRecipeButton = ({ recipeId }: Props) => {

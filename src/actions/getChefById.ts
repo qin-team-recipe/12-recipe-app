@@ -4,7 +4,7 @@ import { getAuthenticatedUser } from "./getAuthenticatedUser";
 export const getChefById = async (id: string) => {
   const chef = await prisma.user.findUnique({
     where: {
-      id: id,
+      id,
     },
     include: {
       Recipe: {
