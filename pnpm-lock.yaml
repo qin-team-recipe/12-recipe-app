@@ -128,6 +128,9 @@ dependencies:
   typescript:
     specifier: 5.1.6
     version: 5.1.6
+  uuid:
+    specifier: ^9.0.0
+    version: 9.0.0
   zact:
     specifier: ^0.0.2
     version: 0.0.2(next@13.4.8)
@@ -142,6 +145,9 @@ devDependencies:
   "@types/prettier":
     specifier: ^2.7.3
     version: 2.7.3
+  "@types/uuid":
+    specifier: ^9.0.2
+    version: 9.0.2
   "@typescript-eslint/parser":
     specifier: ^5.61.0
     version: 5.61.0(eslint@8.41.0)(typescript@5.1.6)
@@ -3155,6 +3161,11 @@ packages:
     resolution:
       { integrity: sha512-5cJ8CB4yAx7BH1oMvdU0Jh9lrEXyPkar6F9G/ERswkCuvP4KQZfZkSjcMbAICCpQTN4OuZn8tz0HiKv9TGZgrQ== }
     dev: false
+
+  /@types/uuid@9.0.2:
+    resolution:
+      { integrity: sha512-kNnC1GFBLuhImSnV7w4njQkUiJi0ZXUycu1rUaouPqiKlXkh77JKgdRnTAp1x5eBwcIwbtI+3otwzuIDEuDoxQ== }
+    dev: true
 
   /@types/websocket@1.0.5:
     resolution:
@@ -6464,6 +6475,12 @@ packages:
   /util-deprecate@1.0.2:
     resolution:
       { integrity: sha512-EPD5q1uXyFxJpCrLnCc1nHnq3gOa6DZBocAIiI2TaSCA7VCJ1UJDMagCzIkXNsUYfD1daK//LTEQ8xiIbrHtcw== }
+
+  /uuid@9.0.0:
+    resolution:
+      { integrity: sha512-MXcSTerfPa4uqyzStbRoTgt5XIe3x5+42+q1sDuy3R5MDk66URdLMOZe5aPX/SQd+kuYAh0FdP/pO28IkQyTeg== }
+    hasBin: true
+    dev: false
 
   /watchpack@2.4.0:
     resolution:

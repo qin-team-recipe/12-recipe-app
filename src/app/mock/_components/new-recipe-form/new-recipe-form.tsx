@@ -1,6 +1,6 @@
 "use client";
 
-import { useTransition } from "react";
+import { useCallback, useState, useTransition } from "react";
 
 import { createRecipe } from "@/src/actions/createRecipe";
 import { Button } from "@/src/components/ui/button";
@@ -21,6 +21,7 @@ type NewRecipeFormValues = z.infer<typeof formSchema>;
 
 const defaultValues: Partial<NewRecipeFormValues> = {
   title: "",
+  recipeImage: undefined,
   bio: "",
   ingredients: [{ name: "" }],
   instructions: [{ value: "" }],
@@ -65,11 +66,22 @@ const NewRecipeForm = () => {
   });
 
   const onSubmit = (data: z.infer<typeof formSchema>) => {
+    console.log(data);
+
     startTransition(async () => {
       await createRecipe(data);
       form.reset();
     });
   };
+
+  // const onUploadImage = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+  //   const files = e.target.files;
+
+  //   if (!files || files?.length === 0) {
+  //     return;
+  //   }
+  //   return files[0];
+  // }, []);
 
   return (
     <Form {...form}>
@@ -84,6 +96,33 @@ const NewRecipeForm = () => {
                 <FormLabel>レシピ名</FormLabel>
                 <FormControl>
                   <Input placeholder="例：肉じゃが" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
+
+        {/* レシピ画像 */}
+        <div className="w-fit self-start">
+          <FormField
+            control={form.control}
+            name="recipeImage"
+            render={({ field: { value, onChange, ...field } }) => (
+              <FormItem className="grid w-full max-w-screen-sm">
+                <FormLabel>レシピ画像</FormLabel>
+                <FormControl>
+                  <Input
+                    {...field}
+                    type="file"
+                    placeholder="例：4"
+                    onChange={(event) => {
+                      if (event.target.files && event.target.files.length > 0) {
+                        console.log(event.target.files[0]);
+                        onChange(event.target.files[0]);
+                      }
+                    }}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
