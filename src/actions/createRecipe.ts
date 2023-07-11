@@ -1,17 +1,23 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { cookies } from "next/headers";
 
 import { prisma } from "@/src/lib/prisma";
+import { createServerActionClient } from "@supabase/auth-helpers-nextjs";
 import { zact } from "zact/server";
 
 import { formSchema } from "../app/mock/_components/new-recipe-form";
-import { getAuthenticatedUser } from "./getAuthenticatedUser";
+import { Database } from "../types/SupabaseTypes";
 
 export const createRecipe = zact(formSchema)(async ({ title, bio, ingredients, urls, servingCount, instructions }) => {
-  const user = await getAuthenticatedUser();
+  const supabaseServerClient = createServerActionClient<Database>({ cookies });
 
-  if (!user) {
+  const {
+    data: { session },
+  } = await supabaseServerClient.auth.getSession();
+
+  if (!session) {
     throw new Error("認証に失敗しました");
   }
 
@@ -20,7 +26,7 @@ export const createRecipe = zact(formSchema)(async ({ title, bio, ingredients, u
     data: {
       title,
       description: bio,
-      userId: user.id,
+      userId: session.user.id,
       servingCount: servingCount,
       Ingredient: {
         create: ingredients.map((ingredient) => ({
