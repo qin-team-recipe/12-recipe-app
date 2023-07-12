@@ -19,7 +19,7 @@ type Props = {
 };
 
 const RecipeHero = async ({ id, path }: Props) => {
-  const { title, description, user, isMe, RecipeLink: recipeLinks } = await getRecipeById(id);
+  const { title, description, isMe, RecipeLink: recipeLinks } = await getRecipeById(id);
 
   return (
     <>
@@ -35,7 +35,7 @@ const RecipeHero = async ({ id, path }: Props) => {
           <div className="flex justify-between">
             <h6 className="text-xl font-bold text-mauve12">{title}</h6>
             <div className="ml-3 flex items-center gap-3">
-              <LinkToIconRenderer links={recipeLinks.map((link) => link.linkUrl)} />
+              {recipeLinks && <LinkToIconRenderer links={recipeLinks.map((link) => link.linkUrl)} />}
               {isMe && (
                 <Popover>
                   <PopoverTrigger>

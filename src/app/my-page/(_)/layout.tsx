@@ -4,10 +4,12 @@ import { redirect } from "next/navigation";
 import { getAuthenticatedUser } from "@/src/actions/getAuthenticatedUser";
 import { getMyRecipes } from "@/src/actions/getMyRecipes";
 import TopBar from "@/src/components/layout/top-bar";
+import LinkToIconRenderer from "@/src/components/link-to-icon-renderer";
 import LinkableTabs from "@/src/components/linkable-tabs";
 import { Button } from "@/src/components/ui/button";
 import { Command, CommandItem, CommandList } from "@/src/components/ui/command";
 import { Popover, PopoverContent, PopoverTrigger } from "@/src/components/ui/popover";
+import { sortUserLinks } from "@/src/lib/utils";
 import { ArrowLeft, CircleEllipsis, Copy, Pencil } from "lucide-react";
 
 import { tabs } from "./_constants/tabs";
@@ -24,7 +26,8 @@ const layout = async ({ children }: { children: React.ReactNode }) => {
     redirect("/mock/unauthorized");
   }
 
-  const myRecipes = await getMyRecipes();
+  const myRecipes = await getMyRecipes({ orderByLikes: false });
+  const sortedUserLinks = sortUserLinks(user.UserLink);
 
   return (
     <div className="mb-20">
@@ -35,28 +38,31 @@ const layout = async ({ children }: { children: React.ReactNode }) => {
           </Link>
         }
         trailingComponent={
-          <Popover>
-            <PopoverTrigger>
-              <CircleEllipsis size={20} />
-            </PopoverTrigger>
-            <PopoverContent align="end" className="p-2">
-              <Command className="w-full">
-                <CommandList>
-                  <CommandItem>
-                    <Link href={"/my-page/edit"} className="flex">
-                      <Pencil size={16} className="mr-2 h-4 w-4" />
-                      <span>プロフィールを編集する</span>
-                    </Link>
-                  </CommandItem>
-                  <CommandItem>
-                    {/* // TODO: URLをコピーする */}
-                    <Copy className="mr-2 h-4 w-4" />
-                    <span>URLをコピーする</span>
-                  </CommandItem>
-                </CommandList>
-              </Command>
-            </PopoverContent>
-          </Popover>
+          <div className="flex items-center gap-3">
+            {sortedUserLinks && <LinkToIconRenderer links={sortedUserLinks.map((link) => link.url)} />}
+            <Popover>
+              <PopoverTrigger>
+                <CircleEllipsis size={20} />
+              </PopoverTrigger>
+              <PopoverContent align="end" className="p-2">
+                <Command className="w-full">
+                  <CommandList>
+                    <CommandItem>
+                      <Link href={"/my-page/edit"} className="flex">
+                        <Pencil size={16} className="mr-2 h-4 w-4" />
+                        <span>プロフィールを編集する</span>
+                      </Link>
+                    </CommandItem>
+                    <CommandItem>
+                      {/* // TODO: URLをコピーする */}
+                      <Copy className="mr-2 h-4 w-4" />
+                      <span>URLをコピーする</span>
+                    </CommandItem>
+                  </CommandList>
+                </Command>
+              </PopoverContent>
+            </Popover>
+          </div>
         }
       />
       <div className="flex flex-col gap-4 px-4 py-5">

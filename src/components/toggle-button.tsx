@@ -16,7 +16,7 @@ const ToggleButton = ({ className, isActive, activeLabel, inactiveLabel, formAct
         className={cn(
           "w-fit",
           "hover:shadow",
-          isActive ? "border-accent bg-mauve1 text-tomato9" : "bg-tomato9",
+          isActive ? "border-tomato4 bg-mauve1 text-tomato9" : "bg-tomato9",
           className
         )}
         formAction={formAction}

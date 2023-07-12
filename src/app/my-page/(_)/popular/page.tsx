@@ -2,7 +2,7 @@ import { getMyRecipes } from "@/src/actions/getMyRecipes";
 import RecipeCard from "@/src/components/recipe-card";
 
 const page = async () => {
-  const myRecipes = await getMyRecipes({ orderByLikes: false });
+  const myRecipes = await getMyRecipes({ orderByLikes: true });
 
   return (
     <div className="grid grid-cols-2 gap-4 p-4">
