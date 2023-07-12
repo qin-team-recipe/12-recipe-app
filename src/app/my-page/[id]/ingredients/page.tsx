@@ -1,8 +1,10 @@
 import { getRecipeById } from "@/src/actions/getRecipeById";
-import { Copy, ShoppingCart } from "lucide-react";
+import { ShoppingCart } from "lucide-react";
+
+import CopyToClipboardButton from "./_components/copy-to-clipboard-button";
 
 const page = async ({ params }: { params: { id: string } }) => {
-  const { Ingredient: ingredients, servingCount } = await getRecipeById(params.id);
+  const { Ingredient: ingredients, servingCount, title } = await getRecipeById(params.id);
 
   return (
     <div className="flex flex-col gap-2">
@@ -27,11 +29,13 @@ const page = async ({ params }: { params: { id: string } }) => {
           </li>
         </ul>
       ))}
-      {/* // TODO: 箇条書きで材料をコピーするように実装 */}
-      <button className="flex items-center gap-2 self-end pr-4 pt-2 text-[#0066DB]">
-        <Copy />
-        <span>コピーする</span>
-      </button>
+      <CopyToClipboardButton
+        recipeName={title}
+        servingCount={servingCount}
+        ingredients={ingredients.map(({ title }) => ({
+          title,
+        }))}
+      />
     </div>
   );
 };
