@@ -23,6 +23,12 @@ export const CONSTANTS = {
 
   /** 話題のレシピ */
   TOPIC_RECIPE: "話題のレシピ",
+
+  /** 作り方 */
+  HOW_TO_COOK: "注目のシェフ",
+
+  /** 材料 */
+  INGREDIENTS: "話題のレシピ",
 };
 
 /**
