@@ -13,13 +13,15 @@ import { BUTTON_NAMES } from "@/src/constants/button-names";
 import { CONSTANTS } from "@/src/constants/constants";
 import { CircleEllipsis, Copy, Lock, Pencil, Trash } from "lucide-react";
 
+import FavoriteButton from "./favorite-button";
+
 type Props = {
   id: string;
   path: string;
 };
 
 const RecipeHero = async ({ id, path }: Props) => {
-  const { title, description, isMe, RecipeLink: recipeLinks } = await getRecipeById(id);
+  const { title, description, isMe, RecipeLink: recipeLinks, _count, isFavorite } = await getRecipeById(id);
 
   return (
     <>
@@ -80,16 +82,10 @@ const RecipeHero = async ({ id, path }: Props) => {
             {/* // TODO: 公開中かどうかのフラグを追加 */}
             公開中
           </Button>
-          <NumberUnit numbers={100000000} unit={CONSTANTS.FAVORITE} />
+          <NumberUnit numbers={_count.likes} unit={CONSTANTS.FAVORITE} />
         </div>
         <div className="flex gap-2">
-          <ToggleButton
-            className="flex-1"
-            isActive={false}
-            activeLabel={BUTTON_NAMES.IS_FAVORITE}
-            inactiveLabel={BUTTON_NAMES.UN_FAVORITE}
-            formAction={undefined}
-          />
+          <FavoriteButton isActive={isFavorite} recipeId={id} />
           <Button variant={"outline"} className="flex-1 border-mauve9 text-mauve12">
             {/* // TODO: 公開中かどうかのフラグを追加 */}
             レシピを編集

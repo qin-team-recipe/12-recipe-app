@@ -26,6 +26,11 @@ export const getRecipeById = async (id: string) => {
       Ingredient: true,
       RecipeImage: true,
       RecipeLink: true,
+      _count: {
+        select: {
+          likes: true,
+        },
+      },
     },
   });
 
@@ -44,11 +49,23 @@ export const getRecipeById = async (id: string) => {
 
   if (!user) throw new Error(`ユーザーが見つかりませんでした🥲 ID:${recipe?.userId}`);
 
+  const isFavorite = Boolean(
+    await prisma.favorite.findUnique({
+      where: {
+        userId_recipeId: {
+          recipeId: id,
+          userId: session.user.id,
+        },
+      },
+    })
+  );
+
   const isMe = recipe.userId === session.user.id;
 
   return {
     ...recipe,
     user,
     isMe,
+    isFavorite,
   };
 };
