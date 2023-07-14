@@ -64,6 +64,9 @@ const layout = async ({ children }: { children: React.ReactNode }) => {
           </Avatar>
         </div>
 
+        {/* 自己紹介 */}
+        <div>{user.profile && <p className="flex-wrap text-mauve12">{user.profile}</p>}</div>
+
         {/* レシピ数・フォロー数 */}
         <div className="flex items-center gap-x-4">
           {myRecipes.length > 0 && <NumberUnit numbers={myRecipes.length} unit={CONSTANTS.RECIPE} />}

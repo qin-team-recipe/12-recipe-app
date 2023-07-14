@@ -16,12 +16,18 @@ const snsOrder = ["youtube", "instagram", "twitter", "facebook"];
 
 export const sortUserLinks = (userLinks: UserLink[]): UserLink[] => {
   return userLinks.sort((a, b) => {
-    const aDomain = new URL(a.url).hostname.split(".")[0].toLowerCase();
-    const bDomain = new URL(b.url).hostname.split(".")[0].toLowerCase();
+    const aDomain = new URL(a.url).hostname.split(".")[1].toLowerCase();
+    const bDomain = new URL(b.url).hostname.split(".")[1].toLowerCase();
 
     // "youtube", "instagram", "twitter", "facebook"含まれない場合は末尾に配置する
     if (!snsOrder.includes(aDomain) && !snsOrder.includes(bDomain)) {
       return 0;
+    }
+    if (!snsOrder.includes(aDomain)) {
+      return 1;
+    }
+    if (!snsOrder.includes(bDomain)) {
+      return -1;
     }
 
     return snsOrder.indexOf(aDomain) - snsOrder.indexOf(bDomain);
