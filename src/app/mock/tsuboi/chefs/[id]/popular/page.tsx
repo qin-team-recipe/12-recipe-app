@@ -6,6 +6,7 @@ import RecipeCard from "@/src/components/recipe-card";
 const page = async ({ params }: { params: { id: string } }) => {
   const chef = await getChefById({
     id: params.id,
+    orderByLikes: true,
   });
 
   if (!chef) return notFound();

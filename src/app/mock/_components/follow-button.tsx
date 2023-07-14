@@ -13,6 +13,7 @@ const FollowButton = ({ isActive, followedId: chefId }: Props) => {
       <form>
         <input type="hidden" name="followedId" value={chefId} />
         <ToggleButton
+          className="w-full"
           isActive={isActive}
           activeLabel={BUTTON_NAMES.UN_FOLLOW}
           inactiveLabel={BUTTON_NAMES.IS_FOLLOW}

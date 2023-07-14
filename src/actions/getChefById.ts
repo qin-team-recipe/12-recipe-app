@@ -5,7 +5,7 @@ import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { prisma } from "../lib/prisma";
 import { Database } from "../types/SupabaseTypes";
 
-export const getChefById = async (id: string) => {
+export const getChefById = async ({ id, orderByLikes = false }: { id: string; orderByLikes?: boolean }) => {
   const chef = await prisma.user.findUnique({
     where: {
       id,
@@ -18,6 +18,9 @@ export const getChefById = async (id: string) => {
               likes: true,
             },
           },
+        },
+        orderBy: {
+          createdAt: "desc",
         },
       },
       followers: true,
@@ -32,6 +35,10 @@ export const getChefById = async (id: string) => {
   });
 
   if (!chef) throw new Error(`シェフが見つかりませんでした🥲 ID:${id}`);
+
+  if (orderByLikes) {
+    chef.Recipe.sort((a, b) => (b._count.likes || 0) - (a._count.likes || 0));
+  }
 
   const supabaseServerClient = createServerComponentClient<Database>({ cookies });
 
