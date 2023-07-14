@@ -56,15 +56,6 @@ const EditProfileForm = ({ defaultValues }: Props) => {
     control: form.control,
   });
 
-  const showPreviewImage = (files: FileList) => {
-    const file = files[0];
-    const fileReader = new FileReader();
-    fileReader.onload = () => {
-      setImageData(fileReader.result as string);
-    };
-    fileReader.readAsDataURL(file);
-  };
-
   const onSubmit = (data: z.infer<typeof editProfileFormSchema>) => {
     startTransition(async () => {
       const result = await updateProfile(data);
@@ -103,9 +94,9 @@ const EditProfileForm = ({ defaultValues }: Props) => {
             </FormItem>
           )}
         />
-
         {/* プロフィール画像 */}
         <FormField
+          // TODO: 画像のバリデーション実装
           control={form.control}
           name="nickName"
           render={({ field }) => (
@@ -142,7 +133,6 @@ const EditProfileForm = ({ defaultValues }: Props) => {
             </FormItem>
           )}
         />
-
         {/* 自己紹介 */}
         <FormField
           control={form.control}
@@ -157,7 +147,6 @@ const EditProfileForm = ({ defaultValues }: Props) => {
             </FormItem>
           )}
         />
-
         {/* リンク */}
         <div>
           {urlsFields.map((field, index) => (
@@ -179,7 +168,6 @@ const EditProfileForm = ({ defaultValues }: Props) => {
                       />
                       <button
                         type="button"
-                        disabled={urlsFields.length === 1}
                         onClick={() => removeUrls(index)}
                         className="absolute right-2 top-1/2 -translate-y-1/2"
                       >
@@ -201,6 +189,7 @@ const EditProfileForm = ({ defaultValues }: Props) => {
             <span>リンクを追加する</span>
           </button>
         </div>
+
         <div className="flex gap-2 px-4">
           <Button variant={"destructive"} className="flex-1" type="submit" disabled={!changed}>
             {isPending && <Spinner />} 保存する
