@@ -6,7 +6,7 @@ import { prisma } from "../lib/prisma";
 import { getAuthenticatedUser } from "./getAuthenticatedUser";
 
 export const restoreRecipe = async (formData: FormData) => {
-  const id = Number(formData.get("recipeId"));
+  const id = String(formData.get("recipeId"));
 
   const user = await getAuthenticatedUser();
 

@@ -6,7 +6,7 @@ type Props = {
 const NumberUnit = ({ numbers, unit }: Props) => {
   return (
     <div className="flex">
-      <span className="mr-0.5 font-bold text-mauve12">{numbers.toLocaleString()}</span>
+      <span className="mr-0.5 font-extrabold text-mauve11">{numbers.toLocaleString()}</span>
       <span className="text-mauve11">{unit}</span>
     </div>
   );

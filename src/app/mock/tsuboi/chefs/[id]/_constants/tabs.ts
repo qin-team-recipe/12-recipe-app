@@ -2,11 +2,11 @@ import { LinkableTab } from "@/src/types/LinkableTab";
 
 export const tabs = (id: string): LinkableTab[] => [
   {
-    value: "レシピ",
+    value: "新着レシピ",
     link: `/mock/tsuboi/chefs/${id}`,
   },
   {
-    value: "リンク",
-    link: `/mock/tsuboi/chefs/${id}/links`,
+    value: "人気レシピ",
+    link: `/mock/tsuboi/chefs/${id}/popular`,
   },
 ];

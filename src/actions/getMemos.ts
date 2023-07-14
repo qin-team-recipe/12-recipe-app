@@ -1,10 +1,18 @@
+import { cookies } from "next/headers";
+
+import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
+
 import { prisma } from "../lib/prisma";
-import { getAuthenticatedUser } from "./getAuthenticatedUser";
+import { Database } from "../types/SupabaseTypes";
 
 export const getMemos = async () => {
-  const user = await getAuthenticatedUser();
+  const supabaseServerClient = createServerComponentClient<Database>({ cookies });
 
-  if (!user) {
+  const {
+    data: { session },
+  } = await supabaseServerClient.auth.getSession();
+
+  if (!session) {
     return [];
   }
 
@@ -16,7 +24,7 @@ export const getMemos = async () => {
       isCompleted: true,
     },
     where: {
-      userId: user.id,
+      userId: session.user.id,
       deletedAt: null,
     },
     orderBy: {
