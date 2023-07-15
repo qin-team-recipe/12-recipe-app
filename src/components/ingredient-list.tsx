@@ -1,8 +1,8 @@
 "use client";
 
-import { ReactNode, useCallback } from "react";
+import { useCallback } from "react";
 
-import { ShoppingCart } from "lucide-react";
+import { MoreVertical, ShoppingCart } from "lucide-react";
 
 /**
  * @param name 材料名
@@ -28,8 +28,7 @@ const IngredientList = ({ name, addedCartFlg, id, isEdit }: Props) => {
       {/* カートに追加・削除みたいなToggleの方がいい気がするけどFigma通りに実装 */}
       {/* 実際にカートに追加されたかがわからないため、カートに追加済みの場合は赤く、未追加の場合はデフォルトにする処理をする(Figmaにはない) */}
       {addedCartFlg !== undefined && <ShoppingCart color={addedCartFlg ? "red" : "grey"} size={20} />}
-      {/* TODO: ここ専用のドロップダウンを作成する */}
-      {isEdit && <div>ドロップダウン</div>}
+      {isEdit && <MoreVertical size={24} />}
     </div>
   );
 };
