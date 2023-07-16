@@ -10,7 +10,7 @@ export const formSchema = z.object({
   servingCount: z.number().int().min(1, {
     message: "1人前以上を入力してください",
   }),
-  recipeImage: z.custom<FileList>().transform((file) => file[0]),
+  recipeImage: z.string().optional(),
   ingredients: z.array(
     z.object({
       name: z.string().min(1, {

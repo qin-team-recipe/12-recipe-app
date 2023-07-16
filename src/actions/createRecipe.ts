@@ -3,11 +3,9 @@
 import { revalidatePath } from "next/cache";
 
 import { prisma } from "@/src/lib/prisma";
-import { v4 as uuidv4 } from "uuid";
 import { zact } from "zact/server";
 
 import { formSchema } from "../app/mock/_components/new-recipe-form";
-import { supabaseServerActionClient } from "../lib/supabase/supabase-server";
 import { getAuthenticatedUser } from "./getAuthenticatedUser";
 
 export const createRecipe = zact(formSchema)(
@@ -16,23 +14,6 @@ export const createRecipe = zact(formSchema)(
 
     if (!user) {
       throw new Error("認証に失敗しました");
-    }
-
-    console.log(recipeImage);
-
-    let imageUrl = "";
-    if (recipeImage) {
-      //画像をアップロードした場合
-      const { data: storageData, error: storageError } = await supabaseServerActionClient.storage
-        .from("recipe")
-        .upload(`${user.id}/${uuidv4()}`, recipeImage);
-
-      if (storageError) {
-        throw new Error("画像のアップロードに失敗しました");
-      }
-
-      const { data: urlData } = await supabaseServerActionClient.storage.from("recipe").getPublicUrl(storageData.path);
-      imageUrl = urlData.publicUrl;
     }
 
     // TODO: RecipeImageの追加
@@ -44,7 +25,7 @@ export const createRecipe = zact(formSchema)(
         servingCount: servingCount,
         RecipeImage: {
           create: {
-            recipeImage: imageUrl,
+            recipeImage: recipeImage ?? "",
           },
         },
         Ingredient: {
