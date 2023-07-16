@@ -21,6 +21,14 @@ export const getAuthenticatedUser = async () => {
     where: {
       id: session.user.id,
     },
+    select: {
+      id: true,
+      name: true,
+      profile: true,
+      profileImage: true,
+      UserLink: true,
+      role: true,
+    },
   });
 
   return user;

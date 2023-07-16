@@ -15,7 +15,7 @@ const page = () => {
         }
         centerComponent={<h1 className="font-bold text-mauve12 md:text-xl">お気に入り</h1>}
         trailingComponent={
-          <Link href={"/favorite/account"}>
+          <Link href={"/my-page"}>
             <UserCircle2 size={20} className="text-mauve12" />
           </Link>
         }

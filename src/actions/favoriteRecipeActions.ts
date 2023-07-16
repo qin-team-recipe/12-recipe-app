@@ -1,20 +1,27 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { cookies } from "next/headers";
+
+import { createServerActionClient } from "@supabase/auth-helpers-nextjs";
 
 import { prisma } from "../lib/prisma";
-import { getAuthenticatedUser } from "./getAuthenticatedUser";
+import { Database } from "../types/SupabaseTypes";
 
-export const addFavoriteRecipe = async (recipeId: number) => {
-  const user = await getAuthenticatedUser();
+export const favoriteRecipe = async (formData: FormData) => {
+  const {
+    data: { session },
+  } = await createServerActionClient<Database>({ cookies }).auth.getSession();
 
-  if (!user) {
+  if (!session) {
     throw new Error("認証に失敗しました");
   }
 
+  const recipeId = String(formData.get("recipeId"));
+
   await prisma.favorite.create({
     data: {
-      userId: user.id,
+      userId: session.user.id,
       recipeId,
     },
   });
@@ -23,17 +30,21 @@ export const addFavoriteRecipe = async (recipeId: number) => {
   revalidatePath("/mock");
 };
 
-export const deleteFavoriteRecipe = async (recipeId: number) => {
-  const user = await getAuthenticatedUser();
+export const unFavoriteRecipe = async (formData: FormData) => {
+  const {
+    data: { session },
+  } = await createServerActionClient<Database>({ cookies }).auth.getSession();
 
-  if (!user) {
+  if (!session) {
     throw new Error("認証に失敗しました");
   }
+
+  const recipeId = String(formData.get("recipeId"));
 
   await prisma.favorite.delete({
     where: {
       userId_recipeId: {
-        userId: user.id,
+        userId: session.user.id,
         recipeId,
       },
     },
