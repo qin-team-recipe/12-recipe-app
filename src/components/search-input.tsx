@@ -52,7 +52,8 @@ const SearchInput = () => {
     if (searchQuery !== inputValue) {
       setInputValue(searchQuery);
     }
-  }, [inputValue, router]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [router]);
 
   // デバウンスされた値がある場合、マウントされたことを示す
   useEffect(() => {

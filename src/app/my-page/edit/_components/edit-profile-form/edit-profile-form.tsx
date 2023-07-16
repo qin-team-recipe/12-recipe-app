@@ -18,7 +18,7 @@ import { Minus, Plus, PlusIcon, X } from "lucide-react";
 import { useFieldArray, useForm } from "react-hook-form";
 import { z } from "zod";
 
-import { EditFormValues, editProfileFormSchema } from "./schema";
+import { EditFormValues, editProfileFormSchema } from ".";
 
 type Props = {
   defaultValues: Partial<EditFormValues>;
@@ -85,7 +85,7 @@ const EditProfileForm = ({ defaultValues }: Props) => {
           control={form.control}
           name="nickName"
           render={({ field }) => (
-            <FormItem className=" grid w-full max-w-screen-sm space-y-0">
+            <FormItem className=" grid w-full space-y-0">
               <FormLabel className="mb-1 ml-3 mt-5 text-lg font-bold">ニックネーム</FormLabel>
               <FormControl>
                 <Input className="rounded-none border-x-0" placeholder="例：肉じゃが" {...field} />
@@ -100,7 +100,7 @@ const EditProfileForm = ({ defaultValues }: Props) => {
           control={form.control}
           name="nickName"
           render={({ field }) => (
-            <FormItem className=" ml-3 grid w-full max-w-screen-sm space-y-0">
+            <FormItem className=" ml-3 grid w-full space-y-0">
               <FormLabel className="mb-1 text-lg font-bold">プロフィール画像（任意）</FormLabel>
               <FormControl>
                 {imageData ? (
@@ -138,7 +138,7 @@ const EditProfileForm = ({ defaultValues }: Props) => {
           control={form.control}
           name="bio"
           render={({ field }) => (
-            <FormItem className=" grid w-full max-w-screen-sm space-y-0">
+            <FormItem className=" grid w-full space-y-0">
               <FormLabel className="mb-1 ml-3 text-lg font-bold">自己紹介（任意）</FormLabel>
               <FormControl>
                 <Textarea className="rounded-none border-x-0" {...field} />
@@ -182,7 +182,7 @@ const EditProfileForm = ({ defaultValues }: Props) => {
           ))}
           <button
             type="button"
-            className="ml-3 mt-2 flex w-fit gap-1 text-tomato9"
+            className="ml-3 mt-2 flex w-fit items-center gap-1 text-tomato9"
             onClick={() => appendUrls({ value: "" })}
           >
             <PlusIcon size={16} />

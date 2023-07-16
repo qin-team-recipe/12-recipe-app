@@ -3,8 +3,7 @@ import { redirect } from "next/navigation";
 import { getAuthenticatedUser } from "@/src/actions/getAuthenticatedUser";
 import TopBar from "@/src/components/layout/top-bar";
 
-import { EditProfileForm } from "./_components/edit-profile-form";
-import { EditFormValues } from "./_components/edit-profile-form/schema";
+import { EditFormValues, EditProfileForm } from "./_components/edit-profile-form";
 
 const page = async () => {
   const user = await getAuthenticatedUser();
