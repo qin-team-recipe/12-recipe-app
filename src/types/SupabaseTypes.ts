@@ -431,7 +431,6 @@ export interface Database {
         Row: {
           created_at: string | null;
           id: number;
-          site_name: string;
           updated_at: string | null;
           url: string;
           user_id: string;
@@ -439,7 +438,6 @@ export interface Database {
         Insert: {
           created_at?: string | null;
           id?: number;
-          site_name: string;
           updated_at?: string | null;
           url: string;
           user_id: string;
@@ -447,7 +445,6 @@ export interface Database {
         Update: {
           created_at?: string | null;
           id?: number;
-          site_name?: string;
           updated_at?: string | null;
           url?: string;
           user_id?: string;
