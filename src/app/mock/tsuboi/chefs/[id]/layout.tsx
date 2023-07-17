@@ -10,7 +10,7 @@ import { Avatar, AvatarImage } from "@/src/components/ui/avatar";
 import { Command, CommandItem, CommandList, CommandSeparator } from "@/src/components/ui/command";
 import { Popover, PopoverContent, PopoverTrigger } from "@/src/components/ui/popover";
 import { CONSTANTS } from "@/src/constants/constants";
-import { sortUserLinks } from "@/src/lib/utils";
+import { sortSiteLinks } from "@/src/lib/utils";
 import { ArrowLeft, CircleEllipsis } from "lucide-react";
 
 import FollowButton from "../../../_components/follow-button";
@@ -25,7 +25,7 @@ const layout = async ({ params, children }: { params: { id: string }; children: 
 
   const { id, name, profile, followersCount, isFollowing, UserLink: userLinks, isMe, _count } = chef;
 
-  const sortedUserLinks = sortUserLinks(userLinks);
+  const sortedUserLinks = sortSiteLinks(userLinks.map((userLink) => userLink.url));
 
   const visibleLinks = sortedUserLinks.slice(0, 2);
   const moreLinks = sortedUserLinks.slice(2);
@@ -52,7 +52,7 @@ const layout = async ({ params, children }: { params: { id: string }; children: 
                       {moreLinks.map((link, index) => (
                         <CommandItem key={index}>
                           <LinkToIconRenderer links={[link.url]} />
-                          <span className="ml-2 text-lg">{link.siteName}</span>
+                          <span className="ml-2 text-lg">{link.label}</span>
                         </CommandItem>
                       ))}
                     </CommandList>

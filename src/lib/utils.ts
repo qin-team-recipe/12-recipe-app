@@ -7,19 +7,25 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-type UserLink = {
+type SiteLink = {
   url: string;
-  siteName: string;
+  label: string;
 };
 
 const snsOrder = ["youtube", "instagram", "twitter", "facebook"];
 
-export const sortUserLinks = (userLinks: UserLink[]): UserLink[] => {
-  return userLinks.sort((a, b) => {
-    const aDomain = new URL(a.url).hostname.split(".")[1].toLowerCase();
-    const bDomain = new URL(b.url).hostname.split(".")[1].toLowerCase();
+export const sortSiteLinks = (links: string[]): SiteLink[] => {
+  // ホスト名を分割
+  const siteLinks: SiteLink[] = links.map((link) => ({
+    url: link,
+    label: new URL(link).hostname.split(".")[new URL(link).hostname.split(".").length - 2].toLowerCase(),
+  }));
 
-    // "youtube", "instagram", "twitter", "facebook"含まれない場合は末尾に配置する
+  // ホスト名の最後の部分であるドメインを抽出
+  return siteLinks.sort((a, b) => {
+    const aDomain = a.label;
+    const bDomain = b.label;
+
     if (!snsOrder.includes(aDomain) && !snsOrder.includes(bDomain)) {
       return 0;
     }

@@ -49,11 +49,10 @@ export const updateProfile = zact(editProfileFormSchema)(
             deleteMany: toBeDeletedUrls.map((url) => ({ id: url.id })),
             updateMany: toBeUpdatedUrls.map((url) => ({
               where: { id: url!.id },
-              data: { url: url!.value ?? "" },
+              data: { url: url?.value ?? "" },
             })),
             create: toBeCreatedUrls.map((url) => ({
-              siteName: "",
-              url: url!.value ?? "",
+              url: url?.value ?? "",
             })),
           },
         },

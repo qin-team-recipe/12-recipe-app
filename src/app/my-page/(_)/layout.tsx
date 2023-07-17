@@ -9,11 +9,12 @@ import LinkableTabs from "@/src/components/linkable-tabs";
 import NumberUnit from "@/src/components/number-unit";
 import { Avatar, AvatarImage } from "@/src/components/ui/avatar";
 import { Button } from "@/src/components/ui/button";
+import { Command, CommandItem, CommandList } from "@/src/components/ui/command";
+import { Popover, PopoverContent, PopoverTrigger } from "@/src/components/ui/popover";
 import { CONSTANTS } from "@/src/constants/constants";
-import { sortUserLinks } from "@/src/lib/utils";
-import { ArrowLeft } from "lucide-react";
+import { sortSiteLinks } from "@/src/lib/utils";
+import { ArrowLeft, CircleEllipsis } from "lucide-react";
 
-import AdminPopoverMenu from "./_components/admin-popover-menu";
 import { tabs } from "./_constants/tabs";
 
 export const metadata = {
@@ -27,7 +28,10 @@ const layout = async ({ children }: { children: React.ReactNode }) => {
     // TODO: 未ログイン時のリダイレクト先を変更する
     redirect("/mock/unauthorized");
   }
-  const sortedUserLinks = sortUserLinks(user.UserLink);
+  const sortedUserLinks = sortSiteLinks(user.UserLink.map((userLink) => userLink.url));
+
+  const visibleLinks = sortedUserLinks.slice(0, 2);
+  const moreLinks = sortedUserLinks.slice(2);
 
   const myRecipes = await getMyRecipes({ orderByLikes: false });
 
@@ -41,8 +45,26 @@ const layout = async ({ children }: { children: React.ReactNode }) => {
         }
         trailingComponent={
           <div className="flex items-center gap-3">
-            {sortedUserLinks && <LinkToIconRenderer links={sortedUserLinks.map((link) => link.url)} />}
-            {user.role === "ADMIN" && <AdminPopoverMenu />}
+            {visibleLinks && <LinkToIconRenderer links={visibleLinks.map((link) => link.url)} />}
+            {moreLinks.length > 0 && (
+              <Popover>
+                <PopoverTrigger>
+                  <CircleEllipsis size={20} />
+                </PopoverTrigger>
+                <PopoverContent align="end" className="p-2">
+                  <Command className="w-full">
+                    <CommandList>
+                      {moreLinks.map((link, index) => (
+                        <CommandItem key={index}>
+                          <LinkToIconRenderer links={[link.url]} />
+                          <span className="ml-2 text-lg">{link.label}</span>
+                        </CommandItem>
+                      ))}
+                    </CommandList>
+                  </Command>
+                </PopoverContent>
+              </Popover>
+            )}
           </div>
         }
       />
@@ -69,7 +91,8 @@ const layout = async ({ children }: { children: React.ReactNode }) => {
 
         {/* レシピ数・フォロー数 */}
         <div className="flex items-center gap-x-4">
-          {myRecipes.length > 0 && <NumberUnit numbers={myRecipes.length} unit={CONSTANTS.RECIPE} />}
+          {<NumberUnit numbers={myRecipes.length} unit={"レシピ"} />}
+          {<NumberUnit numbers={user.followersCount} unit={"フォロワー"} />}
         </div>
 
         <Link href={"/my-page/edit"}>
