@@ -1,9 +1,8 @@
-import { addCarts } from "@/src/actions/addCarts";
 import { getCartList } from "@/src/actions/getCartList";
 import { getFavoriteRecipes } from "@/src/actions/getFavoriteRecipes";
 import { getRecipes } from "@/src/actions/getRecipes";
 
-import AddCartsRecipeButton from "./_components/add-cart-recipe-button";
+import AddCartListButton from "./_components/add-cart-list-button";
 import AddFavoriteRecipeButton from "./_components/add-favorite-recipe-button";
 import DeleteFavoriteRecipeButton from "./_components/delete-favorite-recipe-button";
 
@@ -54,7 +53,7 @@ const page = async () => {
           ))}
         </div>
       ))}
-      <AddCartsRecipeButton recipeId={"3"} ingredientIds={[3]} />
+      <AddCartListButton recipeId={"3"} ingredientIds={[3]} />
     </div>
   );
 };

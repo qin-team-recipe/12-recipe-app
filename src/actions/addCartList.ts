@@ -8,7 +8,7 @@ import { createServerActionClient } from "@supabase/auth-helpers-nextjs";
 import { prisma } from "../lib/prisma";
 import { Database } from "../types/SupabaseTypes";
 
-export const addCarts = async (recipeId: string, ingredientIds: number[]) => {
+export const addCartList = async (recipeId: string, ingredientIds: number[]) => {
   const supabaseServerClient = createServerActionClient<Database>({ cookies });
 
   const {
