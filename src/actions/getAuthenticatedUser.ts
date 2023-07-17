@@ -14,14 +14,35 @@ export const getAuthenticatedUser = async () => {
   } = await supabaseServerClient.auth.getSession();
 
   if (!session) {
-    redirect("/mock/unauthenticated");
+    throw Error("認証に失敗しました🥲");
   }
 
   const user = await prisma.user.findUnique({
     where: {
       id: session.user.id,
     },
+    select: {
+      id: true,
+      name: true,
+      profile: true,
+      profileImage: true,
+      UserLink: true,
+      role: true,
+    },
   });
 
-  return user;
+  if (!user) {
+    throw Error("ユーザーが見つかりませんでした🥲");
+  }
+
+  const followersCount = await prisma.userFollower.count({
+    where: {
+      followedId: user.id,
+    },
+  });
+
+  return {
+    ...user,
+    followersCount,
+  };
 };

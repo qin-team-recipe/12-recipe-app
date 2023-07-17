@@ -2,7 +2,7 @@
 
 import { useTransition } from "react";
 
-import { addFavoriteRecipe } from "@/src/actions/favoriteRecipeActions";
+import { favoriteRecipe } from "@/src/actions/favoriteRecipeActions";
 import { Button } from "@/src/components/ui/button";
 import Spinner from "@/src/components/ui/spinner";
 
@@ -10,9 +10,12 @@ const AddFavoriteRecipeButton = ({ recipeId }: { recipeId: string }) => {
   const [isPending, startTransition] = useTransition();
 
   return (
-    <Button onClick={() => startTransition(() => addFavoriteRecipe(recipeId))}>
-      {isPending ? <Spinner /> : "追加"}
-    </Button>
+    <form>
+      <input type="hidden" name="recipeId" value={recipeId} />
+      <Button formAction={(formData) => startTransition(() => favoriteRecipe(formData))}>
+        {isPending ? <Spinner /> : "追加"}
+      </Button>
+    </form>
   );
 };
 
