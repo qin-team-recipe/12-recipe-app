@@ -2,26 +2,21 @@
 
 import { useRef, useState } from "react";
 
-type Props = {};
-
-const AddImage = ({}: Props) => {
+const AddImage = () => {
   const [recipeImages, setRecipeImages] = useState<string[]>([])
-  const inputRef = useRef<HTMLInputElement>(null!)
-
   const [showDeleteBtn, setShowDeleteBtn] = useState(false);
   const [deleteIndex, setDeleteIndex] = useState<number | null>(null);
-
-
+  const inputRef = useRef<HTMLInputElement>(null!)
+  
+  // input type="file"にフォーカスを当てる
   const onImgSelectBtnClick = () => {
     inputRef.current.click();
   };
 
   const onFileInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (!event.target.files) return;
-
     const files = Array.from(event.target.files);
     const imageUrls = files.map((file) => URL.createObjectURL(file));
-
     setRecipeImages((prevImages) => [...prevImages, ...imageUrls]);
   }
 
@@ -36,19 +31,13 @@ const AddImage = ({}: Props) => {
   };
 
   const handleDeleteImage = () => {
-    if (deleteIndex !== null) {
-      const updatedImgs = [...recipeImages];
-      updatedImgs.splice(deleteIndex, 1);
-      setRecipeImages(updatedImgs);
-      setShowDeleteBtn(false);
-      setDeleteIndex(null);
-    }
+    console.log("delete")
   };
 
   console.log(recipeImages)
   return (
-    <div>
-      <div className="flex flex-wrap gap-4">
+    <div className="mt-4">
+      <div className="mx-auto flex w-[86%] flex-wrap gap-4">
         {recipeImages.map((imgUrl, index) => (
           <div
             key={imgUrl}
