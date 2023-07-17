@@ -106,9 +106,9 @@ const CreateRecipeForm = () => {
             <FormItem className=" grid w-full space-y-0">
               <FormLabel className="mb-1 ml-3 mt-5 text-lg font-bold">レシピ名</FormLabel>
               <FormControl>
-                <Input className="w-full rounded-none border-x-0" placeholder="例：肉じゃが" {...field} />
+                <Input className="w-full rounded-none border-x-0 px-4" placeholder="例：肉じゃが" {...field} />
               </FormControl>
-              <FormMessage className="ml-3" />
+              <FormMessage className="ml-4 pt-1" />
             </FormItem>
           )}
         />
@@ -136,7 +136,7 @@ const CreateRecipeForm = () => {
                   </FormLabel>
                   <FormControl>
                     <div className="relative flex-1">
-                      <Input {...field} className="rounded-none border-x-0" />
+                      <Input {...field} className="rounded-none border-x-0 px-4" />
                       <Button
                         variant={"ghost"}
                         disabled={ingredientsFields.length === 1}
@@ -148,7 +148,7 @@ const CreateRecipeForm = () => {
                       </Button>
                     </div>
                   </FormControl>
-                  <FormMessage className="ml-3" />
+                  <FormMessage className="ml-4 pt-1" />
                 </FormItem>
               )}
             />
@@ -172,7 +172,7 @@ const CreateRecipeForm = () => {
               render={({ field }) => (
                 <FormItem className="space-y-0">
                   <FormLabel className={cn("mb-1 ml-3 flex items-center gap-3", index !== 0 && "sr-only")}>
-                    <span className="mr-2 text-lg font-bold">作り方</span>
+                    <span className="text-lg font-bold">作り方</span>
                   </FormLabel>
                   <FormControl>
                     <div className="relative flex-1">
@@ -191,7 +191,7 @@ const CreateRecipeForm = () => {
                       </Button>
                     </div>
                   </FormControl>
-                  <FormMessage className="ml-3" />
+                  <FormMessage className="ml-4 pt-1" />
                 </FormItem>
               )}
             />
@@ -211,8 +211,8 @@ const CreateRecipeForm = () => {
           control={form.control}
           name="title"
           render={({ field }) => (
-            <FormItem className=" ml-3 grid w-full space-y-0">
-              <FormLabel className="mb-1 text-lg font-bold">プロフィール画像（任意）</FormLabel>
+            <FormItem className="ml-4 grid w-full space-y-0">
+              <FormLabel className="mb-1 text-lg font-bold">画像（任意）</FormLabel>
               <FormControl>
                 {imageData ? (
                   <div className="relative">
@@ -240,7 +240,7 @@ const CreateRecipeForm = () => {
                   </label>
                 )}
               </FormControl>
-              <FormMessage className="ml-3" />
+              <FormMessage className="ml-4 pt-1" />
             </FormItem>
           )}
         />
@@ -254,7 +254,7 @@ const CreateRecipeForm = () => {
               <FormControl>
                 <Textarea className="w-full rounded-none border-x-0" {...field} />
               </FormControl>
-              <FormMessage className="ml-3" />
+              <FormMessage className="ml-4 pt-1" />
             </FormItem>
           )}
         />
@@ -267,7 +267,7 @@ const CreateRecipeForm = () => {
               name={`urls.${index}.value`}
               render={({ field }) => (
                 <FormItem className="space-y-0">
-                  <FormLabel className={cn("mb-1 ml-3 text-lg font-bold", index !== 0 && "sr-only")}>
+                  <FormLabel className={cn("mb-1 ml-4 text-lg font-bold", index !== 0 && "sr-only")}>
                     リンク（任意）
                   </FormLabel>
                   <FormControl>
@@ -287,7 +287,7 @@ const CreateRecipeForm = () => {
                       </Button>
                     </div>
                   </FormControl>
-                  <FormMessage className="ml-3" />
+                  <FormMessage className="ml-4 pt-1" />
                 </FormItem>
               )}
             />
