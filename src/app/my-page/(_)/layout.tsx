@@ -11,7 +11,7 @@ import { Avatar, AvatarImage } from "@/src/components/ui/avatar";
 import { Button } from "@/src/components/ui/button";
 import { Command, CommandItem, CommandList } from "@/src/components/ui/command";
 import { Popover, PopoverContent, PopoverTrigger } from "@/src/components/ui/popover";
-import { CONSTANTS } from "@/src/constants/constants";
+import { Separator } from "@/src/components/ui/separator";
 import { sortSiteLinks } from "@/src/lib/utils";
 import { ArrowLeft, CircleEllipsis } from "lucide-react";
 
@@ -36,74 +36,83 @@ const layout = async ({ children }: { children: React.ReactNode }) => {
   const myRecipes = await getMyRecipes({ orderByLikes: false });
 
   return (
-    <div className="mb-20">
-      <TopBar
-        leadingComponent={
-          <Link href={"/favorite"}>
-            <ArrowLeft size={20} className="text-mauve12" />
+    <>
+      <Separator className="hidden h-full w-[1px] md:block" />
+      <main className="mb-20 flex-1 overflow-y-auto md:mb-0">
+        <TopBar
+          leadingComponent={
+            <Link href={"/favorite"}>
+              <ArrowLeft size={20} className="text-mauve12" />
+            </Link>
+          }
+          trailingComponent={
+            <div className="flex items-center gap-3">
+              {visibleLinks && <LinkToIconRenderer links={visibleLinks.map((link) => link.url)} />}
+              {moreLinks.length > 0 && (
+                <Popover>
+                  <PopoverTrigger>
+                    <CircleEllipsis size={20} />
+                  </PopoverTrigger>
+                  <PopoverContent align="end" className="p-2">
+                    <Command className="w-full">
+                      <CommandList>
+                        {moreLinks.map((link, index) => (
+                          <CommandItem key={index}>
+                            <LinkToIconRenderer links={[link.url]} />
+                            <span className="ml-2 text-lg">{link.label}</span>
+                          </CommandItem>
+                        ))}
+                      </CommandList>
+                    </Command>
+                  </PopoverContent>
+                </Popover>
+              )}
+            </div>
+          }
+        />
+        <div className="flex flex-col gap-4 py-5">
+          {/* プロフィール部分 */}
+          <div className="flex items-center justify-between px-4">
+            <div className="grid gap-1 text-mauve12">
+              <h2 className="text-xl font-bold">{user.name}</h2>
+              <h6>{user.id}</h6>
+            </div>
+            <Avatar className="h-16 w-16">
+              <AvatarImage
+                // TODO: シェフのアバター画像を表示する
+                src={
+                  "https://images.unsplash.com/photo-1577219491135-ce391730fb2c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=80&q=80"
+                }
+                alt={user.name}
+              />
+            </Avatar>
+          </div>
+
+          {/* 自己紹介 */}
+          <div className="px-4">{user.profile && <p className="flex-wrap text-mauve12">{user.profile}</p>}</div>
+
+          {/* レシピ数・フォロー数 */}
+          <div className="flex items-center gap-x-4 px-4">
+            {<NumberUnit numbers={myRecipes.length} unit={"レシピ"} />}
+            {<NumberUnit numbers={user.followersCount} unit={"フォロワー"} />}
+          </div>
+
+          <Link href={"/my-page/edit"} className="px-4">
+            <Button className="w-full border border-mauve9 text-mauve12" variant={"outline"}>
+              プロフィール編集
+            </Button>
           </Link>
-        }
-        trailingComponent={
-          <div className="flex items-center gap-3">
-            {visibleLinks && <LinkToIconRenderer links={visibleLinks.map((link) => link.url)} />}
-            {moreLinks.length > 0 && (
-              <Popover>
-                <PopoverTrigger>
-                  <CircleEllipsis size={20} />
-                </PopoverTrigger>
-                <PopoverContent align="end" className="p-2">
-                  <Command className="w-full">
-                    <CommandList>
-                      {moreLinks.map((link, index) => (
-                        <CommandItem key={index}>
-                          <LinkToIconRenderer links={[link.url]} />
-                          <span className="ml-2 text-lg">{link.label}</span>
-                        </CommandItem>
-                      ))}
-                    </CommandList>
-                  </Command>
-                </PopoverContent>
-              </Popover>
-            )}
-          </div>
-        }
-      />
-      <div className="flex flex-col gap-4 px-4 py-5">
-        {/* プロフィール部分 */}
-        <div className="flex items-center justify-between">
-          <div className="grid gap-1 text-mauve12">
-            <h2 className="text-xl font-bold">{user.name}</h2>
-            <h6>{user.id}</h6>
-          </div>
-          <Avatar className="h-16 w-16">
-            <AvatarImage
-              // TODO: シェフのアバター画像を表示する
-              src={
-                "https://images.unsplash.com/photo-1577219491135-ce391730fb2c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=80&q=80"
-              }
-              alt={user.name}
-            />
-          </Avatar>
+
+          <LinkableTabs tabs={tabs}>{children}</LinkableTabs>
+          <Link href={"/my-recipe/create"} className="fixed inset-x-0 bottom-4 mx-auto w-52 text-mauve1">
+            <Button variant={"destructive"} className="w-full rounded-full">
+              マイレシピを追加する
+            </Button>
+          </Link>
         </div>
-
-        {/* 自己紹介 */}
-        <div>{user.profile && <p className="flex-wrap text-mauve12">{user.profile}</p>}</div>
-
-        {/* レシピ数・フォロー数 */}
-        <div className="flex items-center gap-x-4">
-          {<NumberUnit numbers={myRecipes.length} unit={"レシピ"} />}
-          {<NumberUnit numbers={user.followersCount} unit={"フォロワー"} />}
-        </div>
-
-        <Link href={"/my-page/edit"}>
-          <Button className="w-full border border-mauve9 text-mauve12" variant={"outline"}>
-            プロフィール編集
-          </Button>
-        </Link>
-      </div>
-
-      <LinkableTabs tabs={tabs}>{children}</LinkableTabs>
-    </div>
+      </main>
+      <Separator className="hidden h-full w-[1px] md:block" />
+    </>
   );
 };
 

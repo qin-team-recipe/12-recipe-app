@@ -85,10 +85,10 @@ const EditProfileForm = ({ defaultValues }: Props) => {
           control={form.control}
           name="nickName"
           render={({ field }) => (
-            <FormItem className=" grid w-full space-y-0">
+            <FormItem className="grid space-y-0">
               <FormLabel className="mb-1 ml-3 mt-5 text-lg font-bold">ニックネーム</FormLabel>
               <FormControl>
-                <Input className="rounded-none border-x-0" placeholder="例：肉じゃが" {...field} />
+                <Input className="w-full rounded-none border-x-0" {...field} />
               </FormControl>
               <FormMessage className="ml-3" />
             </FormItem>
@@ -191,7 +191,7 @@ const EditProfileForm = ({ defaultValues }: Props) => {
         </div>
 
         <div className="flex gap-2 px-4">
-          <Button variant={"destructive"} className="flex-1" type="submit" disabled={!changed}>
+          <Button variant={"destructive"} className="flex-1 gap-2" type="submit" disabled={!changed}>
             {isPending && <Spinner />} 保存する
           </Button>
           <Link href="/my-page" className="flex-1">
