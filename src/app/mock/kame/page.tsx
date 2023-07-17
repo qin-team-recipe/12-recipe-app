@@ -10,6 +10,7 @@ import DeleteFavoriteRecipeButton from "./_components/delete-favorite-recipe-but
 const page = async () => {
   const recipes = await getRecipes();
   const favoriteRecipes = await getFavoriteRecipes();
+  const cartList = await getCartList();
 
   return (
     <div className="p-4">
@@ -38,6 +39,22 @@ const page = async () => {
         ))}
       </ul>
       <hr className="py-2" />
+      <h2 className="text-2xl font-bold underline">カート</h2>
+      {cartList.map((cl) => (
+        <div key={cl.id} className="p-2">
+          <h3 className="text-lg font-bold">{cl.recipe.title}</h3>
+          {cl.CartListItem.map((item) => (
+            <>
+              <label key={item.id}>
+                {item.ingredient.title}
+                <input type="checkbox" checked={item.isCompleted} />
+              </label>
+              <br />
+            </>
+          ))}
+        </div>
+      ))}
+      <AddCartsRecipeButton recipeId={"3"} ingredientIds={[3]} />
     </div>
   );
 };
