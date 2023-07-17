@@ -261,7 +261,6 @@ export interface Database {
       Recipe: {
         Row: {
           created_at: string | null;
-          deleted_at: string | null;
           description: string;
           id: string;
           serving_count: number;
@@ -271,7 +270,6 @@ export interface Database {
         };
         Insert: {
           created_at?: string | null;
-          deleted_at?: string | null;
           description: string;
           id: string;
           serving_count: number;
@@ -281,7 +279,6 @@ export interface Database {
         };
         Update: {
           created_at?: string | null;
-          deleted_at?: string | null;
           description?: string;
           id?: string;
           serving_count?: number;
