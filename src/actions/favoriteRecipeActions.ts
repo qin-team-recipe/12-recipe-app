@@ -5,7 +5,7 @@ import { revalidatePath } from "next/cache";
 import { prisma } from "../lib/prisma";
 import { getAuthenticatedUser } from "./getAuthenticatedUser";
 
-export const addFavoriteRecipe = async (recipeId: number) => {
+export const addFavoriteRecipe = async (recipeId: string) => {
   const user = await getAuthenticatedUser();
 
   if (!user) {
@@ -23,7 +23,7 @@ export const addFavoriteRecipe = async (recipeId: number) => {
   revalidatePath("/mock");
 };
 
-export const deleteFavoriteRecipe = async (recipeId: number) => {
+export const deleteFavoriteRecipe = async (recipeId: string) => {
   const user = await getAuthenticatedUser();
 
   if (!user) {

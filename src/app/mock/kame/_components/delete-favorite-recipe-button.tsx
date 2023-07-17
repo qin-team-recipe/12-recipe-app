@@ -6,7 +6,7 @@ import { deleteFavoriteRecipe } from "@/src/actions/favoriteRecipeActions";
 import { Button } from "@/src/components/ui/button";
 import Spinner from "@/src/components/ui/spinner";
 
-const DeleteFavoriteRecipeButton = ({ recipeId }: { recipeId: number }) => {
+const DeleteFavoriteRecipeButton = ({ recipeId }: { recipeId: string }) => {
   const [isPending, startTransition] = useTransition();
 
   return (
