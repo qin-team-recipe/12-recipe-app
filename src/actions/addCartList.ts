@@ -19,7 +19,7 @@ export const addCartList = async (recipeId: string, ingredientIds: number[]) => 
     throw new Error("認証に失敗しました");
   }
 
-  const cartListWithIngredients = await prisma.cartList.findMany({
+  const cartList = await prisma.cartList.findMany({
     include: {
       CartListItem: true,
     },
@@ -28,14 +28,14 @@ export const addCartList = async (recipeId: string, ingredientIds: number[]) => 
     },
   });
 
-  const foundCartList = cartListWithIngredients.find((cartList) => cartList.recipeId === recipeId);
+  const foundCartList = cartList.find((c) => c.recipeId === recipeId);
 
   if (foundCartList) {
     createCartListItem(foundCartList.id, ingredientIds);
   } else {
-    // カート内にレシピが存在しない場合
-    const isEmpty = cartListWithIngredients.length === 0;
-    const displayOrder = isEmpty ? 0 : cartListWithIngredients[0].displayOrder + 1;
+    // カート内に追加対象のレシピが存在しない場合
+    const isCartListEmpty = cartList.length === 0;
+    const displayOrder = isCartListEmpty ? 0 : cartList[0].displayOrder + 1;
     const createdCartList = await prisma.cartList.create({
       data: {
         userId: session.user.id,
