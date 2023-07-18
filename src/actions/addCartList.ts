@@ -42,7 +42,9 @@ export const addCartList = async (recipeId: string, ingredientIds: number[]) => 
   const foundCartList = cartList.find((c) => c.recipeId === recipeId);
 
   if (foundCartList) {
-    createCartListItem(foundCartList.id, ingredientIds);
+    const existingIngredientIds = foundCartList.CartListItem.map((item) => item.ingredientId);
+    const unAddedIngredientIds = ingredientIds.filter((id) => !existingIngredientIds.includes(id));
+    createCartListItem(foundCartList.id, unAddedIngredientIds);
   } else {
     // カート内に追加対象のレシピが存在しない場合
     const isCartListEmpty = cartList.length === 0;
