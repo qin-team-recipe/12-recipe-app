@@ -42,11 +42,12 @@ export const addCartList = async (recipeId: string, ingredientIds: number[]) => 
   const foundCartList = cartList.find((c) => c.recipeId === recipeId);
 
   if (foundCartList) {
+    // レシピが既にカート内に存在する場合は、カートに入っていない材料のみを追加する
     const existingIngredientIds = foundCartList.CartListItem.map((item) => item.ingredientId);
     const unAddedIngredientIds = ingredientIds.filter((id) => !existingIngredientIds.includes(id));
     createCartListItem(foundCartList.id, unAddedIngredientIds);
   } else {
-    // カート内に追加対象のレシピが存在しない場合
+    // レシピがカート内に存在しない場合、レシピをカートに追加したあと全ての材料を追加する
     const isCartListEmpty = cartList.length === 0;
     const displayOrder = isCartListEmpty ? 0 : cartList[0].displayOrder + 1;
     const createdCartList = await prisma.cartList.create({
