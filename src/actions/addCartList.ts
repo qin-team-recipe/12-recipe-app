@@ -9,13 +9,11 @@ import { prisma } from "../lib/prisma";
 import { Database } from "../types/SupabaseTypes";
 
 const createCartListItem = async (cartListId: number, ingredientIds: number[]) => {
-  const cartListItem = ingredientIds.map((ingredientId) => ({
-    cartListId,
-    ingredientId,
-  }));
-
   await prisma.cartListItem.createMany({
-    data: cartListItem,
+    data: ingredientIds.map((ingredientId) => ({
+      cartListId,
+      ingredientId,
+    })),
   });
 };
 
