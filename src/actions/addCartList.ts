@@ -8,6 +8,17 @@ import { createServerActionClient } from "@supabase/auth-helpers-nextjs";
 import { prisma } from "../lib/prisma";
 import { Database } from "../types/SupabaseTypes";
 
+const createCartListItem = async (cartListId: number, ingredientIds: number[]) => {
+  const cartListItem = ingredientIds.map((ingredientId) => ({
+    cartListId,
+    ingredientId,
+  }));
+
+  await prisma.cartListItem.createMany({
+    data: cartListItem,
+  });
+};
+
 export const addCartList = async (recipeId: string, ingredientIds: number[]) => {
   const supabaseServerClient = createServerActionClient<Database>({ cookies });
 
@@ -48,14 +59,3 @@ export const addCartList = async (recipeId: string, ingredientIds: number[]) => 
   // TODO: 適切なパスを指定する
   revalidatePath("/mock");
 };
-
-async function createCartListItem(cartListId: number, ingredientIds: number[]) {
-  const cartListItem = ingredientIds.map((ingredientId) => ({
-    cartListId,
-    ingredientId,
-  }));
-
-  await prisma.cartListItem.createMany({
-    data: cartListItem,
-  });
-}
