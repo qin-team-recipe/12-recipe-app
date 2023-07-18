@@ -1,22 +1,22 @@
 import { getRecipeById } from "@/src/actions/getRecipeById";
+import { cn } from "@/src/lib/utils";
 import { ShoppingCart } from "lucide-react";
 
+import AddAllToCartButton from "./_components/add-all-to-cart-button";
 import CopyToClipboardButton from "./_components/copy-to-clipboard-button";
 
 const page = async ({ params }: { params: { id: string } }) => {
-  const { Ingredient: ingredients, servingCount, title } = await getRecipeById(params.id);
+  const { Ingredient: ingredients, servingCount, title, isAllInCart } = await getRecipeById(params.id);
 
   return (
     <div className="flex flex-col gap-2">
       <div className="flex justify-between border-b p-4">
         <h2 className="text-xl font-bold">{servingCount}人前</h2>
-        <button
-          className="flex items-center gap-2 font-bold"
-          // TODO: まとめてお買い物リストに追加するロジックを実装する
-        >
-          <ShoppingCart size={20} />
-          <span>まとめてお買い物リストに追加</span>
-        </button>
+        <AddAllToCartButton
+          recipeId={params.id}
+          isAllInCart={isAllInCart}
+          ingredientIds={ingredients.map(({ id }) => id)}
+        />
       </div>
       {ingredients.map(({ title, id }) => (
         <ul key={id}>

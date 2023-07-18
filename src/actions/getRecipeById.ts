@@ -62,10 +62,34 @@ export const getRecipeById = async (id: string) => {
 
   const isMe = recipe.userId === session.user.id;
 
+  const cartList = await prisma.cartList.findFirst({
+    where: {
+      userId: session.user.id,
+      recipeId: id,
+    },
+    include: {
+      CartListItem: {
+        select: {
+          ingredientId: true,
+        },
+      },
+    },
+  });
+
+  const ingredientIdsInCart = new Set(cartList?.CartListItem.map((item) => item.ingredientId));
+
+  const ingredients = recipe.Ingredient.map((ingredient) => ({
+    ...ingredient,
+    isInCart: ingredientIdsInCart.has(ingredient.id),
+  }));
+
+  const isAllInCart = ingredients.every((ingredient) => ingredient.isInCart);
+
   return {
     ...recipe,
     user,
     isMe,
     isFavorite,
+    isAllInCart,
   };
 };
