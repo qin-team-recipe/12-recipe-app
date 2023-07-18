@@ -19,7 +19,6 @@ export const getMyRecipes = async ({ orderByLikes }: { orderByLikes: boolean }) 
   const myRecipe = await prisma.recipe.findMany({
     where: {
       userId: session.user.id,
-      deletedAt: null,
     },
     include: {
       RecipeImage: true,

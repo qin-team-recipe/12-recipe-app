@@ -47,7 +47,6 @@ model Recipe {
   Ingredient   Ingredient[]
   createdAt    DateTime?     @default(now()) @map("created_at") @db.Timestamptz(3)
   updatedAt    DateTime?     @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(3)
-  deletedAt    DateTime?     @map("deleted_at") @db.Timestamptz(3)
 }
 
 /// レシピの画像

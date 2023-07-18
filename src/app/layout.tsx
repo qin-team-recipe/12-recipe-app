@@ -4,9 +4,6 @@ import "./globals.css";
 
 import { Inter } from "next/font/google";
 
-import BottomNavbar from "../components/layout/bottom-navbar";
-import SideNavbar from "../components/layout/side-navbar";
-import { Separator } from "../components/ui/separator";
 import { Toaster } from "../components/ui/toaster";
 import { cn } from "../lib/utils";
 import JotaiProvider from "./jotai-provider";
@@ -26,11 +23,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="ja" className={cn(inter.className)}>
       <body className="mx-auto h-screen md:flex md:max-w-6xl md:justify-center">
         <JotaiProvider>
-          <SideNavbar />
-          <Separator className="hidden h-full w-[1px] md:block" />
-          <main className="mb-20 flex-1 overflow-y-auto md:mb-0">{children}</main>
-          <Separator className="hidden h-full w-[1px] md:block" />
-          <BottomNavbar />
+          {children}
           <Toaster />
         </JotaiProvider>
       </body>

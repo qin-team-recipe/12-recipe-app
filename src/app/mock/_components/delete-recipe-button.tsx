@@ -1,7 +1,6 @@
 "use client";
 
 import { deleteRecipe } from "@/src/actions/deleteRecipe";
-import { restoreRecipe } from "@/src/actions/restoreRecipe";
 import { Button } from "@/src/components/ui/button";
 import { useToast } from "@/src/components/ui/use-toast";
 
@@ -10,40 +9,19 @@ type Props = {
 };
 
 const DeleteRecipeButton = ({ recipeId }: Props) => {
-  const { toast, dismiss } = useToast();
+  const { toast } = useToast();
 
   return (
     <>
       <form className="self-end">
         <input type="hidden" name="recipeId" value={recipeId} />
         <Button
-          formAction={(formData: FormData) => {
-            deleteRecipe(formData)
+          onClick={() => {
+            deleteRecipe(recipeId)
               .then(() => {
                 toast({
-                  variant: "default",
                   title: "レシピを削除しました",
-                  action: (
-                    <form>
-                      <input type="hidden" name="recipeId" value={recipeId} />
-                      <Button
-                        formAction={(formData: FormData) => {
-                          restoreRecipe(formData)
-                            .then(() => {
-                              dismiss();
-                            })
-                            .catch((_) => {
-                              toast({
-                                variant: "destructive",
-                                title: "レシピの復元に失敗しました",
-                              });
-                            });
-                        }}
-                      >
-                        復元
-                      </Button>
-                    </form>
-                  ),
+                  duration: 1000,
                 });
               })
               .catch(() => {

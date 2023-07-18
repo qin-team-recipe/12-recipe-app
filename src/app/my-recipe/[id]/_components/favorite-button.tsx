@@ -1,6 +1,5 @@
 import { favoriteRecipe, unFavoriteRecipe } from "@/src/actions/favoriteRecipeActions";
 import ToggleButton from "@/src/components/toggle-button";
-import { BUTTON_NAMES } from "@/src/constants/button-names";
 
 type Props = {
   isActive: boolean;

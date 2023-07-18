@@ -1,3 +1,4 @@
+import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
@@ -14,7 +15,7 @@ export const getAuthenticatedUser = async () => {
   } = await supabaseServerClient.auth.getSession();
 
   if (!session) {
-    throw Error("認証に失敗しました🥲");
+    redirect("/mock/unauthenticated");
   }
 
   const user = await prisma.user.findUnique({
@@ -32,12 +33,12 @@ export const getAuthenticatedUser = async () => {
   });
 
   if (!user) {
-    throw Error("ユーザーが見つかりませんでした🥲");
+    return null;
   }
 
   const followersCount = await prisma.userFollower.count({
     where: {
-      followedId: user.id,
+      followedId: user!.id,
     },
   });
 
