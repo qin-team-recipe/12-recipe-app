@@ -27,7 +27,9 @@ export const getCartList = async () => {
         },
       },
       CartListItem: {
-        include: {
+        select: {
+          id: true,
+          isCompleted: true,
           ingredient: {
             select: {
               title: true,
