@@ -19,16 +19,12 @@ import { z } from "zod";
 
 import { createRecipeFormSchema, CreateRecipeFormValues } from ".";
 
-const defaultValues: Partial<CreateRecipeFormValues> = {
-  title: "",
-  bio: "",
-  ingredients: [{ name: "" }],
-  instructions: [{ value: "" }],
-  urls: [{ value: "" }],
-  servingCount: 1,
+type Props = {
+  defaultValues: Partial<CreateRecipeFormValues>;
+  redirectPath: string;
 };
 
-const CreateRecipeForm = () => {
+const CreateRecipeForm = ({ defaultValues, redirectPath }: Props) => {
   const [imageData, setImageData] = useState("");
 
   const { toast } = useToast();
@@ -43,7 +39,7 @@ const CreateRecipeForm = () => {
     mode: "onChange",
   });
 
-  const { setValue, watch, formState, handleSubmit } = form;
+  const { setValue, watch, handleSubmit } = form;
 
   const watchedValues = watch();
 
@@ -84,7 +80,7 @@ const CreateRecipeForm = () => {
           title: "レシピを作成しました",
           duration: 1500,
         });
-        router.push(`/my-page`);
+        router.push(redirectPath);
       } else {
         toast({
           variant: "destructive",

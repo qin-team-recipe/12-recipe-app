@@ -8,6 +8,7 @@ import { createServerActionClient } from "@supabase/auth-helpers-nextjs";
 import { zact } from "zact/server";
 
 import { formSchema } from "../app/mock/_components/new-recipe-form";
+import { createRecipeFormSchema } from "../components/create-recipe-form";
 import { Database } from "../types/SupabaseTypes";
 
 type CreateRecipeResult = {

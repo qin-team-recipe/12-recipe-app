@@ -3,6 +3,7 @@ import * as z from "zod";
 export type CreateRecipeFormValues = z.infer<typeof createRecipeFormSchema>;
 
 export const createRecipeFormSchema = z.object({
+  uid: z.string(),
   title: z.string().min(1, {
     message: "タイトルは必須です",
   }),

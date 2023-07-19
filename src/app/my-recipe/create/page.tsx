@@ -4,8 +4,8 @@ import { redirect } from "next/navigation";
 import { getAuthenticatedUser } from "@/src/actions/getAuthenticatedUser";
 import TopBar from "@/src/components/layout/top-bar";
 
+import { CreateRecipeForm, CreateRecipeFormValues } from "../../../components/create-recipe-form";
 import CloseButton from "./_components/close-button";
-import { CreateRecipeForm } from "./_components/create-recipe-form";
 
 const page = async () => {
   const user = await getAuthenticatedUser();
@@ -14,6 +14,16 @@ const page = async () => {
     // TODO: 未ログイン時のリダイレクト先を変更する
     redirect("/mock/unauthorized");
   }
+
+  const defaultValues: Partial<CreateRecipeFormValues> = {
+    uid: user.id,
+    title: "",
+    bio: "",
+    ingredients: [{ name: "" }],
+    instructions: [{ value: "" }],
+    urls: [{ value: "" }],
+    servingCount: 1,
+  };
 
   return (
     <>
@@ -25,7 +35,7 @@ const page = async () => {
           </Link>
         }
       />
-      <CreateRecipeForm />
+      <CreateRecipeForm defaultValues={defaultValues} redirectPath="/my-page" />
     </>
   );
 };
