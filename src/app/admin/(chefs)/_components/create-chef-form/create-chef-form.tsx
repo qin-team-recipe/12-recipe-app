@@ -18,6 +18,7 @@ import { useFieldArray, useForm } from "react-hook-form";
 import { z } from "zod";
 
 import { createChefFormSchema, CreateChefFormValues } from ".";
+import { createChef } from "../../../_actions/createChef";
 
 const CreateChefForm = () => {
   const [imageData, setImageData] = useState("");
@@ -53,21 +54,22 @@ const CreateChefForm = () => {
 
   const onSubmit = (data: z.infer<typeof createChefFormSchema>) => {
     startTransition(async () => {
-      // const result = await updateProfile(data);
-      // if (result.isSuccess) {
-      //   toast({
-      //     variant: "default",
-      //     title: "プロフィールを更新しました",
-      //     duration: 1500,
-      //   });
-      //   router.push(`/admin`);
-      // } else {
-      //   toast({
-      //     variant: "destructive",
-      //     title: "プロフィールの更新に失敗しました",
-      //     duration: 1500,
-      //   });
-      // }
+      const result = await createChef(data);
+
+      if (result.isSuccess) {
+        toast({
+          variant: "default",
+          title: "プロフィールを更新しました",
+          duration: 3000,
+        });
+        router.push(`/admin`);
+      } else {
+        toast({
+          variant: "destructive",
+          title: "プロフィールの更新に失敗しました",
+          duration: 3000,
+        });
+      }
     });
   };
 

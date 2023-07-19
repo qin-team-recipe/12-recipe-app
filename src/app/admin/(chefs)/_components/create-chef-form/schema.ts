@@ -4,7 +4,7 @@ export type CreateChefFormValues = z.infer<typeof createChefFormSchema>;
 
 export const createChefFormSchema = z.object({
   name: z.string().min(1, {
-    message: "ニックネームは必須です",
+    message: "シェフ名は必須です",
   }),
 
   // TODO: 画像のバリデーション

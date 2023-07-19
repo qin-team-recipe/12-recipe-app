@@ -87,7 +87,7 @@ const EditChefForm = ({ defaultValues }: Props) => {
           name="name"
           render={({ field }) => (
             <FormItem className="grid space-y-0">
-              <FormLabel className="mb-1 ml-3 mt-5 text-lg font-bold">ニックネーム</FormLabel>
+              <FormLabel className="mb-1 ml-3 mt-5 text-lg font-bold">シェフ名</FormLabel>
               <FormControl>
                 <Input className="w-full rounded-none border-x-0" {...field} />
               </FormControl>
@@ -140,7 +140,7 @@ const EditChefForm = ({ defaultValues }: Props) => {
           name="bio"
           render={({ field }) => (
             <FormItem className=" grid w-full space-y-0">
-              <FormLabel className="mb-1 ml-3 text-lg font-bold">自己紹介（任意）</FormLabel>
+              <FormLabel className="mb-1 ml-3 text-lg font-bold">紹介文（任意）</FormLabel>
               <FormControl>
                 <Textarea className="rounded-none border-x-0" {...field} />
               </FormControl>
@@ -195,7 +195,7 @@ const EditChefForm = ({ defaultValues }: Props) => {
           <Button variant={"destructive"} className="flex-1 gap-2" type="submit" disabled={!changed}>
             {isPending && <Spinner />} 保存する
           </Button>
-          <Link href="/my-page" className="flex-1">
+          <Link href="/admin" className="flex-1">
             <Button variant={"outline"} className="w-full border-tomato7 text-tomato11">
               キャンセル
             </Button>

@@ -10,7 +10,6 @@ import { Command, CommandItem, CommandList } from "@/src/components/ui/command";
 import { Input } from "@/src/components/ui/input";
 import { Popover, PopoverContent, PopoverTrigger } from "@/src/components/ui/popover";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/src/components/ui/table";
-import { useDoubleCheck } from "@/src/hooks/useDoubleCheck";
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -23,7 +22,9 @@ import {
   useReactTable,
   VisibilityState,
 } from "@tanstack/react-table";
-import { ArrowUpDown, ChevronDown, Copy, MoreHorizontal, Pencil, Trash, Trash2Icon } from "lucide-react";
+import { Copy, MoreHorizontal, Pencil } from "lucide-react";
+
+import DeleteChefButton from "./delete-chef-button";
 
 type Chef = {
   id: string;
@@ -58,7 +59,7 @@ export const columns: ColumnDef<Chef>[] = [
   {
     accessorKey: "name",
     header: "シェフ名",
-    cell: ({ row }) => <div className="capitalize">{row.getValue("name")}</div>,
+    cell: ({ row }) => <div>{row.getValue("name")}</div>,
   },
   {
     accessorKey: "_count.Recipe",
@@ -145,8 +146,6 @@ export function DataTableDemo({ data }: { data: Chef[] }) {
   const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = React.useState({});
 
-  const doubleCheckDeleteChef = useDoubleCheck();
-
   const table = useReactTable({
     data,
     columns,
@@ -175,19 +174,13 @@ export function DataTableDemo({ data }: { data: Chef[] }) {
             value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
             onChange={(event) => table.getColumn("name")?.setFilterValue(event.target.value)}
           />
-          {/* チェックボックスに一つでもチェックが有れば削除ボタンを表示 */}
           {table.getFilteredSelectedRowModel().rows.length > 0 && (
-            <Button
-              variant="destructive"
-              className="w-40"
-              {...doubleCheckDeleteChef.getButtonProps({
-                type: "submit",
-                form: "delete-chef",
-              })}
-            >
-              <Trash2Icon size={12} className="mr-2" />
-              <p className="">{doubleCheckDeleteChef.doubleCheck ? "Are you sure?" : "Delete"}</p>
-            </Button>
+            <DeleteChefButton
+              chefIds={table.getFilteredSelectedRowModel().rows.map((row) => row.original.id)}
+              onSuccessfulDelete={() => {
+                table.setRowSelection({});
+              }}
+            />
           )}
         </div>
         <Button variant="outline" className="ml-auto" onClick={() => router.push("/admin/create")}>
@@ -221,7 +214,7 @@ export function DataTableDemo({ data }: { data: Chef[] }) {
             ) : (
               <TableRow>
                 <TableCell colSpan={columns.length} className="h-24 text-center">
-                  該当するシェフが見つかりませんでした。
+                  No data
                 </TableCell>
               </TableRow>
             )}
