@@ -41,18 +41,18 @@ export const addAllToCart = async (recipeId: string, ingredientIds: number[]) =>
       })),
     });
   } else {
-    const cartList = await prisma.cartList.create({
+    await prisma.cartList.create({
       data: {
         userId: session.user.id,
         recipeId,
+        CartListItem: {
+          createMany: {
+            data: ingredientIds.map((ingredientId) => ({
+              ingredientId,
+            })),
+          },
+        },
       },
-    });
-
-    await prisma.cartListItem.createMany({
-      data: ingredientIds.map((ingredientId) => ({
-        ingredientId,
-        cartListId: cartList.id,
-      })),
     });
   }
 
