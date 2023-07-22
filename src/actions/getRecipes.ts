@@ -10,9 +10,6 @@ export const getRecipes = async ({ offset = 0, limit = 10 }: PaginationParams = 
     orderBy: {
       createdAt: "desc",
     },
-    where: {
-      deletedAt: null,
-    },
     skip: offset,
     take: limit,
   });

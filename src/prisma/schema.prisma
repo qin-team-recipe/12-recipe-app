@@ -47,7 +47,6 @@ model Recipe {
   Ingredient   Ingredient[]
   createdAt    DateTime?     @default(now()) @map("created_at") @db.Timestamptz(3)
   updatedAt    DateTime?     @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(3)
-  deletedAt    DateTime?     @map("deleted_at") @db.Timestamptz(3)
 }
 
 /// レシピの画像
@@ -129,7 +128,6 @@ model UserLink {
   id        Int       @id @default(autoincrement())
   user      User      @relation(fields: [userId], references: [id])
   userId    String    @map("user_id")
-  siteName  String    @map("site_name")
   url       String
   createdAt DateTime? @default(now()) @map("created_at") @db.Timestamptz(3)
   updatedAt DateTime? @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(3)

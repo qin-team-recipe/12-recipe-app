@@ -1,15 +1,22 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { cookies } from "next/headers";
+
+import { createServerActionClient } from "@supabase/auth-helpers-nextjs";
 
 import { prisma } from "../lib/prisma";
-import { getAuthenticatedUser } from "./getAuthenticatedUser";
+import { Database } from "../types/SupabaseTypes";
 
 export const doneMemo = async (id: number, isCompleted: boolean) => {
-  const user = await getAuthenticatedUser();
+  const supabaseServerClient = createServerActionClient<Database>({ cookies });
 
-  if (!user) {
-    throw new Error("認証に失敗しました");
+  const {
+    data: { session },
+  } = await supabaseServerClient.auth.getSession();
+
+  if (!session) {
+    throw new Error("認証に失敗しました🥲");
   }
 
   // 論理削除
