@@ -16,7 +16,7 @@ type CreateRecipeResult = {
 };
 
 export const createRecipe = zact(formSchema)(
-  async ({ title, bio, ingredients, urls, servingCount, instructions }): Promise<CreateRecipeResult> => {
+  async ({ title, bio, ingredients, urls, servingCount, instructions, recipeImage }): Promise<CreateRecipeResult> => {
     const supabaseServerClient = createServerActionClient<Database>({ cookies });
 
     const {
@@ -27,7 +27,6 @@ export const createRecipe = zact(formSchema)(
       throw new Error("認証に失敗しました");
     }
 
-    // TODO: RecipeImageの追加
     try {
       await prisma.recipe.create({
         data: {
@@ -35,6 +34,11 @@ export const createRecipe = zact(formSchema)(
           description: bio,
           userId: session.user.id,
           servingCount: servingCount,
+          RecipeImage: {
+            create: {
+              recipeImage: recipeImage ?? "",
+            },
+          },
           Ingredient: {
             create: ingredients.map((ingredient) => ({
               title: ingredient.name,
