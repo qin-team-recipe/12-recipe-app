@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState, useTransition } from "react";
+import { useCallback, useTransition } from "react";
 import Image from "next/image";
 
 import { createRecipe } from "@/src/actions/createRecipe";
@@ -10,6 +10,7 @@ import { Input } from "@/src/components/ui/input";
 import { Label } from "@/src/components/ui/label";
 import Spinner from "@/src/components/ui/spinner";
 import { Textarea } from "@/src/components/ui/textarea";
+import { useUploadImage } from "@/src/hooks/useUploadImage";
 import { cn } from "@/src/lib/utils";
 import { Database } from "@/src/types/SupabaseTypes";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -36,8 +37,7 @@ const defaultValues: Partial<NewRecipeFormValues> = {
 const NewRecipeForm = () => {
   const supabase = createClientComponentClient<Database>();
   const [isPending, startTransition] = useTransition();
-  const [image, setImage] = useState<File | null>(null);
-  const [previewImage, setPreviewImage] = useState<string | null>(null);
+  const { image, previewImage, setPreviewImage, onUploadImage } = useUploadImage();
 
   const form = useForm<NewRecipeFormValues>({
     resolver: zodResolver(formSchema),
@@ -75,19 +75,14 @@ const NewRecipeForm = () => {
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
     if (image) {
       // supabaseストレージに画像アップロード
-      const { data: storageData, error: storageError } = await supabase.storage
-        .from("recipe")
-        .upload(`${uuidv4()}`, image);
-
+      const { data: storageData, error: storageError } = await supabase.storage.from("recipe").upload(uuidv4(), image);
       // エラーチェック
       if (storageError) {
-        console.log("エラーが発生しました。" + storageError.message);
+        form.setError("recipeImage", { type: "manual", message: storageError.message });
         return;
       }
-
       // 画像のURLを取得
       const { data: urlData } = supabase.storage.from("recipe").getPublicUrl(storageData.path);
-
       data.recipeImage = urlData.publicUrl;
     }
 
@@ -97,37 +92,18 @@ const NewRecipeForm = () => {
     });
   };
 
-  // 画像アップロード
-  const onUploadImage = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files;
-    console.log("");
-
-    // ファイルが選択されていない場合
-    if (!file || file?.length == 0) {
-      console.log("画像をアップロードしてください。");
-      return;
-    }
-
-    const fileSize = file[0]?.size / 1024 / 1024; // size in MB
-    const fileType = file[0]?.type; // MIME type of the file
-
-    // 画像サイズが2MBを超える場合
-    if (fileSize > 2) {
-      console.log("画像サイズを2MB以下にする必要があります。");
-      return;
-    }
-
-    // ファイル形式がjpgまたはpngでない場合
-    if (fileType !== "image/jpeg" && fileType !== "image/png") {
-      console.log("画像はjpgまたはpng形式である必要があります。");
-      return;
-    }
-
-    // 画像をセット
-    setImage(file[0]);
-    // 画像のプレビューをセット
-    setPreviewImage(URL.createObjectURL(file[0]));
-  }, []);
+  const handleChangeUploadImage = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      try {
+        onUploadImage(e);
+      } catch (error) {
+        if (error instanceof Error) {
+          form.setError("recipeImage", { type: "manual", message: error.message });
+        }
+      }
+    },
+    [form, onUploadImage]
+  );
 
   return (
     <Form {...form}>
@@ -148,32 +124,44 @@ const NewRecipeForm = () => {
             )}
           />
         </div>
-
         {/* レシピ画像 */}
         <div className="w-full">
-          <FormItem className="grid w-full max-w-screen-sm">
-            <FormLabel>レシピ画像</FormLabel>
-            <FormControl>
-              <>
-                {!previewImage ? (
-                  <Input type="file" accept=".png, .jpg, .jpeg" onChange={onUploadImage} />
-                ) : (
-                  <div className="relative mt-2 h-24 w-24">
-                    <Image src={previewImage} alt="preview" layout="fill" objectFit="cover" />
-                    <button
-                      className="absolute right-0 top-0 rounded-full bg-white/80 shadow-md"
-                      onClick={() => setPreviewImage(null)}
-                    >
-                      <X size={16} />
-                    </button>
-                  </div>
-                )}
-              </>
-            </FormControl>
-            <FormMessage />
-          </FormItem>
+          <FormField
+            control={form.control}
+            name="recipeImage"
+            render={({ field }) => {
+              const { onChange, ...restFieldProps } = field;
+              return (
+                <FormItem className="grid w-full max-w-screen-sm">
+                  <FormLabel>レシピ画像</FormLabel>
+                  <FormControl>
+                    <>
+                      {!previewImage ? (
+                        <Input
+                          type="file"
+                          accept=".png, .jpg, .jpeg"
+                          onChange={handleChangeUploadImage}
+                          {...restFieldProps}
+                        />
+                      ) : (
+                        <div className="relative mt-2 h-24 w-24">
+                          <Image src={previewImage} alt="preview" layout="fill" objectFit="cover" />
+                          <button
+                            className="absolute right-0 top-0 rounded-full bg-white/80 shadow-md"
+                            onClick={() => setPreviewImage(null)}
+                          >
+                            <X size={16} />
+                          </button>
+                        </div>
+                      )}
+                    </>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              );
+            }}
+          />
         </div>
-
         {/* 何人前 */}
         <div className="w-fit self-start">
           <FormField
