@@ -138,7 +138,7 @@ export const columns: ColumnDef<Chef>[] = [
   },
 ];
 
-export function DataTableDemo({ data }: { data: Chef[] }) {
+export function ChefsDataTable({ data }: { data: Chef[] }) {
   const router = useRouter();
 
   const [sorting, setSorting] = React.useState<SortingState>([]);
