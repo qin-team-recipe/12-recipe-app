@@ -2,7 +2,7 @@
 
 import { useRef } from "react";
 
-import { addMemo } from "@/src/actions/addMemo";
+import { postMemo } from "@/src/actions/postMemo";
 import { Button } from "@/src/components/ui/button";
 import { Input } from "@/src/components/ui/input";
 import { Label } from "@/src/components/ui/label";
@@ -10,7 +10,7 @@ import { Label } from "@/src/components/ui/label";
 export default function NewMemo() {
   const formRef = useRef<HTMLFormElement>(null);
   const add = async (data: FormData) => {
-    await addMemo(data);
+    await postMemo(data);
     if (formRef.current) formRef.current.reset();
   };
   return (

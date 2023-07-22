@@ -10,13 +10,13 @@ import { zact } from "zact/server";
 import { createRecipeFormSchema } from "../components/create-recipe-form";
 import { Database } from "../types/SupabaseTypes";
 
-type CreateRecipeResult = {
+type PostRecipeResult = {
   isSuccess: boolean;
   error?: Error;
 };
 
-export const createRecipe = zact(createRecipeFormSchema)(
-  async ({ title, bio, ingredients, urls, servingCount, instructions, recipeImage }): Promise<CreateRecipeResult> => {
+export const postRecipe = zact(createRecipeFormSchema)(
+  async ({ title, bio, ingredients, urls, servingCount, instructions, recipeImage }): Promise<PostRecipeResult> => {
     const supabaseServerClient = createServerActionClient<Database>({ cookies });
 
     const {

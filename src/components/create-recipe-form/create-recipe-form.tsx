@@ -4,7 +4,7 @@ import { useState, useTransition } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 
-import { createRecipe } from "@/src/actions/createRecipe";
+import { postRecipe } from "@/src/actions/postRecipe";
 import { Button } from "@/src/components/ui/button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/src/components/ui/form";
 import { Input } from "@/src/components/ui/input";
@@ -72,7 +72,7 @@ const CreateRecipeForm = ({ defaultValues, redirectPath }: Props) => {
 
   const onSubmit = (data: z.infer<typeof createRecipeFormSchema>) => {
     startTransition(async () => {
-      const result = await createRecipe(data);
+      const result = await postRecipe(data);
 
       if (result.isSuccess) {
         toast({

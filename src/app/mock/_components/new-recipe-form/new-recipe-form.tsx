@@ -3,7 +3,8 @@
 import { useCallback, useTransition } from "react";
 import Image from "next/image";
 
-import { createRecipe } from "@/src/actions/createRecipe";
+import { postRecipe } from "@/src/actions/postRecipe";
+import { createRecipeFormSchema } from "@/src/components/create-recipe-form";
 import { Button } from "@/src/components/ui/button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/src/components/ui/form";
 import { Input } from "@/src/components/ui/input";
@@ -20,9 +21,7 @@ import { useFieldArray, useForm } from "react-hook-form";
 import { v4 as uuidv4 } from "uuid";
 import * as z from "zod";
 
-import { formSchema } from ".";
-
-type NewRecipeFormValues = z.infer<typeof formSchema>;
+type NewRecipeFormValues = z.infer<typeof createRecipeFormSchema>;
 
 const defaultValues: Partial<NewRecipeFormValues> = {
   title: "",
@@ -36,11 +35,11 @@ const defaultValues: Partial<NewRecipeFormValues> = {
 
 const NewRecipeForm = () => {
   const supabase = createClientComponentClient<Database>();
+
   const [isPending, startTransition] = useTransition();
   const { image, previewImage, setPreviewImage, onUploadImage } = useUploadImage();
-
   const form = useForm<NewRecipeFormValues>({
-    resolver: zodResolver(formSchema),
+    resolver: zodResolver(createRecipeFormSchema),
     defaultValues,
     mode: "onChange",
   });
@@ -72,7 +71,7 @@ const NewRecipeForm = () => {
     control: form.control,
   });
 
-  const onSubmit = async (data: z.infer<typeof formSchema>) => {
+  const onSubmit = async (data: z.infer<typeof createRecipeFormSchema>) => {
     if (image) {
       // supabaseストレージに画像アップロード
       const { data: storageData, error: storageError } = await supabase.storage.from("recipe").upload(uuidv4(), image);
@@ -87,7 +86,7 @@ const NewRecipeForm = () => {
     }
 
     startTransition(async () => {
-      await createRecipe(data);
+      await postRecipe(data);
       form.reset();
     });
   };
