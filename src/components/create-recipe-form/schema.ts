@@ -3,13 +3,16 @@ import * as z from "zod";
 export type CreateRecipeFormValues = z.infer<typeof createRecipeFormSchema>;
 
 export const createRecipeFormSchema = z.object({
-  uid: z.string(),
   title: z.string().min(1, {
     message: "タイトルは必須です",
   }),
+
   servingCount: z.number().int().min(1, {
     message: "1人前以上を入力してください",
   }),
+
+  recipeImage: z.string().optional(),
+
   ingredients: z.array(
     z.object({
       name: z.string().min(1, {
@@ -17,6 +20,7 @@ export const createRecipeFormSchema = z.object({
       }),
     })
   ),
+
   instructions: z.array(
     z.object({
       value: z.string().min(1, {
@@ -24,11 +28,11 @@ export const createRecipeFormSchema = z.object({
       }),
     })
   ),
-  // TODO: 画像のバリデーション
 
   bio: z.string().max(160, {
     message: "160文字以内で入力してください",
   }),
+
   urls: z.array(
     z
       .object({
