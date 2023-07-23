@@ -42,10 +42,23 @@ export const addAllToCart = async (recipeId: string, ingredientIds: number[]) =>
     },
   });
 
-  const isNotfoundRecipeInCartList = cartList === null;
+  const foundRecipeInCartList = cartList !== null;
 
-  if (isNotfoundRecipeInCartList) {
-    // お買い物リストの中で一番表示順が大きくなるようにレシピを追加する
+  if (foundRecipeInCartList) {
+    // カード内に存在しない材料だけをカートに追加する
+    const existsIngredientIds = cartList.CartListItem.map((item) => item.ingredientId);
+    const unAddedIngredientIds = ingredientIds.filter((id) => !existsIngredientIds.includes(id));
+
+    // TODO:全て追加されている場合の処理が必要であれば追加する
+
+    await prisma.cartListItem.createMany({
+      data: unAddedIngredientIds.map((ingredientId) => ({
+        ingredientId,
+        cartListId: cartList.id,
+      })),
+    });
+  } else {
+    // お買い物リストの中で一番表示順が大きくなるようにレシピを追加する。材料も併せて追加する。
     const maxDisplayOrder = await getMaxDisplayOrder(session.user.id);
 
     await prisma.cartList.create({
@@ -61,16 +74,6 @@ export const addAllToCart = async (recipeId: string, ingredientIds: number[]) =>
           },
         },
       },
-    });
-  } else {
-    const existIngredientIds = cartList.CartListItem.map((item) => item.ingredientId);
-    const unAddedIngredientIds = ingredientIds.filter((id) => !existIngredientIds.includes(id));
-
-    await prisma.cartListItem.createMany({
-      data: unAddedIngredientIds.map((ingredientId) => ({
-        ingredientId,
-        cartListId: cartList.id,
-      })),
     });
   }
 
