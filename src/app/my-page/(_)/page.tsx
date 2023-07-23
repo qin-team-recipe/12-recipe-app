@@ -8,9 +8,9 @@ const page = async () => {
   return (
     <>
       {myRecipes.length > 0 ? (
-        <div className="grid grid-cols-2 gap-4 p-4">
+        <ul className="grid grid-cols-2 gap-4 p-4">
           {myRecipes.map(({ id, _count, description, title }) => (
-            <div key={id} className="flex flex-col gap-2">
+            <li key={id}>
               <RecipeCard
                 path={`/my-recipe/${id}`}
                 favorites={_count.likes}
@@ -18,9 +18,9 @@ const page = async () => {
                 title={title}
                 imageUrl="https://images.unsplash.com/photo-1595295333158-4742f28fbd85?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=640&q=80"
               />
-            </div>
+            </li>
           ))}
-        </div>
+        </ul>
       ) : (
         <NoDataDisplay text="まだレシピが作成されていません。" />
       )}

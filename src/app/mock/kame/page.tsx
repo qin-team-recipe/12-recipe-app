@@ -34,7 +34,7 @@ const page = async () => {
       <h2 className="text-2xl font-bold underline">お気に入り一覧</h2>
       <ul className="space-y-2">
         {favoriteRecipes.map((fr) => (
-          <li key={fr.id}>{fr.recipe.title}</li>
+          <li key={fr.id}>{fr.title}</li>
         ))}
       </ul>
       <hr className="py-2" />

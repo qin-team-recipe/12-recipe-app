@@ -16,7 +16,7 @@ const page = async ({ params }: { params: { id: string } }) => {
     <>
       <div className="grid grid-cols-2 gap-4 p-4">
         {recipes.map(({ id, likesCount, description, title }) => (
-          <div key={id} className="flex flex-col gap-2">
+          <div key={id}>
             <RecipeCard
               path={`/mock/tsuboi/${id}`}
               favorites={likesCount}

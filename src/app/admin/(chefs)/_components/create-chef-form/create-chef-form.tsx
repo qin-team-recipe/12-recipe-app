@@ -18,7 +18,7 @@ import { useFieldArray, useForm } from "react-hook-form";
 import { z } from "zod";
 
 import { createChefFormSchema, CreateChefFormValues } from ".";
-import { createChef } from "../../../_actions/createChef";
+import { postChef } from "../../../../../actions/postChef";
 
 const CreateChefForm = () => {
   const [imageData, setImageData] = useState("");
@@ -54,7 +54,7 @@ const CreateChefForm = () => {
 
   const onSubmit = (data: z.infer<typeof createChefFormSchema>) => {
     startTransition(async () => {
-      const result = await createChef(data);
+      const result = await postChef(data);
 
       if (result.isSuccess) {
         toast({

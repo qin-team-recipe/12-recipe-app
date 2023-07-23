@@ -4,17 +4,17 @@ import { Avatar, AvatarImage } from "./ui/avatar";
 
 type Props = {
   id: string;
-  avatar: string;
+  imagePath: string;
   name: string;
 };
 
-const ProfileLink = ({ id, avatar, name }: Props) => {
+const ProfileLink = ({ id, imagePath, name }: Props) => {
   return (
     <Link className="flex cursor-pointer items-center gap-x-1 hover:underline" href={`/chef/${id}`}>
       <Avatar className="h-6 w-6">
-        <AvatarImage src={avatar} alt="profile" />
+        <AvatarImage src={imagePath} alt={name} />
       </Avatar>
-      <span>{name}</span>
+      <span className="text-lg text-mauve11">{name}</span>
     </Link>
   );
 };

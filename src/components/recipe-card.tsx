@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 
 import { Heart } from "lucide-react";
@@ -18,25 +19,19 @@ type Props = {
  */
 const RecipeCard = ({ path, imageUrl, title, description, favorites }: Props) => {
   return (
-    <>
-      <Link href={path}>
-        <div className="relative">
-          <img className="aspect-square rounded-2xl" src={imageUrl} alt="recipe-card" />
-          {favorites > 0 && (
-            <div className="absolute right-2 top-2 flex h-7 items-center rounded-2xl bg-[#040013]/[.5] p-1">
-              <Heart className="mr-1 text-mauve1" size={16} />
-              <label className="text-sm text-mauve1" htmlFor="favorite">
-                {favorites}
-              </label>
-            </div>
-          )}
+    <Link href={path} className="relative">
+      <Image src={imageUrl} layout="responsive" className="w-full rounded-2xl" alt={title} width={160} height={160} />
+      {favorites > 0 && (
+        <div className="absolute right-2 top-2 rounded-2xl bg-[#040013]/[.48] p-2 leading-none text-mauve1">
+          <div className="flex items-center gap-2">
+            <Heart size={16} />
+            <span className="">{favorites}</span>
+          </div>
         </div>
-        <div className="grid">
-          <h6 className="mt-1 line-clamp-2 text-ellipsis text-xs font-bold text-mauve12">{title}</h6>
-          <p className="mt-1 truncate text-extend-ss text-mauve11">{description}</p>
-        </div>
-      </Link>
-    </>
+      )}
+      <p className="mt-2 line-clamp-2 font-bold text-mauve12">{title}</p>
+      <p className="mt-1 line-clamp-1 text-xs">{description}</p>
+    </Link>
   );
 };
 

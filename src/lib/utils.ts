@@ -14,9 +14,23 @@ type SiteLink = {
 
 const snsOrder = ["youtube", "instagram", "twitter", "facebook"];
 
+const isValidUrl = (url: string): boolean => {
+  try {
+    new URL(url);
+    return true;
+  } catch (e) {
+    return false;
+  }
+};
+
 export const sortSiteLinks = (links: string[]): SiteLink[] => {
+  if (!links || links.length === 0) return [];
+
+  // URLが正しいかチェック
+  const validLinks = links.filter((link) => isValidUrl(link));
+
   // ホスト名を分割
-  const siteLinks: SiteLink[] = links.map((link) => ({
+  const siteLinks: SiteLink[] = validLinks.map((link) => ({
     url: link,
     label: new URL(link).hostname.split(".")[new URL(link).hostname.split(".").length - 2].toLowerCase(),
   }));
