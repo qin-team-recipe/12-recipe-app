@@ -104,5 +104,20 @@ export const removeCartList = async (recipeId: string, cartListItemId: number) =
         id: cartListItemId,
       },
     });
+
+    const cartListItemSize = await prisma.cartListItem.count({
+      where: {
+        cartListId: cartList.id,
+      },
+    });
+
+    if (cartListItemSize === 0) {
+      // 材料がカート内に存在しない場合カートからレシピを削除する
+      await prisma.cartList.delete({
+        where: {
+          id: cartList.id,
+        },
+      });
+    }
   }
 };
