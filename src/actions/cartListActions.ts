@@ -40,6 +40,7 @@ export const addCartList = async (recipeId: string, ingredientId: number) => {
       CartListItem: true,
     },
   });
+
   const isNotfoundRecipeInCartList = cartList === null;
   if (isNotfoundRecipeInCartList) {
     // お買い物リストの中で一番表示順が大きくなるようにレシピを追加する
@@ -69,6 +70,38 @@ export const addCartList = async (recipeId: string, ingredientId: number) => {
       data: {
         cartListId: cartList.id,
         ingredientId,
+      },
+    });
+  }
+};
+
+export const removeCartList = async (recipeId: string, cartListItemId: number) => {
+  const supabaseServerClient = createServerActionClient<Database>({ cookies });
+
+  const {
+    data: { session },
+  } = await supabaseServerClient.auth.getSession();
+
+  if (!session) {
+    throw new Error("認証に失敗しました");
+  }
+
+  const cartList = await prisma.cartList.findFirst({
+    where: {
+      recipeId,
+      userId: session.user.id,
+    },
+    include: {
+      CartListItem: true,
+    },
+  });
+
+  const existsRecipeInCartList = cartList !== null;
+
+  if (existsRecipeInCartList) {
+    await prisma.cartListItem.delete({
+      where: {
+        id: cartListItemId,
       },
     });
   }
