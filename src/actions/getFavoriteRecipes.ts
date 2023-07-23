@@ -21,12 +21,21 @@ export const getFavoriteRecipes = async () => {
       userId: session.user.id,
     },
     include: {
-      recipe: true,
+      recipe: {
+        include: {
+          _count: {
+            select: {
+              likes: true,
+            },
+          },
+          RecipeImage: true,
+        },
+      },
     },
     orderBy: {
       createdAt: "desc",
     },
   });
 
-  return favoriteRecipes;
+  return favoriteRecipes.map((favoriteRecipe) => favoriteRecipe.recipe);
 };

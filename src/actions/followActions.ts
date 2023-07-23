@@ -33,7 +33,7 @@ export const followChef = async (formData: FormData) => {
   });
 
   // TODO: 適切なパスを指定する
-  revalidatePath("/mock");
+  revalidatePath("/");
 };
 
 // シェフのフォローを外す
@@ -63,5 +63,5 @@ export const unFollowChef = async (formData: FormData) => {
   });
 
   // TODO: 適切なパスを指定する
-  revalidatePath("/mock");
+  revalidatePath("/");
 };

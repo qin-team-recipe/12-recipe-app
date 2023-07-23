@@ -1,4 +1,5 @@
 import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
 
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 
@@ -16,6 +17,7 @@ export const getChefById = async ({ id, orderByLikes = false }: { id: string; or
           _count: {
             select: {
               likes: true,
+              RecipeImage: true,
             },
           },
         },
@@ -47,7 +49,7 @@ export const getChefById = async ({ id, orderByLikes = false }: { id: string; or
   } = await supabaseServerClient.auth.getSession();
 
   if (!session) {
-    throw new Error("認証に失敗しました🥲");
+    redirect("/mock/unauthenticated");
   }
 
   // シェフのフォロワー数を取得

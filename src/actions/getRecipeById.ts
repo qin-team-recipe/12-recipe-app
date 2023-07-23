@@ -26,6 +26,13 @@ export const getRecipeById = async (id: string) => {
       Ingredient: true,
       RecipeImage: true,
       RecipeLink: true,
+      user: {
+        select: {
+          id: true,
+          name: true,
+          profileImage: true,
+        },
+      },
       _count: {
         select: {
           likes: true,
