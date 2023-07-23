@@ -5,6 +5,7 @@ import { getRecipes } from "@/src/actions/getRecipes";
 import AddCartListButton from "./_components/add-cart-list-button";
 import AddFavoriteRecipeButton from "./_components/add-favorite-recipe-button";
 import DeleteFavoriteRecipeButton from "./_components/delete-favorite-recipe-button";
+import RemoveCartListButton from "./_components/remove-cart-list-button";
 
 const page = async () => {
   const recipes = await getRecipes();
@@ -48,12 +49,16 @@ const page = async () => {
                 {item.ingredient.title}
                 <input type="checkbox" checked={item.isCompleted} />
               </label>
+              {/* 削除したいレシピIDを渡す */}
+              <RemoveCartListButton recipeId={"3"} ingredientId={item.id} />
               <br />
             </>
           ))}
         </div>
       ))}
-      <AddCartListButton recipeId={"3"} ingredientIds={[3]} />
+      <br />
+      {/* 追加したいレシピIDとそのレシピに紐づく材料IDをpropsで渡す */}
+      <AddCartListButton recipeId={"3"} ingredientId={3} />
     </div>
   );
 };

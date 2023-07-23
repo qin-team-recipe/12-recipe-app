@@ -2,15 +2,15 @@
 
 import { useTransition } from "react";
 
-import { addCartList } from "@/src/actions/addCartList";
+import { addCartList } from "@/src/actions/cartListActions";
 import { Button } from "@/src/components/ui/button";
 import Spinner from "@/src/components/ui/spinner";
 
-const AddCartListButton = ({ recipeId, ingredientIds }: { recipeId: string; ingredientIds: number[] }) => {
+const AddCartListButton = ({ recipeId, ingredientId }: { recipeId: string; ingredientId: number }) => {
   const [isPending, startTransition] = useTransition();
 
   return (
-    <Button onClick={() => startTransition(() => addCartList(recipeId, ingredientIds))}>
+    <Button onClick={() => startTransition(() => addCartList(recipeId, ingredientId))}>
       {isPending ? <Spinner /> : "カート追加"}
     </Button>
   );
