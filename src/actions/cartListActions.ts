@@ -1,5 +1,6 @@
 "use server";
 
+import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
 
 import { createServerActionClient } from "@supabase/auth-helpers-nextjs";
@@ -47,7 +48,7 @@ export const addCartList = async (recipeId: string, ingredientId: number) => {
     // 材料をカートに追加する
     const existsIngredientId = cartList.CartListItem.find((item) => item.ingredientId === ingredientId);
 
-    if (!existsIngredientId) {
+    if (existsIngredientId) {
       throw new Error("選択された材料は既にカートに追加されています。");
     }
 
@@ -74,6 +75,8 @@ export const addCartList = async (recipeId: string, ingredientId: number) => {
       },
     });
   }
+  // TODO: 適切なパスを指定する
+  revalidatePath("/mock");
 };
 
 export const removeCartList = async (recipeId: string, cartListItemId: number) => {
@@ -121,4 +124,7 @@ export const removeCartList = async (recipeId: string, cartListItemId: number) =
       });
     }
   }
+
+  // TODO: 適切なパスを指定する
+  revalidatePath("/mock");
 };
