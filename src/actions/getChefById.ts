@@ -75,8 +75,8 @@ export const getChefById = async ({ id, orderByLikes = false }: { id: string; or
   return {
     ...chef,
     followersCount,
-    isFollowing: isFollowing,
-    isMe: isMe,
+    isFollowing,
+    isMe,
     Recipe: chef.Recipe.map((recipe) => ({
       ...recipe,
       likesCount: recipe._count.likes,

@@ -22,7 +22,7 @@ export default function Login() {
 
   const handleSignIn = async () => {
     await supabase.auth.signInWithPassword({
-      email: "chef1@gmail.com",
+      email: "admin1@test.com",
       password: "test123",
     });
 

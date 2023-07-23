@@ -7,16 +7,16 @@ import { prisma } from "@/src/lib/prisma";
 import { createServerActionClient } from "@supabase/auth-helpers-nextjs";
 import { zact } from "zact/server";
 
-import { formSchema } from "../app/mock/_components/new-recipe-form";
+import { createRecipeFormSchema } from "../components/create-recipe-form";
 import { Database } from "../types/SupabaseTypes";
 
-type CreateRecipeResult = {
+type PostRecipeResult = {
   isSuccess: boolean;
   error?: Error;
 };
 
-export const createRecipe = zact(formSchema)(
-  async ({ title, bio, ingredients, urls, servingCount, instructions, recipeImage }): Promise<CreateRecipeResult> => {
+export const postRecipe = zact(createRecipeFormSchema)(
+  async ({ title, bio, ingredients, urls, servingCount, instructions, recipeImage }): Promise<PostRecipeResult> => {
     const supabaseServerClient = createServerActionClient<Database>({ cookies });
 
     const {
@@ -59,6 +59,8 @@ export const createRecipe = zact(formSchema)(
           }),
         },
       });
+
+      // TODO: 適切なパスを指定する
       revalidatePath("/mock/tsuboi");
 
       return { isSuccess: true };

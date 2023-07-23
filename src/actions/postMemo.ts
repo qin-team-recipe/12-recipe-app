@@ -8,7 +8,7 @@ import { createServerActionClient } from "@supabase/auth-helpers-nextjs";
 import { prisma } from "../lib/prisma";
 import { Database } from "../types/SupabaseTypes";
 
-export const addMemo = async (formData: FormData) => {
+export const postMemo = async (formData: FormData) => {
   const supabaseServerClient = createServerActionClient<Database>({ cookies });
 
   const {

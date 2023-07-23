@@ -4,7 +4,7 @@ import { useState, useTransition } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 
-import { createRecipe } from "@/src/actions/createRecipe";
+import { postRecipe } from "@/src/actions/postRecipe";
 import { Button } from "@/src/components/ui/button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/src/components/ui/form";
 import { Input } from "@/src/components/ui/input";
@@ -19,16 +19,12 @@ import { z } from "zod";
 
 import { createRecipeFormSchema, CreateRecipeFormValues } from ".";
 
-const defaultValues: Partial<CreateRecipeFormValues> = {
-  title: "",
-  bio: "",
-  ingredients: [{ name: "" }],
-  instructions: [{ value: "" }],
-  urls: [{ value: "" }],
-  servingCount: 1,
+type Props = {
+  defaultValues: Partial<CreateRecipeFormValues>;
+  redirectPath: string;
 };
 
-const CreateRecipeForm = () => {
+const CreateRecipeForm = ({ defaultValues, redirectPath }: Props) => {
   const [imageData, setImageData] = useState("");
 
   const { toast } = useToast();
@@ -43,7 +39,7 @@ const CreateRecipeForm = () => {
     mode: "onChange",
   });
 
-  const { setValue, watch, formState, handleSubmit } = form;
+  const { setValue, watch, handleSubmit } = form;
 
   const watchedValues = watch();
 
@@ -76,7 +72,7 @@ const CreateRecipeForm = () => {
 
   const onSubmit = (data: z.infer<typeof createRecipeFormSchema>) => {
     startTransition(async () => {
-      const result = await createRecipe(data);
+      const result = await postRecipe(data);
 
       if (result.isSuccess) {
         toast({
@@ -84,7 +80,7 @@ const CreateRecipeForm = () => {
           title: "レシピを作成しました",
           duration: 1500,
         });
-        router.push(`/my-page`);
+        router.push(redirectPath);
       } else {
         toast({
           variant: "destructive",
