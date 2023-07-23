@@ -42,10 +42,10 @@ export const addAllToCart = async (recipeId: string, ingredientIds: number[]) =>
     },
   });
 
-  const foundRecipeInCartList = cartList !== null;
+  const existsRecipeInCartList = cartList !== null;
 
-  if (foundRecipeInCartList) {
-    // カード内に存在しない材料だけをカートに追加する
+  if (existsRecipeInCartList) {
+    // カート内に存在しない材料だけをカートに追加する
     const existsIngredientIds = cartList.CartListItem.map((item) => item.ingredientId);
     const unAddedIngredientIds = ingredientIds.filter((id) => !existsIngredientIds.includes(id));
 
