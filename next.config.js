@@ -18,8 +18,9 @@ const nextConfig = {
     return config;
   },
   images: {
-    disableStaticImages: true, // importした画像の型定義設定を無効にする
-    domains: ["localhost:54321"],
+    disableStaticImages: true,
+    // TODO: 本番環境のドメインを設定する
+    domains: ["localhost:54321", "images.unsplash.com", "uploads-ssl.webflow.com"],
   },
 };
 
