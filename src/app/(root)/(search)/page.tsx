@@ -1,4 +1,5 @@
 import { ChefCard } from "@/src/components/chef-card";
+import { ChefTile } from "@/src/components/chef-tile";
 import TopBar from "@/src/components/layout/top-bar";
 import RecipeCard from "@/src/components/recipe-card";
 import { RecipeStep } from "@/src/components/recipe-step";
@@ -32,6 +33,18 @@ const page = () => {
         <RecipeStep
           recipeText="用意するメインの材料は、マカロニ、牛乳、鶏もも肉、玉ねぎ、椎茸で、バター、小麦粉、塩、こしょうも使用します。"
           stepNumber={1}
+        />
+        <ChefTile
+          routingUrl="/chef/1"
+          imageUrl={
+            "https://images.unsplash.com/photo-1577219491135-ce391730fb2c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=80&q=80"
+          }
+          chefName={"ひふみシェフ"}
+          bio={
+            "白ごはん.comを運営しています。アップしたレシピの紹介や、youtube動画、日々の食のこと、オリジナル商品の案内等をブログでやっています。"
+          }
+          id="1"
+          recipeCount={123}
         />
       </div>
     </>
