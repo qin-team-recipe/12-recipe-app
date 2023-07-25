@@ -16,26 +16,26 @@ export const getMyFavoriteRecipes = async () => {
     throw new Error("認証に失敗しました🥲");
   }
 
-  const myFavoriteRecipes = await prisma.recipe.findMany({
+  const favoriteRecipes = await prisma.favorite.findMany({
     where: {
-      likes: {
-        some: {
-          userId: session.user.id,
+      userId: session.user.id,
+    },
+    include: {
+      recipe: {
+        include: {
+          _count: {
+            select: {
+              likes: true,
+            },
+          },
+          RecipeImage: true,
         },
       },
     },
     orderBy: {
       createdAt: "desc",
     },
-    include: {
-      RecipeImage: true,
-      _count: {
-        select: {
-          likes: true,
-        },
-      },
-    },
   });
 
-  return myFavoriteRecipes;
+  return favoriteRecipes.map((favoriteRecipe) => favoriteRecipe.recipe);
 };

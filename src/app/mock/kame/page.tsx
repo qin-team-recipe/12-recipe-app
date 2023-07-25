@@ -1,5 +1,5 @@
 import { getCartList } from "@/src/actions/getCartList";
-import { getFavoriteRecipes } from "@/src/actions/getFavoriteRecipes";
+import { getMyFavoriteRecipes } from "@/src/actions/getMyFavoriteRecipes";
 import { getRecipes } from "@/src/actions/getRecipes";
 
 import AddCartListButton from "./_components/add-cart-list-button";
@@ -8,7 +8,7 @@ import DeleteFavoriteRecipeButton from "./_components/delete-favorite-recipe-but
 
 const page = async () => {
   const recipes = await getRecipes();
-  const favoriteRecipes = await getFavoriteRecipes();
+  const favoriteRecipes = await getMyFavoriteRecipes();
   const cartList = await getCartList();
 
   return (

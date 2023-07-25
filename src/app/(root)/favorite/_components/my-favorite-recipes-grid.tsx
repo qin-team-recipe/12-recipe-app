@@ -1,9 +1,9 @@
-import { getFavoriteRecipes } from "@/src/actions/getFavoriteRecipes";
+import { getMyFavoriteRecipes } from "@/src/actions/getMyFavoriteRecipes";
 import NoDataDisplay from "@/src/components/no-data-display";
 import RecipeCard from "@/src/components/recipe-card";
 
 const MyFavoriteRecipesGrid = async () => {
-  const myFavoriteRecipes = await getFavoriteRecipes();
+  const myFavoriteRecipes = await getMyFavoriteRecipes();
 
   // TODO: 無限スクロールに対応する
   return (
