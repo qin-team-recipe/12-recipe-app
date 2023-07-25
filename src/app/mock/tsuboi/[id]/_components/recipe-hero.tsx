@@ -23,12 +23,11 @@ const RecipeHero = async ({ id, path }: Props) => {
   return (
     <>
       {/* // TODO: 画像を設定する */}
-      <DetailHeaderImage
+      {/* <DetailHeaderImage
         imageUrl={
           "https://images.unsplash.com/photo-1595295333158-4742f28fbd85?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=667&q=80"
         }
-        path={path}
-      />
+      /> */}
       <div className="grid gap-4 p-4">
         <div className="grid gap-4">
           <div className="flex justify-between">
@@ -75,7 +74,7 @@ const RecipeHero = async ({ id, path }: Props) => {
           <p className="text-mauve12">{description}</p>
         </div>
         <div className="flex gap-x-4">
-          <ProfileLink id={user.id} avatar={"https://github.com/shadcn.png"} name={user.name} />
+          <ProfileLink id={user.id} imagePath={"https://github.com/shadcn.png"} name={user.name} />
           <NumberUnit numbers={100000000} unit={CONSTANTS.FAVORITE} />
         </div>
         <ToggleButton

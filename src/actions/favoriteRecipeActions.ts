@@ -27,7 +27,7 @@ export const favoriteRecipe = async (formData: FormData) => {
   });
 
   // TODO: 適切なパスを指定する
-  revalidatePath("/mock");
+  revalidatePath("/");
 };
 
 export const unFavoriteRecipe = async (formData: FormData) => {
@@ -51,5 +51,5 @@ export const unFavoriteRecipe = async (formData: FormData) => {
   });
 
   // TODO: 適切なパスを指定する
-  revalidatePath("/mock");
+  revalidatePath("/");
 };

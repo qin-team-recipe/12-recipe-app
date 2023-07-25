@@ -1,21 +1,20 @@
 import Image from "next/image";
 
 import { getRecipeById } from "@/src/actions/getRecipeById";
+import FavoriteButton from "@/src/app/my-recipe/[id]/_components/favorite-button";
+import PopoverMenu from "@/src/app/my-recipe/[id]/_components/popover-menu";
 import LinkToIconRenderer from "@/src/components/link-to-icon-renderer";
 import NumberUnit from "@/src/components/number-unit";
+import ProfileLink from "@/src/components/profile-link";
 import RouterBackButton from "@/src/components/router-back-button";
-import { Button } from "@/src/components/ui/button";
 import { CONSTANTS } from "@/src/constants/constants";
-
-import FavoriteButton from "./favorite-button";
-import PopoverMenu from "./popover-menu";
 
 type Props = {
   id: string;
 };
 
 const RecipeHero = async ({ id }: Props) => {
-  const { title, description, isMe, RecipeLink: recipeLinks, _count, isFavorite } = await getRecipeById(id);
+  const { title, description, isMe, RecipeLink: recipeLinks, _count, isFavorite, user } = await getRecipeById(id);
 
   return (
     <>
@@ -47,19 +46,10 @@ const RecipeHero = async ({ id }: Props) => {
           <p className="text-mauve12">{description}</p>
         </div>
         <div className="flex items-center gap-4">
-          <Button variant={"outline"} className=" border-tomato9 px-2 text-tomato9">
-            {/* // TODO: 公開中かどうかのフラグを追加 */}
-            公開中
-          </Button>
+          <ProfileLink id={user.id} imagePath={"https://github.com/shadcn.png"} name={user.name} />
           <NumberUnit numbers={_count.likes} unit={CONSTANTS.FAVORITE} />
         </div>
-        <div className="flex gap-4">
-          <FavoriteButton isActive={isFavorite} recipeId={id} />
-          <Button variant={"outline"} className="flex-1 border-mauve9 text-mauve12">
-            {/* // TODO: 公開中かどうかのフラグを追加 */}
-            レシピを編集
-          </Button>
-        </div>
+        <FavoriteButton isActive={isFavorite} recipeId={id} />
       </div>
     </>
   );

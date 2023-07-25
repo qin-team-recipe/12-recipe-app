@@ -5,7 +5,7 @@ import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { prisma } from "../lib/prisma";
 import { Database } from "../types/SupabaseTypes";
 
-export const getFavoriteRecipes = async () => {
+export const getNewRecipesFromFollowingChefs = async () => {
   const supabaseServerClient = createServerComponentClient<Database>({ cookies });
 
   const {
@@ -16,17 +16,32 @@ export const getFavoriteRecipes = async () => {
     throw new Error("認証に失敗しました🥲");
   }
 
-  const favoriteRecipes = await prisma.favorite.findMany({
+  const followingChefs = await prisma.userFollower.findMany({
     where: {
-      userId: session.user.id,
+      followerId: session.user.id,
     },
-    include: {
-      recipe: true,
+  });
+
+  const followingChefIds = followingChefs.map((chef) => chef.followedId);
+
+  const newRecipesFromFollowingChefs = await prisma.recipe.findMany({
+    where: {
+      userId: {
+        in: followingChefIds,
+      },
     },
     orderBy: {
       createdAt: "desc",
     },
+    include: {
+      RecipeImage: true,
+      _count: {
+        select: {
+          likes: true,
+        },
+      },
+    },
   });
 
-  return favoriteRecipes;
+  return newRecipesFromFollowingChefs;
 };
