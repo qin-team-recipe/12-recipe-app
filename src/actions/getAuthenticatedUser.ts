@@ -1,3 +1,4 @@
+import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
@@ -21,7 +22,28 @@ export const getAuthenticatedUser = async () => {
     where: {
       id: session.user.id,
     },
+    select: {
+      id: true,
+      name: true,
+      profile: true,
+      profileImage: true,
+      UserLink: true,
+      role: true,
+    },
   });
 
-  return user;
+  if (!user) {
+    return null;
+  }
+
+  const followersCount = await prisma.userFollower.count({
+    where: {
+      followedId: user!.id,
+    },
+  });
+
+  return {
+    ...user,
+    followersCount,
+  };
 };

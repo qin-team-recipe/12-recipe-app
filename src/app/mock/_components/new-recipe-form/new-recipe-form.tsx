@@ -1,26 +1,31 @@
 "use client";
 
-import { useTransition } from "react";
+import { useCallback, useTransition } from "react";
+import Image from "next/image";
 
-import { createRecipe } from "@/src/actions/createRecipe";
+import { postRecipe } from "@/src/actions/postRecipe";
+import { createRecipeFormSchema } from "@/src/components/create-recipe-form";
 import { Button } from "@/src/components/ui/button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/src/components/ui/form";
 import { Input } from "@/src/components/ui/input";
 import { Label } from "@/src/components/ui/label";
 import Spinner from "@/src/components/ui/spinner";
 import { Textarea } from "@/src/components/ui/textarea";
+import { useUploadImage } from "@/src/hooks/useUploadImage";
 import { cn } from "@/src/lib/utils";
+import { Database } from "@/src/types/SupabaseTypes";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { PlusIcon, X } from "lucide-react";
 import { useFieldArray, useForm } from "react-hook-form";
+import { v4 as uuidv4 } from "uuid";
 import * as z from "zod";
 
-import { formSchema } from ".";
-
-type NewRecipeFormValues = z.infer<typeof formSchema>;
+type NewRecipeFormValues = z.infer<typeof createRecipeFormSchema>;
 
 const defaultValues: Partial<NewRecipeFormValues> = {
   title: "",
+  recipeImage: "",
   bio: "",
   ingredients: [{ name: "" }],
   instructions: [{ value: "" }],
@@ -29,10 +34,12 @@ const defaultValues: Partial<NewRecipeFormValues> = {
 };
 
 const NewRecipeForm = () => {
-  const [isPending, startTransition] = useTransition();
+  const supabase = createClientComponentClient<Database>();
 
+  const [isPending, startTransition] = useTransition();
+  const { image, previewImage, setPreviewImage, onUploadImage } = useUploadImage();
   const form = useForm<NewRecipeFormValues>({
-    resolver: zodResolver(formSchema),
+    resolver: zodResolver(createRecipeFormSchema),
     defaultValues,
     mode: "onChange",
   });
@@ -64,12 +71,38 @@ const NewRecipeForm = () => {
     control: form.control,
   });
 
-  const onSubmit = (data: z.infer<typeof formSchema>) => {
+  const onSubmit = async (data: z.infer<typeof createRecipeFormSchema>) => {
+    if (image) {
+      // supabaseストレージに画像アップロード
+      const { data: storageData, error: storageError } = await supabase.storage.from("recipe").upload(uuidv4(), image);
+      // エラーチェック
+      if (storageError) {
+        form.setError("recipeImage", { type: "manual", message: storageError.message });
+        return;
+      }
+      // 画像のURLを取得
+      const { data: urlData } = supabase.storage.from("recipe").getPublicUrl(storageData.path);
+      data.recipeImage = urlData.publicUrl;
+    }
+
     startTransition(async () => {
-      await createRecipe(data);
+      await postRecipe(data);
       form.reset();
     });
   };
+
+  const handleChangeUploadImage = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      try {
+        onUploadImage(e);
+      } catch (error) {
+        if (error instanceof Error) {
+          form.setError("recipeImage", { type: "manual", message: error.message });
+        }
+      }
+    },
+    [form, onUploadImage]
+  );
 
   return (
     <Form {...form}>
@@ -90,7 +123,44 @@ const NewRecipeForm = () => {
             )}
           />
         </div>
-
+        {/* レシピ画像 */}
+        <div className="w-full">
+          <FormField
+            control={form.control}
+            name="recipeImage"
+            render={({ field }) => {
+              const { onChange, ...restFieldProps } = field;
+              return (
+                <FormItem className="grid w-full max-w-screen-sm">
+                  <FormLabel>レシピ画像</FormLabel>
+                  <FormControl>
+                    <>
+                      {!previewImage ? (
+                        <Input
+                          type="file"
+                          accept=".png, .jpg, .jpeg"
+                          onChange={handleChangeUploadImage}
+                          {...restFieldProps}
+                        />
+                      ) : (
+                        <div className="relative mt-2 h-24 w-24">
+                          <Image src={previewImage} alt="preview" layout="fill" objectFit="cover" />
+                          <button
+                            className="absolute right-0 top-0 rounded-full bg-white/80 shadow-md"
+                            onClick={() => setPreviewImage(null)}
+                          >
+                            <X size={16} />
+                          </button>
+                        </div>
+                      )}
+                    </>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              );
+            }}
+          />
+        </div>
         {/* 何人前 */}
         <div className="w-fit self-start">
           <FormField
@@ -112,7 +182,6 @@ const NewRecipeForm = () => {
             )}
           />
         </div>
-
         {/* 材料 */}
         <div className="flex w-full flex-col justify-items-start">
           {ingredientsFields.map((field, index) => (
@@ -151,7 +220,6 @@ const NewRecipeForm = () => {
             <PlusIcon size={16} />
           </Button>
         </div>
-
         {/* 作り方 */}
         <div className="flex w-full flex-col justify-items-start">
           {instructionsFields.map((field, index) => (
@@ -191,7 +259,6 @@ const NewRecipeForm = () => {
             <PlusIcon size={16} />
           </Button>
         </div>
-
         {/* 紹介文 */}
         <div className="w-full">
           <FormField
@@ -208,7 +275,6 @@ const NewRecipeForm = () => {
             )}
           />
         </div>
-
         {/* リンク */}
         <div className="flex w-full flex-1 flex-col justify-items-start">
           {urlsFields.map((field, index) => (

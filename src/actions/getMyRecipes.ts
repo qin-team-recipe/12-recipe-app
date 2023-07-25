@@ -1,17 +1,24 @@
+import { cookies } from "next/headers";
+
+import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
+
 import { prisma } from "../lib/prisma";
-import { getAuthenticatedUser } from "./getAuthenticatedUser";
+import { Database } from "../types/SupabaseTypes";
 
-export const getMyRecipes = async () => {
-  const user = await getAuthenticatedUser();
+export const getMyRecipes = async ({ orderByLikes }: { orderByLikes: boolean }) => {
+  const supabaseServerClient = createServerComponentClient<Database>({ cookies });
 
-  if (!user) {
-    throw new Error("認証に失敗しました");
+  const {
+    data: { session },
+  } = await supabaseServerClient.auth.getSession();
+
+  if (!session) {
+    throw new Error("認証に失敗しました🥲");
   }
 
   const myRecipe = await prisma.recipe.findMany({
     where: {
-      userId: user.id,
-      deletedAt: null,
+      userId: session.user.id,
     },
     include: {
       RecipeImage: true,
@@ -25,6 +32,10 @@ export const getMyRecipes = async () => {
       createdAt: "desc",
     },
   });
+
+  if (orderByLikes) {
+    myRecipe.sort((a, b) => (b._count.likes || 0) - (a._count.likes || 0));
+  }
 
   return myRecipe;
 };
