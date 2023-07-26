@@ -1,4 +1,4 @@
 export type PaginationParams = {
-  offset?: number;
+  skip?: number;
   limit?: number;
 };
