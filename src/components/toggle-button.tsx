@@ -1,14 +1,17 @@
+"use client";
+
 import { cn } from "../lib/utils";
 import { Button } from "./ui/button";
+
 
 interface Props extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   isActive: boolean;
   activeLabel: string;
   inactiveLabel: string;
-  formAction: ((formData: FormData) => void) | undefined;
+  onClick?: () => void;
 }
 
-const ToggleButton = ({ className, isActive, activeLabel, inactiveLabel, formAction }: Props) => {
+const ToggleButton = ({ className, isActive, activeLabel, inactiveLabel, onClick }: Props) => {
   return (
     <>
       <Button
@@ -19,7 +22,7 @@ const ToggleButton = ({ className, isActive, activeLabel, inactiveLabel, formAct
           isActive ? "border-tomato4 bg-mauve1 text-tomato9" : "bg-tomato9",
           className
         )}
-        formAction={formAction}
+        onClick={onClick}
       >
         {isActive ? activeLabel : inactiveLabel}
       </Button>

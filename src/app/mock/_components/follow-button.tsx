@@ -10,16 +10,15 @@ type Props = {
 const FollowButton = ({ isActive, followedId: chefId }: Props) => {
   return (
     <>
-      <form>
-        <input type="hidden" name="followedId" value={chefId} />
-        <ToggleButton
-          className="w-full"
-          isActive={isActive}
-          activeLabel={BUTTON_NAMES.UN_FOLLOW}
-          inactiveLabel={BUTTON_NAMES.IS_FOLLOW}
-          formAction={isActive ? unFollowChef : followChef}
-        />
-      </form>
+      <ToggleButton
+        className="w-full"
+        isActive={isActive}
+        activeLabel={BUTTON_NAMES.UN_FOLLOW}
+        inactiveLabel={BUTTON_NAMES.IS_FOLLOW}
+        onClick={() => {
+          isActive ? unFollowChef(chefId) : followChef(chefId);
+        }}
+      />
     </>
   );
 };

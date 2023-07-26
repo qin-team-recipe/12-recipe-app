@@ -1,21 +1,18 @@
-import Link from "next/link";
 import { notFound } from "next/navigation";
 
 import { getChefById } from "@/src/actions/getChefById";
 import TopBar from "@/src/components/layout/top-bar";
 import LinkToIconRenderer from "@/src/components/link-to-icon-renderer";
 import LinkableTabs from "@/src/components/linkable-tabs";
-import NumberUnit from "@/src/components/number-unit";
 import { Avatar, AvatarImage } from "@/src/components/ui/avatar";
-import { Command, CommandItem, CommandList, CommandSeparator } from "@/src/components/ui/command";
+import { Command, CommandItem, CommandList } from "@/src/components/ui/command";
 import { Popover, PopoverContent, PopoverTrigger } from "@/src/components/ui/popover";
 import { Separator } from "@/src/components/ui/separator";
-import { CONSTANTS } from "@/src/constants/constants";
 import { sortSiteLinks } from "@/src/lib/utils";
-import { ArrowLeft, CircleEllipsis } from "lucide-react";
+import { CircleEllipsis } from "lucide-react";
 
-import FollowButton from "../../../components/follow-button";
 import RouterBackButton from "../../../components/router-back-button";
+import UserProfileStats from "./_components/user-profile-stats";
 import { tabs } from "./_constants/tabs";
 
 const layout = async ({ params, children }: { params: { id: string }; children: React.ReactNode }) => {
@@ -83,11 +80,9 @@ const layout = async ({ params, children }: { params: { id: string }; children: 
               </div>
               {profile && <p className="text-mauve12">{profile}</p>}
             </div>
-            <div className="flex items-center gap-x-4">
-              {_count.Recipe > 0 && <NumberUnit numbers={_count.Recipe} unit={CONSTANTS.RECIPE} />}
-              <NumberUnit numbers={followersCount} unit={CONSTANTS.FOLLOWER} />
-            </div>
-            {!isMe && <FollowButton followedId={id} isActive={isFollowing} />}
+            <UserProfileStats
+              {...{ isMe, followersCount, recipeCount: _count.Recipe, followedId: id, isActive: isFollowing }}
+            />
           </div>
           <LinkableTabs tabs={tabs(params.id)}>{children}</LinkableTabs>
         </div>
