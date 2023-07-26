@@ -3,11 +3,12 @@ import { getChefs } from "@/src/actions/getChefs";
 import { ChefsDataTable } from "./_components/chefs-data-table";
 
 const page = async () => {
-  const chefs = await getChefs();
+  const data = await getChefs();
 
   return (
     <div className="p-4">
-      <ChefsDataTable data={chefs} />
+      {/* // TODO: シェフのトータル数を表示する */}
+      <ChefsDataTable data={data.chefs} />
     </div>
   );
 };

@@ -15,7 +15,7 @@ export async function generateMetadata({ params }: { params: { id: string } }) {
 export default function layout({ params, children }: { params: { id: string }; children: React.ReactNode }) {
   return (
     <div className="mb-20">
-      <RecipeHero id={params.id} path="/my-page" />
+      <RecipeHero id={params.id} />
       <LinkableTabs tabs={tabs(params.id)}>{children}</LinkableTabs>
     </div>
   );
