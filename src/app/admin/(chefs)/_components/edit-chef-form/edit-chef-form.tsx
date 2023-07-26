@@ -19,7 +19,7 @@ import { useFieldArray, useForm } from "react-hook-form";
 import { z } from "zod";
 
 import { editChefFormSchema, EditChefFormValues } from ".";
-import { editChef } from "../../../_actions/editChef";
+import { putChef } from "@/src/actions/putChef";
 
 type Props = {
   defaultValues: Partial<EditChefFormValues>;
@@ -59,7 +59,7 @@ const EditChefForm = ({ defaultValues }: Props) => {
 
   const onSubmit = (data: z.infer<typeof editChefFormSchema>) => {
     startTransition(async () => {
-      const result = await editChef(data);
+      const result = await putChef(data);
 
       if (result.isSuccess) {
         toast({
