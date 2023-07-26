@@ -24,7 +24,6 @@ const SearchInput = () => {
     (debouncedValue: string) => {
       // TODO: window.location.searchが必要かどうかを再検証する
       const params = new URLSearchParams(window.location.search);
-      console.log(params.get("search"));
 
       const currentSearchValue = params.get("search");
       if (debouncedValue !== currentSearchValue) {
@@ -36,7 +35,7 @@ const SearchInput = () => {
 
         startTransition(() => {
           const newPath =
-            pathname === "/" ? `${searchBasePath}/recipe/?${params.toString()}` : `${pathname}/?${params.toString()}`;
+            pathname === "/" ? `${searchBasePath}/recipes/?${params.toString()}` : `${pathname}/?${params.toString()}`;
 
           router.replace(newPath);
         });
