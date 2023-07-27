@@ -7,12 +7,12 @@ import LinkToIconRenderer from "@/src/components/link-to-icon-renderer";
 import LinkableTabs from "@/src/components/linkable-tabs";
 import NumberUnit from "@/src/components/number-unit";
 import { Avatar, AvatarImage } from "@/src/components/ui/avatar";
-import { Command, CommandItem, CommandList, CommandSeparator } from "@/src/components/ui/command";
+import { Command, CommandItem, CommandList } from "@/src/components/ui/command";
 import { Popover, PopoverContent, PopoverTrigger } from "@/src/components/ui/popover";
 import { Separator } from "@/src/components/ui/separator";
 import { CONSTANTS } from "@/src/constants/constants";
 import { sortSiteLinks } from "@/src/lib/utils";
-import { ArrowLeft, CircleEllipsis } from "lucide-react";
+import { CircleEllipsis } from "lucide-react";
 
 import FollowButton from "../../../components/follow-button";
 import RouterBackButton from "../../../components/router-back-button";
