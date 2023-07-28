@@ -3,11 +3,11 @@ import { LinkableTab } from "@/src/types/LinkableTab";
 
 export const tabs: LinkableTab[] = [
   {
-    link: `${searchBasePath}/recipe`,
+    link: `${searchBasePath}/recipes`,
     value: "レシピ",
   },
   {
-    link: `${searchBasePath}/chef`,
+    link: `${searchBasePath}/chefs`,
     value: "シェフ",
   },
 ];

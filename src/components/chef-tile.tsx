@@ -3,19 +3,25 @@ import Link from "next/link";
 
 type Props = {
   id: string;
-  routingUrl: string;
   imageUrl: string;
   chefName: string;
-  bio: string;
+  bio: string | null;
   recipeCount: number;
 };
 
 export const ChefTile = ({ id, imageUrl, chefName, bio, recipeCount }: Props) => {
   return (
     <Link href={`/chefs/${id}`} className="flex gap-x-4">
-      <Image layout="relative" className="rounded-2xl" src={imageUrl} alt={chefName} width={80} height={120} />
+      <Image
+        layout="relative"
+        className="flex-none overflow-hidden rounded-2xl"
+        src={imageUrl}
+        alt={chefName}
+        width={80}
+        height={128}
+      />
       <div className="flex flex-col items-start self-center">
-        <p className="text-2xl font-bold text-mauve12">{chefName}</p>
+        <p className="line-clamp-1 text-clip break-words text-2xl font-bold text-mauve12">{chefName}</p>
         <p className="mt-2 line-clamp-3 text-lg text-mauve11">{bio}</p>
         <div className="mt-1 flex items-center gap-2 text-lg">
           <svg width="16" height="16" viewBox="0 0 18 19" fill="none" xmlns="http://www.w3.org/2000/svg">

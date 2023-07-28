@@ -7,7 +7,11 @@ import LinkToIconRenderer from "@/src/components/link-to-icon-renderer";
 import NumberUnit from "@/src/components/number-unit";
 import ProfileLink from "@/src/components/profile-link";
 import RouterBackButton from "@/src/components/router-back-button";
+import { Command, CommandItem, CommandList } from "@/src/components/ui/command";
+import { Popover, PopoverContent, PopoverTrigger } from "@/src/components/ui/popover";
 import { CONSTANTS } from "@/src/constants/constants";
+import { sortSiteLinks } from "@/src/lib/utils";
+import { CircleEllipsis } from "lucide-react";
 
 type Props = {
   id: string;
@@ -15,6 +19,11 @@ type Props = {
 
 const RecipeHero = async ({ id }: Props) => {
   const { title, description, isMe, RecipeLink: recipeLinks, _count, isFavorite, user } = await getRecipeById(id);
+
+  const sortedRecipeLinks = sortSiteLinks(recipeLinks.map((recipeLink) => recipeLink.linkUrl));
+
+  const visibleLinks = sortedRecipeLinks.slice(0, 2);
+  const moreLinks = sortedRecipeLinks.slice(2);
 
   return (
     <>
@@ -39,7 +48,27 @@ const RecipeHero = async ({ id }: Props) => {
           <div className="flex justify-between">
             <h6 className="text-xl font-bold text-mauve12">{title}</h6>
             <div className="ml-3 flex items-center gap-3">
-              {recipeLinks && <LinkToIconRenderer links={recipeLinks.map((link) => link.linkUrl)} />}
+              {visibleLinks && <LinkToIconRenderer links={visibleLinks.map((link) => link.url)} />}
+              {moreLinks.length > 0 && (
+                <Popover>
+                  <PopoverTrigger>
+                    <CircleEllipsis size={20} />
+                  </PopoverTrigger>
+                  <PopoverContent align="end" className="p-2">
+                    <Command className="w-full">
+                      <CommandList>
+                        {moreLinks.map((link, index) => (
+                          <CommandItem key={index}>
+                            <LinkToIconRenderer links={[link.url]} />
+                            <span className="ml-2 text-lg">{link.label}</span>
+                          </CommandItem>
+                        ))}
+                      </CommandList>
+                    </Command>
+                  </PopoverContent>
+                </Popover>
+              )}
+
               {isMe && <PopoverMenu recipeId={id} />}
             </div>
           </div>

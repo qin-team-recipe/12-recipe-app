@@ -5,8 +5,6 @@ import NoDataDisplay from "@/src/components/no-data-display";
 const HorizontalFollowingChefsList = async () => {
   const chefs = await getFollowingChefs();
 
-  console.log(chefs);
-
   return (
     <>
       {chefs.length > 0 ? (

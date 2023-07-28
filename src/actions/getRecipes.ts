@@ -1,7 +1,7 @@
 import { prisma } from "../lib/prisma";
 import { PaginationParams } from "../types/PaginationParams";
 
-export const getRecipes = async ({ offset = 0, limit = 10 }: PaginationParams = {}) => {
+export const getRecipes = async ({ skip = 0, limit = 10 }: PaginationParams = {}) => {
   const recipe = await prisma.recipe.findMany({
     include: {
       RecipeImage: true,
@@ -10,7 +10,7 @@ export const getRecipes = async ({ offset = 0, limit = 10 }: PaginationParams = 
     orderBy: {
       createdAt: "desc",
     },
-    skip: offset,
+    skip,
     take: limit,
   });
 

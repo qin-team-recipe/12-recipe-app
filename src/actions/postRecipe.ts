@@ -16,7 +16,16 @@ type PostRecipeResult = {
 };
 
 export const postRecipe = zact(createRecipeFormSchema)(
-  async ({ title, bio, ingredients, urls, servingCount, instructions, recipeImage }): Promise<PostRecipeResult> => {
+  async ({
+    uid,
+    title,
+    bio,
+    ingredients,
+    urls,
+    servingCount,
+    instructions,
+    recipeImage,
+  }): Promise<PostRecipeResult> => {
     const supabaseServerClient = createServerActionClient<Database>({ cookies });
 
     const {
@@ -32,7 +41,7 @@ export const postRecipe = zact(createRecipeFormSchema)(
         data: {
           title,
           description: bio,
-          userId: session.user.id,
+          userId: uid,
           servingCount: servingCount,
           RecipeImage: {
             create: {

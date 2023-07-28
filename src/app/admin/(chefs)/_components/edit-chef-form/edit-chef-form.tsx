@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
+import { putChef } from "@/src/actions/putChef";
 import { updateProfile } from "@/src/actions/updateProfile";
 import { Button } from "@/src/components/ui/button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/src/components/ui/form";
@@ -19,7 +20,6 @@ import { useFieldArray, useForm } from "react-hook-form";
 import { z } from "zod";
 
 import { editChefFormSchema, EditChefFormValues } from ".";
-import { editChef } from "../../../_actions/editChef";
 
 type Props = {
   defaultValues: Partial<EditChefFormValues>;
@@ -59,7 +59,7 @@ const EditChefForm = ({ defaultValues }: Props) => {
 
   const onSubmit = (data: z.infer<typeof editChefFormSchema>) => {
     startTransition(async () => {
-      const result = await editChef(data);
+      const result = await putChef(data);
 
       if (result.isSuccess) {
         toast({

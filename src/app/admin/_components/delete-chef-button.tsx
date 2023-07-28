@@ -2,12 +2,11 @@
 
 import { useTransition } from "react";
 
+import { deleteChefs } from "@/src/actions/deleteChefs";
 import { Button } from "@/src/components/ui/button";
 import Spinner from "@/src/components/ui/spinner";
 import { useToast } from "@/src/components/ui/use-toast";
 import { Trash2Icon } from "lucide-react";
-
-import { deleteChefs } from "../_actions/deleteChefs";
 
 type Props = {
   chefIds: string[];
