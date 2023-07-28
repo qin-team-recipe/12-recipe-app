@@ -13,6 +13,8 @@ import { CONSTANTS } from "@/src/constants/constants";
 import { sortSiteLinks } from "@/src/lib/utils";
 import { CircleEllipsis } from "lucide-react";
 
+import RecipeInfoStats from "./recipe-info-stats";
+
 type Props = {
   id: string;
 };
@@ -74,11 +76,9 @@ const RecipeHero = async ({ id }: Props) => {
           </div>
           <p className="text-mauve12">{description}</p>
         </div>
-        <div className="flex items-center gap-4">
-          <ProfileLink id={user.id} imagePath={"https://github.com/shadcn.png"} name={user.name} />
-          <NumberUnit numbers={_count.likes} unit={CONSTANTS.FAVORITE} />
-        </div>
-        <FavoriteButton isActive={isFavorite} recipeId={id} />
+        <RecipeInfoStats
+          {...{ recipeId: id, isActive: isFavorite, favoriteCount: _count.likes, userId: user.id, userName: user.name }}
+        />
       </div>
     </>
   );

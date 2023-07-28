@@ -8,16 +8,15 @@ type Props = {
 
 const FavoriteButton = ({ isActive, recipeId }: Props) => {
   return (
-    <form className="flex-1">
-      <input type="hidden" name="recipeId" value={recipeId} />
-      <ToggleButton
-        className="w-full"
-        isActive={isActive}
-        activeLabel={"お気に入りに追加済"}
-        inactiveLabel={"お気に入りに追加"}
-        formAction={isActive ? unFavoriteRecipe : favoriteRecipe}
-      />
-    </form>
+    <ToggleButton
+      className="w-full"
+      isActive={isActive}
+      activeLabel={"お気に入りに追加済"}
+      inactiveLabel={"お気に入りに追加"}
+      onClick={() => {
+        isActive ? unFavoriteRecipe(recipeId) : favoriteRecipe(recipeId);
+      }}
+    />
   );
 };
 

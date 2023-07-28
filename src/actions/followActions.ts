@@ -9,7 +9,7 @@ import { prisma } from "../lib/prisma";
 import { Database } from "../types/SupabaseTypes";
 
 // シェフをフォローする
-export const followChef = async (formData: FormData) => {
+export const followChef = async (followedId: string) => {
   const supabaseServerClient = createServerActionClient<Database>({ cookies });
 
   const {
@@ -20,7 +20,6 @@ export const followChef = async (formData: FormData) => {
     throw new Error("認証に失敗しました🥲");
   }
 
-  const followedId = String(formData.get("followedId"));
 
   // 自身をフォローするのを防ぐ
   if (session.user.id === followedId) throw new Error("自分自身をフォロー・アンフォローすることはできません😡");
@@ -37,7 +36,7 @@ export const followChef = async (formData: FormData) => {
 };
 
 // シェフのフォローを外す
-export const unFollowChef = async (formData: FormData) => {
+export const unFollowChef = async (followedId: string) => {
   const supabaseServerClient = createServerActionClient<Database>({ cookies });
 
   const {
@@ -48,7 +47,6 @@ export const unFollowChef = async (formData: FormData) => {
     throw new Error("認証に失敗しました🥲");
   }
 
-  const followedId = String(formData.get("followedId"));
 
   // 自身をフォローするのを防ぐ
   if (session.user.id === followedId) throw new Error("自分自身をフォロー・アンフォローすることはできません😡");
