@@ -5,7 +5,7 @@ import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { prisma } from "../lib/prisma";
 import { Database } from "../types/SupabaseTypes";
 
-export const getNewRecipesFromFollowingChefs = async () => {
+export const getNewRecipesFromFollowingChefs = async ({ limit }: { limit?: number }) => {
   const supabaseServerClient = createServerComponentClient<Database>({ cookies });
 
   const {
@@ -41,6 +41,7 @@ export const getNewRecipesFromFollowingChefs = async () => {
         },
       },
     },
+    take: limit || undefined,
   });
 
   return newRecipesFromFollowingChefs;

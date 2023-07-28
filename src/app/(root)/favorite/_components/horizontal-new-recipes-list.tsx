@@ -3,15 +3,14 @@ import NoDataDisplay from "@/src/components/no-data-display";
 import RecipeCard from "@/src/components/recipe-card";
 
 const HorizontalNewRecipesList = async () => {
-  const newRecipesFromFollowingChefs = await getNewRecipesFromFollowingChefs();
+  const newRecipesFromFollowingChefs = await getNewRecipesFromFollowingChefs({ limit: 5 });
 
   return (
     <>
       {newRecipesFromFollowingChefs.length > 0 ? (
-        <ul className="flex w-screen gap-x-2  overflow-x-scroll px-4 md:w-full">
-          {/* TODO: 「もっと見る」の遷移先があるので、表示させる件数を制限する */}
+        <ul className="mt-2 flex w-screen gap-x-2 overflow-x-scroll px-4 md:w-full">
           {newRecipesFromFollowingChefs.map(({ id, title, description, RecipeImage, _count }) => (
-            <li key={id} className="mt-2 w-[160px] flex-none">
+            <li key={id} className="flex w-[160px] flex-none flex-col">
               <RecipeCard
                 title={title}
                 description={description}

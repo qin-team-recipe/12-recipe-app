@@ -8,7 +8,11 @@ export const searchRecipesAndChefs = async (searchQuery: string, { skip = 0, lim
     prisma.recipe.findMany({
       include: {
         RecipeImage: true,
-        likes: true,
+        _count: {
+          select: {
+            likes: true,
+          },
+        },
       },
       orderBy: {
         createdAt: "desc",

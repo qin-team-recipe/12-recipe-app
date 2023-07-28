@@ -2,7 +2,7 @@ import { addDays } from "date-fns";
 
 import { prisma } from "../lib/prisma";
 
-export const getTopFavoriteRecipesInLast3Days = async () => {
+export const getTopFavoriteRecipesInLast3Days = async ({ limit }: { limit?: number }) => {
   const threeDaysAgo = addDays(new Date(), -3);
 
   const favorites = await prisma.favorite.groupBy({
@@ -20,7 +20,7 @@ export const getTopFavoriteRecipesInLast3Days = async () => {
         recipeId: "desc",
       },
     },
-    take: 10,
+    take: limit || undefined,
   });
 
   const recipeIds = favorites.map((favorite) => favorite.recipeId);

@@ -10,7 +10,7 @@ const page = async () => {
       {myRecipes.length > 0 ? (
         <ul className="grid grid-cols-2 gap-4 p-4">
           {myRecipes.map(({ id, _count, description, title }) => (
-            <li key={id} className="flex flex-col gap-2">
+            <li key={id} className="flex flex-col">
               <RecipeCard
                 path={`/my-page/${id}`}
                 favorites={_count.likes}

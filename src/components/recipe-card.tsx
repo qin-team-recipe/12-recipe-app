@@ -11,12 +11,6 @@ type Props = {
   favorites: number;
 };
 
-/**
- * レシピカード
- * お気に入りがある場合は右上にハートアイコンとお気に入り数を表示
- * このカードを押下時にレシピ詳細ページへ飛ぶ等になる。URLは「https://{domain}/recipe/{recipeId}」という形。
- * @returns
- */
 const RecipeCard = ({ path, imageUrl, title, description, favorites }: Props) => {
   return (
     <Link href={path} className="relative">

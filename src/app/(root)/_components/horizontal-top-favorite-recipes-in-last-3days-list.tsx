@@ -3,15 +3,14 @@ import NoDataDisplay from "@/src/components/no-data-display";
 import RecipeCard from "@/src/components/recipe-card";
 
 const HorizontalTopFavoriteRecipesInLast3DaysList = async () => {
-  const topFavoriteRecipesInLast3Days = await getTopFavoriteRecipesInLast3Days();
+  const topFavoriteRecipesInLast3Days = await getTopFavoriteRecipesInLast3Days({ limit: 5 });
 
   return (
     <>
       {topFavoriteRecipesInLast3Days.length > 0 ? (
-        <ul className="flex w-screen gap-x-2  overflow-x-scroll px-4 md:w-full">
-          {/* TODO: 「もっと見る」の遷移先があるので、表示させる件数を制限する */}
+        <ul className="mt-2 flex w-screen gap-x-2 overflow-x-scroll px-4 md:w-full">
           {topFavoriteRecipesInLast3Days.map(({ id, title, description, RecipeImage, likes, likeCount }) => (
-            <li key={id} className="mt-2 w-[160px] flex-none">
+            <li key={id} className="flex w-[160px] flex-none flex-col">
               <RecipeCard
                 title={title}
                 description={description}

@@ -11,7 +11,7 @@ const MyFavoriteRecipesGrid = async () => {
       {myFavoriteRecipes.length > 0 ? (
         <ul className="grid grid-cols-2 gap-4 p-4">
           {myFavoriteRecipes.map(({ id, title, description, _count }) => (
-            <li key={id}>
+            <li key={id} className="flex flex-col">
               <RecipeCard
                 title={title}
                 description={description}
