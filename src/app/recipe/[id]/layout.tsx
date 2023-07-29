@@ -1,41 +1,27 @@
-import { ReactNode } from "react";
-
-import DetailAbstract from "@/src/components/detail-abstract";
-import DetailHeaderImage from "@/src/components/detail-header-image";
+import { getRecipeById } from "@/src/actions/getRecipeById";
 import LinkableTabs from "@/src/components/linkable-tabs";
-import NumberUnit from "@/src/components/number-unit";
-import ProfileLink from "@/src/components/profile-link";
-import ToggleButton from "@/src/components/toggle-button";
-import { BUTTON_NAMES } from "@/src/constants/button-names";
-import { CONSTANTS } from "@/src/constants/constants";
+import { Separator } from "@/src/components/ui/separator";
 
-import { recipeTabs } from "./_constants/tabs";
+import RecipeHero from "./_components/recipe-hero";
+import { tabs } from "./_constants/tabs";
 
-type Props = {
-  children: ReactNode;
-};
+export async function generateMetadata({ params }: { params: { id: string } }) {
+  const recipe = await getRecipeById(params.id);
 
-const RecipeLayout = ({ children }: Props) => {
+  return {
+    title: recipe.title,
+  };
+}
+
+export default function layout({ params, children }: { params: { id: string }; children: React.ReactNode }) {
   return (
     <>
-      <DetailHeaderImage imageUrl={"https://images.unsplash.com/photo-1492633423870-43d1cd2775eb"} path="/" />
-      <div className="grid gap-4 p-4">
-        <DetailAbstract name={"レシピ名"} abstract={"レシピ概要"} />
-        <div className="flex gap-x-4">
-          <ProfileLink id={"1"} imagePath={"https://github.com/shadcn.png"} name={"シェフ名"} />
-          <NumberUnit numbers={100000000} unit={CONSTANTS.FAVORITE} />
-        </div>
-        <ToggleButton
-          isActive={false}
-          activeLabel={BUTTON_NAMES.IS_FAVORITE}
-          inactiveLabel={BUTTON_NAMES.UN_FAVORITE}
-          formAction={undefined}
-        />
-      </div>
-      {/* TODO: APIとの繋ぎこみではrecipeIdを渡す */}
-      <LinkableTabs tabs={recipeTabs(1)}>{children}</LinkableTabs>
+      <Separator className="hidden h-full w-[1px] md:block" />
+      <main className="mb-20 w-full flex-1 overflow-y-auto">
+        <RecipeHero id={params.id} />
+        <LinkableTabs tabs={tabs(params.id)}>{children}</LinkableTabs>
+      </main>
+      <Separator className="hidden h-full w-[1px] md:block" />
     </>
   );
-};
-
-export default RecipeLayout;
+}

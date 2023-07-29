@@ -11,7 +11,7 @@ type Props = {
 
 export const ChefTile = ({ id, imageUrl, chefName, bio, recipeCount }: Props) => {
   return (
-    <Link href={`/chefs/${id}`} className="flex gap-x-4">
+    <Link href={`/chef/${id}`} className="flex gap-x-4">
       <Image
         layout="relative"
         className="flex-none overflow-hidden rounded-2xl"

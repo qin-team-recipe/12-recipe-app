@@ -13,7 +13,7 @@ const HorizontalFollowingChefsList = async () => {
         <ul className="mt-3 flex gap-4 overflow-scroll pl-4">
           {followingChefs.map((chef) => (
             <li key={chef.id} className="flex w-[64px] flex-col items-center">
-              <Link href={`/chefs/${chef.id}`}>
+              <Link href={`/chef/${chef.id}`}>
                 <Avatar className="h-[64px] w-[64px]">
                   <AvatarImage
                     src={

@@ -12,7 +12,7 @@ const TopBar = ({
   trailingComponent: TrailingComponent,
 }: Props) => {
   return (
-    <div className="flex h-16 w-full items-center border-b border-mauve6 px-2 md:px-4">
+    <div className="flex h-16 w-full items-center border-b border-mauve6 px-4 md:px-4">
       {LeadingComponent ? (
         <div className="flex flex-1 items-center justify-start">{LeadingComponent}</div>
       ) : (

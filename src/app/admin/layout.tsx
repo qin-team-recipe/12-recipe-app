@@ -6,6 +6,7 @@ import { Separator } from "@/src/components/ui/separator";
 export const metadata = {
   title: "管理画面",
 };
+
 const layout = async ({ children }: { children: React.ReactNode }) => {
   const user = await getAuthenticatedUser();
 

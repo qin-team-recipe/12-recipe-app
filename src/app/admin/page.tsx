@@ -7,7 +7,6 @@ const page = async () => {
 
   return (
     <div className="p-4">
-      {/* // TODO: シェフのトータル数を表示する */}
       <ChefsDataTable data={data.chefs} />
     </div>
   );
