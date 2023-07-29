@@ -14,7 +14,7 @@ const page = () => {
     <>
       <TopBar
         leadingComponent={
-          <Link href={"favorite/setting"}>
+          <Link href={"/settings"}>
             <AlignLeft size={20} className="text-mauve12" />
           </Link>
         }

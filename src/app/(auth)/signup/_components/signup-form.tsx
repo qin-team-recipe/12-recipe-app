@@ -21,7 +21,6 @@ type Props = {
   defaultValues: SignUpFormValues;
 };
 
-// サインアップページ
 const SignUpForm = ({ defaultValues }: Props) => {
   const router = useRouter();
   const supabase = createClientComponentClient<Database>();
@@ -39,7 +38,6 @@ const SignUpForm = ({ defaultValues }: Props) => {
   const onSubmit = (data: SignUpFormValues) => {
     startTransition(async () => {
       try {
-        // サインアップ
         const { data: responseData, error } = await supabase.auth.signUp({
           email: data.email,
           password: data.password,
@@ -48,7 +46,6 @@ const SignUpForm = ({ defaultValues }: Props) => {
           },
         });
 
-        // エラーチェック
         if (error) {
           setMessage("エラーが発生しました。" + error.message);
           toast({
@@ -59,10 +56,8 @@ const SignUpForm = ({ defaultValues }: Props) => {
           return;
         }
 
-        // プロフィールの名前を更新
         const result = await postUser({ id: responseData.user?.id, name: data.name });
 
-        // エラーチェック
         if (result.isSuccess) {
           setMessage(
             "本登録用のURLを記載したメールを送信しました。メールをご確認の上、メール本文中のURLをクリックして、本登録を行ってください。"

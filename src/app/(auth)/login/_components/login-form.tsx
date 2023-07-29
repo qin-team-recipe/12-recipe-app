@@ -20,7 +20,6 @@ type Props = {
   defaultValues: LoginFormValues;
 };
 
-// ログインページ
 const LoginForm = ({ defaultValues }: Props) => {
   const router = useRouter();
   const supabase = createClientComponentClient<Database>();
@@ -29,9 +28,7 @@ const LoginForm = ({ defaultValues }: Props) => {
   const [isPending, startTransition] = useTransition();
 
   const form = useForm({
-    // 初期値
     defaultValues,
-    // 入力値の検証
     resolver: zodResolver(loginFormSchema),
     mode: "onChange",
   });
@@ -39,13 +36,11 @@ const LoginForm = ({ defaultValues }: Props) => {
   const onSubmit = (data: LoginFormValues) => {
     startTransition(async () => {
       try {
-        // ログイン
         const { error } = await supabase.auth.signInWithPassword({
           email: data.email,
           password: data.password,
         });
 
-        // エラーチェック
         if (error) {
           toast({
             variant: "destructive",
@@ -55,7 +50,6 @@ const LoginForm = ({ defaultValues }: Props) => {
           return;
         }
 
-        // トップページに遷移
         router.push("/");
       } catch (error) {
         toast({
