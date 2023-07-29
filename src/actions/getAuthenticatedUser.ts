@@ -15,7 +15,7 @@ export const getAuthenticatedUser = async () => {
   } = await supabaseServerClient.auth.getSession();
 
   if (!session) {
-    redirect("/mock/unauthenticated");
+    redirect("/login");
   }
 
   const user = await prisma.user.findUnique({

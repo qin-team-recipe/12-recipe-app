@@ -1,4 +1,5 @@
 import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
 
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 
@@ -13,7 +14,7 @@ export const getFollowingChefs = async () => {
   } = await supabaseServerClient.auth.getSession();
 
   if (!session) {
-    throw new Error("認証に失敗しました🥲");
+    redirect("/login");
   }
 
   const followingChefs = await prisma.user.findMany({

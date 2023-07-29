@@ -49,7 +49,7 @@ export const getChefById = async ({ id, orderByLikes = false }: { id: string; or
   } = await supabaseServerClient.auth.getSession();
 
   if (!session) {
-    redirect("/mock/unauthenticated");
+    redirect("/login");
   }
 
   // シェフのフォロワー数を取得
