@@ -4,7 +4,12 @@ import { revalidatePath } from "next/cache";
 
 import { prisma } from "../lib/prisma";
 
-export const postUser = async ({ id, name }: { id?: string; name: string }) => {
+type PostUserResult = {
+  isSuccess: boolean;
+  error?: Error;
+};
+
+export const postUser = async ({ id, name }: { id?: string; name: string }): Promise<PostUserResult> => {
   try {
     await prisma.user.create({
       data: {

@@ -9,12 +9,15 @@ import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 const page = () => {
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const router = useRouter();
+
   const handleSignOut = async () => {
     const supabase = createClientComponentClient<Database>();
     await supabase.auth.signOut();
 
     router.refresh();
+    router.push("/");
   };
+
   return (
     <>
       <p>設定</p>
