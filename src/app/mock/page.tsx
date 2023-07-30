@@ -1,15 +1,12 @@
 import Link from "next/link";
 
-import { getAuthenticatedUser } from "@/src/actions/getAuthenticatedUser";
 import { Button } from "@/src/components/ui/button";
 import { Separator } from "@/src/components/ui/separator";
 
 const page = async () => {
-  const user = await getAuthenticatedUser();
-
   return (
     <div className="mb-20 p-8 pt-4">
-      <h4 className="text-xl font-medium leading-none">🙌 Hello {user?.name} 🙌</h4>
+      <h4 className="text-xl font-medium leading-none">🙌 Hello モック画面 🙌</h4>
       <Separator className="my-4" />
       <div className="flex gap-4">
         <Link href="/mock/kumabiko" className="flex items-center gap-2">

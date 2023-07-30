@@ -14,7 +14,7 @@ export const getRecipeById = async (id: string) => {
   } = await supabaseServerClient.auth.getSession();
 
   if (!session) {
-    redirect("/mock/unauthenticated");
+    redirect("/login");
   }
 
   const recipe = await prisma.recipe.findUnique({
