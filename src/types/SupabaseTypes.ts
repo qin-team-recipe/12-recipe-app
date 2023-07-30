@@ -116,6 +116,173 @@ export interface Database {
           }
         ];
       };
+      DraftIngredient: {
+        Row: {
+          created_at: string | null;
+          draft_recipe_id: string;
+          id: number;
+          is_custom: boolean;
+          title: string;
+          updated_at: string | null;
+        };
+        Insert: {
+          created_at?: string | null;
+          draft_recipe_id: string;
+          id?: number;
+          is_custom?: boolean;
+          title: string;
+          updated_at?: string | null;
+        };
+        Update: {
+          created_at?: string | null;
+          draft_recipe_id?: string;
+          id?: number;
+          is_custom?: boolean;
+          title?: string;
+          updated_at?: string | null;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "DraftIngredient_draft_recipe_id_fkey";
+            columns: ["draft_recipe_id"];
+            referencedRelation: "DraftRecipe";
+            referencedColumns: ["id"];
+          }
+        ];
+      };
+      DraftInstruction: {
+        Row: {
+          created_at: string | null;
+          draft_recipe_id: string;
+          id: number;
+          step_description: string;
+          step_order: number;
+          updated_at: string | null;
+        };
+        Insert: {
+          created_at?: string | null;
+          draft_recipe_id: string;
+          id?: number;
+          step_description: string;
+          step_order: number;
+          updated_at?: string | null;
+        };
+        Update: {
+          created_at?: string | null;
+          draft_recipe_id?: string;
+          id?: number;
+          step_description?: string;
+          step_order?: number;
+          updated_at?: string | null;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "DraftInstruction_draft_recipe_id_fkey";
+            columns: ["draft_recipe_id"];
+            referencedRelation: "DraftRecipe";
+            referencedColumns: ["id"];
+          }
+        ];
+      };
+      DraftRecipe: {
+        Row: {
+          created_at: string | null;
+          description: string | null;
+          id: string;
+          serving_count: number | null;
+          title: string | null;
+          updated_at: string | null;
+          user_id: string;
+        };
+        Insert: {
+          created_at?: string | null;
+          description?: string | null;
+          id: string;
+          serving_count?: number | null;
+          title?: string | null;
+          updated_at?: string | null;
+          user_id: string;
+        };
+        Update: {
+          created_at?: string | null;
+          description?: string | null;
+          id?: string;
+          serving_count?: number | null;
+          title?: string | null;
+          updated_at?: string | null;
+          user_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "DraftRecipe_user_id_fkey";
+            columns: ["user_id"];
+            referencedRelation: "User";
+            referencedColumns: ["id"];
+          }
+        ];
+      };
+      DraftRecipeImage: {
+        Row: {
+          created_at: string | null;
+          draft_recipe_id: string;
+          id: string;
+          recipe_image: string;
+          updated_at: string | null;
+        };
+        Insert: {
+          created_at?: string | null;
+          draft_recipe_id: string;
+          id: string;
+          recipe_image: string;
+          updated_at?: string | null;
+        };
+        Update: {
+          created_at?: string | null;
+          draft_recipe_id?: string;
+          id?: string;
+          recipe_image?: string;
+          updated_at?: string | null;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "DraftRecipeImage_draft_recipe_id_fkey";
+            columns: ["draft_recipe_id"];
+            referencedRelation: "DraftRecipe";
+            referencedColumns: ["id"];
+          }
+        ];
+      };
+      DraftRecipeLink: {
+        Row: {
+          created_at: string | null;
+          draft_recipe_id: string;
+          id: string;
+          link_url: string;
+          updated_at: string | null;
+        };
+        Insert: {
+          created_at?: string | null;
+          draft_recipe_id: string;
+          id: string;
+          link_url: string;
+          updated_at?: string | null;
+        };
+        Update: {
+          created_at?: string | null;
+          draft_recipe_id?: string;
+          id?: string;
+          link_url?: string;
+          updated_at?: string | null;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "DraftRecipeLink_draft_recipe_id_fkey";
+            columns: ["draft_recipe_id"];
+            referencedRelation: "DraftRecipe";
+            referencedColumns: ["id"];
+          }
+        ];
+      };
       Favorite: {
         Row: {
           created_at: string | null;

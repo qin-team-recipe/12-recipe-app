@@ -29,6 +29,7 @@ model User {
   Memo         Memo[]
   createdAt    DateTime?      @default(now()) @map("created_at") @db.Timestamptz(3)
   updatedAt    DateTime?      @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(3)
+  DraftRecipe  DraftRecipe[]
 }
 
 /// レシピ
@@ -49,10 +50,71 @@ model Recipe {
   updatedAt    DateTime?     @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(3)
 }
 
+/// レシピの下書き
+model DraftRecipe {
+  id               String             @id @default(cuid())
+  title            String?
+  description      String?            @db.Text
+  user             User               @relation(fields: [userId], references: [id])
+  userId           String             @map("user_id")
+  servingCount     Int?               @map("serving_count")
+  DraftRecipeImage DraftRecipeImage[]
+  DraftInstruction DraftInstruction[]
+  DraftIngredient  DraftIngredient[]
+  DraftRecipeLink  DraftRecipeLink[]
+  createdAt        DateTime?          @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt        DateTime?          @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(3)
+}
+
+/// ドラフトレシピの画像
+model DraftRecipeImage {
+  id            String       @id @default(uuid())
+  recipe        DraftRecipe? @relation(fields: [draftRecipeId], references: [id], onDelete: Cascade)
+  draftRecipeId String       @map("draft_recipe_id")
+  recipeImage   String       @map("recipe_image") @db.Text
+  createdAt     DateTime?    @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt     DateTime?    @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(3)
+}
+
+/// ドラフトレシピの作り方
+model DraftInstruction {
+  id              Int          @id @default(autoincrement())
+  recipe          DraftRecipe? @relation(fields: [draftRecipeId], references: [id], onDelete: Cascade)
+  draftRecipeId   String       @map("draft_recipe_id")
+  stepOrder       Int          @map("step_order")
+  stepDescription String       @map("step_description") @db.Text
+  createdAt       DateTime?    @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt       DateTime?    @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(3)
+
+  //* 同じレシピに同じ手順を複数回登録することを防ぐ
+  @@unique([draftRecipeId, stepOrder])
+}
+
+/// 材料
+model DraftIngredient {
+  id            Int          @id @default(autoincrement())
+  title         String       @db.Text
+  recipe        DraftRecipe? @relation(fields: [draftRecipeId], references: [id], onDelete: Cascade)
+  draftRecipeId String       @map("draft_recipe_id")
+  isCustom      Boolean      @default(false) @map("is_custom")
+  createdAt     DateTime?    @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt     DateTime?    @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(3)
+}
+
+/// レシピのリンク
+model DraftRecipeLink {
+  id            String       @id @default(uuid())
+  recipe        DraftRecipe? @relation(fields: [draftRecipeId], references: [id], onDelete: Cascade)
+  draftRecipeId String       @map("draft_recipe_id")
+  linkUrl       String       @map("link_url") @db.Text
+  createdAt     DateTime?    @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt     DateTime?    @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(3)
+}
+
 /// レシピの画像
 model RecipeImage {
   id          String    @id @default(uuid())
-  recipe      Recipe    @relation(fields: [recipeId], references: [id], onDelete: Cascade)
+  recipe      Recipe?   @relation(fields: [recipeId], references: [id], onDelete: Cascade)
   recipeId    String    @map("recipe_id")
   recipeImage String    @map("recipe_image") @db.Text
   createdAt   DateTime? @default(now()) @map("created_at") @db.Timestamptz(3)
