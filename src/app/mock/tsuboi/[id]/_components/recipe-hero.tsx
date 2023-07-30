@@ -1,7 +1,6 @@
 import Link from "next/link";
 
 import { getRecipeById } from "@/src/actions/getRecipeById";
-import DetailHeaderImage from "@/src/components/detail-header-image";
 import LinkToIconRenderer from "@/src/components/link-to-icon-renderer";
 import NumberUnit from "@/src/components/number-unit";
 import ProfileLink from "@/src/components/profile-link";

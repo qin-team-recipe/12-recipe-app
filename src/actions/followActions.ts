@@ -20,7 +20,6 @@ export const followChef = async (followedId: string) => {
     throw new Error("認証に失敗しました🥲");
   }
 
-
   // 自身をフォローするのを防ぐ
   if (session.user.id === followedId) throw new Error("自分自身をフォロー・アンフォローすることはできません😡");
 
@@ -46,7 +45,6 @@ export const unFollowChef = async (followedId: string) => {
   if (!session) {
     throw new Error("認証に失敗しました🥲");
   }
-
 
   // 自身をフォローするのを防ぐ
   if (session.user.id === followedId) throw new Error("自分自身をフォロー・アンフォローすることはできません😡");

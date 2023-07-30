@@ -3,7 +3,6 @@
 import { cn } from "../lib/utils";
 import { Button } from "./ui/button";
 
-
 interface Props extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   isActive: boolean;
   activeLabel: string;
