@@ -4,14 +4,17 @@ import { useCallback } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 
+import { cn } from "../lib/utils";
+
 type Props = {
   name: string;
   value: string;
   path: string;
   children: React.ReactNode;
+  className?: string;
 };
 
-const QueryParamsLink = ({ name, value, path, children }: Props) => {
+const QueryParamsLink = ({ name, value, path, children, className }: Props) => {
   const searchParams = useSearchParams()!;
 
   const createQueryString = useCallback(
@@ -24,7 +27,11 @@ const QueryParamsLink = ({ name, value, path, children }: Props) => {
     [searchParams]
   );
 
-  return <Link href={path + "?" + createQueryString(name, value)}>{children}</Link>;
+  return (
+    <Link className={cn(className)} href={path + "?" + createQueryString(name, value)}>
+      {children}
+    </Link>
+  );
 };
 
 export default QueryParamsLink;

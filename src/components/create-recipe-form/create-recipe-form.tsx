@@ -2,9 +2,10 @@
 
 import { useState, useTransition } from "react";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
 import { postRecipe } from "@/src/actions/postRecipe";
+import { recipeFormStateAtom } from "@/src/atoms/draftRecipeFormValuesAtom";
 import { Button } from "@/src/components/ui/button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/src/components/ui/form";
 import { Input } from "@/src/components/ui/input";
@@ -13,8 +14,10 @@ import { Textarea } from "@/src/components/ui/textarea";
 import { useToast } from "@/src/components/ui/use-toast";
 import { cn } from "@/src/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useAtom } from "jotai";
 import { Minus, Plus, PlusIcon, X } from "lucide-react";
 import { useFieldArray, useForm } from "react-hook-form";
+import useDeepCompareEffect from "use-deep-compare-effect";
 import { z } from "zod";
 
 import { createRecipeFormSchema, CreateRecipeFormValues } from ".";
@@ -27,6 +30,8 @@ type Props = {
 const CreateRecipeForm = ({ defaultValues, redirectPath }: Props) => {
   const [imageData, setImageData] = useState("");
 
+  const pathname = usePathname();
+
   const { toast } = useToast();
 
   const router = useRouter();
@@ -38,6 +43,8 @@ const CreateRecipeForm = ({ defaultValues, redirectPath }: Props) => {
     defaultValues,
     mode: "onChange",
   });
+
+  const [_, setDraftRecipeFormValues] = useAtom(recipeFormStateAtom);
 
   const { setValue, watch, handleSubmit } = form;
 
@@ -90,6 +97,41 @@ const CreateRecipeForm = ({ defaultValues, redirectPath }: Props) => {
       }
     });
   };
+
+  useDeepCompareEffect(() => {
+    if (pathname !== "/my-recipe/create") {
+      return;
+    }
+
+    const isAnyFieldFilled = Object.entries(watchedValues).some(([key, value]) => {
+      if (Array.isArray(value)) {
+        return value.some((item) => {
+          if (typeof item === "object" && item !== null) {
+            return Object.values(item).some(
+              (field) =>
+                field !== undefined &&
+                field !== "" &&
+                (!defaultValues[key as keyof CreateRecipeFormValues] ||
+                  field !== defaultValues[key as keyof CreateRecipeFormValues])
+            );
+          }
+          return false;
+        });
+      } else {
+        return (
+          value !== undefined &&
+          value !== "" &&
+          (!defaultValues[key as keyof CreateRecipeFormValues] ||
+            value !== defaultValues[key as keyof CreateRecipeFormValues])
+        );
+      }
+    });
+
+    setDraftRecipeFormValues({
+      isDraft: isAnyFieldFilled,
+      draftRecipeFormValues: watchedValues,
+    });
+  }, [defaultValues, setDraftRecipeFormValues, watchedValues]);
 
   return (
     <Form {...form}>

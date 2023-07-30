@@ -1,8 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import { useTransition } from "react";
 import { useRouter } from "next/navigation";
 
+import { createDraftRecipe } from "@/src/actions/createDraftRecipe";
+import { recipeFormStateAtom } from "@/src/atoms/draftRecipeFormValuesAtom";
+import { CreateRecipeFormValues } from "@/src/components/create-recipe-form";
+import { CreateDraftRecipeFormValues } from "@/src/components/create-recipe-form/schema";
 import { Button } from "@/src/components/ui/button";
 import {
   Dialog,
@@ -12,35 +16,61 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/src/components/ui/dialog";
+import Spinner from "@/src/components/ui/spinner";
+import { useToast } from "@/src/components/ui/use-toast";
+import { useAtom } from "jotai";
 import { X } from "lucide-react";
 
 const CloseButton = () => {
   const router = useRouter();
-
-  const [isEditing, setIsEditing] = useState(false);
+  const { toast } = useToast();
+  const [isPending, startTransition] = useTransition();
+  const [{ isDraft, draftRecipeFormValues }, setIsEditing] = useAtom(recipeFormStateAtom);
 
   return (
     // TODO: 下書き保存の処理を実装する
-    <button className="flex h-8 w-8 items-center justify-center rounded-full text-mauve12">
-      {isEditing ? (
+    <div className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full text-mauve12">
+      {isDraft ? (
         <Dialog>
           <DialogTrigger>
             <X size={20} />
           </DialogTrigger>
           <DialogContent>
             <DialogHeader>
-              <DialogTitle>確認</DialogTitle>
+              <DialogTitle className="self-center">確認</DialogTitle>
             </DialogHeader>
-            <p className="text-sm">作成中のレシピは保存されません。 下書きに保存しますか？</p>
+            <p className="text-center text-sm">作成中のレシピは保存されません。 下書きに保存しますか？</p>
             <DialogFooter>
               <Button
                 className="w-full"
                 variant="outline"
                 onClick={() => {
-                  router.push("/my-page");
+                  startTransition(async () => {
+                    const result = await createDraftRecipe(draftRecipeFormValues);
+
+                    if (result.isSuccess) {
+                      toast({
+                        variant: "default",
+                        title: "下書きを保存しました",
+                        duration: 1500,
+                      });
+                      router.push("/my-page");
+                    } else {
+                      toast({
+                        variant: "destructive",
+                        title: "下書きの保存に失敗しました",
+                        duration: 1500,
+                      });
+                    }
+
+                    setIsEditing({
+                      isDraft: false,
+                      draftRecipeFormValues: {} as CreateRecipeFormValues,
+                    });
+                  });
                 }}
               >
-                保存
+                {isPending ? <Spinner /> : "保存する"}
               </Button>
             </DialogFooter>
           </DialogContent>
@@ -49,12 +79,15 @@ const CloseButton = () => {
         <X
           size={20}
           onClick={() => {
-            setIsEditing(false);
+            setIsEditing({
+              isDraft: false,
+              draftRecipeFormValues: {} as CreateDraftRecipeFormValues,
+            });
             router.push("/my-page");
           }}
         />
       )}
-    </button>
+    </div>
   );
 };
 
