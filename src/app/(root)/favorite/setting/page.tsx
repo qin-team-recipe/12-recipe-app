@@ -11,8 +11,8 @@ const page = () => {
       <div className="mb-8">
         <SettingList path="/" icon={<img src="/icon-chevron-right.svg" alt=""/>} text="利用規約" />
         <SettingList path="/" icon={<img src="/icon-chevron-right.svg" alt=""/>} text="プライバシーポリシー" />
-        <SettingList path="/" icon={<img src="/icon-arrow-up-right.svg" alt=""/>} text="運営会社" />
-        <SettingList path="/" icon={<img src="/icon-arrow-up-right.svg" alt=""/>} text="お問い合わせ" />
+        <SettingList path="/" icon={<img src="/icon-arrow-up-right.svg" alt=""/>} text="運営会社" external />
+        <SettingList path="/" icon={<img src="/icon-arrow-up-right.svg" alt=""/>} text="お問い合わせ" external />
       </div>
       <div className="my-3 ml-6 text-lg font-bold">アカウントの操作</div>
       <div className="mb-8">
@@ -20,7 +20,7 @@ const page = () => {
       </div>
       <div className="my-3 ml-6 text-lg font-bold">取り消しができない操作</div>
       <div className="mb-8">
-        <SettingList path="/" icon={<img src="/icon-alert-circle.svg" alt=""/>} text="退会する" />
+        <SettingList icon={<img src="/icon-alert-circle.svg" alt=""/>} text="退会する" />
       </div>
     </>
   );
