@@ -48,6 +48,8 @@
 
 レシピの下書き画面にて、3点ドットモーダルの中に「編集する」とありますが、これはどのような機能を想定しているのか？
 
+![スクリーンショット 2023-07-30 19 49 01](https://github.com/qin-team-recipe/12-recipe-app/assets/63396451/6cef7fe4-f6ee-474c-bc13-cada6bae6ead)![スクリーンショット 2023-07-30 19 49 16](https://github.com/qin-team-recipe/12-recipe-app/assets/63396451/b648ad6d-36a6-44e1-a824-882951aae838)
+
 
 
 3点アイコンは必要でしょうか？
