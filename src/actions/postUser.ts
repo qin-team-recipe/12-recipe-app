@@ -3,13 +3,9 @@
 import { revalidatePath } from "next/cache";
 
 import { prisma } from "../lib/prisma";
+import { ActionsResult } from "../types/ActionsResult";
 
-type PostUserResult = {
-  isSuccess: boolean;
-  error?: Error;
-};
-
-export const postUser = async ({ id, name }: { id?: string; name: string }): Promise<PostUserResult> => {
+export const postUser = async ({ id, name }: { id?: string; name: string }): Promise<ActionsResult> => {
   try {
     await prisma.user.create({
       data: {
@@ -23,9 +19,10 @@ export const postUser = async ({ id, name }: { id?: string; name: string }): Pro
 
     return {
       isSuccess: true,
+      message: "ユーザー登録が完了しました🎉",
     };
   } catch (error) {
     console.log(error);
-    return { isSuccess: false, error: error as Error };
+    return { isSuccess: false, error: "ユーザー登録に失敗しました🥲" };
   }
 };

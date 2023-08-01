@@ -4,12 +4,9 @@ import { revalidatePath } from "next/cache";
 
 import { prisma } from "@/src/lib/prisma";
 
-type DeleteRecipeResult = {
-  isSuccess: boolean;
-  error?: Error;
-};
+import { ActionsResult } from "../types/ActionsResult";
 
-export const deleteChefs = async (chefIds: string[]): Promise<DeleteRecipeResult> => {
+export const deleteChefs = async (chefIds: string[]): Promise<ActionsResult> => {
   try {
     await Promise.all(
       chefIds.map(async (id) => {
@@ -61,9 +58,9 @@ export const deleteChefs = async (chefIds: string[]): Promise<DeleteRecipeResult
     // TODO: 適切なパスを指定する
     revalidatePath("/admin");
 
-    return { isSuccess: true };
+    return { isSuccess: true, message: "指定のシェフを削除しました😟" };
   } catch (error) {
     console.log(error);
-    return { isSuccess: false, error: error as Error };
+    return { isSuccess: false, error: "シェフの削除に失敗しました🥲" };
   }
 };

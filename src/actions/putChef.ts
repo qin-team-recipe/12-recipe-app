@@ -6,13 +6,9 @@ import { prisma } from "@/src/lib/prisma";
 import { zact } from "zact/server";
 
 import { editChefFormSchema } from "../app/admin/(chefs)/_components/edit-chef-form";
+import { ActionsResult } from "../types/ActionsResult";
 
-type PutChefResult = {
-  isSuccess: boolean;
-  error?: Error;
-};
-
-export const putChef = zact(editChefFormSchema)(async ({ uid, name, bio, urls }): Promise<PutChefResult> => {
+export const putChef = zact(editChefFormSchema)(async ({ uid, name, bio, urls }): Promise<ActionsResult> => {
   const currentUserLinks = await prisma.userLink.findMany({
     where: {
       userId: uid,
@@ -48,12 +44,13 @@ export const putChef = zact(editChefFormSchema)(async ({ uid, name, bio, urls })
 
     return {
       isSuccess: true,
+      message: `${name} シェフの情報を更新しました🎉`,
     };
   } catch (error) {
     console.error(error);
     return {
       isSuccess: false,
-      error: error as Error,
+      error: `${name} シェフの情報の更新に失敗しました🥲`,
     };
   }
 });

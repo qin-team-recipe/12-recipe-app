@@ -1,4 +1,3 @@
-import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
@@ -14,9 +13,7 @@ export const getAuthenticatedUser = async () => {
     data: { session },
   } = await supabaseServerClient.auth.getSession();
 
-  if (!session) {
-    redirect("/login");
-  }
+  if (!session) redirect("/login");
 
   const user = await prisma.user.findUnique({
     where: {

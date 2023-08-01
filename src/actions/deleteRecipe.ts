@@ -2,25 +2,20 @@
 
 import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
 
 import { prisma } from "@/src/lib/prisma";
 import { createServerActionClient } from "@supabase/auth-helpers-nextjs";
 
+import { ActionsResult } from "../types/ActionsResult";
 import { Database } from "../types/SupabaseTypes";
 
-type DeleteRecipeResult = {
-  isSuccess: boolean;
-  error?: Error;
-};
-
-export const deleteRecipe = async (id: string): Promise<DeleteRecipeResult> => {
+export const deleteRecipe = async (id: string): Promise<ActionsResult> => {
   const {
     data: { session },
   } = await createServerActionClient<Database>({ cookies }).auth.getSession();
 
-  if (!session) {
-    throw new Error("認証に失敗しました");
-  }
+  if (!session) redirect("/login");
 
   try {
     // 物理削除
@@ -65,9 +60,9 @@ export const deleteRecipe = async (id: string): Promise<DeleteRecipeResult> => {
     // TODO: 適切なパスを指定する
     revalidatePath("/mock");
 
-    return { isSuccess: true };
+    return { isSuccess: true, message: "指定のレシピを削除しました🔥" };
   } catch (error) {
     console.log(error);
-    return { isSuccess: false, error: error as Error };
+    return { isSuccess: false, error: "レシピの削除に失敗しました🥲" };
   }
 };

@@ -6,13 +6,9 @@ import { prisma } from "@/src/lib/prisma";
 import { zact } from "zact/server";
 
 import { createChefFormSchema } from "../app/admin/(chefs)/_components/create-chef-form";
+import { ActionsResult } from "../types/ActionsResult";
 
-type PostChefResult = {
-  isSuccess: boolean;
-  error?: Error;
-};
-
-export const postChef = zact(createChefFormSchema)(async ({ name, bio, urls }): Promise<PostChefResult> => {
+export const postChef = zact(createChefFormSchema)(async ({ name, bio, urls }): Promise<ActionsResult> => {
   try {
     await prisma.user.create({
       data: {
@@ -31,12 +27,13 @@ export const postChef = zact(createChefFormSchema)(async ({ name, bio, urls }): 
 
     return {
       isSuccess: true,
+      message: "シェフを登録しました🎉",
     };
   } catch (error) {
     console.error(error);
     return {
       isSuccess: false,
-      error: error as Error,
+      error: "シェフの登録に失敗しました🥲",
     };
   }
 });

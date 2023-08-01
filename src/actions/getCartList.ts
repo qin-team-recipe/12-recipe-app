@@ -1,4 +1,5 @@
 import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
 
 import { createServerActionClient } from "@supabase/auth-helpers-nextjs";
 
@@ -12,9 +13,7 @@ export const getCartList = async () => {
     data: { session },
   } = await supabaseServerClient.auth.getSession();
 
-  if (!session) {
-    throw new Error("認証に失敗しました");
-  }
+  if (!session) redirect("/login");
 
   const cartList = await prisma.cartList.findMany({
     where: {

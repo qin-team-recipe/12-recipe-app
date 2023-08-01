@@ -1,5 +1,5 @@
 import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 
@@ -36,7 +36,7 @@ export const getChefById = async ({ id, orderByLikes = false }: { id: string; or
     },
   });
 
-  if (!chef) throw new Error(`シェフが見つかりませんでした🥲 ID:${id}`);
+  if (!chef) notFound();
 
   if (orderByLikes) {
     chef.Recipe.sort((a, b) => (b._count.likes || 0) - (a._count.likes || 0));
@@ -48,9 +48,7 @@ export const getChefById = async ({ id, orderByLikes = false }: { id: string; or
     data: { session },
   } = await supabaseServerClient.auth.getSession();
 
-  if (!session) {
-    redirect("/login");
-  }
+  if (!session) redirect("/login");
 
   // シェフのフォロワー数を取得
   const followersCount = await prisma.userFollower.count({

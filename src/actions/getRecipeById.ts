@@ -1,5 +1,5 @@
 import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 
@@ -13,9 +13,7 @@ export const getRecipeById = async (id: string) => {
     data: { session },
   } = await supabaseServerClient.auth.getSession();
 
-  if (!session) {
-    redirect("/login");
-  }
+  if (!session) redirect("/login");
 
   const recipe = await prisma.recipe.findUnique({
     where: {
@@ -41,7 +39,7 @@ export const getRecipeById = async (id: string) => {
     },
   });
 
-  if (!recipe) throw new Error(`レシピが見つかりませんでした🥲 ID:${id}`);
+  if (!recipe) notFound();
 
   const user = await prisma.user.findUnique({
     where: {

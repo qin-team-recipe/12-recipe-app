@@ -13,9 +13,7 @@ export const getFollowingChefs = async () => {
     data: { session },
   } = await supabaseServerClient.auth.getSession();
 
-  if (!session) {
-    redirect("/login");
-  }
+  if (!session) redirect("/login");
 
   const followingChefs = await prisma.user.findMany({
     select: {
