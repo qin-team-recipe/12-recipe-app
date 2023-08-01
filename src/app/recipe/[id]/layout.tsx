@@ -8,12 +8,8 @@ import { tabs } from "./_constants/tabs";
 export default function layout({ params, children }: { params: { id: string }; children: React.ReactNode }) {
   return (
     <>
-      <Separator className="hidden h-full w-[1px] md:block" />
-      <main className="mb-20 w-full flex-1 overflow-y-auto">
-        <RecipeHero id={params.id} />
-        <LinkableTabs tabs={tabs(params.id)}>{children}</LinkableTabs>
-      </main>
-      <Separator className="hidden h-full w-[1px] md:block" />
+      <RecipeHero id={params.id} />
+      <LinkableTabs tabs={tabs(params.id)}>{children}</LinkableTabs>
     </>
   );
 }
