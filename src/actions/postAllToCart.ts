@@ -10,7 +10,7 @@ import { prisma } from "../lib/prisma";
 import { ActionsResult } from "../types/ActionsResult";
 import { Database } from "../types/SupabaseTypes";
 
-export const addAllToCart = async (recipeId: string, ingredientIds: number[]): Promise<ActionsResult> => {
+export const postAllToCart = async (recipeId: string, ingredientIds: number[]): Promise<ActionsResult> => {
   const supabaseServerClient = createServerActionClient<Database>({ cookies });
 
   const {

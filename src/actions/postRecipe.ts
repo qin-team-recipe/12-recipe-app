@@ -56,7 +56,7 @@ export const postRecipe = zact(createRecipeFormSchema)(
       });
 
       // TODO: 適切なパスを指定する
-      revalidatePath("/mock/tsuboi");
+      revalidatePath("/my-page");
 
       return {
         isSuccess: true,

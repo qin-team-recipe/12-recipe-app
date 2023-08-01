@@ -3,7 +3,7 @@
 import { useTransition } from "react";
 import { useRouter } from "next/navigation";
 
-import { createDraftRecipe } from "@/src/actions/createDraftRecipe";
+import { postDraftRecipe } from "@/src/actions/postDraftRecipe";
 import { recipeFormStateAtom } from "@/src/atoms/draftRecipeFormValuesAtom";
 import { CreateRecipeFormValues } from "@/src/components/create-recipe-form";
 import { CreateDraftRecipeFormValues } from "@/src/components/create-recipe-form/schema";
@@ -46,19 +46,19 @@ const CloseButton = () => {
                 variant="outline"
                 onClick={() => {
                   startTransition(async () => {
-                    const result = await createDraftRecipe(draftRecipeFormValues);
+                    const result = await postDraftRecipe(draftRecipeFormValues);
 
                     if (result.isSuccess) {
                       toast({
                         variant: "default",
-                        title: "下書きを保存しました",
+                        title: result.message,
                         duration: 3000,
                       });
                       router.push("/my-page");
                     } else {
                       toast({
                         variant: "destructive",
-                        title: "下書きの保存に失敗しました",
+                        title: result.error,
                         duration: 3000,
                       });
                     }
