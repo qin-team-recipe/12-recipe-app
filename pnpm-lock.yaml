@@ -1,9 +1,5 @@
 lockfileVersion: '6.0'
 
-settings:
-  autoInstallPeers: true
-  excludeLinksFromLockfile: false
-
 dependencies:
   '@hookform/resolvers':
     specifier: ^3.1.1
@@ -134,6 +130,9 @@ dependencies:
   typescript:
     specifier: 5.1.6
     version: 5.1.6
+  use-deep-compare-effect:
+    specifier: ^1.8.1
+    version: 1.8.1(react@18.2.0)
   uuid:
     specifier: ^9.0.0
     version: 9.0.0
@@ -6041,6 +6040,17 @@ packages:
       tslib: 2.6.0
     dev: false
 
+  /use-deep-compare-effect@1.8.1(react@18.2.0):
+    resolution: {integrity: sha512-kbeNVZ9Zkc0RFGpfMN3MNfaKNvcLNyxOAAd9O4CBZ+kCBXXscn9s/4I+8ytUER4RDpEYs5+O6Rs4PqiZ+rHr5Q==}
+    engines: {node: '>=10', npm: '>=6'}
+    peerDependencies:
+      react: '>=16.13'
+    dependencies:
+      '@babel/runtime': 7.22.6
+      dequal: 2.0.3
+      react: 18.2.0
+    dev: false
+
   /use-sidecar@1.1.2(@types/react@18.2.14)(react@18.2.0):
     resolution: {integrity: sha512-epTbsLuzZ7lPClpz2TyryBfztm7m+28DlEv2ZCQ3MDr5ssiwyOwGH/e5F9CkfWjJ1t4clvI58yF822/GUkjjhw==}
     engines: {node: '>=10'}
@@ -6179,3 +6189,7 @@ packages:
   /zod@3.21.4:
     resolution: {integrity: sha512-m46AKbrzKVzOzs/DZgVnG5H55N1sv1M8qZU3A8RIKbs3mrACDNeIOeilDymVb2HdmP8uwshOCF4uJ8uM9rCqJw==}
     dev: false
+
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false

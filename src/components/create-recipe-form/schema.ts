@@ -2,6 +2,8 @@ import * as z from "zod";
 
 export type CreateRecipeFormValues = z.infer<typeof createRecipeFormSchema>;
 
+export type CreateDraftRecipeFormValues = z.infer<typeof createDraftRecipeFormSchema>;
+
 export const createRecipeFormSchema = z.object({
   uid: z.string(),
 
@@ -49,4 +51,42 @@ export const createRecipeFormSchema = z.object({
       })
       .optional()
   ),
+});
+
+export const createDraftRecipeFormSchema = z.object({
+  uid: z.string(),
+  title: z.string().optional(),
+  servingCount: z.number().int().optional(),
+  recipeImage: z.string().optional(),
+  ingredients: z
+    .array(
+      z.object({
+        name: z.string().optional(),
+      })
+    )
+    .optional(),
+  instructions: z
+    .array(
+      z.object({
+        value: z.string().optional(),
+      })
+    )
+    .optional(),
+  bio: z.string().optional(),
+  urls: z
+    .array(
+      z
+        .object({
+          value: z
+            .string()
+            .optional()
+            .refine((value) => {
+              if (!value) return true;
+              const parseResult = z.string().url().safeParse(value);
+              return parseResult.success;
+            }, "正しいURLを入力してください"),
+        })
+        .optional()
+    )
+    .optional(),
 });
