@@ -16,13 +16,18 @@ import UserProfileStats from "./_components/user-profile-stats";
 import { tabs } from "./_constants/tabs";
 
 const layout = async ({ params, children }: { params: { id: string }; children: React.ReactNode }) => {
-  const chef = await getChefById({
-    id: params.id,
+  const {
+    id,
+    name,
+    profile,
+    followersCount,
+    isFollowing,
+    UserLink: userLinks,
+    isMe,
+    _count,
+  } = await getChefById({
+    id: params?.id,
   });
-
-  if (!chef) return notFound();
-
-  const { id, name, profile, followersCount, isFollowing, UserLink: userLinks, isMe, _count } = chef;
 
   const sortedUserLinks = sortSiteLinks(userLinks.map((userLink) => userLink.url));
 
@@ -84,7 +89,7 @@ const layout = async ({ params, children }: { params: { id: string }; children: 
               {...{ isMe, followersCount, recipeCount: _count.Recipe, followedId: id, isActive: isFollowing }}
             />
           </div>
-          <LinkableTabs tabs={tabs(params.id)}>{children}</LinkableTabs>
+          <LinkableTabs tabs={tabs(params?.id)}>{children}</LinkableTabs>
         </div>
       </main>
       <Separator className="hidden h-full w-[1px] md:block" />

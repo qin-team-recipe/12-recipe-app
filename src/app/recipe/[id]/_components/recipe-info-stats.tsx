@@ -5,6 +5,7 @@ import { experimental_useOptimistic as useOptimistic } from "react";
 import { favoriteRecipe, unFavoriteRecipe } from "@/src/actions/favoriteRecipeActions";
 import ProfileLink from "@/src/components/profile-link";
 import ToggleButton from "@/src/components/toggle-button";
+import { useToast } from "@/src/components/ui/use-toast";
 
 import NumberUnit from "../../../../components/number-unit";
 import { CONSTANTS } from "../../../../constants/constants";
@@ -19,6 +20,8 @@ type Props = {
 
 const RecipeInfoStats = ({ recipeId, isActive, favoriteCount, userId, userName }: Props) => {
   const [optimisticFavorite, setOptimisticFavorite] = useOptimistic({ favoriteCount, isActive });
+
+  const { toast } = useToast();
 
   const updateFavoriteCount = async () => {
     setOptimisticFavorite((prev) =>
@@ -35,20 +38,13 @@ const RecipeInfoStats = ({ recipeId, isActive, favoriteCount, userId, userName }
 
     const action = isActive ? unFavoriteRecipe : favoriteRecipe;
 
-    try {
-      await action(recipeId);
-    } catch (error) {
-      setOptimisticFavorite((prev) =>
-        isActive
-          ? {
-              favoriteCount: prev.favoriteCount + 1,
-              isActive: true,
-            }
-          : {
-              favoriteCount: prev.favoriteCount - 1,
-              isActive: false,
-            }
-      );
+    const result = await action(recipeId);
+
+    if (!result.isSuccess) {
+      toast({
+        variant: "destructive",
+        title: result.error,
+      });
     }
   };
 

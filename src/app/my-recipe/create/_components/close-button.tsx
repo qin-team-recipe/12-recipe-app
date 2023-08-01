@@ -52,14 +52,14 @@ const CloseButton = () => {
                       toast({
                         variant: "default",
                         title: "下書きを保存しました",
-                        duration: 1500,
+                        duration: 3000,
                       });
                       router.push("/my-page");
                     } else {
                       toast({
                         variant: "destructive",
                         title: "下書きの保存に失敗しました",
-                        duration: 1500,
+                        duration: 3000,
                       });
                     }
 

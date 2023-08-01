@@ -26,17 +26,17 @@ const DeleteChefButton = ({ chefIds, onSuccessfulDelete }: Props) => {
         startTransition(async () => {
           const result = await deleteChefs(chefIds);
 
-          if (result) {
+          if (result.isSuccess) {
             onSuccessfulDelete();
 
             toast({
-              title: "指定のシェフを削除しました",
+              title: result.message,
               duration: 3000,
             });
           } else {
             toast({
               variant: "destructive",
-              title: "シェフの削除に失敗しました",
+              title: result.error,
             });
           }
         });

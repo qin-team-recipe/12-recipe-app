@@ -45,7 +45,7 @@ const LoginForm = ({ defaultValues }: Props) => {
           toast({
             variant: "destructive",
             title: error.message,
-            duration: 1500,
+            duration: 3000,
           });
           return;
         }
@@ -55,7 +55,7 @@ const LoginForm = ({ defaultValues }: Props) => {
         toast({
           variant: "destructive",
           title: "エラーが発生しました。",
-          duration: 1500,
+          duration: 3000,
         });
         return;
       } finally {

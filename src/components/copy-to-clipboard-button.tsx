@@ -22,14 +22,14 @@ const CopyToClipboardButton = ({ recipeName, servingCount, ingredients }: Props)
         toast({
           variant: "default",
           title: "コピーしました",
-          duration: 1500,
+          duration: 3000,
         });
       })
       .catch(() => {
         toast({
           variant: "destructive",
           title: "コピーに失敗しました",
-          duration: 1500,
+          duration: 3000,
         });
       });
   };

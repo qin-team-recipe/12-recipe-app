@@ -63,15 +63,15 @@ const EditProfileForm = ({ defaultValues }: Props) => {
       if (result.isSuccess) {
         toast({
           variant: "default",
-          title: "プロフィールを更新しました",
-          duration: 1500,
+          title: result.message,
+          duration: 3000,
         });
         router.push(`/my-page`);
       } else {
         toast({
           variant: "destructive",
-          title: "プロフィールの更新に失敗しました",
-          duration: 1500,
+          title: result.error,
+          duration: 3000,
         });
       }
     });

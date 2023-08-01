@@ -65,14 +65,14 @@ const EditChefForm = ({ defaultValues }: Props) => {
         toast({
           variant: "default",
           title: "プロフィールを更新しました",
-          duration: 1500,
+          duration: 3000,
         });
         router.push(`/admin`);
       } else {
         toast({
           variant: "destructive",
           title: "プロフィールの更新に失敗しました",
-          duration: 1500,
+          duration: 3000,
         });
       }
     });

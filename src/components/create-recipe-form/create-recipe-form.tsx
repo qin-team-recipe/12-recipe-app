@@ -84,15 +84,15 @@ const CreateRecipeForm = ({ defaultValues, redirectPath }: Props) => {
       if (result.isSuccess) {
         toast({
           variant: "default",
-          title: "レシピを作成しました",
-          duration: 1500,
+          title: result.message,
+          duration: 3000,
         });
         router.push(redirectPath);
       } else {
         toast({
           variant: "destructive",
-          title: "レシピの作成に失敗しました",
-          duration: 1500,
+          title: result.error,
+          duration: 3000,
         });
       }
     });

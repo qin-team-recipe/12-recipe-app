@@ -59,19 +59,19 @@ const PopoverMenu = ({ recipeId }: Props) => {
                 className="flex"
                 onClick={() => {
                   startTransition(async () => {
-                    const { isSuccess } = await deleteRecipe(recipeId);
+                    const result = await deleteRecipe(recipeId);
 
-                    if (isSuccess) {
+                    if (result.isSuccess) {
                       toast({
                         variant: "default",
-                        title: "レシピを削除しました",
-                        duration: 1500,
+                        title: result.message,
+                        duration: 3000,
                       });
                     } else {
                       toast({
                         variant: "destructive",
-                        title: "レシピの削除に失敗しました",
-                        duration: 1500,
+                        title: result.error,
+                        duration: 3000,
                       });
                     }
 

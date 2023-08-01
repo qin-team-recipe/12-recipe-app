@@ -59,13 +59,13 @@ const DraftRecipeTile = ({ id, title, createdAt }: Props) => {
                         toast({
                           variant: "default",
                           title: "下書きレシピを削除しました",
-                          duration: 1500,
+                          duration: 3000,
                         });
                       } else {
                         toast({
                           variant: "destructive",
                           title: "下書きレシピの削除に失敗しました",
-                          duration: 1500,
+                          duration: 3000,
                         });
                       }
                     });

@@ -4,13 +4,9 @@ import { getChefById } from "@/src/actions/getChefById";
 import RecipeCard from "@/src/components/recipe-card";
 
 const page = async ({ params }: { params: { id: string } }) => {
-  const chef = await getChefById({
-    id: params.id,
+  const { Recipe: recipes } = await getChefById({
+    id: params?.id,
   });
-
-  if (!chef) return notFound();
-
-  const { Recipe: recipes } = chef;
 
   return (
     <>
