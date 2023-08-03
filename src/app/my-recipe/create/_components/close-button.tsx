@@ -18,6 +18,7 @@ import {
 } from "@/src/components/ui/dialog";
 import Spinner from "@/src/components/ui/spinner";
 import { useToast } from "@/src/components/ui/use-toast";
+import { kToastDuration } from "@/src/constants/constants";
 import { useAtom } from "jotai";
 import { X } from "lucide-react";
 
@@ -52,14 +53,14 @@ const CloseButton = () => {
                       toast({
                         variant: "default",
                         title: result.message,
-                        duration: 3000,
+                        duration: kToastDuration,
                       });
                       router.push("/my-page");
                     } else {
                       toast({
                         variant: "destructive",
                         title: result.error,
-                        duration: 3000,
+                        duration: kToastDuration,
                       });
                     }
 

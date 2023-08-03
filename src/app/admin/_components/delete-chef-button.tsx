@@ -6,6 +6,7 @@ import { deleteChefs } from "@/src/actions/deleteChefs";
 import { Button } from "@/src/components/ui/button";
 import Spinner from "@/src/components/ui/spinner";
 import { useToast } from "@/src/components/ui/use-toast";
+import { kToastDuration } from "@/src/constants/constants";
 import { Trash2Icon } from "lucide-react";
 
 type Props = {
@@ -31,7 +32,7 @@ const DeleteChefButton = ({ chefIds, onSuccessfulDelete }: Props) => {
 
             toast({
               title: result.message,
-              duration: 3000,
+              duration: kToastDuration,
             });
           } else {
             toast({

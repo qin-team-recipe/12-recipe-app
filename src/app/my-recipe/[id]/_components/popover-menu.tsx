@@ -8,6 +8,7 @@ import { Command, CommandItem, CommandList, CommandSeparator } from "@/src/compo
 import { Popover, PopoverContent, PopoverTrigger } from "@/src/components/ui/popover";
 import Spinner from "@/src/components/ui/spinner";
 import { useToast } from "@/src/components/ui/use-toast";
+import { kToastDuration } from "@/src/constants/constants";
 import { CircleEllipsis, Copy, Lock, Pencil, Trash } from "lucide-react";
 
 type Props = {
@@ -65,13 +66,13 @@ const PopoverMenu = ({ recipeId }: Props) => {
                       toast({
                         variant: "default",
                         title: result.message,
-                        duration: 3000,
+                        duration: kToastDuration,
                       });
                     } else {
                       toast({
                         variant: "destructive",
                         title: result.error,
-                        duration: 3000,
+                        duration: kToastDuration,
                       });
                     }
 

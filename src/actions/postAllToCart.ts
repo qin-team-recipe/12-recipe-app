@@ -47,7 +47,7 @@ export const postAllToCart = async (recipeId: string, ingredientIds: number[]): 
       });
     } else {
       // お買い物リストの中で一番表示順が大きくなるようにレシピを追加する。材料も併せて追加する。
-      const maxDisplayOrder = await _getMaxDisplayOrder(session.user.id);
+      const maxDisplayOrder = await getMaxDisplayOrder(session.user.id);
 
       await prisma.cartList.create({
         data: {
@@ -81,7 +81,7 @@ export const postAllToCart = async (recipeId: string, ingredientIds: number[]): 
   }
 };
 
-const _getMaxDisplayOrder = async (userId: string) => {
+const getMaxDisplayOrder = async (userId: string) => {
   const maxDisplayOrderRecord = await prisma.cartList.findFirst({
     where: {
       userId,

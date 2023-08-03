@@ -52,7 +52,7 @@ export const followChef = async (followedId: string): Promise<ActionsResult> => 
 };
 
 // シェフのフォローを外す
-export const unFollowChef = async (followedId: string) => {
+export const unFollowChef = async (followedId: string): Promise<ActionsResult> => {
   const supabaseServerClient = createServerActionClient<Database>({ cookies });
 
   const {
