@@ -8,6 +8,7 @@ import { Command, CommandItem, CommandList } from "@/src/components/ui/command";
 import { Popover, PopoverContent, PopoverTrigger } from "@/src/components/ui/popover";
 import Spinner from "@/src/components/ui/spinner";
 import { useToast } from "@/src/components/ui/use-toast";
+import { kToastDuration } from "@/src/constants/constants";
 import { MoreVertical, Pencil, Pointer, Trash } from "lucide-react";
 
 type Props = {
@@ -59,13 +60,13 @@ const DraftRecipeTile = ({ id, title, createdAt }: Props) => {
                         toast({
                           variant: "default",
                           title: "下書きレシピを削除しました",
-                          duration: 1500,
+                          duration: kToastDuration,
                         });
                       } else {
                         toast({
                           variant: "destructive",
                           title: "下書きレシピの削除に失敗しました",
-                          duration: 1500,
+                          duration: kToastDuration,
                         });
                       }
                     });

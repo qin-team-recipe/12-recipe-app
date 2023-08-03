@@ -6,6 +6,7 @@ import { deleteChefs } from "@/src/actions/deleteChefs";
 import { Button } from "@/src/components/ui/button";
 import Spinner from "@/src/components/ui/spinner";
 import { useToast } from "@/src/components/ui/use-toast";
+import { kToastDuration } from "@/src/constants/constants";
 import { Trash2Icon } from "lucide-react";
 
 type Props = {
@@ -26,17 +27,17 @@ const DeleteChefButton = ({ chefIds, onSuccessfulDelete }: Props) => {
         startTransition(async () => {
           const result = await deleteChefs(chefIds);
 
-          if (result) {
+          if (result.isSuccess) {
             onSuccessfulDelete();
 
             toast({
-              title: "指定のシェフを削除しました",
-              duration: 3000,
+              title: result.message,
+              duration: kToastDuration,
             });
           } else {
             toast({
               variant: "destructive",
-              title: "シェフの削除に失敗しました",
+              title: result.error,
             });
           }
         });

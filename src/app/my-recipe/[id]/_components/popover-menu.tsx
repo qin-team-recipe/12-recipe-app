@@ -8,6 +8,7 @@ import { Command, CommandItem, CommandList, CommandSeparator } from "@/src/compo
 import { Popover, PopoverContent, PopoverTrigger } from "@/src/components/ui/popover";
 import Spinner from "@/src/components/ui/spinner";
 import { useToast } from "@/src/components/ui/use-toast";
+import { kToastDuration } from "@/src/constants/constants";
 import { CircleEllipsis, Copy, Lock, Pencil, Trash } from "lucide-react";
 
 type Props = {
@@ -59,19 +60,19 @@ const PopoverMenu = ({ recipeId }: Props) => {
                 className="flex"
                 onClick={() => {
                   startTransition(async () => {
-                    const { isSuccess } = await deleteRecipe(recipeId);
+                    const result = await deleteRecipe(recipeId);
 
-                    if (isSuccess) {
+                    if (result.isSuccess) {
                       toast({
                         variant: "default",
-                        title: "レシピを削除しました",
-                        duration: 1500,
+                        title: result.message,
+                        duration: kToastDuration,
                       });
                     } else {
                       toast({
                         variant: "destructive",
-                        title: "レシピの削除に失敗しました",
-                        duration: 1500,
+                        title: result.error,
+                        duration: kToastDuration,
                       });
                     }
 

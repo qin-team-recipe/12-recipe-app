@@ -12,9 +12,9 @@ const AddFavoriteRecipeButton = ({ recipeId }: { recipeId: string }) => {
   return (
     <form>
       <input type="hidden" name="recipeId" value={recipeId} />
-      <Button formAction={(formData) => startTransition(() => favoriteRecipe(formData))}>
+      {/* <Button formAction={(formData) => startTransition(() => favoriteRecipe(formData))}>
         {isPending ? <Spinner /> : "追加"}
-      </Button>
+      </Button> */}
     </form>
   );
 };

@@ -41,3 +41,5 @@ export const POPULAR_SNS = {
   TWITTER: "twitter",
   YOUTUBE: "youtube",
 };
+
+export const kToastDuration = 3000;

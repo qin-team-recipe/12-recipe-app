@@ -3,7 +3,7 @@
 import { useTransition } from "react";
 import { useRouter } from "next/navigation";
 
-import { createDraftRecipe } from "@/src/actions/createDraftRecipe";
+import { postDraftRecipe } from "@/src/actions/postDraftRecipe";
 import { recipeFormStateAtom } from "@/src/atoms/draftRecipeFormValuesAtom";
 import { CreateRecipeFormValues } from "@/src/components/create-recipe-form";
 import { CreateDraftRecipeFormValues } from "@/src/components/create-recipe-form/schema";
@@ -18,6 +18,7 @@ import {
 } from "@/src/components/ui/dialog";
 import Spinner from "@/src/components/ui/spinner";
 import { useToast } from "@/src/components/ui/use-toast";
+import { kToastDuration } from "@/src/constants/constants";
 import { useAtom } from "jotai";
 import { X } from "lucide-react";
 
@@ -46,20 +47,20 @@ const CloseButton = () => {
                 variant="outline"
                 onClick={() => {
                   startTransition(async () => {
-                    const result = await createDraftRecipe(draftRecipeFormValues);
+                    const result = await postDraftRecipe(draftRecipeFormValues);
 
                     if (result.isSuccess) {
                       toast({
                         variant: "default",
-                        title: "下書きを保存しました",
-                        duration: 1500,
+                        title: result.message,
+                        duration: kToastDuration,
                       });
                       router.push("/my-page");
                     } else {
                       toast({
                         variant: "destructive",
-                        title: "下書きの保存に失敗しました",
-                        duration: 1500,
+                        title: result.error,
+                        duration: kToastDuration,
                       });
                     }
 

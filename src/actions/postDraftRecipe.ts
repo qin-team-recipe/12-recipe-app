@@ -6,23 +6,10 @@ import { prisma } from "@/src/lib/prisma";
 import { zact } from "zact/server";
 
 import { createDraftRecipeFormSchema } from "../components/create-recipe-form/schema";
+import { ActionsResult } from "../types/ActionsResult";
 
-type CreateDraftRecipeResult = {
-  isSuccess: boolean;
-  error?: Error;
-};
-
-export const createDraftRecipe = zact(createDraftRecipeFormSchema)(
-  async ({
-    uid,
-    title,
-    bio,
-    ingredients,
-    urls,
-    servingCount,
-    instructions,
-    recipeImage,
-  }): Promise<CreateDraftRecipeResult> => {
+export const postDraftRecipe = zact(createDraftRecipeFormSchema)(
+  async ({ uid, title, bio, ingredients, urls, servingCount, instructions, recipeImage }): Promise<ActionsResult> => {
     try {
       await prisma.draftRecipe.create({
         data: {
@@ -72,10 +59,10 @@ export const createDraftRecipe = zact(createDraftRecipeFormSchema)(
 
       revalidatePath("/my-recipe/drafts");
 
-      return { isSuccess: true };
+      return { isSuccess: true, message: "下書きを作成しました🎉" };
     } catch (error) {
       console.log(error);
-      return { isSuccess: false, error: error as Error };
+      return { isSuccess: false, error: "下書きの作成に失敗しました🥲" };
     }
   }
 );

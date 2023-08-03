@@ -12,6 +12,7 @@ import { Input } from "@/src/components/ui/input";
 import Spinner from "@/src/components/ui/spinner";
 import { Textarea } from "@/src/components/ui/textarea";
 import { useToast } from "@/src/components/ui/use-toast";
+import { kToastDuration } from "@/src/constants/constants";
 import { cn } from "@/src/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Minus, Plus, PlusIcon, X } from "lucide-react";
@@ -63,15 +64,15 @@ const EditProfileForm = ({ defaultValues }: Props) => {
       if (result.isSuccess) {
         toast({
           variant: "default",
-          title: "プロフィールを更新しました",
-          duration: 1500,
+          title: result.message,
+          duration: kToastDuration,
         });
         router.push(`/my-page`);
       } else {
         toast({
           variant: "destructive",
-          title: "プロフィールの更新に失敗しました",
-          duration: 1500,
+          title: result.error,
+          duration: kToastDuration,
         });
       }
     });

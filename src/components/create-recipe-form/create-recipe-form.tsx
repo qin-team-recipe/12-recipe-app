@@ -12,6 +12,7 @@ import { Input } from "@/src/components/ui/input";
 import Spinner from "@/src/components/ui/spinner";
 import { Textarea } from "@/src/components/ui/textarea";
 import { useToast } from "@/src/components/ui/use-toast";
+import { kToastDuration } from "@/src/constants/constants";
 import { cn } from "@/src/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useAtom } from "jotai";
@@ -84,15 +85,15 @@ const CreateRecipeForm = ({ defaultValues, redirectPath }: Props) => {
       if (result.isSuccess) {
         toast({
           variant: "default",
-          title: "レシピを作成しました",
-          duration: 1500,
+          title: result.message,
+          duration: kToastDuration,
         });
         router.push(redirectPath);
       } else {
         toast({
           variant: "destructive",
-          title: "レシピの作成に失敗しました",
-          duration: 1500,
+          title: result.error,
+          duration: kToastDuration,
         });
       }
     });

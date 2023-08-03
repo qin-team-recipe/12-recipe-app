@@ -2,39 +2,25 @@
 
 import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
 
 import { prisma } from "@/src/lib/prisma";
 import { createServerActionClient } from "@supabase/auth-helpers-nextjs";
 import { zact } from "zact/server";
 
 import { createRecipeFormSchema } from "../components/create-recipe-form";
+import { ActionsResult } from "../types/ActionsResult";
 import { Database } from "../types/SupabaseTypes";
 
-type PostRecipeResult = {
-  isSuccess: boolean;
-  error?: Error;
-};
-
 export const postRecipe = zact(createRecipeFormSchema)(
-  async ({
-    uid,
-    title,
-    bio,
-    ingredients,
-    urls,
-    servingCount,
-    instructions,
-    recipeImage,
-  }): Promise<PostRecipeResult> => {
+  async ({ uid, title, bio, ingredients, urls, servingCount, instructions, recipeImage }): Promise<ActionsResult> => {
     const supabaseServerClient = createServerActionClient<Database>({ cookies });
 
     const {
       data: { session },
     } = await supabaseServerClient.auth.getSession();
 
-    if (!session) {
-      throw new Error("認証に失敗しました");
-    }
+    if (!session) redirect("/login");
 
     try {
       await prisma.recipe.create({
@@ -70,12 +56,15 @@ export const postRecipe = zact(createRecipeFormSchema)(
       });
 
       // TODO: 適切なパスを指定する
-      revalidatePath("/mock/tsuboi");
+      revalidatePath("/my-page");
 
-      return { isSuccess: true };
+      return {
+        isSuccess: true,
+        message: "レシピの作成に成功しました🎉",
+      };
     } catch (error) {
       console.log(error);
-      return { isSuccess: false, error: error as Error };
+      return { isSuccess: false, error: "レシピの作成に失敗しました🥲" };
     }
   }
 );

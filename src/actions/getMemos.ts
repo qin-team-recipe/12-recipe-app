@@ -1,4 +1,5 @@
 import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
 
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 
@@ -12,9 +13,7 @@ export const getMemos = async () => {
     data: { session },
   } = await supabaseServerClient.auth.getSession();
 
-  if (!session) {
-    return [];
-  }
+  if (!session) redirect("/login");
 
   const memos = await prisma.memo.findMany({
     select: {

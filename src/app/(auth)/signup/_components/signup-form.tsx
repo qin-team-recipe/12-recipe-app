@@ -10,6 +10,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Input } from "@/src/components/ui/input";
 import Spinner from "@/src/components/ui/spinner";
 import { useToast } from "@/src/components/ui/use-toast";
+import { kToastDuration } from "@/src/constants/constants";
 import type { Database } from "@/src/types/SupabaseTypes";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
@@ -51,7 +52,7 @@ const SignUpForm = ({ defaultValues }: Props) => {
           toast({
             variant: "destructive",
             title: `エラーが発生しました。${error.message}`,
-            duration: 3000,
+            duration: kToastDuration,
           });
           return;
         }
@@ -66,14 +67,14 @@ const SignUpForm = ({ defaultValues }: Props) => {
           toast({
             variant: "destructive",
             title: "エラーが発生しました",
-            duration: 3000,
+            duration: kToastDuration,
           });
         }
       } catch (error) {
         toast({
           variant: "destructive",
           title: "エラーが発生しました",
-          duration: 3000,
+          duration: kToastDuration,
         });
       } finally {
         router.refresh();

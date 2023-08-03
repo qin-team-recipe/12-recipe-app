@@ -5,6 +5,8 @@ import { experimental_useOptimistic as useOptimistic } from "react";
 import { favoriteRecipe, unFavoriteRecipe } from "@/src/actions/favoriteRecipeActions";
 import ProfileLink from "@/src/components/profile-link";
 import ToggleButton from "@/src/components/toggle-button";
+import { useToast } from "@/src/components/ui/use-toast";
+import { useOptimisticToggle } from "@/src/hooks/useOptimisticToggle";
 
 import NumberUnit from "../../../../components/number-unit";
 import { CONSTANTS } from "../../../../constants/constants";
@@ -18,52 +20,25 @@ type Props = {
 };
 
 const RecipeInfoStats = ({ recipeId, isActive, favoriteCount, userId, userName }: Props) => {
-  const [optimisticFavorite, setOptimisticFavorite] = useOptimistic({ favoriteCount, isActive });
-
-  const updateFavoriteCount = async () => {
-    setOptimisticFavorite((prev) =>
-      isActive
-        ? {
-            favoriteCount: prev.favoriteCount - 1,
-            isActive: false,
-          }
-        : {
-            favoriteCount: prev.favoriteCount + 1,
-            isActive: true,
-          }
-    );
-
-    const action = isActive ? unFavoriteRecipe : favoriteRecipe;
-
-    try {
-      await action(recipeId);
-    } catch (error) {
-      setOptimisticFavorite((prev) =>
-        isActive
-          ? {
-              favoriteCount: prev.favoriteCount + 1,
-              isActive: true,
-            }
-          : {
-              favoriteCount: prev.favoriteCount - 1,
-              isActive: false,
-            }
-      );
-    }
-  };
+  const { optimisticState, updateCount } = useOptimisticToggle({
+    count: favoriteCount,
+    isActive,
+    activeAction: favoriteRecipe,
+    inactiveAction: unFavoriteRecipe,
+  });
 
   return (
     <>
       <div className="flex items-center gap-4">
         <ProfileLink id={userId} imagePath={"https://github.com/shadcn.png"} name={userName} />
-        <NumberUnit numbers={favoriteCount} unit={CONSTANTS.FAVORITE} />
+        <NumberUnit numbers={optimisticState.count} unit={CONSTANTS.FAVORITE} />
       </div>
       <ToggleButton
         className="w-full"
-        isActive={optimisticFavorite.isActive}
+        isActive={optimisticState.isActive}
         activeLabel={"お気に入りに追加済"}
         inactiveLabel={"お気に入りに追加"}
-        onClick={() => updateFavoriteCount()}
+        onClick={() => updateCount(recipeId)}
       />
     </>
   );
