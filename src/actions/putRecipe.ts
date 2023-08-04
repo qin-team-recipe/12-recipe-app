@@ -1,0 +1,187 @@
+"use server";
+
+import { revalidatePath } from "next/cache";
+import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
+
+import { prisma } from "@/src/lib/prisma";
+import { Ingredient, Instruction, RecipeLink } from "@prisma/client";
+import { createServerActionClient } from "@supabase/auth-helpers-nextjs";
+import { zact } from "zact/server";
+
+import { editRecipeFormSchema } from "../app/my-recipe/(_)/[id]/edit/_components/edit-recipe-form";
+import { ActionsResult } from "../types/ActionsResult";
+import { Database } from "../types/SupabaseTypes";
+
+export const putRecipe = zact(editRecipeFormSchema)(
+  async ({ recipeId, title, bio, ingredients, urls, servingCount, instructions }): Promise<ActionsResult> => {
+    const supabaseServerClient = createServerActionClient<Database>({ cookies });
+
+    const {
+      data: { session },
+    } = await supabaseServerClient.auth.getSession();
+
+    if (!session) redirect("/login");
+
+    try {
+      const existingRecipe = await prisma.recipe.findUnique({
+        where: { id: recipeId },
+        include: {
+          Ingredient: true,
+          Instruction: true,
+          RecipeLink: true,
+        },
+      });
+
+      if (!existingRecipe) {
+        return { isSuccess: false, error: "レシピが見つかりませんでした🥲" };
+      }
+
+      // 材料に関する処理
+      const { toBeCreatedIngredients, toBeDeletedIngredients, toBeUpdatedIngredients } = processIngredients(
+        existingRecipe,
+        ingredients
+      );
+
+      // 手順に関する処理
+      const { toBeCreatedInstructions, toBeDeleteInstructions, toBeUpdatedInstructions } = processInstructions(
+        existingRecipe,
+        instructions
+      );
+
+      // レシピリンクに関する処理
+      const { toBeCreatedUrls, toBeDeletedUrls, toBeUpdatedUrls } = processUrls(existingRecipe, urls);
+
+      await prisma.recipe.update({
+        where: {
+          id: recipeId,
+        },
+        data: {
+          title,
+          description: bio,
+          servingCount,
+          Ingredient: {
+            deleteMany: toBeDeletedIngredients.map((ingredient) => ({ id: ingredient.id })),
+            updateMany: toBeUpdatedIngredients.map((ingredient) => ({
+              where: { id: ingredient!.id },
+              data: { title: ingredient?.name },
+            })),
+            create: toBeCreatedIngredients.map((ingredient) => ({
+              title: ingredient?.name,
+            })),
+          },
+          Instruction: {
+            deleteMany: toBeDeleteInstructions.map((instruction) => ({ id: instruction.id })),
+            updateMany: toBeUpdatedInstructions.map((instruction) => ({
+              where: { id: instruction!.id },
+              data: { stepDescription: instruction?.stepDescription, stepOrder: instruction?.stepOrder },
+            })),
+            create: toBeCreatedInstructions.map((instruction, index) => ({
+              stepDescription: instruction?.value,
+              stepOrder: instruction?.order ?? index + 1,
+            })),
+          },
+          RecipeLink: {
+            deleteMany: toBeDeletedUrls.map((url) => ({ id: url.id })),
+            updateMany: toBeUpdatedUrls.map((url) => ({
+              where: { id: url!.id },
+              data: { linkUrl: url?.value },
+            })),
+            create: toBeCreatedUrls.map((url) => ({
+              linkUrl: url?.value ?? "",
+            })),
+          },
+        },
+      });
+
+      revalidatePath(`/my-recipe/${recipeId}`);
+
+      return {
+        isSuccess: true,
+        message: "レシピの編集に成功しました🎉",
+      };
+    } catch (error) {
+      console.log(error);
+      return { isSuccess: false, error: "レシピの編集に失敗しました🥲" };
+    }
+  }
+);
+
+type ExistingRecipe = {
+  id: string;
+  title: string;
+  description?: string;
+  servingCount: number;
+  Ingredient: Ingredient[];
+  Instruction: Instruction[];
+  RecipeLink: RecipeLink[];
+};
+
+const processIngredients = (
+  existingRecipe: ExistingRecipe,
+  ingredients: {
+    name: string;
+    id?: number | undefined;
+  }[]
+) => ({
+  toBeDeletedIngredients: existingRecipe.Ingredient.filter(
+    (ingredient) => !ingredients.some((value) => value?.id === ingredient.id)
+  ),
+  toBeUpdatedIngredients: ingredients.filter((ingredient) => ingredient?.id !== undefined),
+  toBeCreatedIngredients: ingredients.filter((ingredient) => ingredient?.id === undefined),
+});
+
+const processInstructions = (
+  existingRecipe: ExistingRecipe,
+  instructions: {
+    value: string;
+    id?: number | undefined;
+    order?: number | undefined;
+  }[]
+) => {
+  const isOrderChanged = instructions.some(
+    (instruction) =>
+      instruction?.id !== undefined &&
+      existingRecipe.Instruction.find((existingInstruction) => existingInstruction.id === instruction.id)?.stepOrder !==
+        instruction?.order
+  );
+
+  const toBeDeleteInstructions = existingRecipe.Instruction.filter(
+    (instruction) => !instructions.some((value) => value?.id === instruction.id)
+  );
+
+  const toBeUpdatedInstructions = existingRecipe.Instruction.filter(
+    (instruction) => !toBeDeleteInstructions.includes(instruction)
+  ).map((instruction, index) => {
+    if (isOrderChanged) {
+      return {
+        ...instruction,
+        stepOrder: instructions[index]?.order,
+        stepDescription: instructions[index]?.value,
+      };
+    }
+    return {
+      ...instruction,
+      stepDescription: instructions[index]?.value,
+    };
+  });
+
+  const toBeCreatedInstructions = instructions.filter((instruction) => instruction?.id === undefined);
+
+  return { toBeDeleteInstructions, toBeUpdatedInstructions, toBeCreatedInstructions };
+};
+
+const processUrls = (
+  existingRecipe: ExistingRecipe,
+  urls: (
+    | {
+        value?: string | undefined;
+        id?: string | undefined;
+      }
+    | undefined
+  )[]
+) => ({
+  toBeDeletedUrls: existingRecipe.RecipeLink.filter((link) => !urls.some((url) => url?.id === link.id)),
+  toBeUpdatedUrls: urls.filter((url) => url?.id !== undefined),
+  toBeCreatedUrls: urls.filter((url) => url?.id === undefined),
+});

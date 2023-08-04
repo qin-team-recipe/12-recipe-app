@@ -1,6 +1,7 @@
 "use client";
 
 import { experimental_useOptimistic as useOptimistic } from "react";
+import Link from "next/link";
 
 import { favoriteRecipe, unFavoriteRecipe } from "@/src/actions/favoriteRecipeActions";
 import ToggleButton from "@/src/components/toggle-button";
@@ -8,7 +9,7 @@ import { useToast } from "@/src/components/ui/use-toast";
 import { useOptimisticToggle } from "@/src/hooks/useOptimisticToggle";
 
 import NumberUnit from "../../../../components/number-unit";
-import { Button } from "../../../../components/ui/button";
+import { Button, buttonVariants } from "../../../../components/ui/button";
 import { CONSTANTS } from "../../../../constants/constants";
 
 type Props = {
@@ -42,9 +43,15 @@ const RecipeInfoStats = ({ recipeId, isActive, favoriteCount }: Props) => {
           inactiveLabel={"お気に入りに追加"}
           onClick={() => updateCount(recipeId)}
         />
-        <Button variant={"outline"} className="flex-1 border-mauve9 text-mauve12">
+        <Link
+          href={`/my-recipe/${recipeId}/edit`}
+          className={buttonVariants({
+            variant: "outline",
+            className: "flex-1 border-mauve9 text-mauve12",
+          })}
+        >
           レシピを編集
-        </Button>
+        </Link>
       </div>
     </>
   );
