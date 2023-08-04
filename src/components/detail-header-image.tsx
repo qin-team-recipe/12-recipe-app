@@ -1,4 +1,6 @@
-import HeaderArrowToGoBack from "./header-arrow-to-go-back";
+import Link from "next/link";
+
+import { ArrowLeft } from "lucide-react";
 
 type Props = {
   imageUrl: string;
@@ -9,7 +11,9 @@ const DetailHeaderImage = ({ imageUrl, path }: Props) => {
   return (
     <div className="relative aspect-square">
       <img className="aspect-square" src={imageUrl} alt="chef or recipe image" />
-      <HeaderArrowToGoBack path={path} />
+      <Link href={path} className="absolute left-5 top-5 cursor-pointer text-mauve1">
+        <ArrowLeft size={32} />
+      </Link>
     </div>
   );
 };
