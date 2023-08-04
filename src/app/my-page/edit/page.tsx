@@ -8,10 +8,7 @@ import { EditFormValues, EditProfileForm } from "./_components/edit-profile-form
 const page = async () => {
   const user = await getAuthenticatedUser();
 
-  if (!user) {
-    // TODO: 未ログイン時のリダイレクト先を変更する
-    redirect("/mock/unauthorized");
-  }
+  if (!user) redirect("/login");
 
   const defaultValues: Partial<EditFormValues> = {
     nickName: user.name,

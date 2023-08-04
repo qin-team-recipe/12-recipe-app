@@ -1,5 +1,5 @@
 import { getRecipeById } from "@/src/actions/getRecipeById";
-import CopyToClipboardButton from "@/src/components/copy-to-clipboard-button";
+import CopyIngredientsToClipboardButton from "@/src/components/copy-ingredients-to-clipboard-button";
 import { ShoppingCart } from "lucide-react";
 
 const page = async ({ params }: { params: { id: string } }) => {
@@ -28,7 +28,7 @@ const page = async ({ params }: { params: { id: string } }) => {
           </li>
         </ul>
       ))}
-      <CopyToClipboardButton
+      <CopyIngredientsToClipboardButton
         recipeName={title}
         servingCount={servingCount}
         ingredients={ingredients.map(({ title }) => ({

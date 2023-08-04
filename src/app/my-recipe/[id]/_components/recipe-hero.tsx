@@ -2,12 +2,9 @@ import Image from "next/image";
 
 import { getRecipeById } from "@/src/actions/getRecipeById";
 import LinkToIconRenderer from "@/src/components/link-to-icon-renderer";
-import NumberUnit from "@/src/components/number-unit";
 import RouterBackButton from "@/src/components/router-back-button";
-import { Button } from "@/src/components/ui/button";
-import { CONSTANTS } from "@/src/constants/constants";
+import { sortSiteLinks } from "@/src/lib/utils";
 
-import FavoriteButton from "./favorite-button";
 import PopoverMenu from "./popover-menu";
 import RecipeInfoStats from "./recipe-info-stats";
 
@@ -17,6 +14,8 @@ type Props = {
 
 const RecipeHero = async ({ id }: Props) => {
   const { title, description, isMe, RecipeLink: recipeLinks, _count, isFavorite } = await getRecipeById(id);
+
+  const sortedRecipeLinks = sortSiteLinks(recipeLinks.map((value) => value.linkUrl));
 
   return (
     <>
@@ -33,7 +32,7 @@ const RecipeHero = async ({ id }: Props) => {
           height={160}
         />
         <div className="absolute left-5 top-5 cursor-pointer stroke-white hover:stroke-mauve2">
-          <RouterBackButton size={32} className="rounded-full bg-[#040013]/[.48] text-mauve1" />
+          <RouterBackButton size={32} path="/my-page" className="rounded-full bg-[#040013]/[.48] text-mauve1" />
         </div>
       </div>
       <div className="grid gap-4 p-4">
@@ -41,7 +40,7 @@ const RecipeHero = async ({ id }: Props) => {
           <div className="flex justify-between">
             <h6 className="text-xl font-bold text-mauve12">{title}</h6>
             <div className="ml-3 flex items-center gap-3">
-              {recipeLinks && <LinkToIconRenderer links={recipeLinks.map((link) => link.linkUrl)} />}
+              {recipeLinks && <LinkToIconRenderer links={sortedRecipeLinks.map((value) => value.url)} />}
               {isMe && <PopoverMenu recipeId={id} />}
             </div>
           </div>

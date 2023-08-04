@@ -30,6 +30,8 @@ export const createRecipeFormSchema = z.object({
       value: z.string().min(1, {
         message: "作り方は必須です",
       }),
+      id: z.number().optional(),
+      order: z.number().optional(),
     })
   ),
 

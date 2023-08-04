@@ -1,13 +1,13 @@
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
-import { createServerActionClient } from "@supabase/auth-helpers-nextjs";
+import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 
 import { prisma } from "../lib/prisma";
 import { Database } from "../types/SupabaseTypes";
 
 export const getCartList = async () => {
-  const supabaseServerClient = createServerActionClient<Database>({ cookies });
+  const supabaseServerClient = createServerComponentClient<Database>({ cookies });
 
   const {
     data: { session },

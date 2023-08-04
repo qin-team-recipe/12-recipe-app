@@ -6,9 +6,11 @@ import { usePathname, useRouter } from "next/navigation";
 
 import { postRecipe } from "@/src/actions/postRecipe";
 import { recipeFormStateAtom } from "@/src/atoms/draftRecipeFormValuesAtom";
-import { Button } from "@/src/components/ui/button";
+import { Button, buttonVariants } from "@/src/components/ui/button";
+import { Command, CommandItem, CommandList, CommandSeparator } from "@/src/components/ui/command";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/src/components/ui/form";
 import { Input } from "@/src/components/ui/input";
+import { Popover, PopoverContent, PopoverTrigger } from "@/src/components/ui/popover";
 import Spinner from "@/src/components/ui/spinner";
 import { Textarea } from "@/src/components/ui/textarea";
 import { useToast } from "@/src/components/ui/use-toast";
@@ -16,7 +18,7 @@ import { kToastDuration } from "@/src/constants/constants";
 import { cn } from "@/src/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useAtom } from "jotai";
-import { Minus, Plus, PlusIcon, X } from "lucide-react";
+import { ChevronDown, ChevronUp, Minus, MoreVertical, Plus, PlusIcon, Trash, X } from "lucide-react";
 import { useFieldArray, useForm } from "react-hook-form";
 import useDeepCompareEffect from "use-deep-compare-effect";
 import { z } from "zod";
@@ -203,38 +205,104 @@ const CreateRecipeForm = ({ defaultValues, redirectPath }: Props) => {
         </div>
         {/* 作り方 */}
         <div>
-          {instructionsFields.map((field, index) => (
-            <FormField
-              control={form.control}
-              key={field.id}
-              name={`instructions.${index}.value`}
-              render={({ field }) => (
-                <FormItem className="space-y-0">
-                  <FormLabel className={cn("mb-1 ml-3 flex items-center gap-3", index !== 0 && "sr-only")}>
-                    <span className="text-lg font-bold">作り方</span>
-                  </FormLabel>
-                  <FormControl>
-                    <div className="relative flex-1">
-                      <div className="absolute left-4 top-1/2 mt-px  flex h-5 w-5 shrink-0 -translate-y-1/2 select-none items-center justify-center rounded-full bg-tomato9 text-sm text-mauve1">
-                        {index + 1}
+          {instructionsFields.map((field, index) => {
+            const stepOrder = index + 1;
+
+            return (
+              <FormField
+                control={form.control}
+                key={field.id}
+                name={`instructions.${index}.value`}
+                render={({ field }) => (
+                  <FormItem className="space-y-0">
+                    <FormLabel className={cn("mb-1 ml-3 flex items-center gap-3", index !== 0 && "sr-only")}>
+                      <span className="text-lg font-bold">作り方</span>
+                    </FormLabel>
+                    <FormControl>
+                      <div className="relative flex-1">
+                        <div className="absolute left-4 top-1/2 mt-px  flex h-5 w-5 shrink-0 -translate-y-1/2 select-none items-center justify-center rounded-full bg-tomato9 text-sm text-mauve1">
+                          {stepOrder}
+                        </div>
+                        <Input {...field} className="rounded-none border-x-0 px-12" />
+                        <Popover>
+                          <PopoverTrigger className="absolute right-6 top-1/2 -translate-y-1/2">
+                            <MoreVertical size={16} />
+                          </PopoverTrigger>
+                          <PopoverContent align="end" className="p-2">
+                            <Command className="w-full">
+                              <CommandList>
+                                {/* TODO: 編集する機能の実装 */}
+                                {index !== 0 && (
+                                  <CommandItem className="text-mauve11">
+                                    <button
+                                      className="flex"
+                                      onClick={() => {
+                                        const instructions = [...watchedValues.instructions];
+                                        const target = instructions[index];
+
+                                        // orderの更新
+                                        instructions[index].order = stepOrder - 1;
+                                        instructions[index - 1].order = stepOrder;
+
+                                        instructions[index] = instructions[index - 1];
+                                        instructions[index - 1] = target;
+
+                                        form.setValue("instructions", instructions);
+                                      }}
+                                    >
+                                      <ChevronUp className="mr-2 h-4 w-4" />
+                                      <span>上に移動する</span>
+                                    </button>
+                                  </CommandItem>
+                                )}
+                                {index !== instructionsFields.length - 1 && (
+                                  <CommandItem className="text-mauve11">
+                                    <button
+                                      className="flex"
+                                      onClick={() => {
+                                        const instructions = [...watchedValues.instructions];
+                                        const target = instructions[index];
+
+                                        // orderの更新
+                                        instructions[index].order = stepOrder + 1;
+                                        instructions[index + 1].order = stepOrder;
+
+                                        instructions[index] = instructions[index + 1];
+                                        instructions[index + 1] = target;
+
+                                        form.setValue("instructions", instructions);
+                                      }}
+                                    >
+                                      <ChevronDown className="mr-2 h-4 w-4" />
+                                      <span>下に移動する</span>
+                                    </button>
+                                  </CommandItem>
+                                )}
+                                <CommandSeparator />
+                                <CommandItem className="text-mauve11">
+                                  <button
+                                    disabled={instructionsFields.length === 1}
+                                    className="flex"
+                                    onClick={() => {
+                                      removeInstructions(index);
+                                    }}
+                                  >
+                                    <Trash className="mr-2 h-4 w-4" />
+                                    <span>リストから削除する</span>
+                                  </button>
+                                </CommandItem>
+                              </CommandList>
+                            </Command>
+                          </PopoverContent>
+                        </Popover>
                       </div>
-                      <Input {...field} className="rounded-none border-x-0 pl-12" />
-                      <Button
-                        variant={"ghost"}
-                        disabled={instructionsFields.length === 1}
-                        type="button"
-                        onClick={() => removeInstructions(index)}
-                        className="absolute right-2 top-1/2 -translate-y-1/2"
-                      >
-                        <X size={16} />
-                      </Button>
-                    </div>
-                  </FormControl>
-                  <FormMessage className="ml-4 pt-1" />
-                </FormItem>
-              )}
-            />
-          ))}
+                    </FormControl>
+                    <FormMessage className="ml-4 pt-1" />
+                  </FormItem>
+                )}
+              />
+            );
+          })}
           <button
             type="button"
             className="ml-3 mt-2 flex w-fit gap-1 text-tomato9"
