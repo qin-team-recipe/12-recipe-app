@@ -10,7 +10,7 @@ import { prisma } from "../lib/prisma";
 import { ActionsResult } from "../types/ActionsResult";
 import { Database } from "../types/SupabaseTypes";
 
-export const doneMemo = async (id: number, isCompleted: boolean): Promise<ActionsResult> => {
+export const putMemo = async (id: number, isCompleted: boolean): Promise<ActionsResult> => {
   const supabaseServerClient = createServerActionClient<Database>({ cookies });
 
   const {

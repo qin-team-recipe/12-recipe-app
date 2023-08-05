@@ -12,7 +12,7 @@ import { editProfileFormSchema } from "../app/my-page/edit/_components/edit-prof
 import { ActionsResult } from "../types/ActionsResult";
 import { Database } from "../types/SupabaseTypes";
 
-export const updateProfile = zact(editProfileFormSchema)(async ({ nickName, bio, urls }): Promise<ActionsResult> => {
+export const putProfile = zact(editProfileFormSchema)(async ({ nickName, bio, urls }): Promise<ActionsResult> => {
   const supabaseServerClient = createServerActionClient<Database>({ cookies });
 
   const {
@@ -52,7 +52,7 @@ export const updateProfile = zact(editProfileFormSchema)(async ({ nickName, bio,
       },
     });
 
-    revalidatePath("/mock/tsuboi");
+    revalidatePath("/my-page");
 
     return {
       isSuccess: true,

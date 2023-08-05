@@ -3,15 +3,13 @@
 import { useToast } from "@/src/components/ui/use-toast";
 import { Copy } from "lucide-react";
 
-import { kToastDuration } from "../constants/constants";
-
 type Props = {
   recipeName: string;
   servingCount: number;
   ingredients: { title: string }[];
 };
 
-const CopyToClipboardButton = ({ recipeName, servingCount, ingredients }: Props) => {
+const CopyIngredientsToClipboardButton = ({ recipeName, servingCount, ingredients }: Props) => {
   const { toast } = useToast();
 
   const copyToClipboard = () => {
@@ -23,15 +21,15 @@ const CopyToClipboardButton = ({ recipeName, servingCount, ingredients }: Props)
       .then(() => {
         toast({
           variant: "default",
-          title: "コピーしました",
-          duration: kToastDuration,
+          title: "コピーしました🎉",
+          duration: 3000,
         });
       })
       .catch(() => {
         toast({
           variant: "destructive",
-          title: "コピーに失敗しました",
-          duration: kToastDuration,
+          title: "コピーに失敗しました🥲",
+          duration: 3000,
         });
       });
   };
@@ -44,4 +42,4 @@ const CopyToClipboardButton = ({ recipeName, servingCount, ingredients }: Props)
   );
 };
 
-export default CopyToClipboardButton;
+export default CopyIngredientsToClipboardButton;

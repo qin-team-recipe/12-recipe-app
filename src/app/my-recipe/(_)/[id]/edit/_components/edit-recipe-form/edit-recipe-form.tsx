@@ -2,10 +2,10 @@
 
 import { useState, useTransition } from "react";
 import Image from "next/image";
-import { usePathname, useRouter } from "next/navigation";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 
-import { postRecipe } from "@/src/actions/postRecipe";
-import { recipeFormStateAtom } from "@/src/atoms/draftRecipeFormValuesAtom";
+import { putRecipe } from "@/src/actions/putRecipe";
 import { Button, buttonVariants } from "@/src/components/ui/button";
 import { Command, CommandItem, CommandList, CommandSeparator } from "@/src/components/ui/command";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/src/components/ui/form";
@@ -14,26 +14,21 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/src/components/ui/pop
 import Spinner from "@/src/components/ui/spinner";
 import { Textarea } from "@/src/components/ui/textarea";
 import { useToast } from "@/src/components/ui/use-toast";
-import { kToastDuration } from "@/src/constants/constants";
 import { cn } from "@/src/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useAtom } from "jotai";
+import { daysInWeek } from "date-fns/constants/index";
 import { ChevronDown, ChevronUp, Minus, MoreVertical, Plus, PlusIcon, Trash, X } from "lucide-react";
 import { useFieldArray, useForm } from "react-hook-form";
-import useDeepCompareEffect from "use-deep-compare-effect";
 import { z } from "zod";
 
-import { createRecipeFormSchema, CreateRecipeFormValues } from ".";
+import { editRecipeFormSchema, EditRecipeFormValues } from ".";
 
 type Props = {
-  defaultValues: Partial<CreateRecipeFormValues>;
-  redirectPath: string;
+  defaultValues: Partial<EditRecipeFormValues>;
 };
 
-const CreateRecipeForm = ({ defaultValues, redirectPath }: Props) => {
-  const [imageData, setImageData] = useState("");
-
-  const pathname = usePathname();
+const EditRecipeForm = ({ defaultValues }: Props) => {
+  const [imageData, setImageData] = useState(defaultValues.recipeImage ?? "");
 
   const { toast } = useToast();
 
@@ -41,17 +36,22 @@ const CreateRecipeForm = ({ defaultValues, redirectPath }: Props) => {
 
   const [isPending, startTransition] = useTransition();
 
-  const form = useForm<CreateRecipeFormValues>({
-    resolver: zodResolver(createRecipeFormSchema),
+  const form = useForm<EditRecipeFormValues>({
+    resolver: zodResolver(editRecipeFormSchema),
     defaultValues,
     mode: "onChange",
   });
 
-  const [_, setDraftRecipeFormValues] = useAtom(recipeFormStateAtom);
+  const watchedValues = form.watch();
 
-  const { setValue, watch, handleSubmit } = form;
+  const cleanedWatchedValues = {
+    ...watchedValues,
+    urls: watchedValues.urls.filter((url) => url?.value !== ""),
+    ingredients: watchedValues.ingredients.filter((ingredient) => ingredient?.name !== ""),
+    instructions: watchedValues.instructions.filter((instruction) => instruction?.value !== ""),
+  };
 
-  const watchedValues = watch();
+  const changed = JSON.stringify(cleanedWatchedValues) !== JSON.stringify(defaultValues);
 
   const {
     fields: urlsFields,
@@ -80,65 +80,31 @@ const CreateRecipeForm = ({ defaultValues, redirectPath }: Props) => {
     control: form.control,
   });
 
-  const onSubmit = (data: z.infer<typeof createRecipeFormSchema>) => {
+  const onSubmit = (data: z.infer<typeof editRecipeFormSchema>) => {
     startTransition(async () => {
-      const result = await postRecipe(data);
+      const result = await putRecipe(data);
 
       if (result.isSuccess) {
         toast({
           variant: "default",
           title: result.message,
-          duration: kToastDuration,
+          duration: 3000,
         });
-        router.push(redirectPath);
+
+        router.push(`/my-recipe/${defaultValues.recipeId}`);
       } else {
         toast({
           variant: "destructive",
           title: result.error,
-          duration: kToastDuration,
+          duration: 3000,
         });
       }
     });
   };
 
-  useDeepCompareEffect(() => {
-    if (pathname !== "/my-recipe/create") {
-      return;
-    }
-
-    const isAnyFieldFilled = Object.entries(watchedValues).some(([key, value]) => {
-      if (Array.isArray(value)) {
-        return value.some((item) => {
-          if (typeof item === "object" && item !== null) {
-            return Object.values(item).some(
-              (field) =>
-                field !== undefined &&
-                field !== "" &&
-                (!defaultValues[key as keyof CreateRecipeFormValues] ||
-                  field !== defaultValues[key as keyof CreateRecipeFormValues])
-            );
-          }
-          return false;
-        });
-      } else {
-        return (
-          value !== undefined &&
-          value !== "" &&
-          (!defaultValues[key as keyof CreateRecipeFormValues] ||
-            value !== defaultValues[key as keyof CreateRecipeFormValues])
-        );
-      }
-    });
-
-    setDraftRecipeFormValues({
-      isDraft: isAnyFieldFilled,
-      draftRecipeFormValues: watchedValues,
-    });
-  }, [defaultValues, setDraftRecipeFormValues, watchedValues]);
-
   return (
     <Form {...form}>
-      <form onSubmit={handleSubmit(onSubmit)} className="mb-8 grid gap-8">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="mb-8 grid gap-8">
         {/* レシピ名 */}
         <FormField
           control={form.control}
@@ -167,12 +133,12 @@ const CreateRecipeForm = ({ defaultValues, redirectPath }: Props) => {
                     <Minus
                       className="text-tomato11"
                       size={16}
-                      onClick={() => setValue("servingCount", Math.max(watchedValues.servingCount - 1, 1))}
+                      onClick={() => form.setValue("servingCount", Math.max(watchedValues.servingCount - 1, 1))}
                     />
                     <PlusIcon
                       className="text-tomato11"
                       size={16}
-                      onClick={() => setValue("servingCount", watchedValues.servingCount + 1)}
+                      onClick={() => form.setValue("servingCount", watchedValues.servingCount + 1)}
                     />
                   </FormLabel>
                   <FormControl>
@@ -220,7 +186,7 @@ const CreateRecipeForm = ({ defaultValues, redirectPath }: Props) => {
                     </FormLabel>
                     <FormControl>
                       <div className="relative flex-1">
-                        <div className="absolute left-4 top-1/2 mt-px  flex h-5 w-5 shrink-0 -translate-y-1/2 select-none items-center justify-center rounded-full bg-tomato9 text-sm text-mauve1">
+                        <div className="absolute left-4 top-1/2 mt-px flex h-5 w-5 shrink-0 -translate-y-1/2 select-none items-center justify-center rounded-full bg-tomato9 text-sm text-mauve1">
                           {stepOrder}
                         </div>
                         <Input {...field} className="rounded-none border-x-0 px-12" />
@@ -285,6 +251,14 @@ const CreateRecipeForm = ({ defaultValues, redirectPath }: Props) => {
                                     className="flex"
                                     onClick={() => {
                                       removeInstructions(index);
+
+                                      // 削除した要素のあとの要素のorderを更新する
+                                      const instructions = [...watchedValues.instructions];
+                                      instructions.splice(index, 1);
+                                      instructions.forEach((instruction, index) => {
+                                        instruction.order = index + 1;
+                                      });
+                                      form.setValue("instructions", instructions);
                                     }}
                                   >
                                     <Trash className="mr-2 h-4 w-4" />
@@ -306,7 +280,11 @@ const CreateRecipeForm = ({ defaultValues, redirectPath }: Props) => {
           <button
             type="button"
             className="ml-3 mt-2 flex w-fit gap-1 text-tomato9"
-            onClick={() => appendInstructions({ value: "" })}
+            onClick={() => {
+              console.log(instructionsFields.length);
+
+              appendInstructions({ value: "", order: instructionsFields.length + 1 });
+            }}
           >
             <PlusIcon size={16} />
             <span>工程を追加する</span>
@@ -409,14 +387,23 @@ const CreateRecipeForm = ({ defaultValues, redirectPath }: Props) => {
           </button>
         </div>
 
-        <div className="flex px-4">
-          <Button variant={"destructive"} className="flex-1 gap-2" type="submit">
+        <div className="flex gap-2 px-4">
+          <Button variant={"destructive"} className="flex-1 gap-2" type="submit" disabled={!changed || isPending}>
             {isPending && <Spinner />} 保存する
           </Button>
+          <Link
+            href={`/my-recipe/${defaultValues.recipeId}`}
+            className={buttonVariants({
+              variant: "outline",
+              className: "flex-1 border-tomato7 text-tomato11",
+            })}
+          >
+            キャンセル
+          </Link>
         </div>
       </form>
     </Form>
   );
 };
 
-export default CreateRecipeForm;
+export default EditRecipeForm;

@@ -9,7 +9,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/src/components/ui/pop
 import Spinner from "@/src/components/ui/spinner";
 import { useToast } from "@/src/components/ui/use-toast";
 import { kToastDuration } from "@/src/constants/constants";
-import { CircleEllipsis, Copy, Lock, Pencil, Trash } from "lucide-react";
+import { CircleEllipsis, Copy, Lock, Trash } from "lucide-react";
 
 type Props = {
   recipeId: string;
@@ -34,18 +34,27 @@ const PopoverMenu = ({ recipeId }: Props) => {
               <button
                 className="flex"
                 onClick={() => {
-                  router.push(`/my-recipe/${recipeId}/edit`);
+                  navigator.clipboard
+                    .writeText(`${location.origin}/recipe/${recipeId}`)
+                    .then(() => {
+                      toast({
+                        variant: "default",
+                        title: "コピーしました🎉",
+                        duration: 3000,
+                      });
+                    })
+                    .catch(() => {
+                      toast({
+                        variant: "destructive",
+                        title: "コピーに失敗しました🥲",
+                        duration: 3000,
+                      });
+                    });
                 }}
               >
-                <Pencil className="mr-2 h-4 w-4" />
-                <span>編集する</span>
+                <Copy className="mr-2 h-4 w-4" />
+                <span>URLをコピーする</span>
               </button>
-            </CommandItem>
-
-            <CommandItem>
-              {/* // TODO: URLをコピーする */}
-              <Copy className="mr-2 h-4 w-4" />
-              <span>URLをコピーする</span>
             </CommandItem>
             <CommandItem>
               {/* // TODO: 公開を停止するロジック実装 */}
