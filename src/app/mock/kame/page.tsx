@@ -4,6 +4,7 @@ import { getRecipes } from "@/src/actions/getRecipes";
 
 import AddCartListButton from "./_components/add-cart-list-button";
 import AddFavoriteRecipeButton from "./_components/add-favorite-recipe-button";
+import DeleteCartListButton from "./_components/delete-cart-list-button";
 import DeleteFavoriteRecipeButton from "./_components/delete-favorite-recipe-button";
 import RemoveCartListButton from "./_components/remove-cart-list-button";
 
@@ -43,6 +44,7 @@ const page = async () => {
       {cartList.map((cl) => (
         <div key={cl.id} className="p-2">
           <h3 className="text-lg font-bold">{cl.recipe.title}</h3>
+          <DeleteCartListButton cartListId={cl.id} />
           {cl.CartListItem.map((item) => (
             <>
               <label key={item.id}>
