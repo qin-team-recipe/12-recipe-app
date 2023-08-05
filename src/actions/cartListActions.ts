@@ -96,42 +96,51 @@ export const removeCartList = async (recipeId: string, cartListItemId: number) =
       },
     });
 
-    const existsRecipeInCartList = cartList !== null;
+    const isNotfoundRecipeInCartList = cartList === null;
 
-    if (existsRecipeInCartList) {
-      const cartListItemSize = await prisma.cartListItem.count({
-        where: {
-          cartListId: cartList.id,
-        },
-      });
+    if (isNotfoundRecipeInCartList) {
+      return {
+        isSuccess: false,
+        error: "このアイテムは既に削除されています。ページを更新するか、しばらくたってから再度アクセスしてください。",
+      };
+    }
+    const cartListItemSize = await prisma.cartListItem.count({
+      where: {
+        cartListId: cartList.id,
+      },
+    });
 
-      if (cartListItemSize === 1) {
-        // 対象のレシピに紐づくアイテムが1つしかない場合はレシピも削除する
-        await prisma.$transaction([
-          prisma.cartListItem.delete({
-            where: {
-              id: cartListItemId,
-            },
-          }),
-          prisma.cartList.delete({
-            where: {
-              id: cartList.id,
-            },
-          }),
-        ]);
-      } else {
-        // 2つ以上のアイテムがカート内に存在する場合はアイテムのみ削除する
-        await prisma.cartListItem.delete({
+    if (cartListItemSize === 1) {
+      // 対象のレシピに紐づくアイテムが1つしかない場合はレシピも削除する
+      await prisma.$transaction([
+        prisma.cartListItem.delete({
           where: {
             id: cartListItemId,
           },
-        });
-      }
+        }),
+        prisma.cartList.delete({
+          where: {
+            id: cartList.id,
+          },
+        }),
+      ]);
+    } else {
+      // 2つ以上のアイテムがカート内に存在する場合はアイテムのみ削除する
+      await prisma.cartListItem.delete({
+        where: {
+          id: cartListItemId,
+        },
+      });
     }
+
+    return {
+      isSuccess: true,
+      error: "アイテムを削除しました。",
+    };
   } catch (_error) {
     return {
       isSuccess: false,
-      error: "削除処理に失敗しました。",
+      error: "アイテムの削除に失敗しました。",
     };
   }
 };
