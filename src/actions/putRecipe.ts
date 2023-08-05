@@ -10,6 +10,7 @@ import { createServerActionClient } from "@supabase/auth-helpers-nextjs";
 import { zact } from "zact/server";
 
 import { editRecipeFormSchema } from "../app/my-recipe/(_)/[id]/edit/_components/edit-recipe-form";
+import { EditRecipeFormValues } from "../app/my-recipe/(_)/[id]/edit/_components/edit-recipe-form/schema";
 import { ActionsResult } from "../types/ActionsResult";
 import { Database } from "../types/SupabaseTypes";
 
@@ -117,13 +118,7 @@ type ExistingRecipe = {
   RecipeLink: RecipeLink[];
 };
 
-const processIngredients = (
-  existingRecipe: ExistingRecipe,
-  ingredients: {
-    name: string;
-    id?: number | undefined;
-  }[]
-) => ({
+const processIngredients = (existingRecipe: ExistingRecipe, ingredients: EditRecipeFormValues["ingredients"]) => ({
   toBeDeletedIngredients: existingRecipe.Ingredient.filter(
     (ingredient) => !ingredients.some((value) => value?.id === ingredient.id)
   ),
@@ -131,14 +126,7 @@ const processIngredients = (
   toBeCreatedIngredients: ingredients.filter((ingredient) => ingredient?.id === undefined),
 });
 
-const processInstructions = (
-  existingRecipe: ExistingRecipe,
-  instructions: {
-    value: string;
-    id?: number | undefined;
-    order?: number | undefined;
-  }[]
-) => {
+const processInstructions = (existingRecipe: ExistingRecipe, instructions: EditRecipeFormValues["instructions"]) => {
   const isOrderChanged = instructions.some(
     (instruction) =>
       instruction?.id !== undefined &&
@@ -171,16 +159,7 @@ const processInstructions = (
   return { toBeDeleteInstructions, toBeUpdatedInstructions, toBeCreatedInstructions };
 };
 
-const processUrls = (
-  existingRecipe: ExistingRecipe,
-  urls: (
-    | {
-        value?: string | undefined;
-        id?: string | undefined;
-      }
-    | undefined
-  )[]
-) => ({
+const processUrls = (existingRecipe: ExistingRecipe, urls: EditRecipeFormValues["urls"]) => ({
   toBeDeletedUrls: existingRecipe.RecipeLink.filter((link) => !urls.some((url) => url?.id === link.id)),
   toBeUpdatedUrls: urls.filter((url) => url?.id !== undefined),
   toBeCreatedUrls: urls.filter((url) => url?.id === undefined),
