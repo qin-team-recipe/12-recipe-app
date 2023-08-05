@@ -3,7 +3,7 @@
 import { useTransition } from "react";
 import { useRouter } from "next/navigation";
 
-import { removeCartList } from "@/src/actions/cartListActions";
+import { removeCartListItem } from "@/src/actions/cartListItemActions";
 import { Button } from "@/src/components/ui/button";
 import Spinner from "@/src/components/ui/spinner";
 
@@ -15,7 +15,7 @@ const RemoveCartListButton = ({ recipeId, cartListItemId }: { recipeId: string; 
     <Button
       onClick={() => {
         startTransition(() => {
-          removeCartList(recipeId, cartListItemId);
+          removeCartListItem(recipeId, cartListItemId);
         });
         router.refresh();
       }}
