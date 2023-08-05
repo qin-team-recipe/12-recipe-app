@@ -76,6 +76,66 @@ export const addCartList = async (recipeId: string, ingredientId: number): Promi
   }
 };
 
+export const removeCartList = async (recipeId: string, cartListItemId: number) => {
+  const supabaseServerClient = createServerActionClient<Database>({ cookies });
+
+  const {
+    data: { session },
+  } = await supabaseServerClient.auth.getSession();
+
+  if (!session) redirect("/login");
+
+  try {
+    const cartList = await prisma.cartList.findFirst({
+      where: {
+        recipeId,
+        userId: session.user.id,
+      },
+      include: {
+        CartListItem: true,
+      },
+    });
+
+    const existsRecipeInCartList = cartList !== null;
+
+    if (existsRecipeInCartList) {
+      const cartListItemSize = await prisma.cartListItem.count({
+        where: {
+          cartListId: cartList.id,
+        },
+      });
+
+      if (cartListItemSize === 1) {
+        // 対象のレシピに紐づくアイテムが1つしかない場合はレシピも削除する
+        prisma.$transaction([
+          prisma.cartListItem.delete({
+            where: {
+              id: cartListItemId,
+            },
+          }),
+          prisma.cartList.delete({
+            where: {
+              id: cartList.id,
+            },
+          }),
+        ]);
+      } else {
+        // 2つ以上のアイテムがカート内に存在する場合はアイテムのみ削除する
+        await prisma.cartListItem.delete({
+          where: {
+            id: cartListItemId,
+          },
+        });
+      }
+    }
+  } catch (_error) {
+    return {
+      isSuccess: false,
+      error: "削除処理に失敗しました。",
+    };
+  }
+};
+
 const getMaxDisplayOrder = async (userId: string) => {
   const maxDisplayOrderRecord = await prisma.cartList.findFirst({
     where: {
