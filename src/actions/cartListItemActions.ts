@@ -9,7 +9,7 @@ import { prisma } from "../lib/prisma";
 import { ActionsResult } from "../types/ActionsResult";
 import { Database } from "../types/SupabaseTypes";
 
-export const addCartList = async (recipeId: string, ingredientId: number): Promise<ActionsResult> => {
+export const addCartListItem = async (recipeId: string, ingredientId: number): Promise<ActionsResult> => {
   const supabaseServerClient = createServerActionClient<Database>({ cookies });
 
   const {
@@ -76,7 +76,7 @@ export const addCartList = async (recipeId: string, ingredientId: number): Promi
   }
 };
 
-export const removeCartList = async (recipeId: string, cartListItemId: number) => {
+export const removeCartListItem = async (recipeId: string, cartListItemId: number): Promise<ActionsResult> => {
   const supabaseServerClient = createServerActionClient<Database>({ cookies });
 
   const {
@@ -135,7 +135,7 @@ export const removeCartList = async (recipeId: string, cartListItemId: number) =
 
     return {
       isSuccess: true,
-      error: "アイテムを削除しました。",
+      message: "アイテムを削除しました。",
     };
   } catch (_error) {
     return {
