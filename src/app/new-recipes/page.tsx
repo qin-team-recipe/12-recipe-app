@@ -1,25 +1,26 @@
 import { getNewRecipesFromFollowingChefs } from "@/src/actions/getNewRecipesFromFollowingChefs";
 import TopBar from "@/src/components/layout/top-bar";
 import LoadMore from "@/src/components/load-more";
-import RecipeCard from "@/src/components/recipe-card";
 import RecipeList from "@/src/components/recipe-list";
 import RouterBackButton from "@/src/components/router-back-button";
 import { kInfiniteScrollCount } from "@/src/constants/constants";
 
 const page = async () => {
-  const initialRecipes = await getNewRecipesFromFollowingChefs({ skip: 0, limit: kInfiniteScrollCount });
+  const initialRecipes = await getNewRecipesFromFollowingChefs();
 
   const loadMoreRecipes = async (offset: number = 0) => {
     "use server";
 
     const newRecipesFromFollowingChefs = await getNewRecipesFromFollowingChefs({
       skip: offset + kInfiniteScrollCount,
-      limit: kInfiniteScrollCount,
     });
 
     const nextOffset = offset + newRecipesFromFollowingChefs.length;
 
-    return [<RecipeList key={offset} recipes={newRecipesFromFollowingChefs} />, nextOffset] as const;
+    return [
+      newRecipesFromFollowingChefs.map((recipe) => <RecipeList key={recipe.id} recipes={[recipe]} />),
+      nextOffset,
+    ] as const;
   };
 
   return (

@@ -1,7 +1,14 @@
+import { kInfiniteScrollCount } from "../constants/constants";
 import { prisma } from "../lib/prisma";
 import { PaginationParams } from "../types/PaginationParams";
 
-export const searchRecipesAndChefs = async (searchQuery: string, { skip, limit }: PaginationParams = {}) => {
+export const searchRecipesAndChefs = async (
+  searchQuery: string,
+  { skip, limit }: PaginationParams = {
+    skip: 0,
+    limit: kInfiniteScrollCount,
+  }
+) => {
   const search = searchQuery.toLowerCase();
 
   const [filteredRecipes, filteredChefs] = await Promise.all([

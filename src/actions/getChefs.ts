@@ -1,7 +1,6 @@
 import { prisma } from "../lib/prisma";
-import { PaginationParams } from "../types/PaginationParams";
 
-export const getChefs = async ({ skip = 0, limit = 10 }: PaginationParams = {}) => {
+export const getChefs = async () => {
   const chefs = await prisma.user.findMany({
     select: {
       id: true,
@@ -20,8 +19,6 @@ export const getChefs = async ({ skip = 0, limit = 10 }: PaginationParams = {}) 
     orderBy: {
       name: "desc",
     },
-    skip,
-    take: limit,
   });
 
   const totalChefs = await prisma.user.count({

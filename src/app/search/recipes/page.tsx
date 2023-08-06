@@ -3,7 +3,6 @@ import TopBar from "@/src/components/layout/top-bar";
 import LinkableTabs from "@/src/components/linkable-tabs";
 import LoadMore from "@/src/components/load-more";
 import NoDataDisplay from "@/src/components/no-data-display";
-import RecipeCard from "@/src/components/recipe-card";
 import RecipeList from "@/src/components/recipe-list";
 import SearchInput from "@/src/components/search-input";
 import { kInfiniteScrollCount } from "@/src/constants/constants";
@@ -28,7 +27,7 @@ const page = async ({ searchParams }: { searchParams: { search?: string } }) => 
 
     const nextOffset = offset + searchedRecipes.length;
 
-    return [<RecipeList key={offset} recipes={searchedRecipes} />, nextOffset] as const;
+    return [searchedRecipes.map((recipe) => <RecipeList key={recipe.id} recipes={[recipe]} />), nextOffset] as const;
   };
 
   return (

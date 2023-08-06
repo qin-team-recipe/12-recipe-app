@@ -3,11 +3,17 @@ import { redirect } from "next/navigation";
 
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 
+import { kInfiniteScrollCount } from "../constants/constants";
 import { prisma } from "../lib/prisma";
 import { PaginationParams } from "../types/PaginationParams";
 import { Database } from "../types/SupabaseTypes";
 
-export const getMyFavoriteRecipes = async ({ limit, skip }: PaginationParams) => {
+export const getMyFavoriteRecipes = async (
+  { skip, limit }: PaginationParams = {
+    skip: 0,
+    limit: kInfiniteScrollCount,
+  }
+) => {
   const supabaseServerClient = createServerComponentClient<Database>({ cookies });
 
   const {

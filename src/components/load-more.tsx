@@ -4,25 +4,26 @@ import { PropsWithChildren, useCallback, useEffect, useRef, useState } from "rea
 
 import Spinner from "@/src/components/ui/spinner";
 
+import { kInfiniteScrollCount } from "../constants/constants";
 import { useToast } from "./ui/use-toast";
 
-type loadMoreAction<T extends string | number> = (offset: T) => Promise<readonly [JSX.Element, T | null]>;
+type loadMoreAction = (offset: number) => Promise<readonly [JSX.Element[], number | null]>;
 
-const LoadMore = <T extends string | number>({
+const LoadMore = ({
   children,
   initialOffset,
   loadMoreAction,
 }: PropsWithChildren<{
-  initialOffset: T;
-  loadMoreAction: loadMoreAction<T>;
+  initialOffset: number;
+  loadMoreAction: loadMoreAction;
 }>) => {
   const ref = useRef<HTMLButtonElement>(null);
   const [loadMoreNodes, setLoadMoreNodes] = useState<JSX.Element[]>([]);
-
-  const [disVisible, setDisVisible] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [allDataLoaded, setAllDataLoaded] = useState(false);
+
   // 現在のオフセット
-  const currentOffsetRef = useRef<T | undefined>(initialOffset);
+  const currentOffsetRef = useRef<number | undefined>(initialOffset);
 
   const { toast } = useToast();
 
@@ -43,11 +44,15 @@ const LoadMore = <T extends string | number>({
             // リクエストが中断された場合は早期リターン
             if (abortController?.signal.aborted) return;
 
+            // 全てのデータを取得したかどうかのチェック
+            if (node.length < kInfiniteScrollCount) {
+              setAllDataLoaded(true);
+            }
+
             //　新しいデータを追加する
-            setLoadMoreNodes((prev) => [...prev, node]);
+            setLoadMoreNodes((prev) => [...prev, ...node]);
             if (next === null) {
               currentOffsetRef.current = undefined;
-              setDisVisible(true);
               return;
             }
 
@@ -71,15 +76,13 @@ const LoadMore = <T extends string | number>({
 
   useEffect(() => {
     // オブザーバーを使用して、スピナーが表示されたときに新しいデータを取得する
-    const signal = new AbortController();
+    const abortController = new AbortController();
 
     const element = ref.current;
 
     const observer = new IntersectionObserver(([entry]) => {
       if (entry.isIntersecting && element?.disabled === false) {
-        loadMore(signal);
-        // 監視を停止する
-        observer.unobserve(element);
+        loadMore(abortController);
       }
     });
 
@@ -88,7 +91,7 @@ const LoadMore = <T extends string | number>({
     }
 
     return () => {
-      signal.abort();
+      abortController.abort();
       if (element) {
         observer.unobserve(element);
       }
@@ -101,13 +104,10 @@ const LoadMore = <T extends string | number>({
         {children}
         {loadMoreNodes}
       </ul>
-
-      {!disVisible && (
-        <div className="flex justify-center">
-          <button ref={ref} onClick={() => loadMore()} disabled={loading}>
-            {loading && <Spinner />}
-          </button>
-        </div>
+      {!allDataLoaded && (
+        <button className="w-full self-center" ref={ref}>
+          {loading && <Spinner />}
+        </button>
       )}
     </>
   );

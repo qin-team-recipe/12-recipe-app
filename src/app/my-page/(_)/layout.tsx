@@ -33,7 +33,7 @@ const layout = async ({ children }: { children: React.ReactNode }) => {
   const visibleLinks = sortedUserLinks.slice(0, 2);
   const moreLinks = sortedUserLinks.slice(2);
 
-  const myRecipes = await getMyRecipes({ orderByLikes: false }, {});
+  const myRecipes = await getMyRecipes();
 
   return (
     <>

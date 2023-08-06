@@ -5,19 +5,18 @@ import RecipeList from "@/src/components/recipe-list";
 import { kInfiniteScrollCount } from "@/src/constants/constants";
 
 const MyFavoriteRecipesGrid = async () => {
-  const initMyFavoriteRecipes = await getMyFavoriteRecipes({ skip: 0, limit: kInfiniteScrollCount });
+  const initMyFavoriteRecipes = await getMyFavoriteRecipes();
 
   const loadMoreMyFavoriteRecipes = async (offset: number = 0) => {
     "use server";
 
     const myRecipes = await getMyFavoriteRecipes({
       skip: offset + kInfiniteScrollCount,
-      limit: kInfiniteScrollCount,
     });
 
     const nextOffset = offset + myRecipes.length;
 
-    return [<RecipeList key={offset} recipes={myRecipes} />, nextOffset] as const;
+    return [myRecipes.map((recipe) => <RecipeList key={recipe.id} recipes={[recipe]} />), nextOffset] as const;
   };
 
   return (

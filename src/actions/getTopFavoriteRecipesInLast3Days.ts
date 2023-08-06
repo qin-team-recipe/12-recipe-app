@@ -1,9 +1,15 @@
 import { addDays } from "date-fns";
 
+import { kInfiniteScrollCount } from "../constants/constants";
 import { prisma } from "../lib/prisma";
 import { PaginationParams } from "../types/PaginationParams";
 
-export const getTopFavoriteRecipesInLast3Days = async ({ limit, skip }: PaginationParams) => {
+export const getTopFavoriteRecipesInLast3Days = async (
+  { limit, skip }: PaginationParams = {
+    skip: 0,
+    limit: kInfiniteScrollCount,
+  }
+) => {
   const threeDaysAgo = addDays(new Date(), -3);
 
   const favorites = await prisma.favorite.groupBy({
