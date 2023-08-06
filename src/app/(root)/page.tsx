@@ -31,7 +31,7 @@ const page = () => {
       <section className="pt-12">
         <div className="flex items-center justify-between px-4">
           <h2 className=" text-xl font-bold text-mauve12">話題のレシピ</h2>
-          <Link href={"/favorite/recipes"}>
+          <Link href={"/search/recipes"}>
             <span className="text-lg font-bold text-mauve9">もっと見る</span>
           </Link>
         </div>

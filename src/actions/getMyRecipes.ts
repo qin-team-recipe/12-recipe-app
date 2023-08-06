@@ -4,9 +4,10 @@ import { redirect } from "next/navigation";
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 
 import { prisma } from "../lib/prisma";
+import { PaginationParams } from "../types/PaginationParams";
 import { Database } from "../types/SupabaseTypes";
 
-export const getMyRecipes = async ({ orderByLikes }: { orderByLikes: boolean }) => {
+export const getMyRecipes = async ({ orderByLikes }: { orderByLikes: boolean }, { limit, skip }: PaginationParams) => {
   const supabaseServerClient = createServerComponentClient<Database>({ cookies });
 
   const {
@@ -27,14 +28,23 @@ export const getMyRecipes = async ({ orderByLikes }: { orderByLikes: boolean }) 
         },
       },
     },
-    orderBy: {
-      createdAt: "desc",
-    },
+    orderBy: orderByLikes
+      ? [
+          {
+            likes: {
+              _count: "desc",
+            },
+          },
+          {
+            createdAt: "desc",
+          },
+        ]
+      : {
+          createdAt: "desc",
+        },
+    skip,
+    take: limit,
   });
-
-  if (orderByLikes) {
-    myRecipe.sort((a, b) => (b._count.likes || 0) - (a._count.likes || 0));
-  }
 
   return myRecipe;
 };

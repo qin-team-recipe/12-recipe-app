@@ -1,27 +1,31 @@
 import { getMyFavoriteRecipes } from "@/src/actions/getMyFavoriteRecipes";
+import LoadMore from "@/src/components/load-more";
 import NoDataDisplay from "@/src/components/no-data-display";
-import RecipeCard from "@/src/components/recipe-card";
+import RecipeList from "@/src/components/recipe-list";
+import { kInfiniteScrollCount } from "@/src/constants/constants";
 
 const MyFavoriteRecipesGrid = async () => {
-  const myFavoriteRecipes = await getMyFavoriteRecipes();
+  const initMyFavoriteRecipes = await getMyFavoriteRecipes({ skip: 0, limit: kInfiniteScrollCount });
 
-  // TODO: 無限スクロールに対応する
+  const loadMoreMyFavoriteRecipes = async (offset: number = 0) => {
+    "use server";
+
+    const myRecipes = await getMyFavoriteRecipes({
+      skip: offset + kInfiniteScrollCount,
+      limit: kInfiniteScrollCount,
+    });
+
+    const nextOffset = offset + myRecipes.length;
+
+    return [<RecipeList key={offset} recipes={myRecipes} />, nextOffset] as const;
+  };
+
   return (
     <>
-      {myFavoriteRecipes.length > 0 ? (
-        <ul className="grid grid-cols-2 gap-4 p-4">
-          {myFavoriteRecipes.map(({ id, title, description, _count }) => (
-            <li key={id} className="flex flex-col">
-              <RecipeCard
-                title={title}
-                description={description}
-                imageUrl="https://images.unsplash.com/photo-1595295333158-4742f28fbd85?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=320&q=80"
-                favorites={_count.likes}
-                path={`/recipe/${id}`}
-              />
-            </li>
-          ))}
-        </ul>
+      {initMyFavoriteRecipes.length > 0 ? (
+        <LoadMore initialOffset={0} loadMoreAction={loadMoreMyFavoriteRecipes}>
+          <RecipeList recipes={initMyFavoriteRecipes} />
+        </LoadMore>
       ) : (
         <NoDataDisplay text="まだお気に入りのレシピはありません。" />
       )}

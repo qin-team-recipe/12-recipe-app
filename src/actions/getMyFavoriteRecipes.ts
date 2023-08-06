@@ -4,9 +4,10 @@ import { redirect } from "next/navigation";
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 
 import { prisma } from "../lib/prisma";
+import { PaginationParams } from "../types/PaginationParams";
 import { Database } from "../types/SupabaseTypes";
 
-export const getMyFavoriteRecipes = async () => {
+export const getMyFavoriteRecipes = async ({ limit, skip }: PaginationParams) => {
   const supabaseServerClient = createServerComponentClient<Database>({ cookies });
 
   const {
@@ -34,6 +35,8 @@ export const getMyFavoriteRecipes = async () => {
     orderBy: {
       createdAt: "desc",
     },
+    skip,
+    take: limit,
   });
 
   return favoriteRecipes.map((favoriteRecipe) => favoriteRecipe.recipe);

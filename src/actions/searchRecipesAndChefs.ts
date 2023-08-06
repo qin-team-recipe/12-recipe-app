@@ -1,7 +1,7 @@
 import { prisma } from "../lib/prisma";
 import { PaginationParams } from "../types/PaginationParams";
 
-export const searchRecipesAndChefs = async (searchQuery: string, { skip = 0, limit = 10 }: PaginationParams = {}) => {
+export const searchRecipesAndChefs = async (searchQuery: string, { skip, limit }: PaginationParams = {}) => {
   const search = searchQuery.toLowerCase();
 
   const [filteredRecipes, filteredChefs] = await Promise.all([
