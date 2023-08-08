@@ -19,7 +19,7 @@ const RecipeCard = ({ path, imageUrl, title, description, favorites }: Props) =>
         <div className="absolute right-2 top-2 rounded-2xl bg-[#040013]/[.48] p-2 leading-none text-mauve1">
           <div className="flex items-center gap-2">
             <Heart size={16} />
-            <span className="">{favorites}</span>
+            <span>{favorites}</span>
           </div>
         </div>
       )}

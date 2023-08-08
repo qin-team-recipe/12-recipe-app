@@ -3,7 +3,7 @@ import NoDataDisplay from "@/src/components/no-data-display";
 import RecipeCard from "@/src/components/recipe-card";
 
 const HorizontalTopFavoriteRecipesInLast3DaysList = async () => {
-  const topFavoriteRecipesInLast3Days = await getTopFavoriteRecipesInLast3Days({ limit: 5 });
+  const topFavoriteRecipesInLast3Days = await getTopFavoriteRecipesInLast3Days({ limit: 10 });
 
   return (
     <>
