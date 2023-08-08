@@ -16,6 +16,11 @@ export const getRecipes = async (
     orderBy: {
       createdAt: "desc",
     },
+    where: {
+      user: {
+        role: "CHEF",
+      },
+    },
     skip,
     take: limit,
   });

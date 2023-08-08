@@ -1,6 +1,8 @@
 import { kInfiniteScrollCount } from "../constants/constants";
 import { prisma } from "../lib/prisma";
 import { PaginationParams } from "../types/PaginationParams";
+import { getChefs } from "./getChefs";
+import { getTopFavoriteRecipesInLast3Days } from "./getTopFavoriteRecipesInLast3Days";
 
 export const searchRecipesAndChefs = async (
   searchQuery: string,
@@ -9,6 +11,24 @@ export const searchRecipesAndChefs = async (
     limit: kInfiniteScrollCount,
   }
 ) => {
+  if (!searchQuery) {
+    const topFavoriteRecipes = await getTopFavoriteRecipesInLast3Days({ limit, skip });
+
+    const { chefs } = await getChefs();
+
+    return {
+      searchedRecipes: topFavoriteRecipes.map((recipe) => ({
+        ...recipe,
+        _count: {
+          likes: recipe.likeCount,
+        },
+      })),
+      searchedChefs: chefs,
+      totalRecipes: topFavoriteRecipes.length,
+      totalChefs: 0,
+    };
+  }
+
   const search = searchQuery.toLowerCase();
 
   const [filteredRecipes, filteredChefs] = await Promise.all([
@@ -25,6 +45,9 @@ export const searchRecipesAndChefs = async (
         createdAt: "desc",
       },
       where: {
+        user: {
+          role: "CHEF",
+        },
         OR: [
           {
             title: {
@@ -73,6 +96,9 @@ export const searchRecipesAndChefs = async (
   const [totalRecipes, totalChefs] = await Promise.all([
     prisma.recipe.count({
       where: {
+        user: {
+          role: "CHEF",
+        },
         OR: [
           {
             title: {

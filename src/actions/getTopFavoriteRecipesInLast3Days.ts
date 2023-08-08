@@ -38,6 +38,9 @@ export const getTopFavoriteRecipesInLast3Days = async (
       id: {
         in: recipeIds,
       },
+      user: {
+        role: "CHEF",
+      },
     },
     include: {
       RecipeImage: true,
