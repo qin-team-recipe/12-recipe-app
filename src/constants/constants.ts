@@ -42,4 +42,8 @@ export const POPULAR_SNS = {
   YOUTUBE: "youtube",
 };
 
+// トーストの表示時間
 export const kToastDuration = 3000;
+
+// 無限スクロールで追加で取得する件数
+export const kInfiniteScrollCount = 10;
