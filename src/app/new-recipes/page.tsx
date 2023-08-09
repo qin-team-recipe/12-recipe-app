@@ -1,4 +1,4 @@
-import { getNewRecipesFromFollowingChefs } from "@/src/actions/getNewRecipesFromFollowingChefs";
+import { getRecipesNewFromFollowedChefs } from "@/src/actions/getRecipesNewFromFollowedChefs";
 import TopBar from "@/src/components/layout/top-bar";
 import LoadMore from "@/src/components/load-more";
 import RecipeList from "@/src/components/recipe-list";
@@ -6,19 +6,19 @@ import RouterBackButton from "@/src/components/router-back-button";
 import { kInfiniteScrollCount } from "@/src/constants/constants";
 
 const page = async () => {
-  const initialRecipes = await getNewRecipesFromFollowingChefs();
+  const initialRecipes = await getRecipesNewFromFollowedChefs();
 
   const loadMoreRecipes = async (offset: number = 0) => {
     "use server";
 
-    const newRecipesFromFollowingChefs = await getNewRecipesFromFollowingChefs({
+    const newRecipesFromFollowingChefs = await getRecipesNewFromFollowedChefs({
       skip: offset + kInfiniteScrollCount,
     });
 
     const nextOffset = offset + newRecipesFromFollowingChefs.length;
 
     return [
-      newRecipesFromFollowingChefs.map((recipe) => <RecipeList key={recipe.id} recipes={[recipe]} />),
+      newRecipesFromFollowingChefs.map((recipe) => <RecipeList key={recipe.id} recipes={[recipe]} segment="recipe" />),
       nextOffset,
     ] as const;
   };
@@ -34,7 +34,7 @@ const page = async () => {
         }
       />
       <LoadMore initialOffset={0} loadMoreAction={loadMoreRecipes}>
-        <RecipeList recipes={initialRecipes} />
+        <RecipeList recipes={initialRecipes} segment="recipe" />
       </LoadMore>
     </>
   );

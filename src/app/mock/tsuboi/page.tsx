@@ -29,7 +29,8 @@ const page = async ({ searchParams }: { searchParams: { search?: string } }) => 
               <div key={recipe.id} className="flex flex-col gap-2">
                 <RecipeCard
                   path={`/mock/tsuboi/${recipe.id}`}
-                  favorites={recipe.likes.length}
+                  favorites={0}
+                  isPublished={recipe.isPublished}
                   description={recipe.description}
                   title={recipe.title}
                   imageUrl={

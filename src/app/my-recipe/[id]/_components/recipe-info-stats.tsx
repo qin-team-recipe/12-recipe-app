@@ -1,24 +1,24 @@
 "use client";
 
-import { experimental_useOptimistic as useOptimistic } from "react";
 import Link from "next/link";
 
-import { favoriteRecipe, unFavoriteRecipe } from "@/src/actions/favoriteRecipeActions";
+import { favoriteRecipe, unFavoriteRecipe } from "@/src/actions/actionsForFavoriteRecipe";
 import ToggleButton from "@/src/components/toggle-button";
-import { useToast } from "@/src/components/ui/use-toast";
 import { useOptimisticToggle } from "@/src/hooks/useOptimisticToggle";
+import { cn } from "@/src/lib/utils";
 
 import NumberUnit from "../../../../components/number-unit";
-import { Button, buttonVariants } from "../../../../components/ui/button";
+import { buttonVariants } from "../../../../components/ui/button";
 import { CONSTANTS } from "../../../../constants/constants";
 
 type Props = {
   recipeId: string;
   isActive: boolean;
+  isPublished: boolean;
   favoriteCount: number;
 };
 
-const RecipeInfoStats = ({ recipeId, isActive, favoriteCount }: Props) => {
+const RecipeInfoStats = ({ recipeId, isActive, isPublished, favoriteCount }: Props) => {
   const { optimisticState, updateCount } = useOptimisticToggle({
     count: favoriteCount,
     isActive,
@@ -29,10 +29,14 @@ const RecipeInfoStats = ({ recipeId, isActive, favoriteCount }: Props) => {
   return (
     <>
       <div className="flex items-center gap-4">
-        <Button variant={"outline"} className=" border-tomato9 px-2 text-tomato9">
-          {/* // TODO: 公開中かどうかのフラグを追加 */}
-          公開中
-        </Button>
+        <span
+          className={buttonVariants({
+            variant: "outline",
+            className: cn(isPublished ? "border-tomato9 text-tomato9" : "border-mauve9 text-mauve9"),
+          })}
+        >
+          {isPublished ? "公開中" : "非公開"}
+        </span>
         <NumberUnit numbers={optimisticState.count} unit={CONSTANTS.FAVORITE} />
       </div>
       <div className="flex gap-4">

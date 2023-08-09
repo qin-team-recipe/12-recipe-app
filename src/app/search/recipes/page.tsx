@@ -27,7 +27,10 @@ const page = async ({ searchParams }: { searchParams: { search?: string } }) => 
 
     const nextOffset = offset + searchedRecipes.length;
 
-    return [searchedRecipes.map((recipe) => <RecipeList key={recipe.id} recipes={[recipe]} />), nextOffset] as const;
+    return [
+      searchedRecipes.map((recipe) => <RecipeList key={recipe.id} recipes={[recipe]} segment="recipe" />),
+      nextOffset,
+    ] as const;
   };
 
   return (
@@ -40,7 +43,7 @@ const page = async ({ searchParams }: { searchParams: { search?: string } }) => 
           </p>
           {searchedRecipes.length > 0 ? (
             <LoadMore initialOffset={0} loadMoreAction={loadMoreSearchRecipes}>
-              <RecipeList recipes={searchedRecipes} />
+              <RecipeList recipes={searchedRecipes} segment="recipe" />
             </LoadMore>
           ) : (
             <NoDataDisplay text={"お探しのレシピが見つかりませんでした。"} />

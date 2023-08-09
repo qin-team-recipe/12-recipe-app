@@ -20,7 +20,16 @@ type Props = {
 };
 
 const RecipeHero = async ({ id }: Props) => {
-  const { title, description, isMe, RecipeLink: recipeLinks, _count, isFavorite, user } = await getRecipeById(id);
+  const {
+    title,
+    description,
+    isMe,
+    RecipeLink: recipeLinks,
+    _count,
+    isFavorite,
+    user,
+    isPublished,
+  } = await getRecipeById(id);
 
   const sortedRecipeLinks = sortSiteLinks(recipeLinks.map((recipeLink) => recipeLink.linkUrl));
 
@@ -71,7 +80,7 @@ const RecipeHero = async ({ id }: Props) => {
                 </Popover>
               )}
 
-              {isMe && <PopoverMenu recipeId={id} />}
+              {isMe && <PopoverMenu recipeId={id} isPublished={isPublished} />}
             </div>
           </div>
           <p className="text-mauve12">{description}</p>

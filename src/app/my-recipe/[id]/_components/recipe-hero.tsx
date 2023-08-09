@@ -13,7 +13,15 @@ type Props = {
 };
 
 const RecipeHero = async ({ id }: Props) => {
-  const { title, description, isMe, RecipeLink: recipeLinks, _count, isFavorite } = await getRecipeById(id);
+  const {
+    title,
+    description,
+    isMe,
+    RecipeLink: recipeLinks,
+    _count,
+    isFavorite,
+    isPublished,
+  } = await getRecipeById(id);
 
   const sortedRecipeLinks = sortSiteLinks(recipeLinks.map((value) => value.linkUrl));
 
@@ -41,12 +49,12 @@ const RecipeHero = async ({ id }: Props) => {
             <h6 className="text-xl font-bold text-mauve12">{title}</h6>
             <div className="ml-3 flex items-center gap-3">
               {recipeLinks && <LinkToIconRenderer links={sortedRecipeLinks.map((value) => value.url)} />}
-              {isMe && <PopoverMenu recipeId={id} />}
+              {isMe && <PopoverMenu recipeId={id} isPublished={isPublished} />}
             </div>
           </div>
           <p className="text-mauve12">{description}</p>
         </div>
-        <RecipeInfoStats recipeId={id} isActive={isFavorite} favoriteCount={_count?.likes} />
+        <RecipeInfoStats recipeId={id} isActive={isFavorite} isPublished={isPublished} favoriteCount={_count?.likes} />
       </div>
     </>
   );
