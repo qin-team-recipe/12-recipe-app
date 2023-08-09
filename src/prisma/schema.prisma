@@ -46,6 +46,7 @@ model Recipe {
   Instruction  Instruction[]
   RecipeLink   RecipeLink[]
   Ingredient   Ingredient[]
+  isPublished  Boolean       @default(false) @map("is_published")
   createdAt    DateTime?     @default(now()) @map("created_at") @db.Timestamptz(3)
   updatedAt    DateTime?     @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(3)
 }
