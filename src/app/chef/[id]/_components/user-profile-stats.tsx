@@ -1,6 +1,6 @@
 "use client";
 
-import { followChef, unFollowChef } from "@/src/actions/followActions";
+import { followChef, unFollowChef } from "@/src/actions/actionsForFollow";
 import NumberUnit from "@/src/components/number-unit";
 import ToggleButton from "@/src/components/toggle-button";
 import { BUTTON_NAMES } from "@/src/constants/button-names";

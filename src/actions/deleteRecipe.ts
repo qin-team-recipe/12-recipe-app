@@ -5,10 +5,9 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
 import { prisma } from "@/src/lib/prisma";
+import { ActionsResult } from "@/src/types/ActionsResult";
+import { Database } from "@/src/types/SupabaseTypes";
 import { createServerActionClient } from "@supabase/auth-helpers-nextjs";
-
-import { ActionsResult } from "../types/ActionsResult";
-import { Database } from "../types/SupabaseTypes";
 
 export const deleteRecipe = async (id: string): Promise<ActionsResult> => {
   const {

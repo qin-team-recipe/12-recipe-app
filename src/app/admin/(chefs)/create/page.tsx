@@ -1,6 +1,3 @@
-import { redirect } from "next/navigation";
-
-import { getAuthenticatedUser } from "@/src/actions/getAuthenticatedUser";
 import TopBar from "@/src/components/layout/top-bar";
 
 import CreateChefForm from "../_components/create-chef-form/create-chef-form";

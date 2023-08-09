@@ -1,4 +1,4 @@
-import { favoriteRecipe, unFavoriteRecipe } from "@/src/actions/favoriteRecipeActions";
+import { favoriteRecipe, unFavoriteRecipe } from "@/src/actions/actionsForFavoriteRecipe";
 import ToggleButton from "@/src/components/toggle-button";
 
 type Props = {

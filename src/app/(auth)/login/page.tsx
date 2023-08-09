@@ -16,9 +16,7 @@ const LoginPage = async () => {
     data: { session },
   } = await supabase.auth.getSession();
 
-  if (session) {
-    redirect("/");
-  }
+  if (session) redirect("/");
 
   const defaultValues: LoginFormValues = {
     email: "",

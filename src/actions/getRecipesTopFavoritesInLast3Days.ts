@@ -1,10 +1,9 @@
+import { kInfiniteScrollCount } from "@/src/constants/constants";
+import { prisma } from "@/src/lib/prisma";
+import { PaginationParams } from "@/src/types/PaginationParams";
 import { addDays } from "date-fns";
 
-import { kInfiniteScrollCount } from "../constants/constants";
-import { prisma } from "../lib/prisma";
-import { PaginationParams } from "../types/PaginationParams";
-
-export const getTopFavoriteRecipesInLast3Days = async (
+export const getRecipesTopFavoritesInLast3Days = async (
   { limit, skip }: PaginationParams = {
     skip: 0,
     limit: kInfiniteScrollCount,

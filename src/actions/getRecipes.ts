@@ -1,6 +1,6 @@
-import { kInfiniteScrollCount } from "../constants/constants";
-import { prisma } from "../lib/prisma";
-import { PaginationParams } from "../types/PaginationParams";
+import { kInfiniteScrollCount } from "@/src/constants/constants";
+import { prisma } from "@/src/lib/prisma";
+import { PaginationParams } from "@/src/types/PaginationParams";
 
 export const getRecipes = async (
   { skip, limit }: PaginationParams = {

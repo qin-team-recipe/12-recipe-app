@@ -1,10 +1,9 @@
 import { cookies } from "next/headers";
 import { notFound, redirect } from "next/navigation";
 
+import { prisma } from "@/src/lib/prisma";
+import { Database } from "@/src/types/SupabaseTypes";
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
-
-import { prisma } from "../lib/prisma";
-import { Database } from "../types/SupabaseTypes";
 
 export const getChefById = async ({ id, orderByLikes = false }: { id: string; orderByLikes?: boolean }) => {
   const chef = await prisma.user.findUnique({

@@ -4,9 +4,8 @@ import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
 
 import { prisma } from "@/src/lib/prisma";
+import { Database } from "@/src/types/SupabaseTypes";
 import { createServerActionClient } from "@supabase/auth-helpers-nextjs";
-
-import { Database } from "../types/SupabaseTypes";
 
 type DeleteDraftRecipeResult = {
   isSuccess: boolean;

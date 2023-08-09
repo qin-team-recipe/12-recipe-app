@@ -1,4 +1,4 @@
-import { prisma } from "../lib/prisma";
+import { prisma } from "@/src/lib/prisma";
 
 export const getDraftRecipe = async (id: string) => {
   const draftRecipe = await prisma.draftRecipe.findUnique({

@@ -1,10 +1,9 @@
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
+import { prisma } from "@/src/lib/prisma";
+import { Database } from "@/src/types/SupabaseTypes";
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
-
-import { prisma } from "../lib/prisma";
-import { Database } from "../types/SupabaseTypes";
 
 export const getMemos = async () => {
   const supabaseServerClient = createServerComponentClient<Database>({ cookies });

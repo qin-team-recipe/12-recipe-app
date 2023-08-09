@@ -3,8 +3,7 @@
 import { revalidatePath } from "next/cache";
 
 import { prisma } from "@/src/lib/prisma";
-
-import { ActionsResult } from "../types/ActionsResult";
+import { ActionsResult } from "@/src/types/ActionsResult";
 
 export const deleteChefs = async (chefIds: string[]): Promise<ActionsResult> => {
   try {

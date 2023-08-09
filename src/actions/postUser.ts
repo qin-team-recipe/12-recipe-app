@@ -2,8 +2,8 @@
 
 import { revalidatePath } from "next/cache";
 
-import { prisma } from "../lib/prisma";
-import { ActionsResult } from "../types/ActionsResult";
+import { prisma } from "@/src/lib/prisma";
+import { ActionsResult } from "@/src/types/ActionsResult";
 
 export const postUser = async ({ id, name }: { id?: string; name: string }): Promise<ActionsResult> => {
   try {

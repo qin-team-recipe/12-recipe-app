@@ -6,7 +6,7 @@ import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { prisma } from "../lib/prisma";
 import { Database } from "../types/SupabaseTypes";
 
-export const getFollowingChefs = async () => {
+export const getChefsInMyFollowingList = async () => {
   const supabaseServerClient = createServerComponentClient<Database>({ cookies });
 
   const {

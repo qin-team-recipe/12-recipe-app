@@ -12,10 +12,7 @@ import CloseButton from "./_components/close-button";
 const page = async ({ searchParams }: { searchParams: { [key: string]: string | undefined } }) => {
   const user = await getAuthenticatedUser();
 
-  if (!user) {
-    // TODO: 未ログイン時のリダイレクト先を変更する
-    redirect("/mock/unauthorized");
-  }
+  if (!user) redirect("/login");
 
   let defaultValues: Partial<CreateRecipeFormValues> = {
     uid: user.id,

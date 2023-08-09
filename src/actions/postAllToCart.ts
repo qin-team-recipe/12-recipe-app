@@ -4,11 +4,10 @@ import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
+import { prisma } from "@/src/lib/prisma";
+import { ActionsResult } from "@/src/types/ActionsResult";
+import { Database } from "@/src/types/SupabaseTypes";
 import { createServerActionClient } from "@supabase/auth-helpers-nextjs";
-
-import { prisma } from "../lib/prisma";
-import { ActionsResult } from "../types/ActionsResult";
-import { Database } from "../types/SupabaseTypes";
 
 export const postAllToCart = async (recipeId: string, ingredientIds: number[]): Promise<ActionsResult> => {
   const supabaseServerClient = createServerActionClient<Database>({ cookies });

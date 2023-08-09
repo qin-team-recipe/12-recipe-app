@@ -1,8 +1,8 @@
-import { kInfiniteScrollCount } from "../constants/constants";
-import { prisma } from "../lib/prisma";
-import { PaginationParams } from "../types/PaginationParams";
-import { getChefs } from "./getChefs";
-import { getTopFavoriteRecipesInLast3Days } from "./getTopFavoriteRecipesInLast3Days";
+import { getChefs } from "@/src/actions/getChefs";
+import { getRecipesTopFavoritesInLast3Days } from "@/src/actions/getRecipesTopFavoritesInLast3Days";
+import { kInfiniteScrollCount } from "@/src/constants/constants";
+import { prisma } from "@/src/lib/prisma";
+import { PaginationParams } from "@/src/types/PaginationParams";
 
 export const searchRecipesAndChefs = async (
   searchQuery: string,
@@ -12,7 +12,7 @@ export const searchRecipesAndChefs = async (
   }
 ) => {
   if (!searchQuery) {
-    const topFavoriteRecipes = await getTopFavoriteRecipesInLast3Days({ limit, skip });
+    const topFavoriteRecipes = await getRecipesTopFavoritesInLast3Days({ limit, skip });
 
     const { chefs } = await getChefs();
 
