@@ -15,7 +15,9 @@ export async function GET(request: NextRequest) {
 
   if (code) {
     // Supabaseのクライアントインスタンスを作成
-    const supabase = createRouteHandlerClient<Database>({ cookies });
+    const cookieStore = cookies();
+
+    const supabase = createRouteHandlerClient<Database>({ cookies: () => cookieStore });
 
     // 認証コードをセッショントークンに交換
     await supabase.auth.exchangeCodeForSession(code);

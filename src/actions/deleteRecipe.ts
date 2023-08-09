@@ -10,9 +10,10 @@ import { Database } from "@/src/types/SupabaseTypes";
 import { createServerActionClient } from "@supabase/auth-helpers-nextjs";
 
 export const deleteRecipe = async (id: string): Promise<ActionsResult> => {
+  const cookieStore = cookies();
   const {
     data: { session },
-  } = await createServerActionClient<Database>({ cookies }).auth.getSession();
+  } = await createServerActionClient<Database>({ cookies: () => cookieStore }).auth.getSession();
 
   if (!session) redirect("/login");
 

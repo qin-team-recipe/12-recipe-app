@@ -41,11 +41,10 @@ export const getChefById = async ({ id, orderByLikes = false }: { id: string; or
     chef.Recipe.sort((a, b) => (b._count.likes || 0) - (a._count.likes || 0));
   }
 
-  const supabaseServerClient = createServerComponentClient<Database>({ cookies });
-
+  const cookieStore = cookies();
   const {
     data: { session },
-  } = await supabaseServerClient.auth.getSession();
+  } = await createServerComponentClient<Database>({ cookies: () => cookieStore }).auth.getSession();
 
   if (!session) redirect("/login");
 

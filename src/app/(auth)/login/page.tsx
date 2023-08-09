@@ -8,13 +8,10 @@ import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { LoginForm, LoginFormValues } from "./_components";
 
 const LoginPage = async () => {
-  const supabase = createServerComponentClient<Database>({
-    cookies,
-  });
-
+  const cookieStore = cookies();
   const {
     data: { session },
-  } = await supabase.auth.getSession();
+  } = await createServerComponentClient<Database>({ cookies: () => cookieStore }).auth.getSession();
 
   if (session) redirect("/");
 

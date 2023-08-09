@@ -2,6 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
 
 import { prisma } from "@/src/lib/prisma";
 import { Database } from "@/src/types/SupabaseTypes";
@@ -13,13 +14,12 @@ type DeleteDraftRecipeResult = {
 };
 
 export const deleteDraftRecipe = async (id: string): Promise<DeleteDraftRecipeResult> => {
+  const cookieStore = cookies();
   const {
     data: { session },
-  } = await createServerActionClient<Database>({ cookies }).auth.getSession();
+  } = await createServerActionClient<Database>({ cookies: () => cookieStore }).auth.getSession();
 
-  if (!session) {
-    throw new Error("認証に失敗しました");
-  }
+  if (!session) redirect("/login");
 
   try {
     // 物理削除

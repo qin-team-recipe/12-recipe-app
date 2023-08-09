@@ -15,11 +15,10 @@ import { zact } from "zact/server";
 
 export const putRecipe = zact(editRecipeFormSchema)(
   async ({ recipeId, title, bio, ingredients, urls, servingCount, instructions }): Promise<ActionsResult> => {
-    const supabaseServerClient = createServerActionClient<Database>({ cookies });
-
+    const cookieStore = cookies();
     const {
       data: { session },
-    } = await supabaseServerClient.auth.getSession();
+    } = await createServerActionClient<Database>({ cookies: () => cookieStore }).auth.getSession();
 
     if (!session) redirect("/login");
 

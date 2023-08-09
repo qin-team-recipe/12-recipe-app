@@ -13,11 +13,10 @@ export const getRecipesNewFromFollowedChefs = async (
     limit: kInfiniteScrollCount,
   }
 ) => {
-  const supabaseServerClient = createServerComponentClient<Database>({ cookies });
-
+  const cookieStore = cookies();
   const {
     data: { session },
-  } = await supabaseServerClient.auth.getSession();
+  } = await createServerComponentClient<Database>({ cookies: () => cookieStore }).auth.getSession();
 
   if (!session) redirect("/login");
 

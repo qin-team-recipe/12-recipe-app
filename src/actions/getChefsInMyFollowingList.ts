@@ -7,11 +7,10 @@ import { prisma } from "../lib/prisma";
 import { Database } from "../types/SupabaseTypes";
 
 export const getChefsInMyFollowingList = async () => {
-  const supabaseServerClient = createServerComponentClient<Database>({ cookies });
-
+  const cookieStore = cookies();
   const {
     data: { session },
-  } = await supabaseServerClient.auth.getSession();
+  } = await createServerComponentClient<Database>({ cookies: () => cookieStore }).auth.getSession();
 
   if (!session) redirect("/login");
 
