@@ -19,6 +19,7 @@ const RemoveCartListButton = ({ recipeId, cartListItemId }: { recipeId: string; 
         });
         router.refresh();
       }}
+      className="bg-red-900"
     >
       {isPending ? <Spinner /> : "食材削除"}
     </Button>

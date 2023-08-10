@@ -27,6 +27,7 @@ const AddCartListButton = ({
         });
         router.refresh();
       }}
+      className="bg-green-900"
     >
       {isPending ? <Spinner /> : text}
     </Button>

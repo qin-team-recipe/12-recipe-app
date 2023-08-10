@@ -19,6 +19,7 @@ const DeleteCartListButton = ({ cartListId }: { cartListId: number }) => {
         });
         router.refresh();
       }}
+      className="bg-red-800"
     >
       {isPending ? <Spinner /> : "カート削除"}
     </Button>
