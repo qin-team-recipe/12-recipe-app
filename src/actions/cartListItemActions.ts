@@ -112,18 +112,11 @@ export const removeCartListItem = async (recipeId: string, cartListItemId: numbe
 
     if (cartListItemSize === 1) {
       // 対象のレシピに紐づくアイテムが1つしかない場合はレシピも削除する
-      await prisma.$transaction([
-        prisma.cartListItem.delete({
-          where: {
-            id: cartListItemId,
-          },
-        }),
-        prisma.cartList.delete({
-          where: {
-            id: cartList.id,
-          },
-        }),
-      ]);
+      await prisma.cartList.delete({
+        where: {
+          id: cartList.id,
+        },
+      });
     } else {
       // 2つ以上のアイテムがカート内に存在する場合はアイテムのみ削除する
       await prisma.cartListItem.delete({
