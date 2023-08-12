@@ -24,16 +24,14 @@ export const metadata = {
 const layout = async ({ children }: { children: React.ReactNode }) => {
   const user = await getAuthenticatedUser();
 
-  if (!user) {
-    // TODO: 未ログイン時のリダイレクト先を変更する
-    redirect("/mock/unauthorized");
-  }
+  if (!user) redirect("/login");
+
   const sortedUserLinks = sortSiteLinks(user.UserLink.map((userLink) => userLink.url));
 
   const visibleLinks = sortedUserLinks.slice(0, 2);
   const moreLinks = sortedUserLinks.slice(2);
 
-  const myRecipes = await getMyRecipes({ orderByLikes: false });
+  const myRecipes = await getMyRecipes();
 
   return (
     <>

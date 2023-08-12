@@ -1,17 +1,22 @@
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
+import { kInfiniteScrollCount } from "@/src/constants/constants";
+import { prisma } from "@/src/lib/prisma";
+import { PaginationParams } from "@/src/types/PaginationParams";
+import { Database } from "@/src/types/SupabaseTypes";
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 
-import { prisma } from "../lib/prisma";
-import { Database } from "../types/SupabaseTypes";
-
-export const getNewRecipesFromFollowingChefs = async ({ limit }: { limit?: number }) => {
-  const supabaseServerClient = createServerComponentClient<Database>({ cookies });
-
+export const getRecipesNewFromFollowedChefs = async (
+  { limit, skip }: PaginationParams = {
+    skip: 0,
+    limit: kInfiniteScrollCount,
+  }
+) => {
+  const cookieStore = cookies();
   const {
     data: { session },
-  } = await supabaseServerClient.auth.getSession();
+  } = await createServerComponentClient<Database>({ cookies: () => cookieStore }).auth.getSession();
 
   if (!session) redirect("/login");
 
@@ -40,6 +45,7 @@ export const getNewRecipesFromFollowingChefs = async ({ limit }: { limit?: numbe
         },
       },
     },
+    skip,
     take: limit || undefined,
   });
 

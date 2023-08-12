@@ -5,8 +5,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
-import { updateProfile } from "@/src/actions/updateProfile";
-import { Button } from "@/src/components/ui/button";
+import { putProfile } from "@/src/actions/putProfile";
+import { Button, buttonVariants } from "@/src/components/ui/button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/src/components/ui/form";
 import { Input } from "@/src/components/ui/input";
 import Spinner from "@/src/components/ui/spinner";
@@ -59,7 +59,7 @@ const EditProfileForm = ({ defaultValues }: Props) => {
 
   const onSubmit = (data: z.infer<typeof editProfileFormSchema>) => {
     startTransition(async () => {
-      const result = await updateProfile(data);
+      const result = await putProfile(data);
 
       if (result.isSuccess) {
         toast({
@@ -192,13 +192,17 @@ const EditProfileForm = ({ defaultValues }: Props) => {
         </div>
 
         <div className="flex gap-2 px-4">
-          <Button variant={"destructive"} className="flex-1 gap-2" type="submit" disabled={!changed}>
+          <Button variant={"destructive"} className="flex-1 gap-2" type="submit" disabled={!changed || isPending}>
             {isPending && <Spinner />} 保存する
           </Button>
-          <Link href="/my-page" className="flex-1">
-            <Button variant={"outline"} className="w-full border-tomato7 text-tomato11">
-              キャンセル
-            </Button>
+          <Link
+            href="/my-page"
+            className={buttonVariants({
+              variant: "outline",
+              className: "flex-1 border-tomato7 text-tomato11",
+            })}
+          >
+            キャンセル
           </Link>
         </div>
       </form>

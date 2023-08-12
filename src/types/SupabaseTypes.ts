@@ -430,6 +430,7 @@ export interface Database {
           created_at: string | null;
           description: string;
           id: string;
+          is_published: boolean;
           serving_count: number;
           title: string;
           updated_at: string | null;
@@ -439,6 +440,7 @@ export interface Database {
           created_at?: string | null;
           description: string;
           id: string;
+          is_published?: boolean;
           serving_count: number;
           title: string;
           updated_at?: string | null;
@@ -448,6 +450,7 @@ export interface Database {
           created_at?: string | null;
           description?: string;
           id?: string;
+          is_published?: boolean;
           serving_count?: number;
           title?: string;
           updated_at?: string | null;

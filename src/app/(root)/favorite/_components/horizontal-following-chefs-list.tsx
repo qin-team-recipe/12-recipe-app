@@ -1,11 +1,11 @@
 import Link from "next/link";
 
-import { getFollowingChefs } from "@/src/actions/getFollowingChefs";
+import { getChefsInMyFollowingList } from "@/src/actions/getChefsInMyFollowingList";
 import NoDataDisplay from "@/src/components/no-data-display";
 import { Avatar, AvatarImage } from "@/src/components/ui/avatar";
 
 const HorizontalFollowingChefsList = async () => {
-  const followingChefs = await getFollowingChefs();
+  const followingChefs = await getChefsInMyFollowingList();
 
   return (
     <>

@@ -1,7 +1,7 @@
 import { getCartList } from "@/src/actions/getCartList";
-import { getMyFavoriteRecipes } from "@/src/actions/getMyFavoriteRecipes";
 import { getRecipes } from "@/src/actions/getRecipes";
 import { prisma } from "@/src/lib/prisma";
+import { getRecipesInMyFavorites } from "@/src/actions/getRecipesInMyFavorites";
 
 import AddCartListButton from "./_components/add-cart-list-button";
 import AddFavoriteRecipeButton from "./_components/add-favorite-recipe-button";
@@ -27,7 +27,7 @@ const getAllRecipes = async () => {
 
 const page = async () => {
   const recipes = await getRecipes();
-  const favoriteRecipes = await getMyFavoriteRecipes();
+  const favoriteRecipes = await getRecipesInMyFavorites();
   const cartList = await getCartList();
   const allRecipes = await getAllRecipes();
 

@@ -14,7 +14,7 @@ const NoDataDisplay = async ({ text }: Props) => {
         src="https://uploads-ssl.webflow.com/603c87adb15be3cb0b3ed9b5/61bf07d2cce98fb122df3dd3_1.png"
         alt="No result"
       />
-      <p className="font-bold text-mauve12">{text}</p>
+      <p className="px-4 text-center font-bold text-mauve12">{text}</p>
     </div>
   );
 };

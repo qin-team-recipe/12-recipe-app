@@ -1,9 +1,9 @@
-import { getFollowingChefs } from "@/src/actions/getFollowingChefs";
+import { getChefsInMyFollowingList } from "@/src/actions/getChefsInMyFollowingList";
 import { ChefIcon } from "@/src/components/chef-icon";
 import NoDataDisplay from "@/src/components/no-data-display";
 
 const HorizontalFollowingChefsList = async () => {
-  const chefs = await getFollowingChefs();
+  const chefs = await getChefsInMyFollowingList();
 
   return (
     <>

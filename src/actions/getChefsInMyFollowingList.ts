@@ -6,12 +6,11 @@ import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { prisma } from "../lib/prisma";
 import { Database } from "../types/SupabaseTypes";
 
-export const getFollowingChefs = async () => {
-  const supabaseServerClient = createServerComponentClient<Database>({ cookies });
-
+export const getChefsInMyFollowingList = async () => {
+  const cookieStore = cookies();
   const {
     data: { session },
-  } = await supabaseServerClient.auth.getSession();
+  } = await createServerComponentClient<Database>({ cookies: () => cookieStore }).auth.getSession();
 
   if (!session) redirect("/login");
 

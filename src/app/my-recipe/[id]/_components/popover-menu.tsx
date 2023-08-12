@@ -1,21 +1,24 @@
 "use client";
 
-import { useTransition } from "react";
+import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 
 import { deleteRecipe } from "@/src/actions/deleteRecipe";
+import { patchRecipePublishStatus } from "@/src/actions/patchRecipePublishStatus";
 import { Command, CommandItem, CommandList, CommandSeparator } from "@/src/components/ui/command";
 import { Popover, PopoverContent, PopoverTrigger } from "@/src/components/ui/popover";
 import Spinner from "@/src/components/ui/spinner";
 import { useToast } from "@/src/components/ui/use-toast";
 import { kToastDuration } from "@/src/constants/constants";
-import { CircleEllipsis, Copy, Lock, Pencil, Trash } from "lucide-react";
+import { CircleEllipsis, Copy, Lock, Trash } from "lucide-react";
 
 type Props = {
   recipeId: string;
+  isPublished: boolean;
 };
 
-const PopoverMenu = ({ recipeId }: Props) => {
+const PopoverMenu = ({ recipeId, isPublished }: Props) => {
+  const [isOpen, setIsOpen] = useState(false);
   const [isPending, startTransition] = useTransition();
 
   const { toast } = useToast();
@@ -23,7 +26,7 @@ const PopoverMenu = ({ recipeId }: Props) => {
   const router = useRouter();
 
   return (
-    <Popover>
+    <Popover open={isOpen} onOpenChange={setIsOpen}>
       <PopoverTrigger>
         <CircleEllipsis size={20} />
       </PopoverTrigger>
@@ -34,23 +37,58 @@ const PopoverMenu = ({ recipeId }: Props) => {
               <button
                 className="flex"
                 onClick={() => {
-                  router.push(`/my-recipe/${recipeId}/edit`);
+                  navigator.clipboard
+                    .writeText(`${location.origin}/recipe/${recipeId}`)
+                    .then(() => {
+                      toast({
+                        variant: "default",
+                        title: "コピーしました🎉",
+                        duration: 3000,
+                      });
+                    })
+                    .catch(() => {
+                      toast({
+                        variant: "destructive",
+                        title: "コピーに失敗しました🥲",
+                        duration: 3000,
+                      });
+                    });
+
+                  setIsOpen(false);
                 }}
               >
-                <Pencil className="mr-2 h-4 w-4" />
-                <span>編集する</span>
+                <Copy className="mr-2 h-4 w-4" />
+                <span>URLをコピーする</span>
               </button>
             </CommandItem>
+            <CommandItem>
+              <button
+                className="flex items-start"
+                onClick={async () => {
+                  const result = await patchRecipePublishStatus(recipeId);
+                  if (result.isSuccess) {
+                    toast({
+                      variant: "default",
+                      title: result.message,
+                      duration: kToastDuration,
+                    });
+                  } else {
+                    toast({
+                      variant: "destructive",
+                      title: result.error,
+                      duration: kToastDuration,
+                    });
+                  }
 
-            <CommandItem>
-              {/* // TODO: URLをコピーする */}
-              <Copy className="mr-2 h-4 w-4" />
-              <span>URLをコピーする</span>
-            </CommandItem>
-            <CommandItem>
-              {/* // TODO: 公開を停止するロジック実装 */}
-              <Lock className="mr-2 h-4 w-4" />
-              <span>公開を停止する</span>
+                  setIsOpen(false);
+                }}
+              >
+                {isPending ? <Spinner /> : <Lock className="mr-2 h-4 w-4" />}
+                <div className="flex flex-col items-start">
+                  <span className="text-sm">{isPublished ? "公開を停止する" : "レシピを限定公開にする"}</span>
+                  {!isPublished && <p className="text-xs">URLを知っている方のみ閲覧可能</p>}
+                </div>
+              </button>
             </CommandItem>
 
             <CommandSeparator />
@@ -80,8 +118,8 @@ const PopoverMenu = ({ recipeId }: Props) => {
                   });
                 }}
               >
-                <Trash className="mr-2 h-4 w-4" />
-                <span>{isPending ? <Spinner /> : "レシピを削除する"}</span>
+                {isPending ? <Spinner /> : <Trash className="mr-2 h-4 w-4" />}
+                <span>レシピを削除する</span>
               </button>
             </CommandItem>
           </CommandList>

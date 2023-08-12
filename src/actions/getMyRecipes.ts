@@ -1,17 +1,22 @@
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
+import { prisma } from "@/src/lib/prisma";
+import { PaginationParams } from "@/src/types/PaginationParams";
+import { Database } from "@/src/types/SupabaseTypes";
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 
-import { prisma } from "../lib/prisma";
-import { Database } from "../types/SupabaseTypes";
-
-export const getMyRecipes = async ({ orderByLikes }: { orderByLikes: boolean }) => {
-  const supabaseServerClient = createServerComponentClient<Database>({ cookies });
-
+export const getMyRecipes = async (
+  { orderByLikes, limit, skip }: { orderByLikes?: boolean } & PaginationParams = {
+    orderByLikes: false,
+    skip: 0,
+    limit: undefined,
+  }
+) => {
+  const cookieStore = cookies();
   const {
     data: { session },
-  } = await supabaseServerClient.auth.getSession();
+  } = await createServerComponentClient<Database>({ cookies: () => cookieStore }).auth.getSession();
 
   if (!session) redirect("/login");
 
@@ -27,14 +32,23 @@ export const getMyRecipes = async ({ orderByLikes }: { orderByLikes: boolean }) 
         },
       },
     },
-    orderBy: {
-      createdAt: "desc",
-    },
+    orderBy: orderByLikes
+      ? [
+          {
+            likes: {
+              _count: "desc",
+            },
+          },
+          {
+            createdAt: "desc",
+          },
+        ]
+      : {
+          createdAt: "desc",
+        },
+    skip,
+    take: limit,
   });
-
-  if (orderByLikes) {
-    myRecipe.sort((a, b) => (b._count.likes || 0) - (a._count.likes || 0));
-  }
 
   return myRecipe;
 };

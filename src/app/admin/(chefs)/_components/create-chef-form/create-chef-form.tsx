@@ -5,7 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
-import { Button } from "@/src/components/ui/button";
+import { Button, buttonVariants } from "@/src/components/ui/button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/src/components/ui/form";
 import { Input } from "@/src/components/ui/input";
 import Spinner from "@/src/components/ui/spinner";
@@ -191,10 +191,14 @@ const CreateChefForm = () => {
           <Button variant={"destructive"} className="flex-1 gap-2" type="submit">
             {isPending && <Spinner />} 保存する
           </Button>
-          <Link href="/admin" className="flex-1">
-            <Button variant={"outline"} className="w-full border-tomato7 text-tomato11">
-              キャンセル
-            </Button>
+          <Link
+            href="/admin"
+            className={buttonVariants({
+              variant: "outline",
+              className: "w-full flex-1 border-tomato7 text-tomato11",
+            })}
+          >
+            キャンセル
           </Link>
         </div>
       </form>

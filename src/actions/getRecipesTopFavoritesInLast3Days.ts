@@ -1,8 +1,14 @@
+import { kInfiniteScrollCount } from "@/src/constants/constants";
+import { prisma } from "@/src/lib/prisma";
+import { PaginationParams } from "@/src/types/PaginationParams";
 import { addDays } from "date-fns";
 
-import { prisma } from "../lib/prisma";
-
-export const getTopFavoriteRecipesInLast3Days = async ({ limit }: { limit?: number }) => {
+export const getRecipesTopFavoritesInLast3Days = async (
+  { limit, skip }: PaginationParams = {
+    skip: 0,
+    limit: kInfiniteScrollCount,
+  }
+) => {
   const threeDaysAgo = addDays(new Date(), -3);
 
   const favorites = await prisma.favorite.groupBy({
@@ -20,6 +26,7 @@ export const getTopFavoriteRecipesInLast3Days = async ({ limit }: { limit?: numb
         recipeId: "desc",
       },
     },
+    skip,
     take: limit || undefined,
   });
 
@@ -30,6 +37,9 @@ export const getTopFavoriteRecipesInLast3Days = async ({ limit }: { limit?: numb
       id: {
         in: recipeIds,
       },
+      user: {
+        role: "CHEF",
+      },
     },
     include: {
       RecipeImage: true,
@@ -39,10 +49,8 @@ export const getTopFavoriteRecipesInLast3Days = async ({ limit }: { limit?: numb
 
   recipes.sort((a, b) => recipeIds.indexOf(a.id) - recipeIds.indexOf(b.id));
 
-  const recipesWithLikeCount = recipes.map((recipe) => ({
+  return recipes.map((recipe) => ({
     ...recipe,
     likeCount: recipe.likes.length,
   }));
-
-  return recipesWithLikeCount;
 };
