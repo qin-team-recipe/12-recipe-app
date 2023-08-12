@@ -4,23 +4,21 @@ import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
+import { editRecipeFormSchema } from "@/src/app/my-recipe/(_)/[id]/edit/_components/edit-recipe-form";
+import { EditRecipeFormValues } from "@/src/app/my-recipe/(_)/[id]/edit/_components/edit-recipe-form/schema";
 import { prisma } from "@/src/lib/prisma";
+import { ActionsResult } from "@/src/types/ActionsResult";
+import { Database } from "@/src/types/SupabaseTypes";
 import { Ingredient, Instruction, RecipeLink } from "@prisma/client";
 import { createServerActionClient } from "@supabase/auth-helpers-nextjs";
 import { zact } from "zact/server";
 
-import { editRecipeFormSchema } from "../app/my-recipe/(_)/[id]/edit/_components/edit-recipe-form";
-import { EditRecipeFormValues } from "../app/my-recipe/(_)/[id]/edit/_components/edit-recipe-form/schema";
-import { ActionsResult } from "../types/ActionsResult";
-import { Database } from "../types/SupabaseTypes";
-
 export const putRecipe = zact(editRecipeFormSchema)(
   async ({ recipeId, title, bio, ingredients, urls, servingCount, instructions }): Promise<ActionsResult> => {
-    const supabaseServerClient = createServerActionClient<Database>({ cookies });
-
+    const cookieStore = cookies();
     const {
       data: { session },
-    } = await supabaseServerClient.auth.getSession();
+    } = await createServerActionClient<Database>({ cookies: () => cookieStore }).auth.getSession();
 
     if (!session) redirect("/login");
 

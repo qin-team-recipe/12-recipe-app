@@ -15,14 +15,17 @@ const page = async () => {
 
     const nextOffset = offset + myRecipes.length;
 
-    return [myRecipes.map((recipe) => <RecipeList key={recipe.id} recipes={[recipe]} />), nextOffset] as const;
+    return [
+      myRecipes.map((recipe) => <RecipeList key={recipe.id} recipes={[recipe]} segment="my-recipe" />),
+      nextOffset,
+    ] as const;
   };
 
   return (
     <>
       {initialRecipes.length > 0 ? (
         <LoadMore initialOffset={0} loadMoreAction={loadMoreMyRecipes}>
-          <RecipeList recipes={initialRecipes} />
+          <RecipeList recipes={initialRecipes} segment="my-recipe" />
         </LoadMore>
       ) : (
         <NoDataDisplay text="まだレシピが作成されていません。" />

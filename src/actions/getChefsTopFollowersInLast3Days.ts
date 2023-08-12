@@ -2,7 +2,7 @@ import { addDays } from "date-fns";
 
 import { prisma } from "../lib/prisma";
 
-export const getTopFollowersInLast3Days = async () => {
+export const getChefsWithTopFollowersInLast3Days = async () => {
   const threeDaysAgo = addDays(new Date(), -3);
 
   const followers = await prisma.userFollower.groupBy({
