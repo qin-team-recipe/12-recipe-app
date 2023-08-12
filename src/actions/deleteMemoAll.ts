@@ -6,10 +6,11 @@ import { redirect } from "next/navigation";
 
 import { prisma } from "@/src/lib/prisma";
 import { ActionsResult } from "@/src/types/ActionsResult";
-import { Database } from "@/src/types/SupabaseTypes";
 import { createServerActionClient } from "@supabase/auth-helpers-nextjs";
 
-export const putMemo = async (id: number, isCompleted: boolean): Promise<ActionsResult> => {
+import { Database } from "../types/SupabaseTypes";
+
+export const deleteMemoAll = async (): Promise<ActionsResult> => {
   const cookieStore = cookies();
   const {
     data: { session },
@@ -18,25 +19,23 @@ export const putMemo = async (id: number, isCompleted: boolean): Promise<Actions
   if (!session) redirect("/login");
 
   try {
-    // 論理削除
-    await prisma.memo.update({
-      data: {
-        isCompleted: !isCompleted,
+    await prisma.memo.deleteMany({
+      where: {
+        userId: session.user.id,
       },
-      where: { id },
     });
 
-    // TODO: 適切なパスを指定する
-    revalidatePath("/mock");
+    revalidatePath("/shopping");
 
     return {
       isSuccess: true,
-      message: "メモを完了しました🎉",
+      message: "すべてのメモを削除しました🔥",
     };
   } catch (error) {
+    console.error(error);
     return {
       isSuccess: false,
-      error: "メモの完了に失敗しました🥲",
+      error: "メモの削除に失敗しました🥲",
     };
   }
 };
