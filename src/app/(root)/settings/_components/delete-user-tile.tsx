@@ -12,15 +12,10 @@ const DeleteUserTile = () => {
   };
 
   return (
-    <>
-      <button
-        onClick={handleModal}
-        className={`flex h-12 w-full cursor-pointer items-center justify-between text-mauve1`}
-      >
-        <p className="text-lg text-mauve12">退会する</p>
-        <AlertCircle className="text-mauve12" size={20} />
-      </button>
-    </>
+    <button onClick={handleModal} className="flex h-12 w-full cursor-pointer items-center justify-between">
+      退会する
+      <AlertCircle size={20} />
+    </button>
   );
 };
 

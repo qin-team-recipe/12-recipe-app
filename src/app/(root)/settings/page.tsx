@@ -4,6 +4,7 @@ import TopBar from "@/src/components/layout/top-bar";
 import { ArrowLeft, ArrowUpRight, ChevronRight, LogOut } from "lucide-react";
 
 import DeleteUserTile from "./_components/delete-user-tile";
+import LogoutTile from "./_components/logout-tile";
 
 const Page = () => {
   return (
@@ -39,10 +40,7 @@ const Page = () => {
       </section>
       <section className="mt-5 px-4">
         <h2 className="mb-3 text-lg font-bold">アカウントの操作</h2>
-        <Link href={"/logout"} className="flex h-12 items-center justify-between">
-          ログアウト
-          <LogOut size={20} />
-        </Link>
+        <LogoutTile />
       </section>
       <section className="mt-5 px-4">
         <h2 className="mb-3 text-lg font-bold">取り消しができない操作</h2>
