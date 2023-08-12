@@ -2,7 +2,7 @@
 
 import { useTransition } from "react";
 
-import { deleteMemo } from "@/src/actions/deleteMemo";
+import { deleteMemoById } from "@/src/actions/deleteMemoById";
 import { Button } from "@/src/components/ui/button";
 import Spinner from "@/src/components/ui/spinner";
 
@@ -13,7 +13,7 @@ const DeleteMemoButton = ({ id }: { id: number }) => {
     <Button
       onClick={() =>
         startTransition(() => {
-          deleteMemo(id);
+          deleteMemoById(id);
         })
       }
     >

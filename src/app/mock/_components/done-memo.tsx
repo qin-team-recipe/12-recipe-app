@@ -2,7 +2,7 @@
 
 import { useTransition } from "react";
 
-import { putMemo } from "@/src/actions/putMemo";
+import { patchMemoCompleteStatus } from "@/src/actions/patchMemoCompleteStatus";
 
 export default function DoneMemo({ id, isCompleted }: { id: number; isCompleted: boolean }) {
   const [isPending, startTransition] = useTransition();
@@ -11,7 +11,7 @@ export default function DoneMemo({ id, isCompleted }: { id: number; isCompleted:
     <input
       onChange={() =>
         startTransition(() => {
-          putMemo(id, isCompleted);
+          patchMemoCompleteStatus(id, isCompleted);
         })
       }
       checked={isCompleted}
