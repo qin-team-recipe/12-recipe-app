@@ -38,27 +38,27 @@ export interface Database {
       };
       CartList: {
         Row: {
-          created_at: string | null;
+          created_at: string;
           display_order: number;
           id: number;
           recipe_id: string;
-          updated_at: string | null;
+          updated_at: string;
           user_id: string;
         };
         Insert: {
-          created_at?: string | null;
+          created_at?: string;
           display_order?: number;
           id?: number;
           recipe_id: string;
-          updated_at?: string | null;
+          updated_at?: string;
           user_id: string;
         };
         Update: {
-          created_at?: string | null;
+          created_at?: string;
           display_order?: number;
           id?: number;
           recipe_id?: string;
-          updated_at?: string | null;
+          updated_at?: string;
           user_id?: string;
         };
         Relationships: [
@@ -79,27 +79,27 @@ export interface Database {
       CartListItem: {
         Row: {
           cart_list_id: number;
-          created_at: string | null;
+          created_at: string;
           id: number;
           ingredient_id: number;
           is_completed: boolean;
-          updated_at: string | null;
+          updated_at: string;
         };
         Insert: {
           cart_list_id: number;
-          created_at?: string | null;
+          created_at?: string;
           id?: number;
           ingredient_id: number;
           is_completed?: boolean;
-          updated_at?: string | null;
+          updated_at?: string;
         };
         Update: {
           cart_list_id?: number;
-          created_at?: string | null;
+          created_at?: string;
           id?: number;
           ingredient_id?: number;
           is_completed?: boolean;
-          updated_at?: string | null;
+          updated_at?: string;
         };
         Relationships: [
           {
@@ -118,28 +118,28 @@ export interface Database {
       };
       DraftIngredient: {
         Row: {
-          created_at: string | null;
+          created_at: string;
           draft_recipe_id: string;
           id: number;
           is_custom: boolean;
           title: string;
-          updated_at: string | null;
+          updated_at: string;
         };
         Insert: {
-          created_at?: string | null;
+          created_at?: string;
           draft_recipe_id: string;
           id?: number;
           is_custom?: boolean;
           title: string;
-          updated_at?: string | null;
+          updated_at?: string;
         };
         Update: {
-          created_at?: string | null;
+          created_at?: string;
           draft_recipe_id?: string;
           id?: number;
           is_custom?: boolean;
           title?: string;
-          updated_at?: string | null;
+          updated_at?: string;
         };
         Relationships: [
           {
@@ -152,28 +152,28 @@ export interface Database {
       };
       DraftInstruction: {
         Row: {
-          created_at: string | null;
+          created_at: string;
           draft_recipe_id: string;
           id: number;
           step_description: string;
           step_order: number;
-          updated_at: string | null;
+          updated_at: string;
         };
         Insert: {
-          created_at?: string | null;
+          created_at?: string;
           draft_recipe_id: string;
           id?: number;
           step_description: string;
           step_order: number;
-          updated_at?: string | null;
+          updated_at?: string;
         };
         Update: {
-          created_at?: string | null;
+          created_at?: string;
           draft_recipe_id?: string;
           id?: number;
           step_description?: string;
           step_order?: number;
-          updated_at?: string | null;
+          updated_at?: string;
         };
         Relationships: [
           {
@@ -186,30 +186,30 @@ export interface Database {
       };
       DraftRecipe: {
         Row: {
-          created_at: string | null;
+          created_at: string;
           description: string | null;
           id: string;
           serving_count: number | null;
           title: string | null;
-          updated_at: string | null;
+          updated_at: string;
           user_id: string;
         };
         Insert: {
-          created_at?: string | null;
+          created_at?: string;
           description?: string | null;
           id: string;
           serving_count?: number | null;
           title?: string | null;
-          updated_at?: string | null;
+          updated_at?: string;
           user_id: string;
         };
         Update: {
-          created_at?: string | null;
+          created_at?: string;
           description?: string | null;
           id?: string;
           serving_count?: number | null;
           title?: string | null;
-          updated_at?: string | null;
+          updated_at?: string;
           user_id?: string;
         };
         Relationships: [
@@ -223,25 +223,25 @@ export interface Database {
       };
       DraftRecipeImage: {
         Row: {
-          created_at: string | null;
+          created_at: string;
           draft_recipe_id: string;
           id: string;
           recipe_image: string;
-          updated_at: string | null;
+          updated_at: string;
         };
         Insert: {
-          created_at?: string | null;
+          created_at?: string;
           draft_recipe_id: string;
           id: string;
           recipe_image: string;
-          updated_at?: string | null;
+          updated_at?: string;
         };
         Update: {
-          created_at?: string | null;
+          created_at?: string;
           draft_recipe_id?: string;
           id?: string;
           recipe_image?: string;
-          updated_at?: string | null;
+          updated_at?: string;
         };
         Relationships: [
           {
@@ -254,25 +254,25 @@ export interface Database {
       };
       DraftRecipeLink: {
         Row: {
-          created_at: string | null;
+          created_at: string;
           draft_recipe_id: string;
           id: string;
           link_url: string;
-          updated_at: string | null;
+          updated_at: string;
         };
         Insert: {
-          created_at?: string | null;
+          created_at?: string;
           draft_recipe_id: string;
           id: string;
           link_url: string;
-          updated_at?: string | null;
+          updated_at?: string;
         };
         Update: {
-          created_at?: string | null;
+          created_at?: string;
           draft_recipe_id?: string;
           id?: string;
           link_url?: string;
-          updated_at?: string | null;
+          updated_at?: string;
         };
         Relationships: [
           {
@@ -285,24 +285,24 @@ export interface Database {
       };
       Favorite: {
         Row: {
-          created_at: string | null;
+          created_at: string;
           id: number;
           recipe_id: string;
-          updated_at: string | null;
+          updated_at: string;
           user_id: string;
         };
         Insert: {
-          created_at?: string | null;
+          created_at?: string;
           id?: number;
           recipe_id: string;
-          updated_at?: string | null;
+          updated_at?: string;
           user_id: string;
         };
         Update: {
-          created_at?: string | null;
+          created_at?: string;
           id?: number;
           recipe_id?: string;
-          updated_at?: string | null;
+          updated_at?: string;
           user_id?: string;
         };
         Relationships: [
@@ -322,28 +322,28 @@ export interface Database {
       };
       Ingredient: {
         Row: {
-          created_at: string | null;
+          created_at: string;
           id: number;
           is_custom: boolean;
           recipe_id: string;
           title: string;
-          updated_at: string | null;
+          updated_at: string;
         };
         Insert: {
-          created_at?: string | null;
+          created_at?: string;
           id?: number;
           is_custom?: boolean;
           recipe_id: string;
           title: string;
-          updated_at?: string | null;
+          updated_at?: string;
         };
         Update: {
-          created_at?: string | null;
+          created_at?: string;
           id?: number;
           is_custom?: boolean;
           recipe_id?: string;
           title?: string;
-          updated_at?: string | null;
+          updated_at?: string;
         };
         Relationships: [
           {
@@ -356,28 +356,28 @@ export interface Database {
       };
       Instruction: {
         Row: {
-          created_at: string | null;
+          created_at: string;
           id: number;
           recipe_id: string;
           step_description: string;
           step_order: number;
-          updated_at: string | null;
+          updated_at: string;
         };
         Insert: {
-          created_at?: string | null;
+          created_at?: string;
           id?: number;
           recipe_id: string;
           step_description: string;
           step_order: number;
-          updated_at?: string | null;
+          updated_at?: string;
         };
         Update: {
-          created_at?: string | null;
+          created_at?: string;
           id?: number;
           recipe_id?: string;
           step_description?: string;
           step_order?: number;
-          updated_at?: string | null;
+          updated_at?: string;
         };
         Relationships: [
           {
@@ -390,30 +390,30 @@ export interface Database {
       };
       Memo: {
         Row: {
-          created_at: string | null;
-          deleted_at: string | null;
+          created_at: string;
           id: number;
           isCompleted: boolean;
+          order: number;
           title: string;
-          updated_at: string | null;
+          updated_at: string;
           user_id: string;
         };
         Insert: {
-          created_at?: string | null;
-          deleted_at?: string | null;
+          created_at?: string;
           id?: number;
           isCompleted?: boolean;
+          order: number;
           title: string;
-          updated_at?: string | null;
+          updated_at?: string;
           user_id: string;
         };
         Update: {
-          created_at?: string | null;
-          deleted_at?: string | null;
+          created_at?: string;
           id?: number;
           isCompleted?: boolean;
+          order?: number;
           title?: string;
-          updated_at?: string | null;
+          updated_at?: string;
           user_id?: string;
         };
         Relationships: [
@@ -427,33 +427,33 @@ export interface Database {
       };
       Recipe: {
         Row: {
-          created_at: string | null;
+          created_at: string;
           description: string;
           id: string;
           is_published: boolean;
           serving_count: number;
           title: string;
-          updated_at: string | null;
+          updated_at: string;
           user_id: string;
         };
         Insert: {
-          created_at?: string | null;
+          created_at?: string;
           description: string;
           id: string;
           is_published?: boolean;
           serving_count: number;
           title: string;
-          updated_at?: string | null;
+          updated_at?: string;
           user_id: string;
         };
         Update: {
-          created_at?: string | null;
+          created_at?: string;
           description?: string;
           id?: string;
           is_published?: boolean;
           serving_count?: number;
           title?: string;
-          updated_at?: string | null;
+          updated_at?: string;
           user_id?: string;
         };
         Relationships: [
@@ -467,25 +467,25 @@ export interface Database {
       };
       RecipeImage: {
         Row: {
-          created_at: string | null;
+          created_at: string;
           id: string;
           recipe_id: string;
           recipe_image: string;
-          updated_at: string | null;
+          updated_at: string;
         };
         Insert: {
-          created_at?: string | null;
+          created_at?: string;
           id: string;
           recipe_id: string;
           recipe_image: string;
-          updated_at?: string | null;
+          updated_at?: string;
         };
         Update: {
-          created_at?: string | null;
+          created_at?: string;
           id?: string;
           recipe_id?: string;
           recipe_image?: string;
-          updated_at?: string | null;
+          updated_at?: string;
         };
         Relationships: [
           {
@@ -498,25 +498,25 @@ export interface Database {
       };
       RecipeLink: {
         Row: {
-          created_at: string | null;
+          created_at: string;
           id: string;
           link_url: string;
           recipe_id: string;
-          updated_at: string | null;
+          updated_at: string;
         };
         Insert: {
-          created_at?: string | null;
+          created_at?: string;
           id: string;
           link_url: string;
           recipe_id: string;
-          updated_at?: string | null;
+          updated_at?: string;
         };
         Update: {
-          created_at?: string | null;
+          created_at?: string;
           id?: string;
           link_url?: string;
           recipe_id?: string;
-          updated_at?: string | null;
+          updated_at?: string;
         };
         Relationships: [
           {
@@ -529,55 +529,55 @@ export interface Database {
       };
       User: {
         Row: {
-          created_at: string | null;
+          created_at: string;
           id: string;
           name: string;
           profile: string | null;
           profileImage: string | null;
           role: Database["public"]["Enums"]["RoleType"];
-          updated_at: string | null;
+          updated_at: string;
         };
         Insert: {
-          created_at?: string | null;
+          created_at?: string;
           id: string;
           name: string;
           profile?: string | null;
           profileImage?: string | null;
           role?: Database["public"]["Enums"]["RoleType"];
-          updated_at?: string | null;
+          updated_at?: string;
         };
         Update: {
-          created_at?: string | null;
+          created_at?: string;
           id?: string;
           name?: string;
           profile?: string | null;
           profileImage?: string | null;
           role?: Database["public"]["Enums"]["RoleType"];
-          updated_at?: string | null;
+          updated_at?: string;
         };
         Relationships: [];
       };
       UserFollower: {
         Row: {
-          created_at: string | null;
+          created_at: string;
           followed_id: string;
           follower_id: string;
           id: number;
-          updated_at: string | null;
+          updated_at: string;
         };
         Insert: {
-          created_at?: string | null;
+          created_at?: string;
           followed_id: string;
           follower_id: string;
           id?: number;
-          updated_at?: string | null;
+          updated_at?: string;
         };
         Update: {
-          created_at?: string | null;
+          created_at?: string;
           followed_id?: string;
           follower_id?: string;
           id?: number;
-          updated_at?: string | null;
+          updated_at?: string;
         };
         Relationships: [
           {
@@ -596,23 +596,23 @@ export interface Database {
       };
       UserLink: {
         Row: {
-          created_at: string | null;
+          created_at: string;
           id: number;
-          updated_at: string | null;
+          updated_at: string;
           url: string;
           user_id: string;
         };
         Insert: {
-          created_at?: string | null;
+          created_at?: string;
           id?: number;
-          updated_at?: string | null;
+          updated_at?: string;
           url: string;
           user_id: string;
         };
         Update: {
-          created_at?: string | null;
+          created_at?: string;
           id?: number;
-          updated_at?: string | null;
+          updated_at?: string;
           url?: string;
           user_id?: string;
         };
