@@ -20,7 +20,7 @@ const Page = () => {
       />
       <section className="mt-5 px-4">
         <h2 className="mb-3 text-lg font-bold">利用規約やお問い合わせ</h2>
-        <Link href={"/terms"} className="flex h-12 items-center justify-between">
+        <Link href={"settings/terms"} className="flex h-12 items-center justify-between">
           利用規約
           <ChevronRight size={20} />
         </Link>
