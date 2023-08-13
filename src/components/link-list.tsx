@@ -15,7 +15,7 @@ export const LinkListItem = () => {
   };
 
   return (
-    <div>
+    <>
       <div className="my-1 ml-4 font-bold">リンク（任意）</div>
       {[...Array(inputCount)].map((_, index) => (
         <Input key={index} className={cn(`rounded-none border-x-0`, index > 0 && "border-t-0")} />
@@ -24,6 +24,6 @@ export const LinkListItem = () => {
         <Plus className="h-4 w-4" />
         <span className="ml-1">リンクを追加する</span>
       </button>
-    </div>
+    </>
   );
 };

@@ -2,16 +2,20 @@
 
 import { useState } from "react";
 
-import { Check } from "lucide-react";
-
-import { cn } from "../lib/utils";
+import CommandIconText from "@/src/components/command-icon-text";
+import { Command, CommandList, CommandSeparator } from "@/src/components/ui/command";
+import { Popover, PopoverContent, PopoverTrigger } from "@/src/components/ui/popover";
+import { cn } from "@/src/lib/utils";
+import { Check, ChevronDown, ChevronUp, MoreVertical, Trash2 } from "lucide-react";
 
 type Props = {
   text: string;
+  isFirst?: boolean; // 買い物リストの一番上だった場合true
+  isLast?: boolean; // 買い物リストの一番下だった場合true
 };
 
 // 買い物リスト
-export const EditableChecklistItem = ({ text: name }: Props) => {
+export const EditableChecklistItem = ({ text: name, isFirst, isLast }: Props) => {
   const [checked, setChecked] = useState(false);
 
   return (
@@ -34,11 +38,21 @@ export const EditableChecklistItem = ({ text: name }: Props) => {
           {name}
         </div>
       </div>
-      {checked && (
-        <button className="w-fit whitespace-nowrap rounded-md px-2 text-sm text-tomato9 hover:bg-mauve3 md:text-base">
-          削除
-        </button>
-      )}
+      <Popover>
+        <PopoverTrigger>
+          <MoreVertical size={20} />
+        </PopoverTrigger>
+        <PopoverContent className="grid gap-3 p-3 text-mauve11">
+          <Command>
+            <CommandList>
+              {isFirst && <CommandIconText Icon={ChevronDown} text="上に移動する" />}
+              {isLast && <CommandIconText Icon={ChevronUp} text="下に移動する" />}
+              <CommandSeparator />
+              <CommandIconText Icon={Trash2} text="アイテムを削除する" />
+            </CommandList>
+          </Command>
+        </PopoverContent>
+      </Popover>
     </div>
   );
 };
