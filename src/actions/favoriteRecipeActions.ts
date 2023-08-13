@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
+import { notFound } from "next/navigation";
 
 import { createServerActionClient } from "@supabase/auth-helpers-nextjs";
 
@@ -15,7 +15,7 @@ export const favoriteRecipe = async (recipeId: string): Promise<ActionsResult> =
     data: { session },
   } = await createServerActionClient<Database>({ cookies }).auth.getSession();
 
-  if (!session) redirect("/login");
+  if (!session) notFound();
 
   try {
     await prisma.favorite.create({
@@ -43,7 +43,7 @@ export const unFavoriteRecipe = async (recipeId: string): Promise<ActionsResult>
     data: { session },
   } = await createServerActionClient<Database>({ cookies }).auth.getSession();
 
-  if (!session) redirect("/login");
+  if (!session) notFound();
 
   try {
     await prisma.favorite.delete({

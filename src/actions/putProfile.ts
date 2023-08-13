@@ -19,7 +19,7 @@ export const putProfile = zact(editProfileFormSchema)(async ({ nickName, bio, ur
     data: { session },
   } = await supabaseServerClient.auth.getSession();
 
-  if (!session) redirect("/login");
+  if (!session) notFound();
 
   const currentUserLinks = await prisma.userLink.findMany({
     where: {

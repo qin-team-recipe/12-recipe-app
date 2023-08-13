@@ -1,4 +1,8 @@
-lockfileVersion: '6.0'
+lockfileVersion: '6.1'
+
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false
 
 dependencies:
   '@hookform/resolvers':
@@ -61,6 +65,9 @@ dependencies:
   '@svgr/webpack':
     specifier: ^8.0.1
     version: 8.0.1
+  '@tabler/icons-react':
+    specifier: ^2.30.0
+    version: 2.30.0(react@18.2.0)
   '@tanstack/react-table':
     specifier: ^8.9.3
     version: 8.9.3(react-dom@18.2.0)(react@18.2.0)
@@ -3029,6 +3036,20 @@ packages:
     resolution: {integrity: sha512-sJ902EfIzn1Fa+qYmjdQqh8tPsoxyBz+8yBKC2HKUxyezKJFwPGOn7pv4WY6QuQW//ySQi5lJjA/ZT9sNWWNTg==}
     dependencies:
       tslib: 2.6.0
+    dev: false
+
+  /@tabler/icons-react@2.30.0(react@18.2.0):
+    resolution: {integrity: sha512-aYggXusHW133L4KujJkVf4GIIrjg7tIRHgNf/n37mnoHqMjwNP+PjmVdrBM1Z8Ywx9PKFRlrwM0eUMDcG+I4HA==}
+    peerDependencies:
+      react: ^16.5.1 || ^17.0.0 || ^18.0.0
+    dependencies:
+      '@tabler/icons': 2.30.0
+      prop-types: 15.8.1
+      react: 18.2.0
+    dev: false
+
+  /@tabler/icons@2.30.0:
+    resolution: {integrity: sha512-tvtmkI4ALjKThVVORh++sB9JnkFY7eGInKxNy+Df7WVQiF7T85tlvGADzlgX4Ic+CK5MIUzZ0jhOlQ/RRlgXpg==}
     dev: false
 
   /@tanstack/react-table@8.9.3(react-dom@18.2.0)(react@18.2.0):
@@ -6189,7 +6210,3 @@ packages:
   /zod@3.21.4:
     resolution: {integrity: sha512-m46AKbrzKVzOzs/DZgVnG5H55N1sv1M8qZU3A8RIKbs3mrACDNeIOeilDymVb2HdmP8uwshOCF4uJ8uM9rCqJw==}
     dev: false
-
-settings:
-  autoInstallPeers: true
-  excludeLinksFromLockfile: false

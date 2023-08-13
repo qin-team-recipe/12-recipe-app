@@ -17,7 +17,7 @@ export const postAllToCart = async (recipeId: string, ingredientIds: number[]): 
     data: { session },
   } = await supabaseServerClient.auth.getSession();
 
-  if (!session) redirect("/login");
+  if (!session) notFound();
 
   try {
     const cartList = await prisma.cartList.findFirst({

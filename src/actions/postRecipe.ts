@@ -20,7 +20,7 @@ export const postRecipe = zact(createRecipeFormSchema)(
       data: { session },
     } = await supabaseServerClient.auth.getSession();
 
-    if (!session) redirect("/login");
+    if (!session) notFound();
 
     try {
       await prisma.recipe.create({

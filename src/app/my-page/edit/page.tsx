@@ -8,7 +8,7 @@ import { EditFormValues, EditProfileForm } from "./_components/edit-profile-form
 const page = async () => {
   const user = await getAuthenticatedUser();
 
-  if (!user) redirect("/login");
+  if (!user) notFound();
 
   const defaultValues: Partial<EditFormValues> = {
     nickName: user.name,

@@ -1,5 +1,5 @@
 import { cookies } from "next/headers";
-import { notFound, redirect } from "next/navigation";
+import { notFound } from "next/navigation";
 
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 
@@ -48,7 +48,7 @@ export const getChefById = async ({ id, orderByLikes = false }: { id: string; or
     data: { session },
   } = await supabaseServerClient.auth.getSession();
 
-  if (!session) redirect("/login");
+  if (!session) notFound();
 
   // シェフのフォロワー数を取得
   const followersCount = await prisma.userFollower.count({

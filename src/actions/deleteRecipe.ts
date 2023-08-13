@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
+import { notFound } from "next/navigation";
 
 import { prisma } from "@/src/lib/prisma";
 import { createServerActionClient } from "@supabase/auth-helpers-nextjs";
@@ -15,7 +15,7 @@ export const deleteRecipe = async (id: string): Promise<ActionsResult> => {
     data: { session },
   } = await createServerActionClient<Database>({ cookies }).auth.getSession();
 
-  if (!session) redirect("/login");
+  if (!session) notFound();
 
   try {
     // 物理削除

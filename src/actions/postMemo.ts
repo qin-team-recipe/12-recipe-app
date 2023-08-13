@@ -17,7 +17,7 @@ export const postMemo = async (formData: FormData): Promise<ActionsResult> => {
     data: { session },
   } = await supabaseServerClient.auth.getSession();
 
-  if (!session) redirect("/login");
+  if (!session) notFound();
 
   const title = String(formData.get("title"));
 

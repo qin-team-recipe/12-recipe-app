@@ -22,7 +22,7 @@ export const putRecipe = zact(editRecipeFormSchema)(
       data: { session },
     } = await supabaseServerClient.auth.getSession();
 
-    if (!session) redirect("/login");
+    if (!session) notFound();
 
     try {
       const existingRecipe = await prisma.recipe.findUnique({

@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
+import { notFound } from "next/navigation";
 
 import { createServerActionClient } from "@supabase/auth-helpers-nextjs";
 
@@ -18,7 +18,7 @@ export const followChef = async (followedId: string): Promise<ActionsResult> => 
     data: { session },
   } = await supabaseServerClient.auth.getSession();
 
-  if (!session) redirect("/login");
+  if (!session) notFound();
 
   try {
     // 自身をフォローするのを防ぐ
@@ -59,7 +59,7 @@ export const unFollowChef = async (followedId: string): Promise<ActionsResult> =
     data: { session },
   } = await supabaseServerClient.auth.getSession();
 
-  if (!session) redirect("/login");
+  if (!session) notFound();
 
   try {
     // 自身をフォローするのを防ぐ

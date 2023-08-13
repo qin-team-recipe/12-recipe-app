@@ -13,7 +13,7 @@ export const getRecipeById = async (id: string) => {
     data: { session },
   } = await supabaseServerClient.auth.getSession();
 
-  if (!session) redirect("/login");
+  if (!session) notFound();
 
   const recipe = await prisma.recipe.findUnique({
     where: {

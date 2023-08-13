@@ -17,7 +17,7 @@ export const putMemo = async (id: number, isCompleted: boolean): Promise<Actions
     data: { session },
   } = await supabaseServerClient.auth.getSession();
 
-  if (!session) redirect("/login");
+  if (!session) notFound();
 
   try {
     // 論理削除

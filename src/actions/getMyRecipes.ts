@@ -1,5 +1,5 @@
 import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
+import { notFound } from "next/navigation";
 
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 
@@ -21,7 +21,7 @@ export const getMyRecipes = async (
     data: { session },
   } = await supabaseServerClient.auth.getSession();
 
-  if (!session) redirect("/login");
+  if (!session) notFound();
 
   const myRecipe = await prisma.recipe.findMany({
     where: {
