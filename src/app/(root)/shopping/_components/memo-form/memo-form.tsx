@@ -100,6 +100,7 @@ const MemoForm = ({ defaultValues }: Props) => {
     const result = await deleteMemoAll();
     if (result.isSuccess) {
       remove();
+
       toast({
         variant: "default",
         title: result.message,
@@ -132,7 +133,7 @@ const MemoForm = ({ defaultValues }: Props) => {
                 <CommandList>
                   <CommandItem>
                     <button
-                      className="flex"
+                      className="flex w-full"
                       disabled={{ memo: form.getValues("memo") }.memo.find((memo) => memo.isCompleted) === undefined}
                       onClick={handleDeleteCompletedMemos}
                     >
@@ -141,7 +142,11 @@ const MemoForm = ({ defaultValues }: Props) => {
                     </button>
                   </CommandItem>
                   <CommandItem>
-                    <button className="flex" disabled={watchedValues.length === 0} onClick={handleDeleteAllMemos}>
+                    <button
+                      className="flex w-full"
+                      disabled={watchedValues.length === 0}
+                      onClick={handleDeleteAllMemos}
+                    >
                       <Trash2 className="mr-2 h-4 w-4" />
                       <span>全てのアイテムを削除する</span>
                     </button>
