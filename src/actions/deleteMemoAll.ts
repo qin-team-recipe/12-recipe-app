@@ -1,14 +1,16 @@
 "use server";
 
+import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
 import { prisma } from "@/src/lib/prisma";
 import { ActionsResult } from "@/src/types/ActionsResult";
-import { Database } from "@/src/types/SupabaseTypes";
 import { createServerActionClient } from "@supabase/auth-helpers-nextjs";
 
-export const postMemo = async (): Promise<ActionsResult & { id?: number }> => {
+import { Database } from "../types/SupabaseTypes";
+
+export const deleteMemoAll = async (): Promise<ActionsResult> => {
   const cookieStore = cookies();
   const {
     data: { session },
@@ -17,21 +19,23 @@ export const postMemo = async (): Promise<ActionsResult & { id?: number }> => {
   if (!session) redirect("/login");
 
   try {
-    const memo = await prisma.memo.create({
-      data: {
+    await prisma.memo.deleteMany({
+      where: {
         userId: session.user.id,
-        title: "",
-        order: (await prisma.memo.count({ where: { userId: session.user.id } })) + 1,
       },
     });
 
+    revalidatePath("/shopping-list");
+
     return {
       isSuccess: true,
-      message: "メモを作成しました🎉",
-      id: memo.id,
+      message: "すべてのメモを削除しました🔥",
     };
   } catch (error) {
-    console.log(error);
-    return { isSuccess: false, error: "メモの作成に失敗しました🥲" };
+    console.error(error);
+    return {
+      isSuccess: false,
+      error: "メモの削除に失敗しました🥲",
+    };
   }
 };

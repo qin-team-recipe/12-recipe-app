@@ -19,13 +19,13 @@ export const getMemos = async () => {
       userId: true,
       title: true,
       isCompleted: true,
+      order: true,
     },
     where: {
       userId: session.user.id,
-      deletedAt: null,
     },
     orderBy: {
-      createdAt: "desc",
+      order: "asc",
     },
   });
 
