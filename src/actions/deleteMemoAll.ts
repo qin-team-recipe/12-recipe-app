@@ -25,7 +25,7 @@ export const deleteMemoAll = async (): Promise<ActionsResult> => {
       },
     });
 
-    revalidatePath("/shopping");
+    revalidatePath("/shopping-list");
 
     return {
       isSuccess: true,

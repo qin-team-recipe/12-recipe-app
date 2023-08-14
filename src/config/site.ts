@@ -14,7 +14,7 @@ export const siteConfig = {
     },
     {
       title: "お買い物",
-      href: "/shopping",
+      href: "/shopping-list",
     },
   ],
 };

@@ -47,7 +47,7 @@ export const deleteMemoById = async (id: number): Promise<ActionsResult> => {
 
     await prisma.$transaction(updateMemos);
 
-    revalidatePath("/shopping");
+    revalidatePath("/shopping-list");
 
     return {
       isSuccess: true,

@@ -25,7 +25,7 @@ export const patchMemoCompleteStatus = async (id: number, isCompleted: boolean):
       where: { id },
     });
 
-    revalidatePath("/shopping");
+    revalidatePath("/shopping-list");
 
     return {
       isSuccess: true,

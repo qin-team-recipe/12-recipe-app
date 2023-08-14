@@ -25,7 +25,7 @@ export const patchMemoTitle = async (id: number, title: string): Promise<Actions
       where: { id },
     });
 
-    revalidatePath("/shopping");
+    revalidatePath("/shopping-list");
 
     return {
       isSuccess: true,

@@ -79,7 +79,7 @@ export const putMemoOrder = async ({
       },
     });
 
-    revalidatePath("/shopping");
+    revalidatePath("/shopping-list");
 
     return {
       isSuccess: true,

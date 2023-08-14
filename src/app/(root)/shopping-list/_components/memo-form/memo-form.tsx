@@ -5,7 +5,7 @@ import { useCallback, useState } from "react";
 import { deleteMemoAll } from "@/src/actions/deleteMemoAll";
 import { deleteMemoCompleted } from "@/src/actions/deleteMemoCompleted";
 import { postMemo } from "@/src/actions/postMemo";
-import { MemoListTile } from "@/src/app/(root)/shopping/_components/memo-form/memo-list-tile";
+import { MemoListTile } from "@/src/app/(root)/shopping-list/_components/memo-form/memo-list-tile";
 import { Command, CommandItem, CommandList } from "@/src/components/ui/command";
 import { Form } from "@/src/components/ui/form";
 import { Popover, PopoverContent, PopoverTrigger } from "@/src/components/ui/popover";
