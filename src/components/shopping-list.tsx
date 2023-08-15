@@ -1,14 +1,13 @@
 "use client";
 
-import { ChangeEvent, useEffect, useRef, useState, useTransition } from "react";
+import { ChangeEvent, useRef, useState, useTransition } from "react";
 
 import CommandIconText from "@/src/components/command-icon-text";
 import { Command, CommandList, CommandSeparator } from "@/src/components/ui/command";
 import { Popover, PopoverContent, PopoverTrigger } from "@/src/components/ui/popover";
 import { cn } from "@/src/lib/utils";
 import { Check, ChevronDown, ChevronUp, MoreVertical, Trash2 } from "lucide-react";
-
-import { Textarea } from "./ui/textarea";
+import TextareaAutoSize from "react-textarea-autosize";
 
 type Props = {
   text: string;
@@ -26,28 +25,11 @@ export const EditableChecklistItem = ({ text: name, isFirst, isLast }: Props) =>
 
   const [, startTransition] = useTransition();
 
-  // textareaの高さを自動的に対応してくれる処理
-  const resizeTextArea = () => {
-    if (!textAreaRef.current) {
-      return;
-    }
-
-    textAreaRef.current.style.height = "auto"; // will not work without this!
-    textAreaRef.current.style.height = `${textAreaRef.current.scrollHeight}px`;
-  };
-
   const handleChangeCartText = (e: ChangeEvent<HTMLTextAreaElement>) => {
     startTransition(() => {
       setValue(e.target.value);
-      resizeTextArea();
     });
   };
-
-  // 1回目の読み込み時にテキストエリアのサイズを調整する
-  useEffect(() => {
-    resizeTextArea();
-    window.addEventListener("resize", resizeTextArea);
-  }, []);
 
   return (
     <div className="flex flex-row justify-between gap-x-2 border-y py-4 pl-4 pr-3">
@@ -63,15 +45,14 @@ export const EditableChecklistItem = ({ text: name, isFirst, isLast }: Props) =>
         >
           {checked && <Check />}
         </button>
-        <Textarea
+        <TextareaAutoSize
           className={cn(
-            ` min-h-0 resize-none border-none bg-white text-sm text-mauve12 focus:outline-0 focus-visible:ring-0 md:text-base`,
+            `min-h-0 w-full resize-none border-none bg-white text-sm text-mauve12 focus:outline-0 focus-visible:ring-0 md:text-base`,
             checked && "text-mauve8"
           )}
+          minRows={1}
           ref={textAreaRef}
-          wrap="soft"
           value={value}
-          rows={1}
           onChange={handleChangeCartText}
         />
       </div>
