@@ -24,7 +24,7 @@ const CloseButton = () => {
         <SelectableDialog
           title="確認"
           message="作成中のレシピは保存されません。 下書きに保存しますか？"
-          trigger={<X size={20} />}
+          triggerComponent={<X size={20} />}
           onConfirm={async () => {
             const result = await postDraftRecipe(draftRecipeFormValues);
 

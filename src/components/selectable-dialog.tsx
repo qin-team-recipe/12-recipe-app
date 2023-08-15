@@ -20,17 +20,25 @@ type Props = {
   onConfirm: () => void;
   confirmLabel: string;
   onCancel?: () => void;
-  cancelLabel?: string;
-  trigger: React.ReactNode;
+  cancelLabel: string;
+  triggerComponent: React.ReactNode;
 };
 
-const SelectableDialog = ({ confirmLabel, message, onConfirm, title, cancelLabel, onCancel, trigger }: Props) => {
+const SelectableDialog = ({
+  confirmLabel,
+  message,
+  onConfirm,
+  title,
+  cancelLabel,
+  onCancel,
+  triggerComponent,
+}: Props) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isPending, startTransition] = useTransition();
 
   return (
     <Dialog open={isOpen} onOpenChange={(open) => setIsOpen(open)}>
-      <DialogTrigger onClick={() => setIsOpen(true)}>{trigger}</DialogTrigger>
+      <DialogTrigger onClick={() => setIsOpen(true)}>{triggerComponent}</DialogTrigger>
       <DialogContent>
         <DialogHeader>
           <DialogTitle className="self-center">{title}</DialogTitle>
@@ -48,28 +56,18 @@ const SelectableDialog = ({ confirmLabel, message, onConfirm, title, cancelLabel
           >
             {isPending ? <Spinner /> : confirmLabel}
           </Button>
-          {cancelLabel && (
-            <Button
-              className="flex-1 border-tomato7 text-tomato11"
-              variant="outline"
-              onClick={
-                onCancel
-                  ? () => {
-                      startTransition(() => {
-                        onCancel();
-                        setIsOpen(false);
-                      });
-                    }
-                  : () => {
-                      startTransition(() => {
-                        setIsOpen(false);
-                      });
-                    }
-              }
-            >
-              {cancelLabel}
-            </Button>
-          )}
+          <Button
+            className="flex-1 border-tomato7 text-tomato11"
+            variant="outline"
+            onClick={() => {
+              startTransition(() => {
+                if (onCancel) onCancel();
+                setIsOpen(false);
+              });
+            }}
+          >
+            {cancelLabel}
+          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

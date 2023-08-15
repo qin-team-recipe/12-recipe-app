@@ -36,7 +36,7 @@ const DraftRecipeTile = ({ id, title, createdAt }: Props) => {
       <SelectableDialog
         title="確認"
         message="下書きレシピを削除しますか？"
-        trigger={<Trash2 size={20} />}
+        triggerComponent={<Trash2 size={20} />}
         onConfirm={async () => {
           const { isSuccess } = await deleteDraftRecipe(id);
 
