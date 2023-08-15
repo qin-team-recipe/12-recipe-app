@@ -97,8 +97,8 @@ const SearchInput = () => {
           onChange={(e) => {
             setInputValue(e.target.value);
           }}
-          placeholder="レシピやシェフを検索"
-          className="bg-mauve4 pl-10 placeholder:text-mauve9 focus:border"
+          placeholder="シェフやレシピを検索"
+          className="bg-mauve4 pl-10 placeholder:font-bold placeholder:text-mauve9 focus:border"
         />
         {isPending && (
           <div className="absolute right-2 top-1/2 -translate-y-1/2">

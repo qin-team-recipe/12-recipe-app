@@ -1,7 +1,7 @@
 export type SiteConfig = typeof siteConfig;
 
 export const siteConfig = {
-  title: "レシピアプリ",
+  title: "一流レシピ",
   description: "レシピアプリ",
   mainNav: [
     {

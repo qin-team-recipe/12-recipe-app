@@ -1,22 +1,12 @@
 "use client";
 
-import { useTransition } from "react";
 import { useRouter } from "next/navigation";
 
 import { postDraftRecipe } from "@/src/actions/postDraftRecipe";
 import { recipeFormStateAtom } from "@/src/atoms/draftRecipeFormValuesAtom";
 import { CreateRecipeFormValues } from "@/src/components/create-recipe-form";
 import { CreateDraftRecipeFormValues } from "@/src/components/create-recipe-form/schema";
-import { Button } from "@/src/components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/src/components/ui/dialog";
-import Spinner from "@/src/components/ui/spinner";
+import SelectableDialog from "@/src/components/selectable-dialog";
 import { useToast } from "@/src/components/ui/use-toast";
 import { kToastDuration } from "@/src/constants/constants";
 import { useAtom } from "jotai";
@@ -25,57 +15,49 @@ import { X } from "lucide-react";
 const CloseButton = () => {
   const router = useRouter();
   const { toast } = useToast();
-  const [isPending, startTransition] = useTransition();
   const [{ isDraft, draftRecipeFormValues }, setIsEditing] = useAtom(recipeFormStateAtom);
 
   return (
     // TODO: 下書き保存の処理を実装する
     <div className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full text-mauve12">
       {isDraft ? (
-        <Dialog>
-          <DialogTrigger>
-            <X size={20} />
-          </DialogTrigger>
-          <DialogContent>
-            <DialogHeader>
-              <DialogTitle className="self-center">確認</DialogTitle>
-            </DialogHeader>
-            <p className="text-center text-sm">作成中のレシピは保存されません。 下書きに保存しますか？</p>
-            <DialogFooter>
-              <Button
-                className="w-full"
-                variant="outline"
-                onClick={() => {
-                  startTransition(async () => {
-                    const result = await postDraftRecipe(draftRecipeFormValues);
+        <SelectableDialog
+          title="確認"
+          message="作成中のレシピは保存されません。 下書きに保存しますか？"
+          triggerComponent={<X size={20} />}
+          onConfirm={async () => {
+            const result = await postDraftRecipe(draftRecipeFormValues);
 
-                    if (result.isSuccess) {
-                      toast({
-                        variant: "default",
-                        title: result.message,
-                        duration: kToastDuration,
-                      });
-                      router.push("/my-page");
-                    } else {
-                      toast({
-                        variant: "destructive",
-                        title: result.error,
-                        duration: kToastDuration,
-                      });
-                    }
+            if (result.isSuccess) {
+              toast({
+                variant: "default",
+                title: result.message,
+                duration: kToastDuration,
+              });
+              router.push("/my-page");
+            } else {
+              toast({
+                variant: "destructive",
+                title: result.error,
+                duration: kToastDuration,
+              });
+            }
 
-                    setIsEditing({
-                      isDraft: false,
-                      draftRecipeFormValues: {} as CreateRecipeFormValues,
-                    });
-                  });
-                }}
-              >
-                {isPending ? <Spinner /> : "保存する"}
-              </Button>
-            </DialogFooter>
-          </DialogContent>
-        </Dialog>
+            setIsEditing({
+              isDraft: false,
+              draftRecipeFormValues: {} as CreateRecipeFormValues,
+            });
+          }}
+          confirmLabel="保存する"
+          onCancel={() => {
+            setIsEditing({
+              isDraft: false,
+              draftRecipeFormValues: {} as CreateDraftRecipeFormValues,
+            });
+            router.push("/my-page");
+          }}
+          cancelLabel="保存せずに戻る"
+        />
       ) : (
         <X
           size={20}
