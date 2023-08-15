@@ -4,7 +4,7 @@ export const searchBasePath = "/search";
 
 export const favoriteBasePath = "/favorite";
 
-export const shoppingBasePath = "/shopping";
+export const shoppingBasePath = "/shopping-lists";
 
 export const sideBarRoutes = (pathname: string) => [
   { href: "/", label: "話題を検索", icon: Search, active: pathname === "/" || pathname.includes(searchBasePath) },
