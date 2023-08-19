@@ -6,9 +6,9 @@ const layout = async ({ children }: { children: React.ReactNode }) => {
   return (
     <>
       <SideNavbar />
-      <Separator className="hidden h-full w-[1px] md:block" />
-      <main className="flex-1 overflow-y-auto pb-20 md:pb-8">{children}</main>
-      <Separator className="hidden h-full w-[1px] md:block" />
+      <main className="block h-auto min-h-screen items-center pb-24 md:w-[800px] md:max-w-[800px] md:border-x-[1px] md:border-x-border md:pb-8">
+        {children}
+      </main>
       <BottomNavbar />
     </>
   );

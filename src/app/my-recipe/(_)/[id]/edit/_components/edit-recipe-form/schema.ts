@@ -1,7 +1,12 @@
+import { JsonValue } from "@/src/types/json";
 import * as z from "zod";
 
 export type EditRecipeFormValues = z.infer<typeof editRecipeFormSchema>;
 
+const literalSchema = z.union([z.string(), z.number(), z.boolean(), z.null()]);
+const jsonSchema: z.ZodSchema<JsonValue> = z.lazy(() =>
+  z.union([literalSchema, z.array(jsonSchema), z.record(jsonSchema)])
+);
 export const editRecipeFormSchema = z.object({
   recipeId: z.string(),
 
@@ -26,9 +31,14 @@ export const editRecipeFormSchema = z.object({
 
   instructions: z.array(
     z.object({
-      value: z.string().min(1, {
-        message: "作り方は必須です",
-      }),
+      value: jsonSchema.refine(
+        (value) => {
+          return value !== null && value !== undefined && Object.keys(value).length > 0;
+        },
+        {
+          message: "作り方は必須です",
+        }
+      ),
       id: z.number().optional(),
       order: z.number().optional(),
     })

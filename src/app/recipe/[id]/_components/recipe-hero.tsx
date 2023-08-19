@@ -1,15 +1,11 @@
 import Image from "next/image";
 
 import { getRecipeById } from "@/src/actions/getRecipeById";
-import FavoriteButton from "@/src/app/my-recipe/[id]/_components/favorite-button";
 import PopoverMenu from "@/src/app/my-recipe/[id]/_components/popover-menu";
 import LinkToIconRenderer from "@/src/components/link-to-icon-renderer";
-import NumberUnit from "@/src/components/number-unit";
-import ProfileLink from "@/src/components/profile-link";
 import RouterBackButton from "@/src/components/router-back-button";
 import { Command, CommandItem, CommandList } from "@/src/components/ui/command";
 import { Popover, PopoverContent, PopoverTrigger } from "@/src/components/ui/popover";
-import { CONSTANTS } from "@/src/constants/constants";
 import { sortSiteLinks } from "@/src/lib/utils";
 import { CircleEllipsis } from "lucide-react";
 

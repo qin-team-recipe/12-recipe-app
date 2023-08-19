@@ -1,6 +1,8 @@
 import Link from "next/link";
+
 import TopBar from "@/src/components/layout/top-bar";
 import { ArrowLeft } from "lucide-react";
+
 import TermsSection from "../_components/terms-section";
 
 const termsList = [

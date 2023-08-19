@@ -73,10 +73,10 @@ export const putRecipe = zact(editRecipeFormSchema)(
             deleteMany: toBeDeleteInstructions.map((instruction) => ({ id: instruction.id })),
             updateMany: toBeUpdatedInstructions.map((instruction) => ({
               where: { id: instruction!.id },
-              data: { stepDescription: instruction?.stepDescription, stepOrder: instruction?.stepOrder },
+              data: { stepDescription: String(instruction?.stepDescription), stepOrder: instruction?.stepOrder },
             })),
             create: toBeCreatedInstructions.map((instruction, index) => ({
-              stepDescription: instruction?.value,
+              stepDescription: String(instruction?.value),
               stepOrder: instruction?.order ?? index + 1,
             })),
           },

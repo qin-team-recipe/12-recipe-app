@@ -7,7 +7,7 @@ const page = async ({ params }: { params: { id: string } }) => {
   return (
     <div className="flex flex-col">
       {instructions.map((instruction) => (
-        <RecipeStep key={instruction.id} stepNumber={instruction.stepOrder} recipeText={instruction.stepDescription} />
+        <RecipeStep key={instruction.id} stepNumber={instruction.stepOrder} instruction={instruction.stepDescription} />
       ))}
     </div>
   );

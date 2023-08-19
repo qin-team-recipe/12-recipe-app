@@ -11,7 +11,7 @@ const InstructionList = async ({ id }: Props) => {
   return (
     <div className="flex flex-col">
       {Instruction.map((instruction) => (
-        <RecipeStep key={instruction.id} stepNumber={instruction.stepOrder} recipeText={instruction.stepDescription} />
+        <RecipeStep key={instruction.id} stepNumber={instruction.stepOrder} instruction={instruction.stepDescription} />
       ))}
     </div>
   );

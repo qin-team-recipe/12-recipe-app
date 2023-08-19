@@ -51,7 +51,7 @@ const RecipeInfoStats = ({ recipeId, isActive, isPublished, favoriteCount }: Pro
           href={`/my-recipe/${recipeId}/edit`}
           className={buttonVariants({
             variant: "outline",
-            className: "flex-1 border-mauve9 text-mauve12",
+            className: "flex-1",
           })}
         >
           レシピを編集
