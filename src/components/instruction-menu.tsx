@@ -20,7 +20,7 @@ type Props = {
   instructionsFields: any;
   removeInstructions: any;
   form: any;
-  value: any;
+  currentEditorState: EditorState;
 };
 
 const InstructionMenu = ({
@@ -30,11 +30,10 @@ const InstructionMenu = ({
   instructionsFields,
   removeInstructions,
   form,
-  value,
+  currentEditorState,
 }: Props) => {
-  const [editorState, setEditorState] = useState(() =>
-    EditorState.createWithContent(ContentState.createFromText(value))
-  );
+  const [editorState, setEditorState] = useState(currentEditorState);
+
   const [isOpenPopover, setIsOpenPopover] = useState(false);
 
   const toggleBold = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {

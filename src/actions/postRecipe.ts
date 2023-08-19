@@ -35,7 +35,7 @@ export const postRecipe = zact(createRecipeFormSchema)(
           Instruction: {
             create: instructions.map((instruction, index) => ({
               stepOrder: index + 1,
-              stepDescription: String(instruction.value),
+              stepDescription: instruction.value,
             })),
           },
           ...(urls.find((url) => url!.value != "") && {

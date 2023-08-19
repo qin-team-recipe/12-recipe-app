@@ -15,6 +15,7 @@ import { useToast } from "@/src/components/ui/use-toast";
 import { kToastDuration } from "@/src/constants/constants";
 import { cn } from "@/src/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { ContentState, EditorState } from "draft-js";
 import { useAtom } from "jotai";
 import { Minus, Plus, PlusIcon, X } from "lucide-react";
 import { useFieldArray, useForm } from "react-hook-form";
@@ -270,7 +271,9 @@ const CreateRecipeForm = ({ defaultValues, redirectPath }: Props) => {
                               watchedValues,
                               setValue,
                               form,
-                              value: field.value,
+                              currentEditorState: EditorState.createWithContent(
+                                ContentState.createFromText(field.value)
+                              ),
                             }}
                           />
                         </div>

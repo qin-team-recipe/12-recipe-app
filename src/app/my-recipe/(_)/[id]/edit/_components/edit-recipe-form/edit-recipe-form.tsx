@@ -8,18 +8,16 @@ import { useRouter } from "next/navigation";
 import { putRecipe } from "@/src/actions/putRecipe";
 import InstructionMenu from "@/src/components/instruction-menu";
 import { Button, buttonVariants } from "@/src/components/ui/button";
-import { Command, CommandItem, CommandList, CommandSeparator } from "@/src/components/ui/command";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/src/components/ui/form";
 import { Input } from "@/src/components/ui/input";
-import { Popover, PopoverContent, PopoverTrigger } from "@/src/components/ui/popover";
 import Spinner from "@/src/components/ui/spinner";
 import { Textarea } from "@/src/components/ui/textarea";
 import { useToast } from "@/src/components/ui/use-toast";
 import { cn } from "@/src/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ChevronDown, ChevronUp, Minus, MoreVertical, Pencil, Plus, PlusIcon, Trash, X } from "lucide-react";
+import { convertFromRaw, EditorState } from "draft-js";
+import { Minus, Plus, PlusIcon, X } from "lucide-react";
 import { useFieldArray, useForm } from "react-hook-form";
-import { Drawer } from "vaul";
 import { z } from "zod";
 
 import { editRecipeFormSchema, EditRecipeFormValues } from ".";
@@ -212,37 +210,42 @@ const EditRecipeForm = ({ defaultValues }: Props) => {
                 control={form.control}
                 key={field.id}
                 name={`instructions.${index}.value`}
-                render={({ field }) => (
-                  <FormItem className="space-y-0">
-                    <FormLabel className={cn("mb-1 ml-3 flex items-center gap-3", index !== 0 && "sr-only")}>
-                      <span className="text-lg font-bold">作り方</span>
-                    </FormLabel>
-                    <FormControl>
-                      <div className="relative flex-1">
-                        <div className="absolute left-4 top-1/2 mt-px flex h-5 w-5 shrink-0 -translate-y-1/2 select-none items-center justify-center rounded-full bg-tomato9 text-sm text-mauve1">
-                          {stepOrder}
+                render={({ field }) => {
+                  const contentState = convertFromRaw(JSON.parse(field.value));
+                  const currentEditorState = EditorState.createWithContent(contentState);
+
+                  return (
+                    <FormItem className="space-y-0">
+                      <FormLabel className={cn("mb-1 ml-3 flex items-center gap-3", index !== 0 && "sr-only")}>
+                        <span className="text-lg font-bold">作り方</span>
+                      </FormLabel>
+                      <FormControl>
+                        <div className="relative flex-1">
+                          <div className="absolute left-4 top-1/2 mt-px flex h-5 w-5 shrink-0 -translate-y-1/2 select-none items-center justify-center rounded-full bg-tomato9 text-sm text-mauve1">
+                            {stepOrder}
+                          </div>
+                          <p className="flex h-10 max-w-[800px] items-center self-center overflow-hidden whitespace-nowrap rounded-none border-x-0 border-y px-12">
+                            <span className="inline-block max-w-full overflow-hidden">
+                              {formatJSONDisplay(field.value)}
+                            </span>
+                          </p>
+                          <InstructionMenu
+                            {...{
+                              index,
+                              form,
+                              instructionsFields,
+                              removeInstructions,
+                              stepOrder,
+                              watchedValues,
+                              currentEditorState,
+                            }}
+                          />
                         </div>
-                        <p className="flex h-10 max-w-[800px] items-center self-center overflow-hidden whitespace-nowrap rounded-none border-x-0 border-y px-12">
-                          <span className="inline-block max-w-full overflow-hidden">
-                            {formatJSONDisplay(field.value)}
-                          </span>
-                        </p>
-                        <InstructionMenu
-                          {...{
-                            index,
-                            form,
-                            instructionsFields,
-                            removeInstructions,
-                            stepOrder,
-                            watchedValues,
-                            value: field.value,
-                          }}
-                        />
-                      </div>
-                    </FormControl>
-                    <FormMessage className="ml-4 pt-1" />
-                  </FormItem>
-                )}
+                      </FormControl>
+                      <FormMessage className="ml-4 pt-1" />
+                    </FormItem>
+                  );
+                }}
               />
             );
           })}
