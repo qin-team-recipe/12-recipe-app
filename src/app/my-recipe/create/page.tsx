@@ -5,7 +5,6 @@ import { deleteDraftRecipe } from "@/src/actions/deleteDraftRecipe";
 import { getAuthenticatedUser } from "@/src/actions/getAuthenticatedUser";
 import { getDraftRecipe } from "@/src/actions/getDraftRecipe";
 import TopBar from "@/src/components/layout/top-bar";
-import { Json } from "@/src/types/json";
 
 import { CreateRecipeForm, CreateRecipeFormValues } from "../../../components/create-recipe-form";
 import CloseButton from "./_components/close-button";
@@ -60,10 +59,7 @@ const page = async ({ searchParams }: { searchParams: { [key: string]: string | 
       instructions:
         draftInstruction && draftInstruction.length > 0
           ? draftInstruction.map((instruction) => {
-              const value = instruction?.stepDescription as Json;
-              return {
-                value,
-              };
+              return { value: String(instruction?.stepDescription) || "" };
             })
           : [{ value: "" }],
       urls:

@@ -1,6 +1,5 @@
 import { getRecipeById } from "@/src/actions/getRecipeById";
 import TopBar from "@/src/components/layout/top-bar";
-import { Json } from "@/src/types/json";
 
 import { EditRecipeForm, EditRecipeFormValues } from "./_components/edit-recipe-form";
 
@@ -29,10 +28,8 @@ const page = async ({ params }: { params: { id: string } }) => {
     }),
     recipeImage: recipeImage[0].recipeImage,
     instructions: instructions.map((instruction) => {
-      const value = instruction?.stepDescription as Json;
-
       return {
-        value,
+        value: String(instruction.stepDescription),
         id: instruction.id,
         order: instruction.stepOrder,
       };

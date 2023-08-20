@@ -10,7 +10,7 @@ import { Label } from "@/src/components/ui/label";
 export default function NewMemo() {
   const formRef = useRef<HTMLFormElement>(null);
   const add = async (data: FormData) => {
-    await postMemo(data);
+    // await postMemo(data);
     if (formRef.current) formRef.current.reset();
   };
   return (
