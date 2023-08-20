@@ -2,7 +2,7 @@
 
 import { useState, useTransition } from "react";
 import Image from "next/image";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 import { postRecipe } from "@/src/actions/postRecipe";
 import { recipeFormStateAtom } from "@/src/atoms/draftRecipeFormValuesAtom";
@@ -15,7 +15,7 @@ import { useToast } from "@/src/components/ui/use-toast";
 import { kToastDuration } from "@/src/constants/constants";
 import { cn } from "@/src/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ContentState, EditorState } from "draft-js";
+import { ContentState, convertFromRaw, EditorState } from "draft-js";
 import { useAtom } from "jotai";
 import { Minus, Plus, PlusIcon, X } from "lucide-react";
 import { useFieldArray, useForm } from "react-hook-form";
@@ -33,11 +33,16 @@ type Props = {
 const CreateRecipeForm = ({ defaultValues, redirectPath }: Props) => {
   const [imageData, setImageData] = useState("");
 
+  const router = useRouter();
   const pathname = usePathname();
 
-  const { toast } = useToast();
+  const searchParams = useSearchParams();
 
-  const router = useRouter();
+  const isDraft = searchParams.has("draftId");
+
+  console.log("isDraft", isDraft);
+
+  const { toast } = useToast();
 
   const [isPending, startTransition] = useTransition();
 
@@ -134,7 +139,7 @@ const CreateRecipeForm = ({ defaultValues, redirectPath }: Props) => {
   };
 
   useDeepCompareEffect(() => {
-    if (pathname !== "/my-recipe/create") {
+    if (isDraft) {
       return;
     }
 
@@ -246,6 +251,10 @@ const CreateRecipeForm = ({ defaultValues, redirectPath }: Props) => {
                 key={field.id}
                 name={`instructions.${index}.value`}
                 render={({ field }) => {
+                  const currentEditorState = isDraft
+                    ? EditorState.createWithContent(convertFromRaw(JSON.parse(field.value)))
+                    : EditorState.createWithContent(ContentState.createFromText(field.value));
+
                   return (
                     <FormItem className="space-y-0">
                       <FormLabel className={cn("mb-1 ml-3 flex items-center gap-3", index !== 0 && "sr-only")}>
@@ -256,12 +265,9 @@ const CreateRecipeForm = ({ defaultValues, redirectPath }: Props) => {
                           <div className="absolute left-4 top-1/2 mt-px  flex h-5 w-5 shrink-0 -translate-y-1/2 select-none items-center justify-center rounded-full bg-tomato9 text-sm text-mauve1">
                             {stepOrder}
                           </div>
-                          <p className="flex h-10 max-w-[800px] items-center self-center overflow-hidden whitespace-nowrap rounded-none border-x-0 border-y px-12">
-                            <span className="inline-block max-w-full overflow-hidden">
-                              {formatJSONDisplay(field.value)}
-                            </span>
+                          <p className="line-clamp-1 h-10 w-full overflow-hidden rounded-none border border-x-0 border-input bg-transparent px-12 py-2 leading-loose">
+                            {formatJSONDisplay(field.value)}
                           </p>
-
                           <InstructionMenu
                             {...{
                               stepOrder,
@@ -271,9 +277,7 @@ const CreateRecipeForm = ({ defaultValues, redirectPath }: Props) => {
                               watchedValues,
                               setValue,
                               form,
-                              currentEditorState: EditorState.createWithContent(
-                                ContentState.createFromText(field.value)
-                              ),
+                              currentEditorState,
                             }}
                           />
                         </div>
