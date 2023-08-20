@@ -1,33 +1,22 @@
 import { getRecipeById } from "@/src/actions/getRecipeById";
 import { ShoppingCart } from "lucide-react";
+import AddIngredientToCart from "../_components/add-ingredient-to-cart-component";
+import AddAllIngredientsToCart from "../_components/add-all-ingredients-to-cart-component";
 
 import CopyIngredientsToClipboardButton from "@/src/components/copy-ingredients-to-clipboard-button";
 
 const page = async ({ params }: { params: { id: string } }) => {
   const { Ingredient: ingredients, servingCount, title } = await getRecipeById(params.id);
+  const ingredientIds = ingredients.map((ingredient) => Number(ingredient.id))
 
   return (
     <div className="flex flex-col gap-2">
       <div className="flex justify-between border-b p-4">
         <h2 className="text-xl font-bold">{servingCount}人前</h2>
-        <button
-          className="flex items-center gap-2 font-bold"
-          // TODO: まとめてお買い物リストに追加するロジックを実装する
-        >
-          <ShoppingCart size={20} />
-          <span>まとめてお買い物リストに追加</span>
-        </button>
+        <AddAllIngredientsToCart recipeId={ingredients[0].recipeId} ingredientIds={ingredientIds} />
       </div>
-      {ingredients.map(({ title, id }) => (
-        <ul key={id}>
-          <li className="flex justify-between border-b px-4 py-2">
-            <p className="">{title}</p>
-            <button className=" pl-[20px] text-mauve11 hover:text-mauve12">
-              {/* // TODO: お買い物リストに追加するロジックを実装する */}
-              <ShoppingCart size={20} />
-            </button>
-          </li>
-        </ul>
+      {ingredients.map(({ title, id, recipeId }) => (
+        <AddIngredientToCart key={id} title={title} id={id} recipeId={recipeId} />
       ))}
       <CopyIngredientsToClipboardButton
         recipeName={title}
