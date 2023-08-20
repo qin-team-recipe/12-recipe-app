@@ -3,18 +3,9 @@
 import { Dispatch, SetStateAction, useMemo } from "react";
 
 import createLinkPlugin from "@draft-js-plugins/anchor";
-import {
-  BoldButton,
-  HeadlineOneButton,
-  HeadlineThreeButton,
-  HeadlineTwoButton,
-  ItalicButton,
-  UnderlineButton,
-} from "@draft-js-plugins/buttons";
 import Editor from "@draft-js-plugins/editor";
 import createImagePlugin from "@draft-js-plugins/image";
-import createInlineToolbarPlugin from "@draft-js-plugins/inline-toolbar";
-import { AtomicBlockUtils, ContentBlock, DraftInlineStyle, EditorState, RichUtils, SelectionState } from "draft-js";
+import { AtomicBlockUtils, ContentBlock, EditorState, RichUtils, SelectionState } from "draft-js";
 
 type Props = {
   onChange: (value: EditorState) => void;
@@ -23,11 +14,10 @@ type Props = {
 };
 
 const InstructionEditor = ({ onChange, editorState, setEditorState }: Props) => {
-  const [plugins, InlineToolbar, LinkButton] = useMemo(() => {
+  const [plugins, LinkButton] = useMemo(() => {
     const linkPlugin = createLinkPlugin({ placeholder: "http://..." });
     const imagePlugin = createImagePlugin();
-    const inlineToolbarPlugin = createInlineToolbarPlugin();
-    return [[inlineToolbarPlugin, linkPlugin, imagePlugin], inlineToolbarPlugin.InlineToolbar, linkPlugin.LinkButton];
+    return [[linkPlugin, imagePlugin], linkPlugin.LinkButton];
   }, []);
 
   const handleKeyCommand = (command: any, editorState: any) => {
@@ -80,9 +70,6 @@ const InstructionEditor = ({ onChange, editorState, setEditorState }: Props) => 
           handleKeyCommand={handleKeyCommand}
           handleDroppedFiles={handleDroppedFiles}
           plugins={plugins}
-          customStyleFn={(style: DraftInlineStyle, block: ContentBlock) => {
-            return {};
-          }}
           blockStyleFn={(block: ContentBlock) => {
             switch (block.getType()) {
               case "unordered-list-item":
@@ -95,18 +82,6 @@ const InstructionEditor = ({ onChange, editorState, setEditorState }: Props) => 
           }}
         />
       </div>
-      <InlineToolbar>
-        {(externalProps) => (
-          <>
-            <ItalicButton {...externalProps} />
-            <BoldButton {...externalProps} />
-            <UnderlineButton {...externalProps} />
-            <HeadlineOneButton {...externalProps} />
-            <HeadlineTwoButton {...externalProps} />
-            <HeadlineThreeButton {...externalProps} />
-          </>
-        )}
-      </InlineToolbar>
     </>
   );
 };

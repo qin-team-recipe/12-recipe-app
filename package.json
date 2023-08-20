@@ -22,7 +22,6 @@
     "@draft-js-plugins/buttons": "^4.3.3",
     "@draft-js-plugins/editor": "^4.1.4",
     "@draft-js-plugins/image": "^4.1.4",
-    "@draft-js-plugins/inline-toolbar": "^4.2.1",
     "@hookform/resolvers": "^3.1.1",
     "@prisma/client": "4.16.2",
     "@radix-ui/react-avatar": "^1.0.3",

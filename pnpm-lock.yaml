@@ -17,9 +17,6 @@ dependencies:
   '@draft-js-plugins/image':
     specifier: ^4.1.4
     version: 4.1.4(draft-js@0.11.7)(react-dom@18.2.0)(react@18.2.0)
-  '@draft-js-plugins/inline-toolbar':
-    specifier: ^4.2.1
-    version: 4.2.1(draft-js@0.11.7)(react-dom@18.2.0)(react@18.2.0)
   '@hookform/resolvers':
     specifier: ^3.1.1
     version: 3.1.1(react-hook-form@7.45.2)
@@ -1537,20 +1534,6 @@ packages:
       react-dom: ^16.8.0 || ^17.0.0 || >=18.0.0
     dependencies:
       clsx: 1.2.1
-      draft-js: 0.11.7(react-dom@18.2.0)(react@18.2.0)
-      react: 18.2.0
-      react-dom: 18.2.0(react@18.2.0)
-    dev: false
-
-  /@draft-js-plugins/inline-toolbar@4.2.1(draft-js@0.11.7)(react-dom@18.2.0)(react@18.2.0):
-    resolution: {integrity: sha512-+LNhv9UkXhKybtUVHFMh7yvp44G3HKv8E5I6BLA3el+n67mrc3I4Frm/LE/wxAJC0tIrT2sjWvg8EFs3S9CRZA==}
-    peerDependencies:
-      draft-js: ^0.10.1 || ^0.11.0
-      react: ^16.8.0 || ^17.0.0 || >=18.0.0
-      react-dom: ^16.8.0 || ^17.0.0 || >=18.0.0
-    dependencies:
-      '@draft-js-plugins/buttons': 4.3.3(draft-js@0.11.7)(react-dom@18.2.0)(react@18.2.0)
-      '@draft-js-plugins/utils': 4.2.1(draft-js@0.11.7)
       draft-js: 0.11.7(react-dom@18.2.0)(react@18.2.0)
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
