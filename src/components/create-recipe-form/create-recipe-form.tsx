@@ -34,13 +34,10 @@ const CreateRecipeForm = ({ defaultValues, redirectPath }: Props) => {
   const [imageData, setImageData] = useState("");
 
   const router = useRouter();
-  const pathname = usePathname();
 
   const searchParams = useSearchParams();
 
   const isDraft = searchParams.has("draftId");
-
-  console.log("isDraft", isDraft);
 
   const { toast } = useToast();
 

@@ -1,15 +1,17 @@
 import { useState } from "react";
 
 import { Command, CommandItem, CommandList, CommandSeparator } from "@/src/components/ui/command";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/src/components/ui/dialog";
 import { Popover, PopoverContent, PopoverTrigger } from "@/src/components/ui/popover";
-import { ContentState, convertToRaw, EditorState, RichUtils } from "draft-js";
-import { BoldIcon, ChevronDown, ChevronUp, List, ListOrdered, MoreVertical, Pencil, Trash, X } from "lucide-react";
+import { convertToRaw, EditorState, RichUtils } from "draft-js";
+import { BoldIcon, ChevronDown, ChevronUp, List, ListOrdered, MoreVertical, Pencil, Trash } from "lucide-react";
 import { Drawer } from "vaul";
 
 import "@draft-js-plugins/image/lib/plugin.css";
 
 import { cn } from "@/src/lib/utils";
 
+import { useWindowSize } from "../hooks/useWindowSize";
 import InstructionEditor from "./instruction-editor";
 import { Button } from "./ui/button";
 
@@ -33,23 +35,9 @@ const InstructionMenu = ({
   currentEditorState,
 }: Props) => {
   const [editorState, setEditorState] = useState(currentEditorState);
-
   const [isOpenPopover, setIsOpenPopover] = useState(false);
 
-  const toggleBold = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-    event.preventDefault();
-    setEditorState(RichUtils.toggleInlineStyle(editorState, "BOLD"));
-  };
-
-  const toggleUnorderedList = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-    event.preventDefault();
-    setEditorState(RichUtils.toggleBlockType(editorState, "unordered-list-item"));
-  };
-
-  const toggleOrderedList = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-    event.preventDefault();
-    setEditorState(RichUtils.toggleBlockType(editorState, "ordered-list-item"));
-  };
+  const { isMobile } = useWindowSize();
 
   const onChange = (value: EditorState) => {
     setEditorState(value);
@@ -64,128 +52,82 @@ const InstructionMenu = ({
         <Command className="w-full">
           <CommandList>
             <CommandItem className="text-mauve11">
-              <Drawer.Root
-                shouldScaleBackground
-                onOpenChange={(isOpen) => {
-                  if (!isOpen) {
-                    form.setValue(
-                      `instructions.${index}.value`,
-                      JSON.stringify(convertToRaw(editorState.getCurrentContent()))
-                    );
-                    setIsOpenPopover(false);
-                  }
-                }}
-              >
-                <Drawer.Trigger className="flex w-full">
-                  <Pencil className="mr-2 h-4 w-4" />
-                  <span>編集する</span>
-                </Drawer.Trigger>
-                <Drawer.Portal className="w-fit">
-                  <Drawer.Overlay className="fixed inset-0 bg-black/40" />
-                  <Drawer.Content className="fixed inset-x-0 bottom-0 z-50 flex flex-col rounded-t-[10px] bg-zinc-100 px-2">
-                    <div className="flex-1 rounded-t-[10px] bg-white p-4">
-                      <div className="mx-auto mb-8 h-1.5 w-12 shrink-0 rounded-full bg-mauve6" />
-                      <div className="p-4">
-                        <Drawer.Title className="mb-4 flex justify-between text-2xl">
-                          <h2>作り方 {stepOrder}</h2>
-                          <div className="flex items-center">
-                            {/* 太字 */}
-                            <Button
-                              variant={"outline"}
-                              type="button"
-                              className={cn(
-                                editorState.getCurrentInlineStyle().has("BOLD") ? "bg-zinc-100" : "bg-white"
-                              )}
-                              onClick={toggleBold}
-                            >
-                              <BoldIcon size={12} />
-                            </Button>
-                            {/* 箇条書き */}
-                            <Button
-                              variant={"outline"}
-                              type="button"
-                              className={cn(
-                                RichUtils.getCurrentBlockType(editorState) === "unordered-list-item"
-                                  ? "bg-zinc-100"
-                                  : "bg-white"
-                              )}
-                              onClick={toggleUnorderedList}
-                            >
-                              <List size={12} />
-                            </Button>
-                            {/* 順序付きリスト */}
-                            <Button
-                              variant={"outline"}
-                              type="button"
-                              className={cn(
-                                RichUtils.getCurrentBlockType(editorState) === "ordered-list-item"
-                                  ? "bg-zinc-100"
-                                  : "bg-white"
-                              )}
-                              onClick={toggleOrderedList}
-                            >
-                              <ListOrdered size={12} />
-                            </Button>
-                          </div>
-                        </Drawer.Title>
-                        <InstructionEditor {...{ editorState, onChange, setEditorState }} />
+              {isMobile ? (
+                <Drawer.Root
+                  shouldScaleBackground
+                  onOpenChange={(isOpen) => {
+                    if (!isOpen) {
+                      form.setValue(
+                        `instructions.${index}.value`,
+                        JSON.stringify(convertToRaw(editorState.getCurrentContent()))
+                      );
+                      setIsOpenPopover(false);
+                    }
+                  }}
+                >
+                  <Drawer.Trigger className="flex w-full">
+                    <Pencil className="mr-2 h-4 w-4" />
+                    <span>編集する</span>
+                  </Drawer.Trigger>
+                  <Drawer.Portal className="w-fit">
+                    <Drawer.Overlay className="fixed inset-0 bg-black/40" />
+                    <Drawer.Content className="fixed inset-x-0 bottom-0 z-50 flex flex-col rounded-t-[10px] bg-zinc-100 px-2">
+                      <div className="flex-1 rounded-t-[10px] bg-white p-4">
+                        <div className="mx-auto mb-8 h-1.5 w-12 shrink-0 rounded-full bg-mauve6" />
+                        <div className="p-4">
+                          <Drawer.Title className="mb-4 flex justify-between text-2xl">
+                            <h2>作り方 {stepOrder}</h2>
+                            <EditorToolbar {...{ editorState, setEditorState }} />
+                          </Drawer.Title>
+                          <InstructionEditor {...{ editorState, onChange, setEditorState }} />
+                        </div>
                       </div>
-                    </div>
-                  </Drawer.Content>
-                </Drawer.Portal>
-              </Drawer.Root>
+                    </Drawer.Content>
+                  </Drawer.Portal>
+                </Drawer.Root>
+              ) : (
+                <Dialog
+                  onOpenChange={(isOpen) => {
+                    if (!isOpen) {
+                      form.setValue(
+                        `instructions.${index}.value`,
+                        JSON.stringify(convertToRaw(editorState.getCurrentContent()))
+                      );
+                      setIsOpenPopover(false);
+                    }
+                  }}
+                >
+                  <DialogTrigger className="flex w-full">
+                    <Pencil className="mr-2 h-4 w-4" />
+                    <span>編集する</span>
+                  </DialogTrigger>
+                  <DialogContent className="sm:max-w-[424px]">
+                    <DialogHeader>
+                      <DialogTitle className="flex justify-between">
+                        <h2 className="text-xl">作り方 {stepOrder}</h2>
+                        <EditorToolbar {...{ editorState, setEditorState, className: "pr-4" }} />
+                      </DialogTitle>
+                    </DialogHeader>
+                    <InstructionEditor {...{ editorState, onChange, setEditorState }} />
+                  </DialogContent>
+                </Dialog>
+              )}
             </CommandItem>
             {index !== 0 && (
               <CommandItem className="text-mauve11">
-                <button
-                  className="flex"
-                  onClick={() => {
-                    const instructions = [...watchedValues.instructions];
-                    const target = instructions[index];
-
-                    // orderの更新
-                    instructions[index].order = stepOrder - 1;
-                    instructions[index - 1].order = stepOrder;
-
-                    instructions[index] = instructions[index - 1];
-                    instructions[index - 1] = target;
-
-                    form.setValue("instructions", instructions);
-                  }}
-                >
-                  <ChevronUp className="mr-2 h-4 w-4" />
-                  <span>上に移動する</span>
-                </button>
+                <MoveInstructionButton direction="up" index={index} watchedValues={watchedValues} form={form} />
               </CommandItem>
             )}
             {index !== instructionsFields.length - 1 && (
               <CommandItem className="text-mauve11">
-                <button
-                  className="flex"
-                  onClick={() => {
-                    const instructions = [...watchedValues.instructions];
-                    const target = instructions[index];
-
-                    // orderの更新
-                    instructions[index].order = stepOrder + 1;
-                    instructions[index + 1].order = stepOrder;
-
-                    instructions[index] = instructions[index + 1];
-                    instructions[index + 1] = target;
-
-                    form.setValue("instructions", instructions);
-                  }}
-                >
-                  <ChevronDown className="mr-2 h-4 w-4" />
-                  <span>下に移動する</span>
-                </button>
+                <MoveInstructionButton direction="down" index={index} watchedValues={watchedValues} form={form} />
               </CommandItem>
             )}
             <CommandSeparator />
             <CommandItem className="text-mauve11">
               <button
                 disabled={instructionsFields.length === 1}
-                className="flex"
+                className="flex w-full"
                 onClick={() => {
                   removeInstructions(index);
                 }}
@@ -202,3 +144,88 @@ const InstructionMenu = ({
 };
 
 export default InstructionMenu;
+
+const EditorToolbar = ({
+  editorState,
+  setEditorState,
+  className,
+}: {
+  editorState: EditorState;
+  setEditorState: React.Dispatch<React.SetStateAction<EditorState>>;
+  className?: string;
+}) => {
+  const toggleStyle = (
+    styleType: "inline" | "block",
+    styleValue: "BOLD" | "ITALIC" | "unordered-list-item" | "ordered-list-item"
+  ) => {
+    if (styleType === "inline") {
+      setEditorState(RichUtils.toggleInlineStyle(editorState, styleValue));
+    } else if (styleType === "block") {
+      setEditorState(RichUtils.toggleBlockType(editorState, styleValue));
+    }
+  };
+
+  return (
+    <div className={cn("flex items-center", className)}>
+      <Button
+        variant={"outline"}
+        type="button"
+        className={cn(editorState.getCurrentInlineStyle().has("BOLD") ? "bg-zinc-100" : "bg-white")}
+        onClick={() => toggleStyle("inline", "BOLD")}
+      >
+        <BoldIcon size={12} />
+      </Button>
+      <Button
+        variant={"outline"}
+        type="button"
+        className={cn(
+          RichUtils.getCurrentBlockType(editorState) === "unordered-list-item" ? "bg-zinc-100" : "bg-white"
+        )}
+        onClick={() => toggleStyle("block", "unordered-list-item")}
+      >
+        <List size={12} />
+      </Button>
+      <Button
+        variant={"outline"}
+        type="button"
+        className={cn(RichUtils.getCurrentBlockType(editorState) === "ordered-list-item" ? "bg-zinc-100" : "bg-white")}
+        onClick={() => toggleStyle("block", "ordered-list-item")}
+      >
+        <ListOrdered size={12} />
+      </Button>
+    </div>
+  );
+};
+
+const MoveInstructionButton = ({
+  direction,
+  index,
+  watchedValues,
+  form,
+}: {
+  direction: "up" | "down";
+  index: number;
+  watchedValues: any;
+  form: any;
+}) => {
+  const moveInstruction = () => {
+    const instructions = [...watchedValues.instructions];
+    const target = instructions[index];
+    const newIndex = direction === "up" ? index - 1 : index + 1;
+
+    instructions[index].order = newIndex + 1;
+    instructions[newIndex].order = index + 1;
+
+    instructions[index] = instructions[newIndex];
+    instructions[newIndex] = target;
+
+    form.setValue("instructions", instructions);
+  };
+
+  return (
+    <button className="flex w-full" onClick={moveInstruction}>
+      {direction === "up" ? <ChevronUp className="mr-2 h-4 w-4" /> : <ChevronDown className="mr-2 h-4 w-4" />}
+      <span>{direction === "up" ? "上に移動する" : "下に移動する"}</span>
+    </button>
+  );
+};
