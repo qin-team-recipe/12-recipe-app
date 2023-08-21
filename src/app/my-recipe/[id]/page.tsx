@@ -1,4 +1,5 @@
 import { getRecipeById } from "@/src/actions/getRecipeById";
+
 import { RecipeStep } from "@/src/components/recipe-step";
 
 const page = async ({ params }: { params: { id: string } }) => {

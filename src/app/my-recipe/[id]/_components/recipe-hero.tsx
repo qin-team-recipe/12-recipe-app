@@ -1,9 +1,10 @@
 import Image from "next/image";
 
 import { getRecipeById } from "@/src/actions/getRecipeById";
+import { sortSiteLinks } from "@/src/lib/utils";
+
 import LinkToIconRenderer from "@/src/components/link-to-icon-renderer";
 import RouterBackButton from "@/src/components/router-back-button";
-import { sortSiteLinks } from "@/src/lib/utils";
 
 import PopoverMenu from "./popover-menu";
 import RecipeInfoStats from "./recipe-info-stats";

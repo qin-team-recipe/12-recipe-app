@@ -1,5 +1,6 @@
 import { getAuthenticatedUser } from "@/src/actions/getAuthenticatedUser";
 import { searchRecipesAndChefs } from "@/src/actions/searchRecipesAndChefs";
+
 import TopBar from "@/src/components/layout/top-bar";
 import RecipeCard from "@/src/components/recipe-card";
 import SearchInput from "@/src/components/search-input";

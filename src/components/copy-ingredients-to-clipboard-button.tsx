@@ -1,7 +1,8 @@
 "use client";
 
-import { useToast } from "@/src/components/ui/use-toast";
 import { Copy } from "lucide-react";
+
+import { useToast } from "@/src/components/ui/use-toast";
 
 type Props = {
   recipeName: string;

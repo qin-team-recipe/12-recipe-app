@@ -3,9 +3,10 @@
 import Link from "next/link";
 
 import { favoriteRecipe, unFavoriteRecipe } from "@/src/actions/actionsForFavoriteRecipe";
-import ToggleButton from "@/src/components/toggle-button";
 import { useOptimisticToggle } from "@/src/hooks/useOptimisticToggle";
 import { cn } from "@/src/lib/utils";
+
+import ToggleButton from "@/src/components/toggle-button";
 
 import NumberUnit from "../../../../components/number-unit";
 import { buttonVariants } from "../../../../components/ui/button";

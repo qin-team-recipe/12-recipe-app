@@ -22,7 +22,7 @@ export const ChefTile = ({ id, imageUrl, chefName, bio, recipeCount }: Props) =>
       />
       <div className="flex flex-col items-start self-center">
         <p className="line-clamp-1 text-clip break-words text-xl font-bold text-mauve12">{chefName}</p>
-        <p className="mt-2 line-clamp-3 text-mauve11">{bio}</p>
+        <p className="mt-2 line-clamp-3 text-ellipsis text-mauve11">{bio}</p>
         <div className="mt-1 flex items-center gap-2">
           <svg width="16" height="16" viewBox="0 0 18 19" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M3 2.75H9L8.25 9.5H3.75L3 2.75Z" stroke="black" strokeLinecap="round" strokeLinejoin="round" />

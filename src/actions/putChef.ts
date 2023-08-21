@@ -2,10 +2,11 @@
 
 import { revalidatePath } from "next/cache";
 
-import { editChefFormSchema } from "@/src/app/admin/(chefs)/_components/edit-chef-form";
 import { prisma } from "@/src/lib/prisma";
 import { ActionsResult } from "@/src/types/ActionsResult";
 import { zact } from "zact/server";
+
+import { editChefFormSchema } from "@/src/app/admin/(chefs)/_components/edit-chef-form";
 
 export const putChef = zact(editChefFormSchema)(async ({ uid, name, bio, urls }): Promise<ActionsResult> => {
   const currentUserLinks = await prisma.userLink.findMany({

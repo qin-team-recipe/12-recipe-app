@@ -3,6 +3,9 @@ import { redirect } from "next/navigation";
 
 import { getAuthenticatedUser } from "@/src/actions/getAuthenticatedUser";
 import { getMyRecipes } from "@/src/actions/getMyRecipes";
+import { sortSiteLinks } from "@/src/lib/utils";
+import { ArrowLeft, CircleEllipsis } from "lucide-react";
+
 import TopBar from "@/src/components/layout/top-bar";
 import LinkToIconRenderer from "@/src/components/link-to-icon-renderer";
 import LinkableTabs from "@/src/components/linkable-tabs";
@@ -12,8 +15,6 @@ import { Button } from "@/src/components/ui/button";
 import { Command, CommandItem, CommandList } from "@/src/components/ui/command";
 import { Popover, PopoverContent, PopoverTrigger } from "@/src/components/ui/popover";
 import { Separator } from "@/src/components/ui/separator";
-import { sortSiteLinks } from "@/src/lib/utils";
-import { ArrowLeft, CircleEllipsis } from "lucide-react";
 
 import { tabs } from "./_constants/tabs";
 

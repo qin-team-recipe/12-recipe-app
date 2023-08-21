@@ -1,12 +1,13 @@
 import { getChefById } from "@/src/actions/getChefById";
+import { sortSiteLinks } from "@/src/lib/utils";
+import { CircleEllipsis } from "lucide-react";
+
 import TopBar from "@/src/components/layout/top-bar";
 import LinkToIconRenderer from "@/src/components/link-to-icon-renderer";
 import LinkableTabs from "@/src/components/linkable-tabs";
 import { Avatar, AvatarImage } from "@/src/components/ui/avatar";
 import { Command, CommandItem, CommandList } from "@/src/components/ui/command";
 import { Popover, PopoverContent, PopoverTrigger } from "@/src/components/ui/popover";
-import { sortSiteLinks } from "@/src/lib/utils";
-import { CircleEllipsis } from "lucide-react";
 
 import RouterBackButton from "../../../components/router-back-button";
 import UserProfileStats from "./_components/user-profile-stats";

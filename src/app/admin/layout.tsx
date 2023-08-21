@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation";
 
 import { getAuthenticatedUser } from "@/src/actions/getAuthenticatedUser";
+
 import { Separator } from "@/src/components/ui/separator";
 
 export const metadata = {

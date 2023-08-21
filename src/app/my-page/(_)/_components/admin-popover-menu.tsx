@@ -1,8 +1,9 @@
 import Link from "next/link";
 
+import { CircleEllipsis, Copy, Pencil } from "lucide-react";
+
 import { Command, CommandItem, CommandList } from "@/src/components/ui/command";
 import { Popover, PopoverContent, PopoverTrigger } from "@/src/components/ui/popover";
-import { CircleEllipsis, Copy, Pencil } from "lucide-react";
 
 const AdminPopoverMenu = () => {
   return (

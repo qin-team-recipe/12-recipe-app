@@ -2,9 +2,10 @@
 
 import { useRouter } from "next/navigation";
 
-import { Button } from "@/src/components/ui/button";
 import { Database } from "@/src/types/SupabaseTypes";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+
+import { Button } from "@/src/components/ui/button";
 
 export default function Login() {
   const router = useRouter();

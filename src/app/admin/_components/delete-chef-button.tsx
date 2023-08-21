@@ -3,11 +3,12 @@
 import { useTransition } from "react";
 
 import { deleteChefs } from "@/src/actions/deleteChefs";
+import { kToastDuration } from "@/src/constants/constants";
+import { Trash2Icon } from "lucide-react";
+
 import { Button } from "@/src/components/ui/button";
 import Spinner from "@/src/components/ui/spinner";
 import { useToast } from "@/src/components/ui/use-toast";
-import { kToastDuration } from "@/src/constants/constants";
-import { Trash2Icon } from "lucide-react";
 
 type Props = {
   chefIds: string[];

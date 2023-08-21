@@ -1,4 +1,5 @@
 import { getChefsInMyFollowingList } from "@/src/actions/getChefsInMyFollowingList";
+
 import { ChefIcon } from "@/src/components/chef-icon";
 import NoDataDisplay from "@/src/components/no-data-display";
 

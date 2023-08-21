@@ -1,9 +1,10 @@
 "use client";
 
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/src/components/ui/dialog";
 import Editor from "@draft-js-plugins/editor";
 import { ContentBlock, convertFromRaw, EditorState } from "draft-js";
 import { Drawer } from "vaul";
+
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/src/components/ui/dialog";
 
 import { useWindowSize } from "../hooks/useWindowSize";
 

@@ -1,15 +1,16 @@
 import Link from "next/link";
 
 import { getRecipeById } from "@/src/actions/getRecipeById";
+import { BUTTON_NAMES } from "@/src/constants/button-names";
+import { CONSTANTS } from "@/src/constants/constants";
+import { CircleEllipsis, Copy, Lock, Pencil, Trash } from "lucide-react";
+
 import LinkToIconRenderer from "@/src/components/link-to-icon-renderer";
 import NumberUnit from "@/src/components/number-unit";
 import ProfileLink from "@/src/components/profile-link";
 import ToggleButton from "@/src/components/toggle-button";
 import { Command, CommandItem, CommandList, CommandSeparator } from "@/src/components/ui/command";
 import { Popover, PopoverContent, PopoverTrigger } from "@/src/components/ui/popover";
-import { BUTTON_NAMES } from "@/src/constants/button-names";
-import { CONSTANTS } from "@/src/constants/constants";
-import { CircleEllipsis, Copy, Lock, Pencil, Trash } from "lucide-react";
 
 type Props = {
   id: string;

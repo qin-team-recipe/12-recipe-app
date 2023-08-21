@@ -1,9 +1,10 @@
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
-import TopBar from "@/src/components/layout/top-bar";
 import type { Database } from "@/src/types/SupabaseTypes";
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
+
+import TopBar from "@/src/components/layout/top-bar";
 
 import { LoginForm, LoginFormValues } from "./_components";
 
