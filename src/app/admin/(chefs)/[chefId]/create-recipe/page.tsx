@@ -6,8 +6,8 @@ import { X } from "lucide-react";
 import { CreateRecipeForm, CreateRecipeFormValues } from "@/src/components/create-recipe-form";
 import TopBar from "@/src/components/layout/top-bar";
 
-const page = async ({ params }: { params: { id: string } }) => {
-  const { id } = await getChefById({ id: params.id });
+const page = async ({ params }: { params: { chefId: string } }) => {
+  const { id } = await getChefById({ id: params.chefId });
 
   const defaultValues: Partial<CreateRecipeFormValues> = {
     uid: id,
