@@ -1,6 +1,7 @@
 import { followChef, unFollowChef } from "@/src/actions/actionsForFollow";
-import ToggleButton from "@/src/components/toggle-button";
 import { BUTTON_NAMES } from "@/src/constants/button-names";
+
+import ToggleButton from "@/src/components/toggle-button";
 
 type Props = {
   isActive: boolean;

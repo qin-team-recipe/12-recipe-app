@@ -1,11 +1,12 @@
 "use client";
 
 import { deleteDraftRecipe } from "@/src/actions/deleteDraftRecipe";
+import { kToastDuration } from "@/src/constants/constants";
+import { Trash2 } from "lucide-react";
+
 import QueryParamsLink from "@/src/components/query-params-link";
 import SelectableDialog from "@/src/components/selectable-dialog";
 import { useToast } from "@/src/components/ui/use-toast";
-import { kToastDuration } from "@/src/constants/constants";
-import { Trash2 } from "lucide-react";
 
 type Props = {
   id: string;

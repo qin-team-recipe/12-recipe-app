@@ -1,11 +1,12 @@
 import { searchRecipesAndChefs } from "@/src/actions/searchRecipesAndChefs";
+import { kInfiniteScrollCount } from "@/src/constants/constants";
+
 import TopBar from "@/src/components/layout/top-bar";
 import LinkableTabs from "@/src/components/linkable-tabs";
 import LoadMore from "@/src/components/load-more";
 import NoDataDisplay from "@/src/components/no-data-display";
 import RecipeList from "@/src/components/recipe-list";
 import SearchInput from "@/src/components/search-input";
-import { kInfiniteScrollCount } from "@/src/constants/constants";
 
 import { tabs } from "../_constants/tabs";
 

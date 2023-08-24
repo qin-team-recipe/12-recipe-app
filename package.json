@@ -18,6 +18,10 @@
     "migrate-and-gen": "pnpm run prisma-migrate && pnpm run supabase-types"
   },
   "dependencies": {
+    "@draft-js-plugins/anchor": "^4.2.1",
+    "@draft-js-plugins/buttons": "^4.3.3",
+    "@draft-js-plugins/editor": "^4.1.4",
+    "@draft-js-plugins/image": "^4.1.4",
     "@hookform/resolvers": "^3.1.1",
     "@prisma/client": "4.16.2",
     "@radix-ui/react-avatar": "^1.0.3",
@@ -47,6 +51,7 @@
     "clsx": "^1.2.1",
     "cmdk": "^0.2.0",
     "date-fns": "^2.30.0",
+    "draft-js": "^0.11.7",
     "eslint": "8.41.0",
     "eslint-config-next": "13.4.8",
     "jotai": "^2.2.2",
@@ -64,11 +69,13 @@
     "typescript": "5.1.6",
     "use-deep-compare-effect": "^1.8.1",
     "uuid": "^9.0.0",
+    "vaul": "^0.3.2",
     "zact": "^0.0.2",
     "zod": "^3.21.4"
   },
   "devDependencies": {
     "@ianvs/prettier-plugin-sort-imports": "^4.1.0",
+    "@types/draft-js": "^0.11.12",
     "@types/prettier": "^2.7.3",
     "@types/uuid": "^9.0.2",
     "@typescript-eslint/parser": "^5.62.0",

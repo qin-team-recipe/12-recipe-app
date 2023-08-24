@@ -34,6 +34,7 @@ const SelectableDialog = ({
   triggerComponent,
 }: Props) => {
   const [isOpen, setIsOpen] = useState(false);
+
   const [isPending, startTransition] = useTransition();
 
   return (
@@ -60,10 +61,8 @@ const SelectableDialog = ({
             className="flex-1 border-tomato7 text-tomato11"
             variant="outline"
             onClick={() => {
-              startTransition(() => {
-                if (onCancel) onCancel();
-                setIsOpen(false);
-              });
+              if (onCancel) onCancel();
+              setIsOpen(false);
             }}
           >
             {cancelLabel}

@@ -1,8 +1,9 @@
 import { getRecipesInMyFavorites } from "@/src/actions/getRecipesInMyFavorites";
+import { kInfiniteScrollCount } from "@/src/constants/constants";
+
 import LoadMore from "@/src/components/load-more";
 import NoDataDisplay from "@/src/components/no-data-display";
 import RecipeList from "@/src/components/recipe-list";
-import { kInfiniteScrollCount } from "@/src/constants/constants";
 
 const MyFavoriteRecipesGrid = async () => {
   const initMyFavoriteRecipes = await getRecipesInMyFavorites();

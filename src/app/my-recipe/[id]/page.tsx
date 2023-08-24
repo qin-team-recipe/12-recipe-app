@@ -1,4 +1,5 @@
 import { getRecipeById } from "@/src/actions/getRecipeById";
+
 import { RecipeStep } from "@/src/components/recipe-step";
 
 const page = async ({ params }: { params: { id: string } }) => {
@@ -7,7 +8,7 @@ const page = async ({ params }: { params: { id: string } }) => {
   return (
     <div className="flex flex-col">
       {instructions.map((instruction) => (
-        <RecipeStep key={instruction.id} stepNumber={instruction.stepOrder} recipeText={instruction.stepDescription} />
+        <RecipeStep key={instruction.id} stepNumber={instruction.stepOrder} instruction={instruction.stepDescription} />
       ))}
     </div>
   );

@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 
 import { getChefById } from "@/src/actions/getChefById";
+
 import RecipeCard from "@/src/components/recipe-card";
 
 const page = async ({ params }: { params: { id: string } }) => {

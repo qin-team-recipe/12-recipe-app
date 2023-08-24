@@ -1,9 +1,10 @@
 import { getRecipesNewFromFollowedChefs } from "@/src/actions/getRecipesNewFromFollowedChefs";
+import { kInfiniteScrollCount } from "@/src/constants/constants";
+
 import TopBar from "@/src/components/layout/top-bar";
 import LoadMore from "@/src/components/load-more";
 import RecipeList from "@/src/components/recipe-list";
 import RouterBackButton from "@/src/components/router-back-button";
-import { kInfiniteScrollCount } from "@/src/constants/constants";
 
 const page = async () => {
   const initialRecipes = await getRecipesNewFromFollowedChefs();

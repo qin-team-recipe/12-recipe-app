@@ -14,13 +14,8 @@ const ToggleButton = ({ className, isActive, activeLabel, inactiveLabel, onClick
   return (
     <>
       <Button
-        variant={isActive ? "outline" : "destructive"}
-        className={cn(
-          "w-fit",
-          "hover:shadow",
-          isActive ? "border-tomato4 bg-mauve1 text-tomato9" : "bg-tomato9",
-          className
-        )}
+        variant={isActive ? "outlineDestructive" : "destructive"}
+        className={cn("w-fit", className)}
         onClick={onClick}
       >
         {isActive ? activeLabel : inactiveLabel}

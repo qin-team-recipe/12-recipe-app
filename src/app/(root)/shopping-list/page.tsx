@@ -1,4 +1,5 @@
 import { getMemos } from "@/src/actions/getMemos";
+
 import TopBar from "@/src/components/layout/top-bar";
 import { LinkListItem } from "@/src/components/link-list";
 

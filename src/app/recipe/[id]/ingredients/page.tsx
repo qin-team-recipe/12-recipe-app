@@ -1,6 +1,7 @@
 import { getRecipeById } from "@/src/actions/getRecipeById";
-import CopyIngredientsToClipboardButton from "@/src/components/copy-ingredients-to-clipboard-button";
 import { ShoppingCart } from "lucide-react";
+
+import CopyIngredientsToClipboardButton from "@/src/components/copy-ingredients-to-clipboard-button";
 
 const page = async ({ params }: { params: { id: string } }) => {
   const { Ingredient: ingredients, servingCount, title } = await getRecipeById(params.id);
