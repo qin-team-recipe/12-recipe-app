@@ -35,7 +35,7 @@ const PopoverMenu = ({ chefId, recipeId }: Props) => {
         <Command className="w-full">
           <CommandList>
             <CommandItem>
-              <Link href={`/admin/${chefId}/recipe/${recipeId}/edit`} className="flex">
+              <Link href={`/admin/${chefId}/recipe/${recipeId}/edit`} className="flex w-full">
                 <Pencil size={16} className="mr-2 h-4 w-4" />
                 <span>レシピを編集する</span>
               </Link>
@@ -45,7 +45,7 @@ const PopoverMenu = ({ chefId, recipeId }: Props) => {
 
             <CommandItem>
               <button
-                className="flex w-full"
+                className="flex w-full gap-2"
                 onClick={() => {
                   startTransition(async () => {
                     const result = await deleteRecipe(recipeId);
@@ -68,10 +68,8 @@ const PopoverMenu = ({ chefId, recipeId }: Props) => {
                   });
                 }}
               >
-                <div className="flex gap-2">
-                  {isPending ? <Spinner /> : <Trash className="h-4 w-4" />}
-                  <span>レシピを削除する</span>
-                </div>
+                {isPending ? <Spinner /> : <Trash className="h-4 w-4" />}
+                <span>レシピを削除する</span>
               </button>
             </CommandItem>
           </CommandList>
