@@ -20,7 +20,7 @@ const InstructionEditor = ({ onChange, editorState, setEditorState }: Props) => 
     return [[linkPlugin, imagePlugin], linkPlugin.LinkButton];
   }, []);
 
-  const handleKeyCommand = (command: any, editorState: any) => {
+  const handleKeyCommand = (command: string, editorState: EditorState) => {
     const newState = RichUtils.handleKeyCommand(editorState, command);
     if (newState) {
       setEditorState(newState);

@@ -60,7 +60,7 @@ const page = async ({ searchParams }: { searchParams: { [key: string]: string | 
       instructions:
         draftInstruction && draftInstruction.length > 0
           ? draftInstruction.map((instruction) => {
-              return { value: String(instruction?.stepDescription) || "" };
+              return { value: instruction?.stepDescription ? String(instruction.stepDescription) : "" };
             })
           : [{ value: "" }],
       urls:

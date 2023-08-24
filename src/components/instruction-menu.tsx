@@ -1,11 +1,12 @@
 import { useState } from "react";
 
-import { Command, CommandItem, CommandList, CommandSeparator } from "@/src/components/ui/command";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/src/components/ui/dialog";
-import { Popover, PopoverContent, PopoverTrigger } from "@/src/components/ui/popover";
 import { convertToRaw, EditorState, RichUtils } from "draft-js";
 import { BoldIcon, ChevronDown, ChevronUp, List, ListOrdered, MoreVertical, Pencil, Trash } from "lucide-react";
 import { Drawer } from "vaul";
+
+import { Command, CommandItem, CommandList, CommandSeparator } from "@/src/components/ui/command";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/src/components/ui/dialog";
+import { Popover, PopoverContent, PopoverTrigger } from "@/src/components/ui/popover";
 
 import "@draft-js-plugins/image/lib/plugin.css";
 

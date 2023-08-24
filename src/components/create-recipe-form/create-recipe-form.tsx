@@ -2,7 +2,7 @@
 
 import { useState, useTransition } from "react";
 import Image from "next/image";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
 import { postRecipe } from "@/src/actions/postRecipe";
 import { recipeFormStateAtom } from "@/src/atoms/draftRecipeFormValuesAtom";
@@ -16,6 +16,7 @@ import { useFieldArray, useForm } from "react-hook-form";
 import useDeepCompareEffect from "use-deep-compare-effect";
 import { z } from "zod";
 
+import InstructionMenu from "@/src/components/instruction-menu";
 import { Button } from "@/src/components/ui/button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/src/components/ui/form";
 import { Input } from "@/src/components/ui/input";
@@ -24,7 +25,6 @@ import { Textarea } from "@/src/components/ui/textarea";
 import { useToast } from "@/src/components/ui/use-toast";
 
 import { createRecipeFormSchema, CreateRecipeFormValues } from ".";
-import InstructionMenu from "../instruction-menu";
 
 type Props = {
   defaultValues: Partial<CreateRecipeFormValues>;

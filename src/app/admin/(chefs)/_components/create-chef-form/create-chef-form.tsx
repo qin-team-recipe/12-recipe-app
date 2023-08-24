@@ -61,14 +61,14 @@ const CreateChefForm = () => {
       if (result.isSuccess) {
         toast({
           variant: "default",
-          title: "プロフィールを更新しました",
+          title: "プロフィールを更新しました🎉",
           duration: kToastDuration,
         });
         router.push(`/admin`);
       } else {
         toast({
           variant: "destructive",
-          title: "プロフィールの更新に失敗しました",
+          title: "プロフィールの更新に失敗しました🥲",
           duration: kToastDuration,
         });
       }
