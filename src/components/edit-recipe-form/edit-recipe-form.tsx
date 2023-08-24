@@ -25,9 +25,10 @@ import { editRecipeFormSchema, EditRecipeFormValues } from ".";
 
 type Props = {
   defaultValues: Partial<EditRecipeFormValues>;
+  navigateTo: string;
 };
 
-const EditRecipeForm = ({ defaultValues }: Props) => {
+const EditRecipeForm = ({ defaultValues, navigateTo }: Props) => {
   const [imageData, setImageData] = useState(defaultValues.recipeImage ?? "");
 
   const { toast } = useToast();
@@ -123,7 +124,7 @@ const EditRecipeForm = ({ defaultValues }: Props) => {
           duration: 3000,
         });
 
-        router.push(`/my-recipe/${defaultValues.recipeId}`);
+        router.push(navigateTo);
       } else {
         toast({
           variant: "destructive",
@@ -365,7 +366,7 @@ const EditRecipeForm = ({ defaultValues }: Props) => {
             {isPending && <Spinner />} 保存する
           </Button>
           <Link
-            href={`/my-recipe/${defaultValues.recipeId}`}
+            href={navigateTo}
             className={buttonVariants({
               variant: "outline",
               className: "flex-1 border-tomato7 text-tomato11",
