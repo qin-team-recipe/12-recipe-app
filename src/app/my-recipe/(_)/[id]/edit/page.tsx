@@ -2,7 +2,7 @@ import { getRecipeById } from "@/src/actions/getRecipeById";
 
 import TopBar from "@/src/components/layout/top-bar";
 
-import { EditRecipeForm, EditRecipeFormValues } from "./_components/edit-recipe-form";
+import { EditRecipeForm, EditRecipeFormValues } from "../../../../../components/edit-recipe-form";
 
 const page = async ({ params }: { params: { id: string } }) => {
   const {
@@ -46,7 +46,7 @@ const page = async ({ params }: { params: { id: string } }) => {
   return (
     <>
       <TopBar centerComponent={<h1 className="font-bold text-mauve12 md:text-xl">マイレシピの編集</h1>} />
-      <EditRecipeForm defaultValues={defaultValues} />
+      <EditRecipeForm defaultValues={defaultValues} navigateTo={`/my-recipe/${defaultValues.recipeId}`} />
     </>
   );
 };
