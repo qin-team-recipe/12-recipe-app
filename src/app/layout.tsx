@@ -21,7 +21,7 @@ export const metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="ja" className={cn(inter.className)}>
-      <body className="mx-auto h-screen md:flex md:max-w-6xl md:justify-center">
+      <body className="min-h-screen md:mr-0 md:flex md:justify-center">
         <JotaiProvider>
           {children}
           <Toaster />

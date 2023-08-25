@@ -1,7 +1,7 @@
 "use server";
 
 import { cookies } from "next/headers";
-import { notFound } from "next/navigation";
+import { redirect } from "next/navigation";
 
 import { createServerActionClient } from "@supabase/auth-helpers-nextjs";
 
@@ -9,14 +9,14 @@ import { prisma } from "../lib/prisma";
 import { ActionsResult } from "../types/ActionsResult";
 import { Database } from "../types/SupabaseTypes";
 
-export const addCartList = async (recipeId: string, ingredientId: number): Promise<ActionsResult> => {
+export const addCartListItem = async (recipeId: string, ingredientId: number): Promise<ActionsResult> => {
   const supabaseServerClient = createServerActionClient<Database>({ cookies });
 
   const {
     data: { session },
   } = await supabaseServerClient.auth.getSession();
 
-  if (!session) notFound();
+  if (!session) redirect("/login");
 
   try {
     const cartList = await prisma.cartList.findFirst({
@@ -72,6 +72,68 @@ export const addCartList = async (recipeId: string, ingredientId: number): Promi
     return {
       isSuccess: false,
       error: "カートに追加できませんでした🥲",
+    };
+  }
+};
+
+export const removeCartListItem = async (recipeId: string, cartListItemId: number): Promise<ActionsResult> => {
+  const supabaseServerClient = createServerActionClient<Database>({ cookies });
+
+  const {
+    data: { session },
+  } = await supabaseServerClient.auth.getSession();
+
+  if (!session) redirect("/login");
+
+  try {
+    const cartList = await prisma.cartList.findFirst({
+      where: {
+        recipeId,
+        userId: session.user.id,
+      },
+      include: {
+        CartListItem: true,
+      },
+    });
+
+    const isNotfoundRecipeInCartList = cartList === null;
+
+    if (isNotfoundRecipeInCartList) {
+      return {
+        isSuccess: false,
+        error: "このアイテムは既に削除されています。ページを更新するか、しばらくたってから再度アクセスしてください。",
+      };
+    }
+    const cartListItemSize = await prisma.cartListItem.count({
+      where: {
+        cartListId: cartList.id,
+      },
+    });
+
+    if (cartListItemSize === 1) {
+      // 対象のレシピに紐づくアイテムが1つしかない場合はレシピも削除する
+      await prisma.cartList.delete({
+        where: {
+          id: cartList.id,
+        },
+      });
+    } else {
+      // 2つ以上のアイテムがカート内に存在する場合はアイテムのみ削除する
+      await prisma.cartListItem.delete({
+        where: {
+          id: cartListItemId,
+        },
+      });
+    }
+
+    return {
+      isSuccess: true,
+      message: "アイテムを削除しました。",
+    };
+  } catch (_error) {
+    return {
+      isSuccess: false,
+      error: "アイテムの削除に失敗しました。",
     };
   }
 };

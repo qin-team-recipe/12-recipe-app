@@ -3,10 +3,10 @@
 import { revalidatePath } from "next/cache";
 
 import { prisma } from "@/src/lib/prisma";
+import { ActionsResult } from "@/src/types/ActionsResult";
 import { zact } from "zact/server";
 
-import { createDraftRecipeFormSchema } from "../components/create-recipe-form/schema";
-import { ActionsResult } from "../types/ActionsResult";
+import { createDraftRecipeFormSchema } from "@/src/components/create-recipe-form/schema";
 
 export const postDraftRecipe = zact(createDraftRecipeFormSchema)(
   async ({ uid, title, bio, ingredients, urls, servingCount, instructions, recipeImage }): Promise<ActionsResult> => {

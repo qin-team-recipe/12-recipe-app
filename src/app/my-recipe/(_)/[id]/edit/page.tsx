@@ -1,4 +1,5 @@
 import { getRecipeById } from "@/src/actions/getRecipeById";
+
 import TopBar from "@/src/components/layout/top-bar";
 
 import { EditRecipeForm, EditRecipeFormValues } from "./_components/edit-recipe-form";
@@ -29,7 +30,7 @@ const page = async ({ params }: { params: { id: string } }) => {
     recipeImage: recipeImage[0].recipeImage,
     instructions: instructions.map((instruction) => {
       return {
-        value: instruction.stepDescription,
+        value: String(instruction.stepDescription),
         id: instruction.id,
         order: instruction.stepOrder,
       };

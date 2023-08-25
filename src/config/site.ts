@@ -1,7 +1,7 @@
 export type SiteConfig = typeof siteConfig;
 
 export const siteConfig = {
-  title: "レシピアプリ",
+  title: "一流レシピ",
   description: "レシピアプリ",
   mainNav: [
     {
@@ -14,7 +14,7 @@ export const siteConfig = {
     },
     {
       title: "お買い物",
-      href: "/shopping",
+      href: "/shopping-list",
     },
   ],
 };

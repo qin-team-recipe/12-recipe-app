@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation";
 
 import { getChefById } from "@/src/actions/getChefById";
+
 import TopBar from "@/src/components/layout/top-bar";
 
 import { EditChefForm, EditChefFormValues } from "../../_components/edit-chef-form";

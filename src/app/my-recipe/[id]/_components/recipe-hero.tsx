@@ -1,9 +1,10 @@
 import Image from "next/image";
 
 import { getRecipeById } from "@/src/actions/getRecipeById";
+import { sortSiteLinks } from "@/src/lib/utils";
+
 import LinkToIconRenderer from "@/src/components/link-to-icon-renderer";
 import RouterBackButton from "@/src/components/router-back-button";
-import { sortSiteLinks } from "@/src/lib/utils";
 
 import PopoverMenu from "./popover-menu";
 import RecipeInfoStats from "./recipe-info-stats";
@@ -13,7 +14,15 @@ type Props = {
 };
 
 const RecipeHero = async ({ id }: Props) => {
-  const { title, description, isMe, RecipeLink: recipeLinks, _count, isFavorite } = await getRecipeById(id);
+  const {
+    title,
+    description,
+    isMe,
+    RecipeLink: recipeLinks,
+    _count,
+    isFavorite,
+    isPublished,
+  } = await getRecipeById(id);
 
   const sortedRecipeLinks = sortSiteLinks(recipeLinks.map((value) => value.linkUrl));
 
@@ -25,8 +34,8 @@ const RecipeHero = async ({ id }: Props) => {
           src={
             "https://images.unsplash.com/photo-1595295333158-4742f28fbd85?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80"
           }
-          layout="responsive"
-          className="w-full"
+          sizes="100vw"
+          className="h-auto w-full object-cover"
           alt={title}
           width={160}
           height={160}
@@ -41,12 +50,12 @@ const RecipeHero = async ({ id }: Props) => {
             <h6 className="text-xl font-bold text-mauve12">{title}</h6>
             <div className="ml-3 flex items-center gap-3">
               {recipeLinks && <LinkToIconRenderer links={sortedRecipeLinks.map((value) => value.url)} />}
-              {isMe && <PopoverMenu recipeId={id} />}
+              {isMe && <PopoverMenu recipeId={id} isPublished={isPublished} />}
             </div>
           </div>
           <p className="text-mauve12">{description}</p>
         </div>
-        <RecipeInfoStats recipeId={id} isActive={isFavorite} favoriteCount={_count?.likes} />
+        <RecipeInfoStats recipeId={id} isActive={isFavorite} isPublished={isPublished} favoriteCount={_count?.likes} />
       </div>
     </>
   );

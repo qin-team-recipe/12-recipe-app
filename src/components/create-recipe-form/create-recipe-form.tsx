@@ -2,26 +2,27 @@
 
 import { useState, useTransition } from "react";
 import Image from "next/image";
-import { usePathname, useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
 import { postRecipe } from "@/src/actions/postRecipe";
 import { recipeFormStateAtom } from "@/src/atoms/draftRecipeFormValuesAtom";
-import { Button, buttonVariants } from "@/src/components/ui/button";
-import { Command, CommandItem, CommandList, CommandSeparator } from "@/src/components/ui/command";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/src/components/ui/form";
-import { Input } from "@/src/components/ui/input";
-import { Popover, PopoverContent, PopoverTrigger } from "@/src/components/ui/popover";
-import Spinner from "@/src/components/ui/spinner";
-import { Textarea } from "@/src/components/ui/textarea";
-import { useToast } from "@/src/components/ui/use-toast";
 import { kToastDuration } from "@/src/constants/constants";
 import { cn } from "@/src/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { ContentState, convertFromRaw, EditorState } from "draft-js";
 import { useAtom } from "jotai";
-import { ChevronDown, ChevronUp, Minus, MoreVertical, Plus, PlusIcon, Trash, X } from "lucide-react";
+import { Minus, Plus, PlusIcon, X } from "lucide-react";
 import { useFieldArray, useForm } from "react-hook-form";
 import useDeepCompareEffect from "use-deep-compare-effect";
 import { z } from "zod";
+
+import InstructionMenu from "@/src/components/instruction-menu";
+import { Button } from "@/src/components/ui/button";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/src/components/ui/form";
+import { Input } from "@/src/components/ui/input";
+import Spinner from "@/src/components/ui/spinner";
+import { Textarea } from "@/src/components/ui/textarea";
+import { useToast } from "@/src/components/ui/use-toast";
 
 import { createRecipeFormSchema, CreateRecipeFormValues } from ".";
 
@@ -33,11 +34,13 @@ type Props = {
 const CreateRecipeForm = ({ defaultValues, redirectPath }: Props) => {
   const [imageData, setImageData] = useState("");
 
-  const pathname = usePathname();
+  const router = useRouter();
+
+  const searchParams = useSearchParams();
+
+  const isDraft = searchParams.has("draftId");
 
   const { toast } = useToast();
-
-  const router = useRouter();
 
   const [isPending, startTransition] = useTransition();
 
@@ -80,6 +83,38 @@ const CreateRecipeForm = ({ defaultValues, redirectPath }: Props) => {
     control: form.control,
   });
 
+  const formatJSONDisplay = (jsonString: any) => {
+    if (!jsonString) {
+      return "";
+    }
+
+    const parsedData = JSON.parse(jsonString);
+    const blocks = parsedData.blocks;
+
+    let displayText = "";
+
+    for (const block of blocks) {
+      if (block.text) {
+        switch (block.type) {
+          case "unstyled":
+            displayText += block.text + " ";
+            break;
+          case "unordered-list-item":
+            displayText += "• " + block.text + " ";
+            break;
+          case "ordered-list-item":
+            displayText += "1. " + block.text + " ";
+            break;
+          default:
+            displayText += block.text + " ";
+            break;
+        }
+      }
+    }
+
+    return displayText.trim();
+  };
+
   const onSubmit = (data: z.infer<typeof createRecipeFormSchema>) => {
     startTransition(async () => {
       const result = await postRecipe(data);
@@ -102,7 +137,7 @@ const CreateRecipeForm = ({ defaultValues, redirectPath }: Props) => {
   };
 
   useDeepCompareEffect(() => {
-    if (pathname !== "/my-recipe/create") {
+    if (isDraft) {
       return;
     }
 
@@ -213,93 +248,42 @@ const CreateRecipeForm = ({ defaultValues, redirectPath }: Props) => {
                 control={form.control}
                 key={field.id}
                 name={`instructions.${index}.value`}
-                render={({ field }) => (
-                  <FormItem className="space-y-0">
-                    <FormLabel className={cn("mb-1 ml-3 flex items-center gap-3", index !== 0 && "sr-only")}>
-                      <span className="text-lg font-bold">作り方</span>
-                    </FormLabel>
-                    <FormControl>
-                      <div className="relative flex-1">
-                        <div className="absolute left-4 top-1/2 mt-px  flex h-5 w-5 shrink-0 -translate-y-1/2 select-none items-center justify-center rounded-full bg-tomato9 text-sm text-mauve1">
-                          {stepOrder}
+                render={({ field }) => {
+                  const currentEditorState = isDraft
+                    ? EditorState.createWithContent(convertFromRaw(JSON.parse(field.value)))
+                    : EditorState.createWithContent(ContentState.createFromText(field.value));
+
+                  return (
+                    <FormItem className="space-y-0">
+                      <FormLabel className={cn("mb-1 ml-3 flex items-center gap-3", index !== 0 && "sr-only")}>
+                        <span className="text-lg font-bold">作り方</span>
+                      </FormLabel>
+                      <FormControl>
+                        <div className="relative w-full flex-1">
+                          <div className="absolute left-4 top-1/2 mt-px  flex h-5 w-5 shrink-0 -translate-y-1/2 select-none items-center justify-center rounded-full bg-tomato9 text-sm text-mauve1">
+                            {stepOrder}
+                          </div>
+                          <p className="line-clamp-1 h-10 w-full overflow-hidden rounded-none border border-x-0 border-input bg-transparent px-12 py-2 leading-loose">
+                            {formatJSONDisplay(field.value)}
+                          </p>
+                          <InstructionMenu
+                            {...{
+                              stepOrder,
+                              index,
+                              instructionsFields,
+                              removeInstructions,
+                              watchedValues,
+                              setValue,
+                              form,
+                              currentEditorState,
+                            }}
+                          />
                         </div>
-                        <Input {...field} className="rounded-none border-x-0 px-12" />
-                        <Popover>
-                          <PopoverTrigger className="absolute right-6 top-1/2 -translate-y-1/2">
-                            <MoreVertical size={16} />
-                          </PopoverTrigger>
-                          <PopoverContent align="end" className="p-2">
-                            <Command className="w-full">
-                              <CommandList>
-                                {/* TODO: 編集する機能の実装 */}
-                                {index !== 0 && (
-                                  <CommandItem className="text-mauve11">
-                                    <button
-                                      className="flex"
-                                      onClick={() => {
-                                        const instructions = [...watchedValues.instructions];
-                                        const target = instructions[index];
-
-                                        // orderの更新
-                                        instructions[index].order = stepOrder - 1;
-                                        instructions[index - 1].order = stepOrder;
-
-                                        instructions[index] = instructions[index - 1];
-                                        instructions[index - 1] = target;
-
-                                        form.setValue("instructions", instructions);
-                                      }}
-                                    >
-                                      <ChevronUp className="mr-2 h-4 w-4" />
-                                      <span>上に移動する</span>
-                                    </button>
-                                  </CommandItem>
-                                )}
-                                {index !== instructionsFields.length - 1 && (
-                                  <CommandItem className="text-mauve11">
-                                    <button
-                                      className="flex"
-                                      onClick={() => {
-                                        const instructions = [...watchedValues.instructions];
-                                        const target = instructions[index];
-
-                                        // orderの更新
-                                        instructions[index].order = stepOrder + 1;
-                                        instructions[index + 1].order = stepOrder;
-
-                                        instructions[index] = instructions[index + 1];
-                                        instructions[index + 1] = target;
-
-                                        form.setValue("instructions", instructions);
-                                      }}
-                                    >
-                                      <ChevronDown className="mr-2 h-4 w-4" />
-                                      <span>下に移動する</span>
-                                    </button>
-                                  </CommandItem>
-                                )}
-                                <CommandSeparator />
-                                <CommandItem className="text-mauve11">
-                                  <button
-                                    disabled={instructionsFields.length === 1}
-                                    className="flex"
-                                    onClick={() => {
-                                      removeInstructions(index);
-                                    }}
-                                  >
-                                    <Trash className="mr-2 h-4 w-4" />
-                                    <span>リストから削除する</span>
-                                  </button>
-                                </CommandItem>
-                              </CommandList>
-                            </Command>
-                          </PopoverContent>
-                        </Popover>
-                      </div>
-                    </FormControl>
-                    <FormMessage className="ml-4 pt-1" />
-                  </FormItem>
-                )}
+                      </FormControl>
+                      <FormMessage className="ml-4 pt-1" />
+                    </FormItem>
+                  );
+                }}
               />
             );
           })}

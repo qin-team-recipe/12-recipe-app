@@ -1,7 +1,8 @@
 import Link from "next/link";
 
-import TopBar from "@/src/components/layout/top-bar";
 import { ArrowLeft, ArrowUpRight, ChevronRight, LogOut } from "lucide-react";
+
+import TopBar from "@/src/components/layout/top-bar";
 
 import DeleteUserTile from "./_components/delete-user-tile";
 import LogoutTile from "./_components/logout-tile";
@@ -21,7 +22,7 @@ const Page = () => {
       />
       <section className="mt-5 px-4">
         <h2 className="mb-3 text-lg font-bold">利用規約やお問い合わせ</h2>
-        <Link href={"/terms"} className="flex h-12 items-center justify-between">
+        <Link href={"settings/terms"} className="flex h-12 items-center justify-between">
           利用規約
           <ChevronRight size={20} />
         </Link>

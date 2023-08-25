@@ -1,9 +1,10 @@
-import { getTopFollowersInLast3Days } from "@/src/actions/getTopFollowersInLast3Days";
+import { getChefsWithTopFollowersInLast3Days } from "@/src/actions/getChefsTopFollowersInLast3Days";
+
 import { ChefCard } from "@/src/components/chef-card";
 import NoDataDisplay from "@/src/components/no-data-display";
 
 const HorizontalTopFollowChefsInLast3DaysList = async () => {
-  const topFollowersInLast3Days = await getTopFollowersInLast3Days();
+  const topFollowersInLast3Days = await getChefsWithTopFollowersInLast3Days();
 
   return (
     <>

@@ -2,12 +2,13 @@ import { Suspense } from "react";
 import { cookies } from "next/headers";
 import Link from "next/link";
 
-import TopBar from "@/src/components/layout/top-bar";
-import SuggestLogin from "@/src/components/suggest-login";
-import Spinner from "@/src/components/ui/spinner";
 import { Database } from "@/src/types/SupabaseTypes";
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { AlignLeft, UserCircle2 } from "lucide-react";
+
+import TopBar from "@/src/components/layout/top-bar";
+import SuggestLogin from "@/src/components/suggest-login";
+import Spinner from "@/src/components/ui/spinner";
 
 import HorizontalFollowingChefsList from "./_components/horizontal-following-chefs-list";
 import HorizontalNewRecipesList from "./_components/horizontal-new-recipes-list";

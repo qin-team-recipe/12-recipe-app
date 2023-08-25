@@ -1,24 +1,20 @@
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
-import TopBar from "@/src/components/layout/top-bar";
 import type { Database } from "@/src/types/SupabaseTypes";
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
+
+import TopBar from "@/src/components/layout/top-bar";
 
 import { LoginForm, LoginFormValues } from "./_components";
 
 const LoginPage = async () => {
-  const supabase = createServerComponentClient<Database>({
-    cookies,
-  });
-
+  const cookieStore = cookies();
   const {
     data: { session },
-  } = await supabase.auth.getSession();
+  } = await createServerComponentClient<Database>({ cookies: () => cookieStore }).auth.getSession();
 
-  if (session) {
-    redirect("/");
-  }
+  if (session) redirect("/");
 
   const defaultValues: LoginFormValues = {
     email: "",

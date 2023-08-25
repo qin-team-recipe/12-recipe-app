@@ -1,20 +1,18 @@
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
-import TopBar from "@/src/components/layout/top-bar";
 import type { Database } from "@/src/types/SupabaseTypes";
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
+
+import TopBar from "@/src/components/layout/top-bar";
 
 import SignUpForm from "./_components/signup-form";
 
 const SignUpPage = async () => {
-  const supabase = createServerComponentClient<Database>({
-    cookies,
-  });
-
+  const cookieStore = cookies();
   const {
     data: { session },
-  } = await supabase.auth.getSession();
+  } = await createServerComponentClient<Database>({ cookies: () => cookieStore }).auth.getSession();
 
   if (session) {
     redirect("/");

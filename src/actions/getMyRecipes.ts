@@ -1,12 +1,10 @@
 import { cookies } from "next/headers";
 import { notFound } from "next/navigation";
 
+import { prisma } from "@/src/lib/prisma";
+import { PaginationParams } from "@/src/types/PaginationParams";
+import { Database } from "@/src/types/SupabaseTypes";
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
-
-import { kInfiniteScrollCount } from "../constants/constants";
-import { prisma } from "../lib/prisma";
-import { PaginationParams } from "../types/PaginationParams";
-import { Database } from "../types/SupabaseTypes";
 
 export const getMyRecipes = async (
   { orderByLikes, limit, skip }: { orderByLikes?: boolean } & PaginationParams = {
@@ -15,11 +13,10 @@ export const getMyRecipes = async (
     limit: undefined,
   }
 ) => {
-  const supabaseServerClient = createServerComponentClient<Database>({ cookies });
-
+  const cookieStore = cookies();
   const {
     data: { session },
-  } = await supabaseServerClient.auth.getSession();
+  } = await createServerComponentClient<Database>({ cookies: () => cookieStore }).auth.getSession();
 
   if (!session) notFound();
 

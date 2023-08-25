@@ -5,19 +5,18 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
 import { prisma } from "@/src/lib/prisma";
+import { ActionsResult } from "@/src/types/ActionsResult";
+import { Database } from "@/src/types/SupabaseTypes";
 import { createServerActionClient } from "@supabase/auth-helpers-nextjs";
 import { zact } from "zact/server";
 
-import { editProfileFormSchema } from "../app/my-page/edit/_components/edit-profile-form/schema";
-import { ActionsResult } from "../types/ActionsResult";
-import { Database } from "../types/SupabaseTypes";
+import { editProfileFormSchema } from "@/src/app/my-page/edit/_components/edit-profile-form/schema";
 
 export const putProfile = zact(editProfileFormSchema)(async ({ nickName, bio, urls }): Promise<ActionsResult> => {
-  const supabaseServerClient = createServerActionClient<Database>({ cookies });
-
+  const cookieStore = cookies();
   const {
     data: { session },
-  } = await supabaseServerClient.auth.getSession();
+  } = await createServerActionClient<Database>({ cookies: () => cookieStore }).auth.getSession();
 
   if (!session) notFound();
 

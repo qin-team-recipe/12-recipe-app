@@ -26,7 +26,7 @@ const NavbarItem: React.FC<Props> = ({ icon: Icon, label, active, href }) => {
         gap-x-4
         px-2
         py-1
-        font-medium
+        font-serif
         text-mauve11
         transition
         hover:rounded-2xl
@@ -37,7 +37,7 @@ const NavbarItem: React.FC<Props> = ({ icon: Icon, label, active, href }) => {
       )}
     >
       <Icon size={24} />
-      <span className={cn(`truncate text-sm md:text-lg`, active && "font-bold")}>{label}</span>
+      <span className={cn(`truncate text-base md:text-2xl`, active && "font-bold")}>{label}</span>
     </Link>
   );
 };

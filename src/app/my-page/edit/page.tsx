@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation";
 
 import { getAuthenticatedUser } from "@/src/actions/getAuthenticatedUser";
+
 import TopBar from "@/src/components/layout/top-bar";
 
 import { EditFormValues, EditProfileForm } from "./_components/edit-profile-form";

@@ -1,5 +1,6 @@
 import { getAuthenticatedUser } from "@/src/actions/getAuthenticatedUser";
 import { searchRecipesAndChefs } from "@/src/actions/searchRecipesAndChefs";
+
 import TopBar from "@/src/components/layout/top-bar";
 import RecipeCard from "@/src/components/recipe-card";
 import SearchInput from "@/src/components/search-input";
@@ -29,7 +30,8 @@ const page = async ({ searchParams }: { searchParams: { search?: string } }) => 
               <div key={recipe.id} className="flex flex-col gap-2">
                 <RecipeCard
                   path={`/mock/tsuboi/${recipe.id}`}
-                  favorites={recipe.likes.length}
+                  favorites={0}
+                  isPublished={recipe.isPublished}
                   description={recipe.description}
                   title={recipe.title}
                   imageUrl={

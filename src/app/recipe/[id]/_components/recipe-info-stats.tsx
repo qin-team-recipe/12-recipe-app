@@ -1,12 +1,10 @@
 "use client";
 
-import { experimental_useOptimistic as useOptimistic } from "react";
+import { favoriteRecipe, unFavoriteRecipe } from "@/src/actions/actionsForFavoriteRecipe";
+import { useOptimisticToggle } from "@/src/hooks/useOptimisticToggle";
 
-import { favoriteRecipe, unFavoriteRecipe } from "@/src/actions/favoriteRecipeActions";
 import ProfileLink from "@/src/components/profile-link";
 import ToggleButton from "@/src/components/toggle-button";
-import { useToast } from "@/src/components/ui/use-toast";
-import { useOptimisticToggle } from "@/src/hooks/useOptimisticToggle";
 
 import NumberUnit from "../../../../components/number-unit";
 import { CONSTANTS } from "../../../../constants/constants";

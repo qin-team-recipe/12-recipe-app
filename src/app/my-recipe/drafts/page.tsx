@@ -1,9 +1,10 @@
 import Link from "next/link";
 
 import { getDraftRecipes } from "@/src/actions/getDraftRecipes";
+import { ArrowLeft } from "lucide-react";
+
 import TopBar from "@/src/components/layout/top-bar";
 import NoDataDisplay from "@/src/components/no-data-display";
-import { ArrowLeft } from "lucide-react";
 
 import DraftRecipeTile from "./_components/draft-recipe-tile";
 

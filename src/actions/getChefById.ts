@@ -1,10 +1,9 @@
 import { cookies } from "next/headers";
 import { notFound } from "next/navigation";
 
+import { prisma } from "@/src/lib/prisma";
+import { Database } from "@/src/types/SupabaseTypes";
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
-
-import { prisma } from "../lib/prisma";
-import { Database } from "../types/SupabaseTypes";
 
 export const getChefById = async ({ id, orderByLikes = false }: { id: string; orderByLikes?: boolean }) => {
   const chef = await prisma.user.findUnique({
@@ -42,11 +41,10 @@ export const getChefById = async ({ id, orderByLikes = false }: { id: string; or
     chef.Recipe.sort((a, b) => (b._count.likes || 0) - (a._count.likes || 0));
   }
 
-  const supabaseServerClient = createServerComponentClient<Database>({ cookies });
-
+  const cookieStore = cookies();
   const {
     data: { session },
-  } = await supabaseServerClient.auth.getSession();
+  } = await createServerComponentClient<Database>({ cookies: () => cookieStore }).auth.getSession();
 
   if (!session) notFound();
 

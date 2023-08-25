@@ -60,7 +60,7 @@ const LoadMore = ({
           })
           .catch((e) => {
             console.log(e);
-            // クエリパラメータに日本語を含むServer Actionを使用するとエラーが発生する
+            // クエリパラメータに日本語を含を含めてServer Actionを使用するとエラーが発生する
             // 以下のPRがマージされたら、エラーが発生しなくなる可能性がある
             // https://github.com/vercel/next.js/pull/53073
             toast({
@@ -69,7 +69,7 @@ const LoadMore = ({
             });
           })
           .finally(() => setLoading(false));
-      }, 300);
+      }, 800);
     },
     [loadMoreAction, toast]
   );

@@ -4,23 +4,20 @@ import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
+import { prisma } from "@/src/lib/prisma";
+import { ActionsResult } from "@/src/types/ActionsResult";
+import { Database } from "@/src/types/SupabaseTypes";
 import { createServerActionClient } from "@supabase/auth-helpers-nextjs";
 
-import { prisma } from "../lib/prisma";
-import { ActionsResult } from "../types/ActionsResult";
-import { Database } from "../types/SupabaseTypes";
-
-export const putMemo = async (id: number, isCompleted: boolean): Promise<ActionsResult> => {
-  const supabaseServerClient = createServerActionClient<Database>({ cookies });
-
+export const patchMemoCompleteStatus = async (id: number, isCompleted: boolean): Promise<ActionsResult> => {
+  const cookieStore = cookies();
   const {
     data: { session },
-  } = await supabaseServerClient.auth.getSession();
+  } = await createServerActionClient<Database>({ cookies: () => cookieStore }).auth.getSession();
 
   if (!session) notFound();
 
   try {
-    // 論理削除
     await prisma.memo.update({
       data: {
         isCompleted: !isCompleted,
@@ -28,8 +25,7 @@ export const putMemo = async (id: number, isCompleted: boolean): Promise<Actions
       where: { id },
     });
 
-    // TODO: 適切なパスを指定する
-    revalidatePath("/mock");
+    revalidatePath("/shopping-list");
 
     return {
       isSuccess: true,

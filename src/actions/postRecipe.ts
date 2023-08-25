@@ -1,16 +1,14 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
 
+import { getAuthenticatedUser } from "@/src/actions/getAuthenticatedUser";
 import { prisma } from "@/src/lib/prisma";
-import { createServerActionClient } from "@supabase/auth-helpers-nextjs";
+import { ActionsResult } from "@/src/types/ActionsResult";
+import { Prisma } from "@prisma/client";
 import { zact } from "zact/server";
 
-import { createRecipeFormSchema } from "../components/create-recipe-form";
-import { ActionsResult } from "../types/ActionsResult";
-import { Database } from "../types/SupabaseTypes";
+import { createRecipeFormSchema } from "@/src/components/create-recipe-form";
 
 export const postRecipe = zact(createRecipeFormSchema)(
   async ({ uid, title, bio, ingredients, urls, servingCount, instructions, recipeImage }): Promise<ActionsResult> => {
@@ -29,6 +27,8 @@ export const postRecipe = zact(createRecipeFormSchema)(
           description: bio,
           userId: uid,
           servingCount: servingCount,
+          // 管理者が作成した場合（シェフのレシピ）は公開状態にする
+          isPublished: user?.role === "ADMIN",
           RecipeImage: {
             create: {
               recipeImage: recipeImage ?? "",
