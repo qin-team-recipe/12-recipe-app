@@ -15,11 +15,12 @@ import HorizontalNewRecipesList from "./_components/horizontal-new-recipes-list"
 import MyFavoriteRecipesGrid from "./_components/my-favorite-recipes-grid";
 
 const page = async () => {
-  const supabaseServerClient = createServerComponentClient<Database>({ cookies });
-
+  const cookieStore = cookies();
   const {
     data: { session },
-  } = await supabaseServerClient.auth.getSession();
+  } = await createServerComponentClient<Database>({ cookies: () => cookieStore }).auth.getSession();
+
+  console.log(session);
 
   return (
     <>
