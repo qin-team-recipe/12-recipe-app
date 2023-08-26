@@ -10,16 +10,16 @@ type Props = {
     description: string;
     title: string;
   }[];
-  segment: string;
+  path: string;
 };
 
-const RecipeList = ({ recipes, segment }: Props) => {
+const RecipeList = ({ recipes, path }: Props) => {
   return (
     <>
       {recipes.map(({ id, _count, description, title, isPublished }) => (
         <li key={id} className="flex flex-col">
           <RecipeCard
-            path={`/${segment}/${id}`}
+            path={`/${path}/${id}`}
             favorites={_count.likes}
             description={description}
             isPublished={isPublished}

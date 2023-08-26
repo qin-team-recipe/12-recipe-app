@@ -5,7 +5,16 @@ import { prisma } from "@/src/lib/prisma";
 import { Database } from "@/src/types/SupabaseTypes";
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 
-export const getChefById = async ({ id, orderByLikes = false }: { id: string; orderByLikes?: boolean }) => {
+import { PaginationParams } from "../types/PaginationParams";
+
+export const getChefById = async (
+  { id, orderByLikes, limit, skip }: { id: string; orderByLikes?: boolean } & PaginationParams = {
+    id: "",
+    orderByLikes: false,
+    skip: 0,
+    limit: undefined,
+  }
+) => {
   const chef = await prisma.user.findUnique({
     where: {
       id,
@@ -23,6 +32,8 @@ export const getChefById = async ({ id, orderByLikes = false }: { id: string; or
         orderBy: {
           createdAt: "desc",
         },
+        skip,
+        take: limit,
       },
       followers: true,
       UserLink: true,
