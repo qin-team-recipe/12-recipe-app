@@ -11,8 +11,8 @@ import { Ingredient, Instruction, RecipeLink } from "@prisma/client";
 import { createServerActionClient } from "@supabase/auth-helpers-nextjs";
 import { zact } from "zact/server";
 
-import { editRecipeFormSchema } from "@/src/app/my-recipe/(_)/[id]/edit/_components/edit-recipe-form";
-import { EditRecipeFormValues } from "@/src/app/my-recipe/(_)/[id]/edit/_components/edit-recipe-form/schema";
+import { editRecipeFormSchema } from "@/src/components/edit-recipe-form";
+import { EditRecipeFormValues } from "@/src/components/edit-recipe-form/schema";
 
 export const putRecipe = zact(editRecipeFormSchema)(
   async ({ recipeId, title, bio, ingredients, urls, servingCount, instructions }): Promise<ActionsResult> => {

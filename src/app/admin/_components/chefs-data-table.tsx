@@ -52,6 +52,7 @@ export const columns: ColumnDef<Chef>[] = [
         checked={row.getIsSelected()}
         onCheckedChange={(value) => row.toggleSelected(!!value)}
         aria-label="Select row"
+        onClick={(event) => event.stopPropagation()}
       />
     ),
     enableSorting: false,
@@ -59,12 +60,12 @@ export const columns: ColumnDef<Chef>[] = [
   },
   {
     accessorKey: "name",
-    header: "シェフ名",
+    header: () => <div className="whitespace-nowrap text-mauve12">シェフ名</div>,
     cell: ({ row }) => <div>{row.getValue("name")}</div>,
   },
   {
     accessorKey: "_count.Recipe",
-    header: () => <div className="text-right">レシピ数</div>,
+    header: () => <div className="whitespace-nowrap text-right text-mauve12">レシピ数</div>,
     cell: ({ row }) => {
       return <div className="text-right font-medium">{row.original._count.Recipe}</div>;
     },
@@ -75,7 +76,7 @@ export const columns: ColumnDef<Chef>[] = [
     cell: ({ row }) => {
       return (
         <Popover>
-          <PopoverTrigger>
+          <PopoverTrigger onClick={(event) => event.stopPropagation()}>
             <MoreHorizontal className="h-4 w-4" />
           </PopoverTrigger>
           <PopoverContent align="end" className="p-2">
@@ -83,7 +84,7 @@ export const columns: ColumnDef<Chef>[] = [
               <CommandList>
                 <CommandItem>
                   <Link href={`/admin/${row.original.id}/edit`}>
-                    <button className="flex">
+                    <button className="flex w-full" onClick={(event) => event.stopPropagation()}>
                       <Pencil className="mr-2 h-4 w-4" />
                       <span>編集する</span>
                     </button>
@@ -92,7 +93,7 @@ export const columns: ColumnDef<Chef>[] = [
 
                 <CommandItem>
                   <Link href={`/admin/${row.original.id}/create-recipe`}>
-                    <button className="flex">
+                    <button className="flex w-full" onClick={(event) => event.stopPropagation()}>
                       <svg className="mr-2 h-4 w-4" viewBox="0 0 18 19" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path
                           d="M3 2.75H9L8.25 9.5H3.75L3 2.75Z"
@@ -125,10 +126,17 @@ export const columns: ColumnDef<Chef>[] = [
                   </Link>
                 </CommandItem>
 
-                <CommandItem>
-                  {/* // TODO: URLをコピーする */}
-                  <Copy className="mr-2 h-4 w-4" />
-                  <span>URLをコピーする</span>
+                <CommandItem className="w-full" onClick={(event) => event.stopPropagation()}>
+                  <button
+                    className="flex"
+                    onClick={(e) => {
+                      /* // TODO: URLをコピーする */
+                      e.stopPropagation();
+                    }}
+                  >
+                    <Copy className="mr-2 h-4 w-4" />
+                    <span>URLをコピーする</span>
+                  </button>
                 </CommandItem>
               </CommandList>
             </Command>
@@ -184,7 +192,7 @@ export function ChefsDataTable({ data }: { data: Chef[] }) {
             />
           )}
         </div>
-        <Button variant="outline" className="ml-auto" onClick={() => router.push("/admin/create")}>
+        <Button variant="outline" className="ml-auto font-bold" onClick={() => router.push("/admin/create")}>
           シェフを作成する
         </Button>
       </div>
@@ -206,7 +214,14 @@ export function ChefsDataTable({ data }: { data: Chef[] }) {
           <TableBody>
             {table.getRowModel().rows?.length ? (
               table.getRowModel().rows.map((row) => (
-                <TableRow key={row.id} data-state={row.getIsSelected() && "selected"}>
+                <TableRow
+                  key={row.id}
+                  className="cursor-pointer hover:bg-gray-100"
+                  data-state={row.getIsSelected() && "selected"}
+                  onClick={() => {
+                    router.push(`/admin/${row.original.id}`);
+                  }}
+                >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</TableCell>
                   ))}
