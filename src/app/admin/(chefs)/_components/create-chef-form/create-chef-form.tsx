@@ -24,6 +24,7 @@ import { postChef } from "../../../../../actions/postChef";
 
 const CreateChefForm = () => {
   const [imageData, setImageData] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const { toast } = useToast();
 
@@ -55,6 +56,8 @@ const CreateChefForm = () => {
   });
 
   const onSubmit = (data: z.infer<typeof createChefFormSchema>) => {
+    setIsSubmitting(true);
+
     startTransition(async () => {
       const result = await postChef(data);
 
@@ -189,7 +192,7 @@ const CreateChefForm = () => {
         </div>
 
         <div className="flex gap-2 px-4">
-          <Button variant={"destructive"} className="flex-1 gap-2" type="submit">
+          <Button variant={"destructive"} className="flex-1 gap-2" type="submit" disabled={isSubmitting}>
             {isPending && <Spinner />} 保存する
           </Button>
           <Link

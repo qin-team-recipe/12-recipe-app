@@ -24,9 +24,13 @@ type Props = {
 };
 
 const SignUpForm = ({ defaultValues }: Props) => {
-  const router = useRouter();
-  const supabase = createClientComponentClient<Database>();
   const [message, setMessage] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const router = useRouter();
+
+  const supabase = createClientComponentClient<Database>();
+
   const [isPending, startTransition] = useTransition();
 
   const { toast } = useToast();
@@ -38,6 +42,8 @@ const SignUpForm = ({ defaultValues }: Props) => {
   });
 
   const onSubmit = (data: SignUpFormValues) => {
+    setIsSubmitting(true);
+
     startTransition(async () => {
       try {
         const { data: responseData, error } = await supabase.auth.signUp({
@@ -126,7 +132,7 @@ const SignUpForm = ({ defaultValues }: Props) => {
               </FormItem>
             )}
           />
-          <Button variant={"destructive"} className="flex-1 gap-2" type="submit">
+          <Button variant={"destructive"} className="flex-1 gap-2" type="submit" disabled={isSubmitting}>
             {isPending && <Spinner />} サインアップ
           </Button>
         </form>
