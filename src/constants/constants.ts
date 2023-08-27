@@ -47,3 +47,7 @@ export const kToastDuration = 3000;
 
 // 無限スクロールで追加で取得する件数
 export const kInfiniteScrollCount = 10;
+
+export const ROLE_TYPE = {
+   USER:'USER',
+} as const
