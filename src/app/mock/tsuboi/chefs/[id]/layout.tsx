@@ -2,6 +2,10 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 
 import { getChefById } from "@/src/actions/getChefById";
+import { CONSTANTS } from "@/src/constants/constants";
+import { sortSiteLinks } from "@/src/lib/utils";
+import { ArrowLeft, CircleEllipsis } from "lucide-react";
+
 import TopBar from "@/src/components/layout/top-bar";
 import LinkToIconRenderer from "@/src/components/link-to-icon-renderer";
 import LinkableTabs from "@/src/components/linkable-tabs";
@@ -9,9 +13,6 @@ import NumberUnit from "@/src/components/number-unit";
 import { Avatar, AvatarImage } from "@/src/components/ui/avatar";
 import { Command, CommandItem, CommandList, CommandSeparator } from "@/src/components/ui/command";
 import { Popover, PopoverContent, PopoverTrigger } from "@/src/components/ui/popover";
-import { CONSTANTS } from "@/src/constants/constants";
-import { sortSiteLinks } from "@/src/lib/utils";
-import { ArrowLeft, CircleEllipsis } from "lucide-react";
 
 import FollowButton from "../../../_components/follow-button";
 import { tabs } from "./_constants/tabs";

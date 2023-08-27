@@ -1,5 +1,5 @@
-import RecipeHero from "@/src/app/mock/tsuboi/[id]/_components/recipe-hero";
 import LinkableTabs from "@/src/components/linkable-tabs";
+import RecipeHero from "@/src/app/mock/tsuboi/[id]/_components/recipe-hero";
 
 import { tabs } from "./_constants/tabs";
 

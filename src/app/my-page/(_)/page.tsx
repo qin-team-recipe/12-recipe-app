@@ -1,7 +1,8 @@
 import { getMyRecipes } from "@/src/actions/getMyRecipes";
+import { kInfiniteScrollCount } from "@/src/constants/constants";
+
 import LoadMore from "@/src/components/load-more";
 import NoDataDisplay from "@/src/components/no-data-display";
-import { kInfiniteScrollCount } from "@/src/constants/constants";
 
 import RecipeList from "../../../components/recipe-list";
 

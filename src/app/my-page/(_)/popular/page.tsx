@@ -1,8 +1,9 @@
 import { getMyRecipes } from "@/src/actions/getMyRecipes";
+import { kInfiniteScrollCount } from "@/src/constants/constants";
+
 import LoadMore from "@/src/components/load-more";
 import NoDataDisplay from "@/src/components/no-data-display";
 import RecipeList from "@/src/components/recipe-list";
-import { kInfiniteScrollCount } from "@/src/constants/constants";
 
 const page = async () => {
   const initialRecipes = await getMyRecipes({ orderByLikes: true, limit: kInfiniteScrollCount });

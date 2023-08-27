@@ -3,6 +3,7 @@
 import { useTransition } from "react";
 
 import { favoriteRecipe } from "@/src/actions/actionsForFavoriteRecipe";
+
 import { Button } from "@/src/components/ui/button";
 import Spinner from "@/src/components/ui/spinner";
 

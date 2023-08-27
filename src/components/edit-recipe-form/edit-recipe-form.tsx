@@ -6,28 +6,29 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 import { putRecipe } from "@/src/actions/putRecipe";
+import { cn } from "@/src/lib/utils";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { convertFromRaw, EditorState } from "draft-js";
+import { Minus, Plus, PlusIcon, X } from "lucide-react";
+import { useFieldArray, useForm } from "react-hook-form";
+import { z } from "zod";
+
+import InstructionMenu from "@/src/components/instruction-menu";
 import { Button, buttonVariants } from "@/src/components/ui/button";
-import { Command, CommandItem, CommandList, CommandSeparator } from "@/src/components/ui/command";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/src/components/ui/form";
 import { Input } from "@/src/components/ui/input";
-import { Popover, PopoverContent, PopoverTrigger } from "@/src/components/ui/popover";
 import Spinner from "@/src/components/ui/spinner";
 import { Textarea } from "@/src/components/ui/textarea";
 import { useToast } from "@/src/components/ui/use-toast";
-import { cn } from "@/src/lib/utils";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { daysInWeek } from "date-fns/constants/index";
-import { ChevronDown, ChevronUp, Minus, MoreVertical, Plus, PlusIcon, Trash, X } from "lucide-react";
-import { useFieldArray, useForm } from "react-hook-form";
-import { z } from "zod";
 
 import { editRecipeFormSchema, EditRecipeFormValues } from ".";
 
 type Props = {
   defaultValues: Partial<EditRecipeFormValues>;
+  navigateTo: string;
 };
 
-const EditRecipeForm = ({ defaultValues }: Props) => {
+const EditRecipeForm = ({ defaultValues, navigateTo }: Props) => {
   const [imageData, setImageData] = useState(defaultValues.recipeImage ?? "");
 
   const { toast } = useToast();
@@ -80,6 +81,38 @@ const EditRecipeForm = ({ defaultValues }: Props) => {
     control: form.control,
   });
 
+  const formatJSONDisplay = (jsonString: any) => {
+    if (!jsonString) {
+      return "";
+    }
+
+    const parsedData = JSON.parse(jsonString);
+    const blocks = parsedData.blocks;
+
+    let displayText = "";
+
+    for (const block of blocks) {
+      if (block.text) {
+        switch (block.type) {
+          case "unstyled":
+            displayText += block.text + " ";
+            break;
+          case "unordered-list-item":
+            displayText += "• " + block.text + " ";
+            break;
+          case "ordered-list-item":
+            displayText += "1. " + block.text + " ";
+            break;
+          default:
+            displayText += block.text + " ";
+            break;
+        }
+      }
+    }
+
+    return displayText.trim();
+  };
+
   const onSubmit = (data: z.infer<typeof editRecipeFormSchema>) => {
     startTransition(async () => {
       const result = await putRecipe(data);
@@ -91,7 +124,7 @@ const EditRecipeForm = ({ defaultValues }: Props) => {
           duration: 3000,
         });
 
-        router.push(`/my-recipe/${defaultValues.recipeId}`);
+        router.push(navigateTo);
       } else {
         toast({
           variant: "destructive",
@@ -179,101 +212,42 @@ const EditRecipeForm = ({ defaultValues }: Props) => {
                 control={form.control}
                 key={field.id}
                 name={`instructions.${index}.value`}
-                render={({ field }) => (
-                  <FormItem className="space-y-0">
-                    <FormLabel className={cn("mb-1 ml-3 flex items-center gap-3", index !== 0 && "sr-only")}>
-                      <span className="text-lg font-bold">作り方</span>
-                    </FormLabel>
-                    <FormControl>
-                      <div className="relative flex-1">
-                        <div className="absolute left-4 top-1/2 mt-px flex h-5 w-5 shrink-0 -translate-y-1/2 select-none items-center justify-center rounded-full bg-tomato9 text-sm text-mauve1">
-                          {stepOrder}
+                render={({ field }) => {
+                  const contentState = convertFromRaw(JSON.parse(field.value));
+                  const currentEditorState = EditorState.createWithContent(contentState);
+
+                  return (
+                    <FormItem className="space-y-0">
+                      <FormLabel className={cn("mb-1 ml-3 flex items-center gap-3", index !== 0 && "sr-only")}>
+                        <span className="text-lg font-bold">作り方</span>
+                      </FormLabel>
+                      <FormControl>
+                        <div className="relative flex-1">
+                          <div className="absolute left-4 top-1/2 mt-px flex h-5 w-5 shrink-0 -translate-y-1/2 select-none items-center justify-center rounded-full bg-tomato9 text-sm text-mauve1">
+                            {stepOrder}
+                          </div>
+                          <p className="flex h-10 max-w-[800px] items-center self-center overflow-hidden whitespace-nowrap rounded-none border-x-0 border-y px-12">
+                            <span className="inline-block max-w-full overflow-hidden">
+                              {formatJSONDisplay(field.value)}
+                            </span>
+                          </p>
+                          <InstructionMenu
+                            {...{
+                              index,
+                              form,
+                              instructionsFields,
+                              removeInstructions,
+                              stepOrder,
+                              watchedValues,
+                              currentEditorState,
+                            }}
+                          />
                         </div>
-                        <Input {...field} className="rounded-none border-x-0 px-12" />
-                        <Popover>
-                          <PopoverTrigger className="absolute right-6 top-1/2 -translate-y-1/2">
-                            <MoreVertical size={16} />
-                          </PopoverTrigger>
-                          <PopoverContent align="end" className="p-2">
-                            <Command className="w-full">
-                              <CommandList>
-                                {/* TODO: 編集する機能の実装 */}
-                                {index !== 0 && (
-                                  <CommandItem className="text-mauve11">
-                                    <button
-                                      className="flex"
-                                      onClick={() => {
-                                        const instructions = [...watchedValues.instructions];
-                                        const target = instructions[index];
-
-                                        // orderの更新
-                                        instructions[index].order = stepOrder - 1;
-                                        instructions[index - 1].order = stepOrder;
-
-                                        instructions[index] = instructions[index - 1];
-                                        instructions[index - 1] = target;
-
-                                        form.setValue("instructions", instructions);
-                                      }}
-                                    >
-                                      <ChevronUp className="mr-2 h-4 w-4" />
-                                      <span>上に移動する</span>
-                                    </button>
-                                  </CommandItem>
-                                )}
-                                {index !== instructionsFields.length - 1 && (
-                                  <CommandItem className="text-mauve11">
-                                    <button
-                                      className="flex"
-                                      onClick={() => {
-                                        const instructions = [...watchedValues.instructions];
-                                        const target = instructions[index];
-
-                                        // orderの更新
-                                        instructions[index].order = stepOrder + 1;
-                                        instructions[index + 1].order = stepOrder;
-
-                                        instructions[index] = instructions[index + 1];
-                                        instructions[index + 1] = target;
-
-                                        form.setValue("instructions", instructions);
-                                      }}
-                                    >
-                                      <ChevronDown className="mr-2 h-4 w-4" />
-                                      <span>下に移動する</span>
-                                    </button>
-                                  </CommandItem>
-                                )}
-                                <CommandSeparator />
-                                <CommandItem className="text-mauve11">
-                                  <button
-                                    disabled={instructionsFields.length === 1}
-                                    className="flex"
-                                    onClick={() => {
-                                      removeInstructions(index);
-
-                                      // 削除した要素のあとの要素のorderを更新する
-                                      const instructions = [...watchedValues.instructions];
-                                      instructions.splice(index, 1);
-                                      instructions.forEach((instruction, index) => {
-                                        instruction.order = index + 1;
-                                      });
-                                      form.setValue("instructions", instructions);
-                                    }}
-                                  >
-                                    <Trash className="mr-2 h-4 w-4" />
-                                    <span>リストから削除する</span>
-                                  </button>
-                                </CommandItem>
-                              </CommandList>
-                            </Command>
-                          </PopoverContent>
-                        </Popover>
-                      </div>
-                    </FormControl>
-                    <FormMessage className="ml-4 pt-1" />
-                  </FormItem>
-                )}
+                      </FormControl>
+                      <FormMessage className="ml-4 pt-1" />
+                    </FormItem>
+                  );
+                }}
               />
             );
           })}
@@ -392,7 +366,7 @@ const EditRecipeForm = ({ defaultValues }: Props) => {
             {isPending && <Spinner />} 保存する
           </Button>
           <Link
-            href={`/my-recipe/${defaultValues.recipeId}`}
+            href={navigateTo}
             className={buttonVariants({
               variant: "outline",
               className: "flex-1 border-tomato7 text-tomato11",

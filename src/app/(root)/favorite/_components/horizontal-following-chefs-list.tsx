@@ -1,6 +1,7 @@
 import Link from "next/link";
 
 import { getChefsInMyFollowingList } from "@/src/actions/getChefsInMyFollowingList";
+
 import NoDataDisplay from "@/src/components/no-data-display";
 import { Avatar, AvatarImage } from "@/src/components/ui/avatar";
 

@@ -1,12 +1,13 @@
 import Link from "next/link";
 
 import { getChefById } from "@/src/actions/getChefById";
-import { CreateRecipeForm, CreateRecipeFormValues } from "@/src/components/create-recipe-form";
-import TopBar from "@/src/components/layout/top-bar";
 import { X } from "lucide-react";
 
-const page = async ({ params }: { params: { id: string } }) => {
-  const { id } = await getChefById({ id: params.id });
+import { CreateRecipeForm, CreateRecipeFormValues } from "@/src/components/create-recipe-form";
+import TopBar from "@/src/components/layout/top-bar";
+
+const page = async ({ params }: { params: { chefId: string } }) => {
+  const { id } = await getChefById({ id: params.chefId });
 
   const defaultValues: Partial<CreateRecipeFormValues> = {
     uid: id,

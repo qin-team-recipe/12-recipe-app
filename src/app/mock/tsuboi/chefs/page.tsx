@@ -2,6 +2,7 @@ import { Suspense } from "react";
 import Link from "next/link";
 
 import { searchRecipesAndChefs } from "@/src/actions/searchRecipesAndChefs";
+
 import TopBar from "@/src/components/layout/top-bar";
 import SearchInput from "@/src/components/search-input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/src/components/ui/card";

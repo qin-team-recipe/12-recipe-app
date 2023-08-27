@@ -15,7 +15,7 @@ const page = () => {
       <TopBar centerComponent={<SearchInput />} />
       {/* 注目のシェフ */}
       <section className="pt-5">
-        <h2 className="pl-4 text-xl font-bold text-mauve12">注目のシェフ</h2>
+        <h2 className="pl-4 font-serif text-xl font-bold text-mauve12">注目のシェフ</h2>
         <Suspense
           fallback={
             <div className="flex h-20 items-center justify-center">
@@ -30,7 +30,7 @@ const page = () => {
       {/* 話題のレシピ */}
       <section className="pt-12">
         <div className="flex items-center justify-between px-4">
-          <h2 className=" text-xl font-bold text-mauve12">話題のレシピ</h2>
+          <h2 className=" font-serif text-xl font-bold text-mauve12">話題のレシピ</h2>
           <Link href={"/search/recipes"}>
             <span className="text-lg font-bold text-mauve9">もっと見る</span>
           </Link>
@@ -47,8 +47,8 @@ const page = () => {
       </section>
 
       {/* シェフ */}
-      <section className="pt-12">
-        <h2 className="pl-4 text-xl font-bold text-mauve12">シェフ</h2>
+      <section className="w-full pt-12">
+        <h2 className="pl-4 font-serif text-xl font-bold text-mauve12">シェフ</h2>
         <Suspense
           fallback={
             <div className="flex items-center justify-center">

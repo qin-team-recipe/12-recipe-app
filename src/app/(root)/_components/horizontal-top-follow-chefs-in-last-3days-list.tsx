@@ -1,4 +1,5 @@
 import { getChefsWithTopFollowersInLast3Days } from "@/src/actions/getChefsTopFollowersInLast3Days";
+
 import { ChefCard } from "@/src/components/chef-card";
 import NoDataDisplay from "@/src/components/no-data-display";
 

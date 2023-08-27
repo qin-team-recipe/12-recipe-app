@@ -1,9 +1,10 @@
 "use client";
 
 import { favoriteRecipe, unFavoriteRecipe } from "@/src/actions/actionsForFavoriteRecipe";
+import { useOptimisticToggle } from "@/src/hooks/useOptimisticToggle";
+
 import ProfileLink from "@/src/components/profile-link";
 import ToggleButton from "@/src/components/toggle-button";
-import { useOptimisticToggle } from "@/src/hooks/useOptimisticToggle";
 
 import NumberUnit from "../../../../components/number-unit";
 import { CONSTANTS } from "../../../../constants/constants";

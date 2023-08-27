@@ -1,16 +1,12 @@
-import { Separator } from "@/src/components/ui/separator";
-
 export const metadata = {
   title: "管理画面",
 };
 
 const layout = async ({ children }: { children: React.ReactNode }) => {
   return (
-    <>
-      <Separator className="hidden h-full w-[1px] md:block" />
-      <main className="flex-1 overflow-y-auto">{children}</main>
-      <Separator className="hidden h-full w-[1px] md:block" />
-    </>
+    <main className="block h-auto min-h-screen items-center md:w-[800px] md:max-w-[800px] md:border-x-[1px] md:border-x-border">
+      {children}
+    </main>
   );
 };
 

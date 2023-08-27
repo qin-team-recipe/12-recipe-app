@@ -1,13 +1,14 @@
 import { redirect } from "next/navigation";
 
 import { getChefById } from "@/src/actions/getChefById";
+
 import TopBar from "@/src/components/layout/top-bar";
 
 import { EditChefForm, EditChefFormValues } from "../../_components/edit-chef-form";
 
-const page = async ({ params }: { params: { id: string } }) => {
+const page = async ({ params }: { params: { chefId: string } }) => {
   const chef = await getChefById({
-    id: params.id,
+    id: params.chefId,
   });
 
   const defaultValues: Partial<EditChefFormValues> = {

@@ -1,4 +1,5 @@
 import { searchRecipesAndChefs } from "@/src/actions/searchRecipesAndChefs";
+
 import ChefTileList from "@/src/components/chef-tile-list";
 import TopBar from "@/src/components/layout/top-bar";
 import LinkableTabs from "@/src/components/linkable-tabs";
