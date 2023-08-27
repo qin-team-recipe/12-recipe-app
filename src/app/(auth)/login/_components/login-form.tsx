@@ -1,6 +1,6 @@
 "use client";
 
-import { useTransition } from "react";
+import { useState, useTransition } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
@@ -23,8 +23,12 @@ type Props = {
 };
 
 const LoginForm = ({ defaultValues }: Props) => {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   const router = useRouter();
+
   const supabase = createClientComponentClient<Database>();
+
   const { toast } = useToast();
 
   const [isPending, startTransition] = useTransition();
@@ -36,6 +40,8 @@ const LoginForm = ({ defaultValues }: Props) => {
   });
 
   const onSubmit = (data: LoginFormValues) => {
+    setIsSubmitting(true);
+
     startTransition(async () => {
       try {
         const { error } = await supabase.auth.signInWithPassword({
@@ -96,7 +102,7 @@ const LoginForm = ({ defaultValues }: Props) => {
               </FormItem>
             )}
           />
-          <Button variant={"destructive"} className="flex-1 gap-2" type="submit">
+          <Button variant={"destructive"} className="flex-1 gap-2" type="submit" disabled={isSubmitting}>
             {isPending && <Spinner />} ログイン
           </Button>
         </form>

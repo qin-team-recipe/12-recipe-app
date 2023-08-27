@@ -18,7 +18,7 @@ const MyFavoriteRecipesGrid = async () => {
     const nextOffset = offset + myRecipes.length;
 
     return [
-      myRecipes.map((recipe) => <RecipeList key={recipe.id} recipes={[recipe]} segment="recipe" />),
+      myRecipes.map((recipe) => <RecipeList key={recipe.id} recipes={[recipe]} path="recipe" />),
       nextOffset,
     ] as const;
   };
@@ -27,7 +27,7 @@ const MyFavoriteRecipesGrid = async () => {
     <>
       {initMyFavoriteRecipes.length > 0 ? (
         <LoadMore initialOffset={0} loadMoreAction={loadMoreMyFavoriteRecipes}>
-          <RecipeList recipes={initMyFavoriteRecipes} segment="recipe" />
+          <RecipeList recipes={initMyFavoriteRecipes} path="recipe" />
         </LoadMore>
       ) : (
         <NoDataDisplay text="まだお気に入りのレシピはありません。" />

@@ -69,7 +69,7 @@ const LoadMore = ({
             });
           })
           .finally(() => setLoading(false));
-      }, 800);
+      }, 400);
     },
     [loadMoreAction, toast]
   );

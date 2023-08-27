@@ -30,6 +30,7 @@ type Props = {
 
 const EditRecipeForm = ({ defaultValues, navigateTo }: Props) => {
   const [imageData, setImageData] = useState(defaultValues.recipeImage ?? "");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const { toast } = useToast();
 
@@ -114,6 +115,8 @@ const EditRecipeForm = ({ defaultValues, navigateTo }: Props) => {
   };
 
   const onSubmit = (data: z.infer<typeof editRecipeFormSchema>) => {
+    setIsSubmitting(true);
+
     startTransition(async () => {
       const result = await putRecipe(data);
 
@@ -362,7 +365,12 @@ const EditRecipeForm = ({ defaultValues, navigateTo }: Props) => {
         </div>
 
         <div className="flex gap-2 px-4">
-          <Button variant={"destructive"} className="flex-1 gap-2" type="submit" disabled={!changed || isPending}>
+          <Button
+            variant={"destructive"}
+            className="flex-1 gap-2"
+            type="submit"
+            disabled={!changed || isPending || isSubmitting}
+          >
             {isPending && <Spinner />} 保存する
           </Button>
           <Link

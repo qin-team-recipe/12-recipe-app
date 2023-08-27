@@ -45,16 +45,14 @@ const RecipeHero = async ({ id }: Props) => {
         </div>
       </div>
       <div className="grid gap-4 p-4">
-        <div className="grid gap-4">
-          <div className="flex justify-between">
-            <h6 className="text-xl font-bold text-mauve12">{title}</h6>
-            <div className="ml-3 flex items-center gap-3">
-              {recipeLinks && <LinkToIconRenderer links={sortedRecipeLinks.map((value) => value.url)} />}
-              {isMe && <PopoverMenu recipeId={id} isPublished={isPublished} />}
-            </div>
+        <div className="flex justify-between">
+          <h6 className="text-xl font-bold text-mauve12">{title}</h6>
+          <div className="ml-3 flex items-center gap-3">
+            {recipeLinks && <LinkToIconRenderer links={sortedRecipeLinks.map((value) => value.url)} />}
+            {isMe && <PopoverMenu recipeId={id} isPublished={isPublished} />}
           </div>
-          <p className="text-mauve12">{description}</p>
         </div>
+        <p className="line-clamp-3 text-mauve12">{description}</p>
         <RecipeInfoStats recipeId={id} isActive={isFavorite} isPublished={isPublished} favoriteCount={_count?.likes} />
       </div>
     </>
