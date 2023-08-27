@@ -20,8 +20,6 @@ const page = async () => {
     data: { session },
   } = await createServerComponentClient<Database>({ cookies: () => cookieStore }).auth.getSession();
 
-  console.log(session);
-
   return (
     <>
       <TopBar
@@ -32,9 +30,13 @@ const page = async () => {
         }
         centerComponent={<h1 className="font-bold text-mauve12 md:text-xl">お気に入り</h1>}
         trailingComponent={
-          <Link href={"/my-page"}>
-            <UserCircle2 size={20} className="text-mauve12" />
-          </Link>
+          session ? (
+            <Link href={"/my-page"}>
+              <UserCircle2 size={20} className="text-mauve12" />
+            </Link>
+          ) : (
+            ""
+          )
         }
       />
 

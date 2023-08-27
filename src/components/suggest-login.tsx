@@ -3,15 +3,36 @@
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { IconBrandApple, IconBrandGoogle } from "@tabler/icons-react";
 
 import { Button } from "@/src/components/ui/button";
 
+import { kToastDuration } from "../constants/constants";
+import { Database } from "../types/SupabaseTypes";
+import { toast } from "./ui/use-toast";
+
 const SuggestLogin = () => {
-  const router = useRouter();
-  const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const supabase = createClientComponentClient<Database>();
+
+  const handleClick = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    router.push("/login");
+
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: "github",
+      options: {
+        redirectTo: `${location.origin}/signup`,
+      },
+    });
+
+    if (error) {
+      toast({
+        variant: "destructive",
+        title: `エラーが発生しました。${error.message}`,
+        duration: kToastDuration,
+      });
+      return;
+    }
   };
   return (
     <div className="flex flex-col items-center justify-center pt-5">

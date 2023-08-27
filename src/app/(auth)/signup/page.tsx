@@ -1,28 +1,23 @@
-import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
-import type { Database } from "@/src/types/SupabaseTypes";
-import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
+import { getAuthenticatedUser } from "@/src/actions/getAuthenticatedUser";
 
 import TopBar from "@/src/components/layout/top-bar";
 
 import SignUpForm from "./_components/signup-form";
 
 const SignUpPage = async () => {
-  const cookieStore = cookies();
-  const {
-    data: { session },
-  } = await createServerComponentClient<Database>({ cookies: () => cookieStore }).auth.getSession();
+  // const user = await getAuthenticatedUser();
 
-  if (session) {
-    redirect("/");
-  }
+  // if (user) {
+  //   redirect("/");
+  // }
 
-  const defaultValues = { name: "", email: "", password: "" };
+  const defaultValues = { name: "" };
 
   return (
     <>
-      <TopBar centerComponent={<h1 className="font-bold text-mauve12 md:text-xl">サインアップ</h1>} />
+      <TopBar centerComponent={<h1 className="font-bold text-mauve12 md:text-xl">新規登録</h1>} />
       <SignUpForm defaultValues={defaultValues} />
     </>
   );
