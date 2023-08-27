@@ -45,6 +45,9 @@ const SignUpForm = ({ defaultValues }: Props) => {
           password: data.password,
           options: {
             emailRedirectTo: `${location.origin}/auth/callback`,
+            data: {
+              role: "USER",
+            },
           },
         });
 
@@ -132,7 +135,7 @@ const SignUpForm = ({ defaultValues }: Props) => {
         </form>
       </Form>
 
-      {message && <div className="my-5 text-center text-sm text-tomato9">{message}</div>}
+      {message && <div className="text-tomato9 my-5 text-center text-sm">{message}</div>}
 
       <div className="text-center text-sm">
         <Link href="/login" className="font-bold text-gray-500">
