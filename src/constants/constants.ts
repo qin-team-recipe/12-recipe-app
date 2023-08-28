@@ -49,5 +49,5 @@ export const kToastDuration = 3000;
 export const kInfiniteScrollCount = 10;
 
 export const ROLE_TYPE = {
-   USER:'USER',
-} as const
+  USER: "USER",
+} as const;
