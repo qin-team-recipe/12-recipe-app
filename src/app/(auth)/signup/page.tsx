@@ -22,7 +22,7 @@ const SignUpPage = async () => {
 
   return (
     <>
-      <TopBar centerComponent={<h1 className="text-mauve12 font-bold md:text-xl">サインアップ</h1>} />
+      <TopBar centerComponent={<h1 className="font-bold text-mauve12 md:text-xl">サインアップ</h1>} />
       <SignUpForm defaultValues={defaultValues} />
     </>
   );
