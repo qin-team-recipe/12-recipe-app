@@ -5,31 +5,31 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 import { getUserRole } from "@/src/actions/getUserRole";
-import { Button } from "@/src/components/ui/button";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/src/components/ui/form";
-import { Input } from "@/src/components/ui/input";
-import Spinner from "@/src/components/ui/spinner";
-import { useToast } from "@/src/components/ui/use-toast";
 import { kToastDuration } from "@/src/constants/constants";
 import type { Database } from "@/src/types/SupabaseTypes";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { useForm } from "react-hook-form";
 
+import { Button } from "@/src/components/ui/button";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/src/components/ui/form";
+import { Input } from "@/src/components/ui/input";
+import Spinner from "@/src/components/ui/spinner";
+import { useToast } from "@/src/components/ui/use-toast";
+
 import { loginFormSchema, LoginFormValues } from "./schema";
 
-type Props = {
-  defaultValues: LoginFormValues;
-};
-
-const AdminLoginForm = ({ defaultValues }: Props) => {
+const AdminLoginForm = () => {
   const router = useRouter();
   const supabase = createClientComponentClient<Database>();
   const { toast } = useToast();
   const [isPending, startTransition] = useTransition();
 
   const form = useForm({
-    defaultValues,
+    defaultValues: {
+      email: "",
+      password: "",
+    },
     resolver: zodResolver(loginFormSchema),
     mode: "onChange",
   });

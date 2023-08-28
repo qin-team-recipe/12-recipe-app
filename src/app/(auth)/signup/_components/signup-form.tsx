@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 import { postUser } from "@/src/actions/postUser";
-import { kToastDuration } from "@/src/constants/constants";
+import { kToastDuration, ROLE_TYPE } from "@/src/constants/constants";
 import type { Database } from "@/src/types/SupabaseTypes";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
@@ -46,7 +46,7 @@ const SignUpForm = ({ defaultValues }: Props) => {
           options: {
             emailRedirectTo: `${location.origin}/auth/callback`,
             data: {
-              role: "USER",
+              role: ROLE_TYPE.USER,
             },
           },
         });
@@ -135,7 +135,7 @@ const SignUpForm = ({ defaultValues }: Props) => {
         </form>
       </Form>
 
-      {message && <div className="text-tomato9 my-5 text-center text-sm">{message}</div>}
+      {message && <div className="my-5 text-center text-sm text-tomato9">{message}</div>}
 
       <div className="text-center text-sm">
         <Link href="/login" className="font-bold text-gray-500">
