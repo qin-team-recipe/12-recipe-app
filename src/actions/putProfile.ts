@@ -12,56 +12,59 @@ import { zact } from "zact/server";
 
 import { editProfileFormSchema } from "@/src/app/my-page/edit/_components/edit-profile-form/schema";
 
-export const putProfile = zact(editProfileFormSchema)(async ({ nickName, bio, urls }): Promise<ActionsResult> => {
-  const cookieStore = cookies();
-  const {
-    data: { session },
-  } = await createServerActionClient<Database>({ cookies: () => cookieStore }).auth.getSession();
+export const putProfile = zact(editProfileFormSchema)(
+  async ({ nickName, bio, urls, profileImage }): Promise<ActionsResult> => {
+    const cookieStore = cookies();
+    const {
+      data: { session },
+    } = await createServerActionClient<Database>({ cookies: () => cookieStore }).auth.getSession();
 
-  if (!session) redirect("/login");
+    if (!session) redirect("/login");
 
-  const currentUserLinks = await prisma.userLink.findMany({
-    where: {
-      userId: session.user.id,
-    },
-  });
-
-  const toBeDeletedUrls = currentUserLinks.filter((link) => !urls.some((url) => url?.id === link.id));
-  const toBeUpdatedUrls = urls.filter((url) => url?.id !== undefined);
-  const toBeCreatedUrls = urls.filter((url) => url?.id === undefined);
-
-  try {
-    await prisma.user.update({
+    const currentUserLinks = await prisma.userLink.findMany({
       where: {
-        id: session.user.id,
-      },
-      data: {
-        name: nickName,
-        profile: bio,
-        UserLink: {
-          deleteMany: toBeDeletedUrls.map((url) => ({ id: url.id })),
-          updateMany: toBeUpdatedUrls.map((url) => ({
-            where: { id: url!.id },
-            data: { url: url?.value ?? "" },
-          })),
-          create: toBeCreatedUrls.map((url) => ({
-            url: url?.value ?? "",
-          })),
-        },
+        userId: session.user.id,
       },
     });
 
-    revalidatePath("/my-page");
+    const toBeDeletedUrls = currentUserLinks.filter((link) => !urls.some((url) => url?.id === link.id));
+    const toBeUpdatedUrls = urls.filter((url) => url?.id !== undefined);
+    const toBeCreatedUrls = urls.filter((url) => url?.id === undefined);
 
-    return {
-      isSuccess: true,
-      message: "プロフィールを更新しました🎉",
-    };
-  } catch (error) {
-    console.error(error);
-    return {
-      isSuccess: false,
-      error: "プロフィールの更新に失敗しました🥲",
-    };
+    try {
+      await prisma.user.update({
+        where: {
+          id: session.user.id,
+        },
+        data: {
+          name: nickName,
+          profile: bio,
+          UserLink: {
+            deleteMany: toBeDeletedUrls.map((url) => ({ id: url.id })),
+            updateMany: toBeUpdatedUrls.map((url) => ({
+              where: { id: url!.id },
+              data: { url: url?.value ?? "" },
+            })),
+            create: toBeCreatedUrls.map((url) => ({
+              url: url?.value ?? "",
+            })),
+          },
+          profileImage,
+        },
+      });
+
+      revalidatePath("/my-page");
+
+      return {
+        isSuccess: true,
+        message: "プロフィールを更新しました🎉",
+      };
+    } catch (error) {
+      console.error(error);
+      return {
+        isSuccess: false,
+        error: "プロフィールの更新に失敗しました🥲",
+      };
+    }
   }
-});
+);
