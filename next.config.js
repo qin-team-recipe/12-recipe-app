@@ -20,7 +20,7 @@ const nextConfig = {
   images: {
     disableStaticImages: true,
     // TODO: 本番環境のドメインを設定する
-    domains: ["localhost:54321", "images.unsplash.com", "uploads-ssl.webflow.com"],
+    domains: ["localhost", "localhost:54321", "images.unsplash.com", "uploads-ssl.webflow.com"],
   },
 };
 
