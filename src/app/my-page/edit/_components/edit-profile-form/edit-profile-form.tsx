@@ -36,7 +36,7 @@ const EditProfileForm = ({ defaultValues }: Props) => {
   const { image, previewImage: selectedImage, setPreviewImage, onUploadImage } = useUploadImage();
   const [isPending, startTransition] = useTransition();
   const [isChangedImage, setIsChangedImage] = useState(false);
-  const [showProfileImage, setShowProfileImage] = useState(!!defaultValues.profileImage);
+  const [hiddenStorageImage, setHiddenStorageImage] = useState(false);
 
   const supabase = createClientComponentClient<Database>();
 
@@ -76,6 +76,9 @@ const EditProfileForm = ({ defaultValues }: Props) => {
         // 画像のURLを取得
         const { data: urlData } = supabase.storage.from("user").getPublicUrl(storageData.path);
         data.profileImage = urlData.publicUrl;
+      } else {
+        // 画像が選択されていない場合はprofileImageを削除する
+        data.profileImage = "";
       }
       const result = await putProfile(data);
 
@@ -136,11 +139,11 @@ const EditProfileForm = ({ defaultValues }: Props) => {
               <FormItem className=" ml-3 grid w-full space-y-0">
                 <FormLabel className="mb-1 text-lg font-bold">プロフィール画像（任意）</FormLabel>
                 <FormControl>
-                  {defaultValues.profileImage && showProfileImage ? (
+                  {defaultValues.profileImage && !hiddenStorageImage ? (
                     // ユーザがプロフィール写真を設定している場合
                     <PreviewImage
                       onClick={() => {
-                        setShowProfileImage(false);
+                        setHiddenStorageImage(true);
                         setIsChangedImage(false);
                         setPreviewImage(null);
                       }}
@@ -240,7 +243,7 @@ const EditProfileForm = ({ defaultValues }: Props) => {
             className="flex-1 gap-2"
             type="submit"
             // isPendingを優先してdisabled判定を行うこと
-            disabled={isPending || [isChangedFiled, isChangedImage].every((b) => !b)}
+            disabled={isPending || [isChangedFiled, isChangedImage, hiddenStorageImage].every((b) => !b)}
           >
             {isPending && <Spinner />} 保存する
           </Button>
