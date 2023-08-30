@@ -6,18 +6,19 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 import { putProfile } from "@/src/actions/putProfile";
-import { Button, buttonVariants } from "@/src/components/ui/button";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/src/components/ui/form";
-import { Input } from "@/src/components/ui/input";
-import Spinner from "@/src/components/ui/spinner";
-import { Textarea } from "@/src/components/ui/textarea";
-import { useToast } from "@/src/components/ui/use-toast";
 import { kToastDuration } from "@/src/constants/constants";
 import { cn } from "@/src/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Minus, Plus, PlusIcon, X } from "lucide-react";
 import { useFieldArray, useForm } from "react-hook-form";
 import { z } from "zod";
+
+import { Button, buttonVariants } from "@/src/components/ui/button";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/src/components/ui/form";
+import { Input } from "@/src/components/ui/input";
+import Spinner from "@/src/components/ui/spinner";
+import { Textarea } from "@/src/components/ui/textarea";
+import { useToast } from "@/src/components/ui/use-toast";
 
 import { EditFormValues, editProfileFormSchema } from ".";
 
@@ -27,6 +28,7 @@ type Props = {
 
 const EditProfileForm = ({ defaultValues }: Props) => {
   const [imageData, setImageData] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const { toast } = useToast();
 
@@ -58,6 +60,8 @@ const EditProfileForm = ({ defaultValues }: Props) => {
   });
 
   const onSubmit = (data: z.infer<typeof editProfileFormSchema>) => {
+    setIsSubmitting(true);
+
     startTransition(async () => {
       const result = await putProfile(data);
 
@@ -192,7 +196,12 @@ const EditProfileForm = ({ defaultValues }: Props) => {
         </div>
 
         <div className="flex gap-2 px-4">
-          <Button variant={"destructive"} className="flex-1 gap-2" type="submit" disabled={!changed || isPending}>
+          <Button
+            variant={"destructive"}
+            className="flex-1 gap-2"
+            type="submit"
+            disabled={!changed || isPending || isSubmitting}
+          >
             {isPending && <Spinner />} 保存する
           </Button>
           <Link

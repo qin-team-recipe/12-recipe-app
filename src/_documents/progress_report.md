@@ -9,48 +9,19 @@
 - UI コンポーネント: [shadcn/ui](https://ui.shadcn.com/)
 
 
-### 進捗(画面単位)
+### ８月の主な進捗
 
-- ログイン画面
-- [ ] UI
-- [ ] データのつなぎ込み
+- 管理画面の実装
+  - シェフの作成・編集・削除
+  - シェフのレシピの作成・編集・削除
+  - table は[ shadcn/ui の Table コンポーネント](https://ui.shadcn.com/docs/components/table)を使用
 
-- ルート画面
-- [x] UI
-- [x] データのつなぎ込み
+- レシピカードの無限スクロール（主に以下２点で実現）
+  - 次に読み込むデータの開始位置を示すオフセットを useRef で管理 
+  - Server Actions で jsxを返す
+ 
+- フォロー・アンフォロー & レシピのお気に入り追加・削除で楽観的更新
+  - [useOptimistic](https://nextjs.org/docs/app/building-your-application/data-fetching/server-actions#enhancements)を使用
 
-- 検索ワードあり・なしの画面
-- [x] UI
-- [X] データのつなぎ込み
-
-- お気に入り画面
-- [x] UI
-- [X] データのつなぎ込み
-
-- マイページ画面
-- [x] UI
-- [x] データのつなぎ込み
-
-- 設定画面
-- [ ] UI
-- [ ] データのつなぎ込み
-
-- 買い物リスト画面
-- [ ] UI
-- [ ] データのつなぎ込み
-
-- 管理画面
-- [x] UI
-- [ ] データのつなぎ込み(シェフのレシピの編集・削除機能は未対応)
-
-
-### 質問事項
-
-レシピの下書き画面にて、3点ドットモーダルの中に「編集する」とありますが、これはどのような機能を想定しているのか？
-
-![スクリーンショット 2023-07-30 19 49 01](https://github.com/qin-team-recipe/12-recipe-app/assets/63396451/6cef7fe4-f6ee-474c-bc13-cada6bae6ead)![スクリーンショット 2023-07-30 19 49 16](https://github.com/qin-team-recipe/12-recipe-app/assets/63396451/b648ad6d-36a6-44e1-a824-882951aae838)
-
-
-
-3点アイコンは必要でしょうか？
-下書きのタイルをタップすると下書きが使用される、また削除アイコンはタイルの右端に配置するのはどうか
+- 自分メモのUI・機能実装
+  - [react-textarea-autosize](https://www.npmjs.com/package/react-textarea-autosize)を使用

@@ -47,7 +47,7 @@ const page = () => {
       </section>
 
       {/* シェフ */}
-      <section className="pt-12">
+      <section className="w-full pt-12">
         <h2 className="pl-4 font-serif text-xl font-bold text-mauve12">シェフ</h2>
         <Suspense
           fallback={

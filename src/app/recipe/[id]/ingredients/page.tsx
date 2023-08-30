@@ -2,6 +2,7 @@ import { getRecipeById } from "@/src/actions/getRecipeById";
 import CopyIngredientsToClipboardButton from "@/src/components/copy-ingredients-to-clipboard-button";
 import IngredientToCart from "../_components/add-ingredient-to-cart";
 import AllIngredientsToCart from "../_components/add-all-ingredients-to-cart";
+import { ShoppingCart } from "lucide-react";
 
 const page = async ({ params }: { params: { id: string } }) => {
   const { Ingredient: ingredients, servingCount, title } = await getRecipeById(params.id);

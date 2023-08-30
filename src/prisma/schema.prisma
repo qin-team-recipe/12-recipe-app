@@ -83,7 +83,7 @@ model DraftInstruction {
   recipe          DraftRecipe? @relation(fields: [draftRecipeId], references: [id], onDelete: Cascade)
   draftRecipeId   String       @map("draft_recipe_id")
   stepOrder       Int          @map("step_order")
-  stepDescription String       @map("step_description") @db.Text
+  stepDescription Json         @map("step_description")
   createdAt       DateTime     @default(now()) @map("created_at") @db.Timestamptz(3)
   updatedAt       DateTime     @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(3)
 
@@ -138,7 +138,7 @@ model Instruction {
   recipe          Recipe   @relation(fields: [recipeId], references: [id], onDelete: Cascade)
   recipeId        String   @map("recipe_id")
   stepOrder       Int      @map("step_order")
-  stepDescription String   @map("step_description") @db.Text
+  stepDescription Json     @map("step_description")
   createdAt       DateTime @default(now()) @map("created_at") @db.Timestamptz(3)
   updatedAt       DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(3)
 

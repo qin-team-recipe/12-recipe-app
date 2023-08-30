@@ -4,14 +4,15 @@ import { deleteMemoById } from "@/src/actions/deleteMemoById";
 import { patchMemoCompleteStatus } from "@/src/actions/patchMemoCompleteStatus";
 import { patchMemoTitle } from "@/src/actions/patchMemoTitle";
 import { putMemoOrder } from "@/src/actions/putMemoOrder";
-import { Command, CommandItem, CommandList, CommandSeparator } from "@/src/components/ui/command";
-import { FormControl, FormField, FormItem } from "@/src/components/ui/form";
-import { Popover, PopoverContent, PopoverTrigger } from "@/src/components/ui/popover";
-import { useToast } from "@/src/components/ui/use-toast";
 import { kToastDuration } from "@/src/constants/constants";
 import { Check, ChevronDown, ChevronUp, MoreVertical, Trash } from "lucide-react";
 import { UseFieldArrayRemove, UseFormReturn } from "react-hook-form";
 import TextareaAutosize from "react-textarea-autosize";
+
+import { Command, CommandItem, CommandList, CommandSeparator } from "@/src/components/ui/command";
+import { FormControl, FormField, FormItem } from "@/src/components/ui/form";
+import { Popover, PopoverContent, PopoverTrigger } from "@/src/components/ui/popover";
+import { useToast } from "@/src/components/ui/use-toast";
 
 import { MemoFormValues } from ".";
 import { cn } from "../../../../../lib/utils";
@@ -75,7 +76,7 @@ export const MemoListTile = ({ form, index, remove }: Props) => {
     setIsOpenPopover(false);
   }, [form, index, isChecked, toast]);
 
-  const handleMoveUp = useCallback(async () => {
+  const handleMoveDown = useCallback(async () => {
     const memos = form.getValues("memo");
     const target = memos[index];
     const nextMemo = memos[index + 1];
@@ -135,7 +136,7 @@ export const MemoListTile = ({ form, index, remove }: Props) => {
     setIsOpenPopover(false);
   }, [form, index, remove, toast]);
 
-  const handleMoveDown = useCallback(async () => {
+  const handleMoveUp = useCallback(async () => {
     const memos = form.getValues("memo");
     const target = memos[index];
     const prevMemo = memos[index - 1];
@@ -255,7 +256,7 @@ export const MemoListTile = ({ form, index, remove }: Props) => {
                     <CommandList>
                       {index !== 0 && (
                         <CommandItem className="text-mauve11">
-                          <button className="flex w-full" onClick={handleDelete}>
+                          <button className="flex w-full" onClick={handleMoveUp}>
                             <ChevronUp className="mr-2 h-4 w-4" />
                             <span>上に移動する</span>
                           </button>
@@ -263,7 +264,7 @@ export const MemoListTile = ({ form, index, remove }: Props) => {
                       )}
                       {index !== form.getValues("memo").length - 1 && (
                         <CommandItem className="text-mauve11">
-                          <button className="flex w-full" onClick={handleMoveUp}>
+                          <button className="flex w-full" onClick={handleMoveDown}>
                             <ChevronDown className="mr-2 h-4 w-4" />
                             <span>下に移動する</span>
                           </button>

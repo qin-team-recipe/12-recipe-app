@@ -1,9 +1,10 @@
 import { Suspense } from "react";
 import Link from "next/link";
 
+import { AlignLeft, UserCircle2 } from "lucide-react";
+
 import TopBar from "@/src/components/layout/top-bar";
 import Spinner from "@/src/components/ui/spinner";
-import { AlignLeft, UserCircle2 } from "lucide-react";
 
 import HorizontalFollowingChefsList from "./_components/horizontal-following-chefs-list";
 import HorizontalNewRecipesList from "./_components/horizontal-new-recipes-list";

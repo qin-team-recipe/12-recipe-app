@@ -1,7 +1,8 @@
 import Link from "next/link";
 
-import TopBar from "@/src/components/layout/top-bar";
 import { ArrowLeft, ArrowUpRight, ChevronRight, LogOut } from "lucide-react";
+
+import TopBar from "@/src/components/layout/top-bar";
 
 import DeleteUserTile from "./_components/delete-user-tile";
 

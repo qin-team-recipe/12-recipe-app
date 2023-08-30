@@ -155,7 +155,7 @@ export interface Database {
           created_at: string;
           draft_recipe_id: string;
           id: number;
-          step_description: string;
+          step_description: Json;
           step_order: number;
           updated_at: string;
         };
@@ -163,7 +163,7 @@ export interface Database {
           created_at?: string;
           draft_recipe_id: string;
           id?: number;
-          step_description: string;
+          step_description: Json;
           step_order: number;
           updated_at?: string;
         };
@@ -171,7 +171,7 @@ export interface Database {
           created_at?: string;
           draft_recipe_id?: string;
           id?: number;
-          step_description?: string;
+          step_description?: Json;
           step_order?: number;
           updated_at?: string;
         };
@@ -359,7 +359,7 @@ export interface Database {
           created_at: string;
           id: number;
           recipe_id: string;
-          step_description: string;
+          step_description: Json;
           step_order: number;
           updated_at: string;
         };
@@ -367,7 +367,7 @@ export interface Database {
           created_at?: string;
           id?: number;
           recipe_id: string;
-          step_description: string;
+          step_description: Json;
           step_order: number;
           updated_at?: string;
         };
@@ -375,7 +375,7 @@ export interface Database {
           created_at?: string;
           id?: number;
           recipe_id?: string;
-          step_description?: string;
+          step_description?: Json;
           step_order?: number;
           updated_at?: string;
         };

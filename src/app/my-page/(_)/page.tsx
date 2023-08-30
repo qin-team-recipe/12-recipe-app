@@ -1,7 +1,8 @@
 import { getMyRecipes } from "@/src/actions/getMyRecipes";
+import { kInfiniteScrollCount } from "@/src/constants/constants";
+
 import LoadMore from "@/src/components/load-more";
 import NoDataDisplay from "@/src/components/no-data-display";
-import { kInfiniteScrollCount } from "@/src/constants/constants";
 
 import RecipeList from "../../../components/recipe-list";
 
@@ -16,7 +17,7 @@ const page = async () => {
     const nextOffset = offset + myRecipes.length;
 
     return [
-      myRecipes.map((recipe) => <RecipeList key={recipe.id} recipes={[recipe]} segment="my-recipe" />),
+      myRecipes.map((recipe) => <RecipeList key={recipe.id} recipes={[recipe]} path="my-recipe" />),
       nextOffset,
     ] as const;
   };
@@ -25,7 +26,7 @@ const page = async () => {
     <>
       {initialRecipes.length > 0 ? (
         <LoadMore initialOffset={0} loadMoreAction={loadMoreMyRecipes}>
-          <RecipeList recipes={initialRecipes} segment="my-recipe" />
+          <RecipeList recipes={initialRecipes} path="my-recipe" />
         </LoadMore>
       ) : (
         <NoDataDisplay text="まだレシピが作成されていません。" />

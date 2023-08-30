@@ -12,8 +12,8 @@ export const ChefCard = ({ path, imageUrl, chefName }: Props) => {
     <Link href={path} className="relative">
       <Image
         src={imageUrl}
-        layout="responsive"
-        className="aspect-square w-full rounded-2xl"
+        sizes="100vw"
+        className="aspect-square h-auto w-full rounded-2xl object-cover"
         alt={chefName}
         width={160}
         height={160}

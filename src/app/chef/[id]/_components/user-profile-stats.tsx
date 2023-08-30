@@ -1,11 +1,12 @@
 "use client";
 
 import { followChef, unFollowChef } from "@/src/actions/actionsForFollow";
-import NumberUnit from "@/src/components/number-unit";
-import ToggleButton from "@/src/components/toggle-button";
 import { BUTTON_NAMES } from "@/src/constants/button-names";
 import { CONSTANTS } from "@/src/constants/constants";
 import { useOptimisticToggle } from "@/src/hooks/useOptimisticToggle";
+
+import NumberUnit from "@/src/components/number-unit";
+import ToggleButton from "@/src/components/toggle-button";
 
 type Props = {
   recipeCount: number;

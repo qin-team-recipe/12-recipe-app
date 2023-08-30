@@ -5,6 +5,7 @@ import { getRecipes } from "@/src/actions/getRecipes";
 import AllIngredientsToCart from "@/src/app/recipe/[id]/_components/add-all-ingredients-to-cart";
 import IngredientToCart from "@/src/app/recipe/[id]/_components/add-ingredient-to-cart";
 import CopyIngredientsToClipboardButton from "@/src/components/copy-ingredients-to-clipboard-button";
+import { ShoppingCart } from "lucide-react";
 
 const page = async ({ params }: { params: { id: string } }) => {
   const { Ingredient: ingredients, servingCount, title } = await getRecipeById(params.id);

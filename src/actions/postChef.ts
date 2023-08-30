@@ -2,10 +2,11 @@
 
 import { revalidatePath } from "next/cache";
 
-import { createChefFormSchema } from "@/src/app/admin/(chefs)/_components/create-chef-form";
 import { prisma } from "@/src/lib/prisma";
 import { ActionsResult } from "@/src/types/ActionsResult";
 import { zact } from "zact/server";
+
+import { createChefFormSchema } from "@/src/app/admin/(chefs)/_components/create-chef-form";
 
 export const postChef = zact(createChefFormSchema)(async ({ name, bio, urls }): Promise<ActionsResult> => {
   try {

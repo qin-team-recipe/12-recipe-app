@@ -1,19 +1,20 @@
 "use client";
 
-import { useTransition } from "react";
+import { useState, useTransition } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+
+import { kToastDuration } from "@/src/constants/constants";
+import type { Database } from "@/src/types/SupabaseTypes";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import { useForm } from "react-hook-form";
 
 import { Button } from "@/src/components/ui/button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/src/components/ui/form";
 import { Input } from "@/src/components/ui/input";
 import Spinner from "@/src/components/ui/spinner";
 import { useToast } from "@/src/components/ui/use-toast";
-import { kToastDuration } from "@/src/constants/constants";
-import type { Database } from "@/src/types/SupabaseTypes";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
-import { useForm } from "react-hook-form";
 
 import { loginFormSchema, LoginFormValues } from "./schema";
 
@@ -22,8 +23,12 @@ type Props = {
 };
 
 const LoginForm = ({ defaultValues }: Props) => {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   const router = useRouter();
+
   const supabase = createClientComponentClient<Database>();
+
   const { toast } = useToast();
 
   const [isPending, startTransition] = useTransition();
@@ -35,6 +40,8 @@ const LoginForm = ({ defaultValues }: Props) => {
   });
 
   const onSubmit = (data: LoginFormValues) => {
+    setIsSubmitting(true);
+
     startTransition(async () => {
       try {
         const { error } = await supabase.auth.signInWithPassword({
@@ -95,7 +102,7 @@ const LoginForm = ({ defaultValues }: Props) => {
               </FormItem>
             )}
           />
-          <Button variant={"destructive"} className="flex-1 gap-2" type="submit">
+          <Button variant={"destructive"} className="flex-1 gap-2" type="submit" disabled={isSubmitting}>
             {isPending && <Spinner />} ログイン
           </Button>
         </form>

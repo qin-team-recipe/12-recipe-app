@@ -1,9 +1,10 @@
 import { getRecipesNewFromFollowedChefs } from "@/src/actions/getRecipesNewFromFollowedChefs";
+import { kInfiniteScrollCount } from "@/src/constants/constants";
+
 import TopBar from "@/src/components/layout/top-bar";
 import LoadMore from "@/src/components/load-more";
 import RecipeList from "@/src/components/recipe-list";
 import RouterBackButton from "@/src/components/router-back-button";
-import { kInfiniteScrollCount } from "@/src/constants/constants";
 
 const page = async () => {
   const initialRecipes = await getRecipesNewFromFollowedChefs();
@@ -18,7 +19,7 @@ const page = async () => {
     const nextOffset = offset + newRecipesFromFollowingChefs.length;
 
     return [
-      newRecipesFromFollowingChefs.map((recipe) => <RecipeList key={recipe.id} recipes={[recipe]} segment="recipe" />),
+      newRecipesFromFollowingChefs.map((recipe) => <RecipeList key={recipe.id} recipes={[recipe]} path="recipe" />),
       nextOffset,
     ] as const;
   };
@@ -34,7 +35,7 @@ const page = async () => {
         }
       />
       <LoadMore initialOffset={0} loadMoreAction={loadMoreRecipes}>
-        <RecipeList recipes={initialRecipes} segment="recipe" />
+        <RecipeList recipes={initialRecipes} path="recipe" />
       </LoadMore>
     </>
   );

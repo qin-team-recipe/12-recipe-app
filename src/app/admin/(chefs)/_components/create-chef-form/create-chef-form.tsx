@@ -5,12 +5,6 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
-import { Button, buttonVariants } from "@/src/components/ui/button";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/src/components/ui/form";
-import { Input } from "@/src/components/ui/input";
-import Spinner from "@/src/components/ui/spinner";
-import { Textarea } from "@/src/components/ui/textarea";
-import { useToast } from "@/src/components/ui/use-toast";
 import { kToastDuration } from "@/src/constants/constants";
 import { cn } from "@/src/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -18,11 +12,19 @@ import { Minus, Plus, PlusIcon, X } from "lucide-react";
 import { useFieldArray, useForm } from "react-hook-form";
 import { z } from "zod";
 
+import { Button, buttonVariants } from "@/src/components/ui/button";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/src/components/ui/form";
+import { Input } from "@/src/components/ui/input";
+import Spinner from "@/src/components/ui/spinner";
+import { Textarea } from "@/src/components/ui/textarea";
+import { useToast } from "@/src/components/ui/use-toast";
+
 import { createChefFormSchema, CreateChefFormValues } from ".";
 import { postChef } from "../../../../../actions/postChef";
 
 const CreateChefForm = () => {
   const [imageData, setImageData] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const { toast } = useToast();
 
@@ -54,20 +56,22 @@ const CreateChefForm = () => {
   });
 
   const onSubmit = (data: z.infer<typeof createChefFormSchema>) => {
+    setIsSubmitting(true);
+
     startTransition(async () => {
       const result = await postChef(data);
 
       if (result.isSuccess) {
         toast({
           variant: "default",
-          title: "プロフィールを更新しました",
+          title: "プロフィールを更新しました🎉",
           duration: kToastDuration,
         });
         router.push(`/admin`);
       } else {
         toast({
           variant: "destructive",
-          title: "プロフィールの更新に失敗しました",
+          title: "プロフィールの更新に失敗しました🥲",
           duration: kToastDuration,
         });
       }
@@ -188,7 +192,7 @@ const CreateChefForm = () => {
         </div>
 
         <div className="flex gap-2 px-4">
-          <Button variant={"destructive"} className="flex-1 gap-2" type="submit">
+          <Button variant={"destructive"} className="flex-1 gap-2" type="submit" disabled={isSubmitting}>
             {isPending && <Spinner />} 保存する
           </Button>
           <Link

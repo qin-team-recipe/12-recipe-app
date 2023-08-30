@@ -1,11 +1,12 @@
 import { searchRecipesAndChefs } from "@/src/actions/searchRecipesAndChefs";
+import { kInfiniteScrollCount } from "@/src/constants/constants";
+
 import TopBar from "@/src/components/layout/top-bar";
 import LinkableTabs from "@/src/components/linkable-tabs";
 import LoadMore from "@/src/components/load-more";
 import NoDataDisplay from "@/src/components/no-data-display";
 import RecipeList from "@/src/components/recipe-list";
 import SearchInput from "@/src/components/search-input";
-import { kInfiniteScrollCount } from "@/src/constants/constants";
 
 import { tabs } from "../_constants/tabs";
 
@@ -28,7 +29,7 @@ const page = async ({ searchParams }: { searchParams: { search?: string } }) => 
     const nextOffset = offset + searchedRecipes.length;
 
     return [
-      searchedRecipes.map((recipe) => <RecipeList key={recipe.id} recipes={[recipe]} segment="recipe" />),
+      searchedRecipes.map((recipe) => <RecipeList key={recipe.id} recipes={[recipe]} path="recipe" />),
       nextOffset,
     ] as const;
   };
@@ -43,7 +44,7 @@ const page = async ({ searchParams }: { searchParams: { search?: string } }) => 
           </p>
           {searchedRecipes.length > 0 ? (
             <LoadMore initialOffset={0} loadMoreAction={loadMoreSearchRecipes}>
-              <RecipeList recipes={searchedRecipes} segment="recipe" />
+              <RecipeList recipes={searchedRecipes} path="recipe" />
             </LoadMore>
           ) : (
             <NoDataDisplay text={"お探しのレシピが見つかりませんでした。"} />

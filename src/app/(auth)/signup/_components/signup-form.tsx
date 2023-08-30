@@ -5,16 +5,17 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 import { postUser } from "@/src/actions/postUser";
+import { kToastDuration, ROLE_TYPE } from "@/src/constants/constants";
+import type { Database } from "@/src/types/SupabaseTypes";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import { useForm } from "react-hook-form";
+
 import { Button } from "@/src/components/ui/button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/src/components/ui/form";
 import { Input } from "@/src/components/ui/input";
 import Spinner from "@/src/components/ui/spinner";
 import { useToast } from "@/src/components/ui/use-toast";
-import { kToastDuration } from "@/src/constants/constants";
-import type { Database } from "@/src/types/SupabaseTypes";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
-import { useForm } from "react-hook-form";
 
 import { signUpFormSchema, SignUpFormValues } from "./schema";
 
@@ -23,9 +24,13 @@ type Props = {
 };
 
 const SignUpForm = ({ defaultValues }: Props) => {
-  const router = useRouter();
-  const supabase = createClientComponentClient<Database>();
   const [message, setMessage] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const router = useRouter();
+
+  const supabase = createClientComponentClient<Database>();
+
   const [isPending, startTransition] = useTransition();
 
   const { toast } = useToast();
@@ -37,6 +42,8 @@ const SignUpForm = ({ defaultValues }: Props) => {
   });
 
   const onSubmit = (data: SignUpFormValues) => {
+    setIsSubmitting(true);
+
     startTransition(async () => {
       try {
         const { data: responseData, error } = await supabase.auth.signUp({
@@ -44,6 +51,9 @@ const SignUpForm = ({ defaultValues }: Props) => {
           password: data.password,
           options: {
             emailRedirectTo: `${location.origin}/auth/callback`,
+            data: {
+              role: ROLE_TYPE.USER,
+            },
           },
         });
 
@@ -125,7 +135,7 @@ const SignUpForm = ({ defaultValues }: Props) => {
               </FormItem>
             )}
           />
-          <Button variant={"destructive"} className="flex-1 gap-2" type="submit">
+          <Button variant={"destructive"} className="flex-1 gap-2" type="submit" disabled={isSubmitting}>
             {isPending && <Spinner />} サインアップ
           </Button>
         </form>

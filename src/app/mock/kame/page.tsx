@@ -1,7 +1,7 @@
 import { getCartList } from "@/src/actions/getCartList";
 import { getRecipes } from "@/src/actions/getRecipes";
-import { prisma } from "@/src/lib/prisma";
 import { getRecipesInMyFavorites } from "@/src/actions/getRecipesInMyFavorites";
+import { prisma } from "@/src/lib/prisma";
 
 import AddCartListButton from "./_components/add-cart-list-button";
 import AddFavoriteRecipeButton from "./_components/add-favorite-recipe-button";

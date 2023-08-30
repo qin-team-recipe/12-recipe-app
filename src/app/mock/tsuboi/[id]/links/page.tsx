@@ -1,4 +1,5 @@
 import { getRecipeById } from "@/src/actions/getRecipeById";
+
 import ExternalLinkTile from "@/src/components/external-link-tile";
 
 const page = async ({ params }: { params: { id: string } }) => {

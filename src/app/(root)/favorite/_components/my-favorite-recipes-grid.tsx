@@ -1,8 +1,9 @@
 import { getRecipesInMyFavorites } from "@/src/actions/getRecipesInMyFavorites";
+import { kInfiniteScrollCount } from "@/src/constants/constants";
+
 import LoadMore from "@/src/components/load-more";
 import NoDataDisplay from "@/src/components/no-data-display";
 import RecipeList from "@/src/components/recipe-list";
-import { kInfiniteScrollCount } from "@/src/constants/constants";
 
 const MyFavoriteRecipesGrid = async () => {
   const initMyFavoriteRecipes = await getRecipesInMyFavorites();
@@ -17,7 +18,7 @@ const MyFavoriteRecipesGrid = async () => {
     const nextOffset = offset + myRecipes.length;
 
     return [
-      myRecipes.map((recipe) => <RecipeList key={recipe.id} recipes={[recipe]} segment="recipe" />),
+      myRecipes.map((recipe) => <RecipeList key={recipe.id} recipes={[recipe]} path="recipe" />),
       nextOffset,
     ] as const;
   };
@@ -26,7 +27,7 @@ const MyFavoriteRecipesGrid = async () => {
     <>
       {initMyFavoriteRecipes.length > 0 ? (
         <LoadMore initialOffset={0} loadMoreAction={loadMoreMyFavoriteRecipes}>
-          <RecipeList recipes={initMyFavoriteRecipes} segment="recipe" />
+          <RecipeList recipes={initMyFavoriteRecipes} path="recipe" />
         </LoadMore>
       ) : (
         <NoDataDisplay text="まだお気に入りのレシピはありません。" />

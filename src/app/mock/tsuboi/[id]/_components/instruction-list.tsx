@@ -1,4 +1,5 @@
 import { getRecipeById } from "@/src/actions/getRecipeById";
+
 import { RecipeStep } from "@/src/components/recipe-step";
 
 type Props = {
@@ -11,7 +12,7 @@ const InstructionList = async ({ id }: Props) => {
   return (
     <div className="flex flex-col">
       {Instruction.map((instruction) => (
-        <RecipeStep key={instruction.id} stepNumber={instruction.stepOrder} recipeText={instruction.stepDescription} />
+        <RecipeStep key={instruction.id} stepNumber={instruction.stepOrder} instruction={instruction.stepDescription} />
       ))}
     </div>
   );
