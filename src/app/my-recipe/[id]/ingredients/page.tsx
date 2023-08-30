@@ -1,31 +1,30 @@
+import { getCartList } from "@/src/actions/getCartList";
+import { getMyRecipes } from "@/src/actions/getMyRecipes";
 import { getRecipeById } from "@/src/actions/getRecipeById";
-import { ShoppingCart } from "lucide-react";
 
 import CopyIngredientsToClipboardButton from "@/src/components/copy-ingredients-to-clipboard-button";
+import AllIngredientsToCart from "@/src/app/recipe/[id]/_components/add-all-ingredients-to-cart";
+import IngredientToCart from "@/src/app/recipe/[id]/_components/add-ingredient-to-cart";
 
 const page = async ({ params }: { params: { id: string } }) => {
   const { Ingredient: ingredients, servingCount, title } = await getRecipeById(params.id);
+  const cartList = await getCartList();
+  const ingredientIds = ingredients.map((ingredient) => Number(ingredient.id));
+  // console.log(ingredients)
+  // const myRecipes = await getMyRecipes();
+  // console.log(myRecipes)
 
   return (
     <div className="flex flex-col gap-2">
       <div className="flex justify-between border-b p-4">
         <h2 className="text-xl font-bold">{servingCount}人前</h2>
-        <button
-          className="flex items-center gap-2 font-bold"
-          // TODO: まとめてお買い物リストに追加するロジックを実装する
-        >
-          <ShoppingCart size={20} />
-          <span>まとめてお買い物リストに追加</span>
-        </button>
+        <AllIngredientsToCart recipeId={ingredients[0].recipeId} ingredientIds={ingredientIds} />
       </div>
       <ul>
-        {ingredients.map(({ title, id }) => (
+        {ingredients.map(({ title, id, recipeId }) => (
           <li key={id} className="flex justify-between border-b px-4 py-2">
-            <p className="">{title}</p>
-            <button className=" pl-[20px] text-mauve11 hover:text-mauve12">
-              {/* // TODO: お買い物リストに追加するロジックを実装する */}
-              <ShoppingCart size={20} />
-            </button>
+            <p>{title}</p>
+            <IngredientToCart id={id} recipeId={recipeId} cartList={cartList} />
           </li>
         ))}
       </ul>
