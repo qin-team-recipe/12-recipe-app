@@ -1,5 +1,6 @@
 "use server";
 
+import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
@@ -10,9 +11,14 @@ import { ActionsResult } from "../types/ActionsResult";
 import { Database } from "../types/SupabaseTypes";
 import { Carter_One } from "next/font/google";
 
-export const addCartListItem = async (recipeId: string, ingredientId: number): Promise<ActionsResult> => {
+export const addCartListItem = async ({
+  recipeId,
+  ingredientId,
+}: {
+  recipeId: string;
+  ingredientId: number;
+}): Promise<ActionsResult> => {
   const supabaseServerClient = createServerActionClient<Database>({ cookies });
-  console.log("aaaa")
   const {
     data: { session },
   } = await supabaseServerClient.auth.getSession();
@@ -65,6 +71,9 @@ export const addCartListItem = async (recipeId: string, ingredientId: number): P
       });
     }
 
+    // TODO: 適切なパスを指定する
+    revalidatePath("/");
+
     return {
       isSuccess: true,
       message: "カートに追加しました🎉",
@@ -77,7 +86,13 @@ export const addCartListItem = async (recipeId: string, ingredientId: number): P
   }
 };
 
-export const removeCartListItem = async (recipeId: string, cartListItemId: number): Promise<ActionsResult> => {
+export const removeCartListItem = async ({
+  recipeId,
+  ingredientId,
+}: {
+  recipeId: string;
+  ingredientId: number;
+}): Promise<ActionsResult> => {
   const supabaseServerClient = createServerActionClient<Database>({ cookies });
 
   const {
@@ -96,9 +111,7 @@ export const removeCartListItem = async (recipeId: string, cartListItemId: numbe
         CartListItem: true,
       },
     });
-    // console.log(cartList)
     const isNotfoundRecipeInCartList = cartList === null;
-    console.log(isNotfoundRecipeInCartList)
     if (isNotfoundRecipeInCartList) {
       return {
         isSuccess: false,
@@ -110,7 +123,6 @@ export const removeCartListItem = async (recipeId: string, cartListItemId: numbe
         cartListId: cartList.id,
       },
     });
-    console.log(cartListItemSize)
     if (cartListItemSize === 1) {
       // 対象のレシピに紐づくアイテムが1つしかない場合はレシピも削除する
       await prisma.cartList.delete({
@@ -120,23 +132,26 @@ export const removeCartListItem = async (recipeId: string, cartListItemId: numbe
       });
     } else {
       console.log("qqqqqqqq")
-      console.log(cartListItemId)
       // 2つ以上のアイテムがカート内に存在する場合はアイテムのみ削除する
-      await prisma.cartListItem.delete({
+      await prisma.cartListItem.deleteMany({
         where: {
-          id: cartListItemId,
+          cartListId: cartList.id,
+          ingredientId,
         },
       });
     }
-    console.log("gggggggg")
+
+    // TODO: 適切なパスを指定する
+    revalidatePath("/");
+
     return {
       isSuccess: true,
-      message: "アイテムを削除しました。",
+      message: "アイテムを削除しました🔥",
     };
   } catch (_error) {
     return {
       isSuccess: false,
-      error: "アイテムの削除に失敗しました。",
+      error: "アイテムの削除に失敗しました🥲",
     };
   }
 };
