@@ -36,7 +36,7 @@ const EditProfileForm = ({ defaultValues }: Props) => {
   const { image, previewImage: selectedImage, setPreviewImage, onUploadImage } = useUploadImage();
   const [isPending, startTransition] = useTransition();
   const [isChangedImage, setIsChangedImage] = useState(false);
-  const [hiddenStorageImage, setHiddenStorageImage] = useState(false);
+  const [isHiddenStorageImage, setIsHiddenStorageImage] = useState(false);
 
   const supabase = createClientComponentClient<Database>();
 
@@ -63,24 +63,47 @@ const EditProfileForm = ({ defaultValues }: Props) => {
     control: form.control,
   });
 
-  const onSubmit = async (data: z.infer<typeof editProfileFormSchema>) => {
+  const onSubmit = async (formData: z.infer<typeof editProfileFormSchema>) => {
     startTransition(async () => {
       if (image) {
-        // supabaseストレージに画像アップロード
-        const { data: storageData, error: storageError } = await supabase.storage.from("user").upload(uuidv4(), image);
-        // エラーチェック
-        if (storageError) {
-          form.setError("profileImage", { type: "manual", message: storageError.message });
-          return;
+        // 編集画面でプロフィール画像が選択された場合
+        if (formData.profileImage) {
+          // supabaseストレージにプロフィール画像が存在する場合、選択した画像で置き換える
+          const path = formData.profileImage.split("/").slice(-1)[0];
+          const { error: replaceError } = await supabase.storage.from("user").update(path, image);
+          // エラーチェック
+          if (replaceError) {
+            form.setError("profileImage", { type: "manual", message: replaceError.message });
+            return;
+          }
+        } else {
+          // supabaseストレージに選択した画像をアップロード
+          const { data: storageData, error: storageError } = await supabase.storage
+            .from("user")
+            .upload(uuidv4(), image);
+          // エラーチェック
+          if (storageError) {
+            form.setError("profileImage", { type: "manual", message: storageError.message });
+            return;
+          }
+          // ユーザテーブルのプロフィール画像を設定するためにsupabaseストレージのURLを取得する
+          const { data: urlData } = supabase.storage.from("user").getPublicUrl(storageData.path);
+          formData.profileImage = urlData.publicUrl;
         }
-        // 画像のURLを取得
-        const { data: urlData } = supabase.storage.from("user").getPublicUrl(storageData.path);
-        data.profileImage = urlData.publicUrl;
       } else {
-        // 画像が選択されていない場合はprofileImageを削除する
-        data.profileImage = "";
+        // プロフィール画像が選択されていない場合
+        if (formData.profileImage) {
+          // 既にプロフィール画像が存在する場合はsupabaseストレージからプロフィール画像を削除
+          const path = formData.profileImage.split("/").slice(-1)[0];
+          const { error: removeError } = await supabase.storage.from("user").remove([path]);
+          if (removeError) {
+            form.setError("profileImage", { type: "manual", message: removeError.message });
+            return;
+          }
+        }
+        formData.profileImage = "";
       }
-      const result = await putProfile(data);
+      const result = await putProfile(formData);
 
       if (result.isSuccess) {
         toast({
@@ -136,14 +159,14 @@ const EditProfileForm = ({ defaultValues }: Props) => {
             // InvalidStateError: Failed to set the 'value' property on 'HTMLInputElement': This input element accepts a filename, which may only be programmatically set to the empty string.
             const { onChange, value, ...restFieldProps } = field;
             return (
-              <FormItem className=" ml-3 grid w-full space-y-0">
+              <FormItem className=" ml-3 grid space-y-0">
                 <FormLabel className="mb-1 text-lg font-bold">プロフィール画像（任意）</FormLabel>
                 <FormControl>
-                  {defaultValues.profileImage && !hiddenStorageImage ? (
+                  {defaultValues.profileImage && !isHiddenStorageImage ? (
                     // ユーザがプロフィール写真を設定している場合
                     <PreviewImage
                       onClick={() => {
-                        setHiddenStorageImage(true);
+                        setIsHiddenStorageImage(true);
                         setIsChangedImage(false);
                         setPreviewImage(null);
                       }}
@@ -243,7 +266,7 @@ const EditProfileForm = ({ defaultValues }: Props) => {
             className="flex-1 gap-2"
             type="submit"
             // isPendingを優先してdisabled判定を行うこと
-            disabled={isPending || [isChangedFiled, isChangedImage, hiddenStorageImage].every((b) => !b)}
+            disabled={isPending || [isChangedFiled, isChangedImage, isHiddenStorageImage].every((b) => !b)}
           >
             {isPending && <Spinner />} 保存する
           </Button>
@@ -269,7 +292,7 @@ type PreviewImageProps = {
   previewImage: string;
 };
 const PreviewImage = ({ onClick, previewImage }: PreviewImageProps) => (
-  <div className="relative">
+  <div className="relative h-[100px] w-[100px]">
     <Image
       width={100}
       height={100}
@@ -277,8 +300,8 @@ const PreviewImage = ({ onClick, previewImage }: PreviewImageProps) => (
       src={previewImage}
       alt="プロフィール写真"
     />
-    <button type="button" className="absolute" onClick={onClick}>
-      <Minus className="absolute -top-[106px] left-[86px] z-50 h-5 w-5 rounded-full bg-tomato9 p-1 text-white" />
+    <button type="button" className="absolute -right-1 -top-1 z-50" onClick={onClick}>
+      <Minus className="h-5 w-5 rounded-full bg-tomato9 p-1 text-white" />
     </button>
   </div>
 );
