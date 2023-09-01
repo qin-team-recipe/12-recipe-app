@@ -9,7 +9,6 @@ import { createServerActionClient } from "@supabase/auth-helpers-nextjs";
 import { prisma } from "../lib/prisma";
 import { ActionsResult } from "../types/ActionsResult";
 import { Database } from "../types/SupabaseTypes";
-import { Carter_One } from "next/font/google";
 
 export const addCartListItem = async ({
   recipeId,
