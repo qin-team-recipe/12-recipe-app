@@ -81,24 +81,33 @@ export interface Database {
           cart_list_id: number;
           created_at: string;
           id: number;
-          ingredient_id: number;
+          ingredient_id: number | null;
           is_completed: boolean;
+          is_custom: boolean;
+          order: number;
+          title: string | null;
           updated_at: string;
         };
         Insert: {
           cart_list_id: number;
           created_at?: string;
           id?: number;
-          ingredient_id: number;
+          ingredient_id?: number | null;
           is_completed?: boolean;
+          is_custom?: boolean;
+          order: number;
+          title?: string | null;
           updated_at?: string;
         };
         Update: {
           cart_list_id?: number;
           created_at?: string;
           id?: number;
-          ingredient_id?: number;
+          ingredient_id?: number | null;
           is_completed?: boolean;
+          is_custom?: boolean;
+          order?: number;
+          title?: string | null;
           updated_at?: string;
         };
         Relationships: [
@@ -324,7 +333,6 @@ export interface Database {
         Row: {
           created_at: string;
           id: number;
-          is_custom: boolean;
           recipe_id: string;
           title: string;
           updated_at: string;
@@ -332,7 +340,6 @@ export interface Database {
         Insert: {
           created_at?: string;
           id?: number;
-          is_custom?: boolean;
           recipe_id: string;
           title: string;
           updated_at?: string;
@@ -340,7 +347,6 @@ export interface Database {
         Update: {
           created_at?: string;
           id?: number;
-          is_custom?: boolean;
           recipe_id?: string;
           title?: string;
           updated_at?: string;

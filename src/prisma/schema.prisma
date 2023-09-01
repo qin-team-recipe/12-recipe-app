@@ -153,7 +153,6 @@ model Ingredient {
   title        String         @db.Text
   recipe       Recipe         @relation(fields: [recipeId], references: [id], onDelete: Cascade)
   recipeId     String         @map("recipe_id")
-  isCustom     Boolean        @default(false) @map("is_custom")
   CartListItem CartListItem[]
   createdAt    DateTime       @default(now()) @map("created_at") @db.Timestamptz(3)
   updatedAt    DateTime       @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(3)
@@ -224,12 +223,17 @@ model CartList {
 
 /// お買い物リストの材料
 model CartListItem {
-  id           Int        @id @default(autoincrement())
-  isCompleted  Boolean    @default(false) @map("is_completed")
-  cartList     CartList   @relation(fields: [cartListId], references: [id], onDelete: Cascade)
-  cartListId   Int        @map("cart_list_id")
-  ingredient   Ingredient @relation(fields: [ingredientId], references: [id])
-  ingredientId Int        @map("ingredient_id")
-  createdAt    DateTime   @default(now()) @map("created_at") @db.Timestamptz(3)
-  updatedAt    DateTime   @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(3)
+  id           Int         @id @default(autoincrement())
+  isCompleted  Boolean     @default(false) @map("is_completed")
+  cartList     CartList    @relation(fields: [cartListId], references: [id], onDelete: Cascade)
+  cartListId   Int         @map("cart_list_id")
+  ingredient   Ingredient? @relation(fields: [ingredientId], references: [id])
+  ingredientId Int?        @map("ingredient_id")
+  // 独自に追加された材料の名前
+  title        String?     @db.Text
+  // 独自に追加された材料かどうか
+  isCustom     Boolean     @default(false) @map("is_custom")
+  order        Int
+  createdAt    DateTime    @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt    DateTime    @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(3)
 }
