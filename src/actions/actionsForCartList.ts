@@ -39,6 +39,7 @@ export const addCartList = async (recipeId: string, ingredientId: number): Promi
           CartListItem: {
             create: {
               ingredientId,
+              order: 1,
             },
           },
         },
@@ -58,6 +59,7 @@ export const addCartList = async (recipeId: string, ingredientId: number): Promi
         data: {
           cartListId: cartList.id,
           ingredientId,
+          order: (await prisma.cartListItem.count({ where: { cartListId: cartList.id } })) + 1,
         },
       });
     }
