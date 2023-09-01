@@ -3,6 +3,8 @@ import { useCallback, useState } from "react";
 export const useUploadImage = () => {
   const [image, setImage] = useState<File | null>(null);
   const [previewImage, setPreviewImage] = useState<string | null>(null);
+  const [isChangedImage, setIsChangedImage] = useState(false);
+  const [isHiddenStorageImage, setIsHiddenStorageImage] = useState(false);
 
   // 画像アップロード
   const onUploadImage = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
@@ -32,5 +34,14 @@ export const useUploadImage = () => {
     setPreviewImage(URL.createObjectURL(file[0]));
   }, []);
 
-  return { image, previewImage, setPreviewImage, onUploadImage };
+  return {
+    image,
+    previewImage,
+    isChangedImage,
+    isHiddenStorageImage,
+    setPreviewImage,
+    onUploadImage,
+    setIsChangedImage,
+    setIsHiddenStorageImage,
+  };
 };

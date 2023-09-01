@@ -33,10 +33,18 @@ type Props = {
 const EditProfileForm = ({ defaultValues }: Props) => {
   const { toast } = useToast();
   const router = useRouter();
-  const { image, previewImage: selectedImage, setPreviewImage, onUploadImage } = useUploadImage();
+  const {
+    image,
+    previewImage: selectedImage,
+    isChangedImage,
+    isHiddenStorageImage,
+    setPreviewImage,
+    onUploadImage,
+    setIsChangedImage,
+    setIsHiddenStorageImage,
+  } = useUploadImage();
+
   const [isPending, startTransition] = useTransition();
-  const [isChangedImage, setIsChangedImage] = useState(false);
-  const [isHiddenStorageImage, setIsHiddenStorageImage] = useState(false);
 
   const supabase = createClientComponentClient<Database>();
 
@@ -63,6 +71,10 @@ const EditProfileForm = ({ defaultValues }: Props) => {
     control: form.control,
   });
 
+  /**
+   * 編集したプロフィール情報でプロフィールを更新する処理
+   * @param formData 編集したプロフィール情報
+   */
   const onSubmit = async (formData: z.infer<typeof editProfileFormSchema>) => {
     startTransition(async () => {
       if (image) {
@@ -103,6 +115,7 @@ const EditProfileForm = ({ defaultValues }: Props) => {
         }
         formData.profileImage = "";
       }
+      // プロフィールの更新
       const result = await putProfile(formData);
 
       if (result.isSuccess) {
