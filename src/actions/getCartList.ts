@@ -45,7 +45,7 @@ export const getCartList = async () => {
   const allCartListItems = cartList.flatMap((cart) => cart.CartListItem);
 
   // 全てのカートアイテムが買い物リストに追加されているかどうかのフラグ
-  const isAllCartListItemCompleted = cartList.every(({ recipe }) =>
+  const isAllCartListItemCompleted = cartList.length === 0 || allCartListItems.length === 0 ? false : cartList.every(({ recipe }) =>
     recipe.Ingredient.every((ingredient) =>
       allCartListItems.some((cartItem) => cartItem.ingredient?.id === ingredient.id)
     )
