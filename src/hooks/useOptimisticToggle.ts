@@ -16,6 +16,8 @@ export const useOptimisticToggle = ({ count, isActive, activeAction, inactiveAct
   const { toast } = useToast();
 
   const updateCount = async (id: string) => {
+    const currentState = { ...optimisticState };
+
     setOptimisticState((prev) =>
       isActive
         ? {
@@ -33,6 +35,7 @@ export const useOptimisticToggle = ({ count, isActive, activeAction, inactiveAct
     const result = await action(id);
 
     if (!result.isSuccess) {
+      setOptimisticState(currentState);
       toast({
         variant: "destructive",
         title: result.error,

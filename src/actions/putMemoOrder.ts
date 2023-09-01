@@ -71,12 +71,8 @@ export const putMemoOrder = async ({
     }
 
     await prisma.memo.update({
-      where: {
-        id: sourceMemoId,
-      },
-      data: {
-        order: targetMemo.order,
-      },
+      where: { id: sourceMemoId },
+      data: { order: targetMemo.order },
     });
 
     revalidatePath("/shopping-list");
