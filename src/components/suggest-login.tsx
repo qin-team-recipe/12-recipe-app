@@ -3,7 +3,7 @@
 import Image from "next/image";
 
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
-import { IconBrandApple, IconBrandGoogle } from "@tabler/icons-react";
+import { IconBrandApple, IconBrandGithub, IconBrandGoogle } from "@tabler/icons-react";
 
 import { Button } from "@/src/components/ui/button";
 
@@ -46,14 +46,18 @@ const SuggestLogin = () => {
       <p className="mb-3 font-bold text-mauve12">ログインをお願いします</p>
       <p className="mb-3 text-sm text-mauve12">こちらの機能を利用するにはログインが必要です</p>
       <div className="flex gap-3">
-        <Button className="gap-1 bg-slateBlue10 hover:bg-slateBlue10" onClick={handleClick}>
+        <Button className="gap-1 bg-mauve12 hover:bg-mauve11" onClick={handleClick}>
+          <IconBrandGithub size={16} stroke={3} />
+          GitHubログイン
+        </Button>
+        {/* <Button className="gap-1 bg-slateBlue10 hover:bg-slateBlue10" onClick={handleClick}>
           <IconBrandGoogle size={16} stroke={3} />
           Googleログイン
         </Button>
         <Button className="gap-1" onClick={handleClick}>
           <IconBrandApple size={16} stroke={3} />
           Appleログイン
-        </Button>
+        </Button> */}
       </div>
     </div>
   );
