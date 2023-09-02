@@ -313,7 +313,7 @@ const PreviewImage = ({ onClick, previewImage }: PreviewImageProps) => (
       src={previewImage}
       alt="プロフィール写真"
     />
-    <button type="button" className="absolute -right-1 -top-1 z-50" onClick={onClick}>
+    <button type="button" className="absolute -right-2 -top-1 z-50" onClick={onClick}>
       <Minus className="h-5 w-5 rounded-full bg-tomato9 p-1 text-white" />
     </button>
   </div>
