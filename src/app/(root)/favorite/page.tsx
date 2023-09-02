@@ -90,7 +90,7 @@ const page = async () => {
           </section>
         </>
       ) : (
-        <SuggestLogin />
+        <SuggestLogin page="Favorite" />
       )}
     </>
   );
