@@ -9,7 +9,7 @@ import { ActionsResult } from "@/src/types/ActionsResult";
 import { Database } from "@/src/types/SupabaseTypes";
 import { createServerActionClient } from "@supabase/auth-helpers-nextjs";
 
-export const deleteRecipe = async (id: string): Promise<ActionsResult> => {
+export const deleteRecipe = async (recipeId: string): Promise<ActionsResult> => {
   const cookieStore = cookies();
   const {
     data: { session },
@@ -22,37 +22,37 @@ export const deleteRecipe = async (id: string): Promise<ActionsResult> => {
     await prisma.$transaction([
       prisma.recipeImage.deleteMany({
         where: {
-          recipeId: id,
+          recipeId,
         },
       }),
       prisma.recipeLink.deleteMany({
         where: {
-          recipeId: id,
+          recipeId,
         },
       }),
       prisma.instruction.deleteMany({
         where: {
-          recipeId: id,
-        },
-      }),
-      prisma.ingredient.deleteMany({
-        where: {
-          recipeId: id,
+          recipeId,
         },
       }),
       prisma.cartList.deleteMany({
         where: {
-          recipeId: id,
+          recipeId,
+        },
+      }),
+      prisma.ingredient.deleteMany({
+        where: {
+          recipeId,
         },
       }),
       prisma.favorite.deleteMany({
         where: {
-          recipeId: id,
+          recipeId,
         },
       }),
       prisma.recipe.delete({
         where: {
-          id,
+          id: recipeId,
         },
       }),
     ]);

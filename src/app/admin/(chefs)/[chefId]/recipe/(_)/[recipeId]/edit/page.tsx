@@ -1,10 +1,9 @@
 import { getRecipeById } from "@/src/actions/getRecipeById";
 
+import { EditRecipeForm, EditRecipeFormValues } from "@/src/components/edit-recipe-form";
 import TopBar from "@/src/components/layout/top-bar";
 
-import { EditRecipeForm, EditRecipeFormValues } from "../../../../../components/edit-recipe-form";
-
-const page = async ({ params }: { params: { id: string } }) => {
+const page = async ({ params }: { params: { recipeId: string; chefId: string } }) => {
   const {
     id,
     title,
@@ -14,7 +13,7 @@ const page = async ({ params }: { params: { id: string } }) => {
     Instruction: instructions,
     RecipeImage: recipeImage,
     RecipeLink: recipeLinks,
-  } = await getRecipeById(params.id);
+  } = await getRecipeById(params.recipeId);
 
   const defaultValues: Partial<EditRecipeFormValues> = {
     recipeId: id,
@@ -45,8 +44,8 @@ const page = async ({ params }: { params: { id: string } }) => {
 
   return (
     <>
-      <TopBar centerComponent={<h1 className="font-bold text-mauve12 md:text-xl">マイレシピの編集</h1>} />
-      <EditRecipeForm defaultValues={defaultValues} navigateTo={`/my-recipe/${defaultValues.recipeId}`} />
+      <TopBar centerComponent={<h1 className="font-bold text-mauve12 md:text-xl">レシピの編集</h1>} />
+      <EditRecipeForm defaultValues={defaultValues} navigateTo={`/admin/${params.chefId}/recipe/${params.recipeId}`} />
     </>
   );
 };

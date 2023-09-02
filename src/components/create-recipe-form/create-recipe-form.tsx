@@ -33,6 +33,7 @@ type Props = {
 
 const CreateRecipeForm = ({ defaultValues, redirectPath }: Props) => {
   const [imageData, setImageData] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const router = useRouter();
 
@@ -116,6 +117,8 @@ const CreateRecipeForm = ({ defaultValues, redirectPath }: Props) => {
   };
 
   const onSubmit = (data: z.infer<typeof createRecipeFormSchema>) => {
+    setIsSubmitting(true);
+
     startTransition(async () => {
       const result = await postRecipe(data);
 
@@ -394,7 +397,7 @@ const CreateRecipeForm = ({ defaultValues, redirectPath }: Props) => {
         </div>
 
         <div className="flex px-4">
-          <Button variant={"destructive"} className="flex-1 gap-2" type="submit">
+          <Button variant={"destructive"} className="flex-1 gap-2" type="submit" disabled={isSubmitting}>
             {isPending && <Spinner />} 保存する
           </Button>
         </div>

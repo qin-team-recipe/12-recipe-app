@@ -25,10 +25,12 @@ import { editRecipeFormSchema, EditRecipeFormValues } from ".";
 
 type Props = {
   defaultValues: Partial<EditRecipeFormValues>;
+  navigateTo: string;
 };
 
-const EditRecipeForm = ({ defaultValues }: Props) => {
+const EditRecipeForm = ({ defaultValues, navigateTo }: Props) => {
   const [imageData, setImageData] = useState(defaultValues.recipeImage ?? "");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const { toast } = useToast();
 
@@ -113,6 +115,8 @@ const EditRecipeForm = ({ defaultValues }: Props) => {
   };
 
   const onSubmit = (data: z.infer<typeof editRecipeFormSchema>) => {
+    setIsSubmitting(true);
+
     startTransition(async () => {
       const result = await putRecipe(data);
 
@@ -123,7 +127,7 @@ const EditRecipeForm = ({ defaultValues }: Props) => {
           duration: 3000,
         });
 
-        router.push(`/my-recipe/${defaultValues.recipeId}`);
+        router.push(navigateTo);
       } else {
         toast({
           variant: "destructive",
@@ -361,11 +365,16 @@ const EditRecipeForm = ({ defaultValues }: Props) => {
         </div>
 
         <div className="flex gap-2 px-4">
-          <Button variant={"destructive"} className="flex-1 gap-2" type="submit" disabled={!changed || isPending}>
+          <Button
+            variant={"destructive"}
+            className="flex-1 gap-2"
+            type="submit"
+            disabled={!changed || isPending || isSubmitting}
+          >
             {isPending && <Spinner />} 保存する
           </Button>
           <Link
-            href={`/my-recipe/${defaultValues.recipeId}`}
+            href={navigateTo}
             className={buttonVariants({
               variant: "outline",
               className: "flex-1 border-tomato7 text-tomato11",

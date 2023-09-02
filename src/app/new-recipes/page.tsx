@@ -19,7 +19,7 @@ const page = async () => {
     const nextOffset = offset + newRecipesFromFollowingChefs.length;
 
     return [
-      newRecipesFromFollowingChefs.map((recipe) => <RecipeList key={recipe.id} recipes={[recipe]} segment="recipe" />),
+      newRecipesFromFollowingChefs.map((recipe) => <RecipeList key={recipe.id} recipes={[recipe]} path="recipe" />),
       nextOffset,
     ] as const;
   };
@@ -35,7 +35,7 @@ const page = async () => {
         }
       />
       <LoadMore initialOffset={0} loadMoreAction={loadMoreRecipes}>
-        <RecipeList recipes={initialRecipes} segment="recipe" />
+        <RecipeList recipes={initialRecipes} path="recipe" />
       </LoadMore>
     </>
   );
