@@ -14,7 +14,7 @@ export const addCartList = async (recipeId: string, ingredientId: number): Promi
     data: { session },
   } = await createServerActionClient<Database>({ cookies: () => cookieStore }).auth.getSession();
 
-  if (!session) redirect("/login");
+  if (!session) redirect("/favorite");
 
   try {
     const cartList = await prisma.cartList.findFirst({

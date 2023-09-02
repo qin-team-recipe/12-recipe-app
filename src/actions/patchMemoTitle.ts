@@ -15,7 +15,7 @@ export const patchMemoTitle = async (id: number, title: string): Promise<Actions
     data: { session },
   } = await createServerActionClient<Database>({ cookies: () => cookieStore }).auth.getSession();
 
-  if (!session) redirect("/login");
+  if (!session) redirect("/favorite");
 
   try {
     await prisma.memo.update({

@@ -12,7 +12,7 @@ export const getChefsInMyFollowingList = async () => {
     data: { session },
   } = await createServerComponentClient<Database>({ cookies: () => cookieStore }).auth.getSession();
 
-  if (!session) redirect("/login");
+  if (!session) redirect("/favorite");
 
   const followingChefs = await prisma.user.findMany({
     select: {

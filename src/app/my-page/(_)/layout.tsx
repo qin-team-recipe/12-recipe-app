@@ -25,7 +25,7 @@ export const metadata = {
 const layout = async ({ children }: { children: React.ReactNode }) => {
   const user = await getAuthenticatedUser();
 
-  if (!user) redirect("/login");
+  if (!user) redirect("/favorite");
 
   const sortedUserLinks = sortSiteLinks(user.UserLink.map((userLink) => userLink.url));
 

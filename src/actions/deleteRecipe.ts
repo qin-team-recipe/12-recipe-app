@@ -15,7 +15,7 @@ export const deleteRecipe = async (recipeId: string): Promise<ActionsResult> => 
     data: { session },
   } = await createServerActionClient<Database>({ cookies: () => cookieStore }).auth.getSession();
 
-  if (!session) redirect("/login");
+  if (!session) redirect("/favorite");
 
   try {
     // 物理削除

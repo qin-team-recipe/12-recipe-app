@@ -16,7 +16,7 @@ export const addCartListItem = async (recipeId: string, ingredientId: number): P
     data: { session },
   } = await supabaseServerClient.auth.getSession();
 
-  if (!session) redirect("/login");
+  if (!session) redirect("/favorite");
 
   try {
     const cartList = await prisma.cartList.findFirst({
@@ -83,7 +83,7 @@ export const removeCartListItem = async (recipeId: string, cartListItemId: numbe
     data: { session },
   } = await supabaseServerClient.auth.getSession();
 
-  if (!session) redirect("/login");
+  if (!session) redirect("/favorite");
 
   try {
     const cartList = await prisma.cartList.findFirst({

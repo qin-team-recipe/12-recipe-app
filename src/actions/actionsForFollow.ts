@@ -16,7 +16,7 @@ export const followChef = async (followedId: string): Promise<ActionsResult> => 
     data: { session },
   } = await createServerActionClient<Database>({ cookies: () => cookieStore }).auth.getSession();
 
-  if (!session) redirect("/login");
+  if (!session) redirect("/favorite");
 
   try {
     // 自身をフォローするのを防ぐ
@@ -57,7 +57,7 @@ export const unFollowChef = async (followedId: string): Promise<ActionsResult> =
     data: { session },
   } = await supabaseServerClient.auth.getSession();
 
-  if (!session) redirect("/login");
+  if (!session) redirect("/favorite");
 
   try {
     // 自身をフォローするのを防ぐ
