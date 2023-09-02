@@ -7,11 +7,11 @@ import TopBar from "@/src/components/layout/top-bar";
 import SignUpForm from "./_components/signup-form";
 
 const SignUpPage = async () => {
-  // const user = await getAuthenticatedUser();
+  const user = await getAuthenticatedUser();
 
-  // if (user) {
-  //   redirect("/");
-  // }
+  if (user) {
+    redirect("/");
+  }
 
   const defaultValues = { name: "" };
 

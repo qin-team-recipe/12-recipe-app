@@ -1,7 +1,6 @@
 "use client";
 
 import Image from "next/image";
-import { useRouter } from "next/navigation";
 
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { IconBrandApple, IconBrandGoogle } from "@tabler/icons-react";
@@ -21,7 +20,7 @@ const SuggestLogin = () => {
     const { error } = await supabase.auth.signInWithOAuth({
       provider: "github",
       options: {
-        redirectTo: `${location.origin}/signup`,
+        redirectTo: `${location.origin}/auth/callback`,
       },
     });
 

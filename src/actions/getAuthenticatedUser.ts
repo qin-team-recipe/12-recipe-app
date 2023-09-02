@@ -11,9 +11,6 @@ export const getAuthenticatedUser = async () => {
     data: { session },
   } = await createServerComponentClient<Database>({ cookies: () => cookieStore }).auth.getSession();
 
-  //TODO:ログインできていたら、sessionが取れているはずだが、nullになっている
-  console.log(session);
-
   if (!session) redirect("/favorite");
 
   const user = await prisma.user.findUnique({
