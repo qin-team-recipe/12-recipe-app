@@ -1,7 +1,7 @@
 "use server";
 
 import { cookies } from "next/headers";
-import { notFound } from "next/navigation";
+import { redirect } from "next/navigation";
 
 import { prisma } from "@/src/lib/prisma";
 import { ActionsResult } from "@/src/types/ActionsResult";
@@ -14,7 +14,7 @@ export const addCartList = async (recipeId: string, ingredientId: number): Promi
     data: { session },
   } = await createServerActionClient<Database>({ cookies: () => cookieStore }).auth.getSession();
 
-  if (!session) notFound();
+  if (!session) redirect("/login");
 
   try {
     const cartList = await prisma.cartList.findFirst({

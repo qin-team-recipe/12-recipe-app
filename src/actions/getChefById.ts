@@ -1,5 +1,5 @@
 import { cookies } from "next/headers";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 
 import { prisma } from "@/src/lib/prisma";
 import { Database } from "@/src/types/SupabaseTypes";
@@ -57,7 +57,7 @@ export const getChefById = async (
     data: { session },
   } = await createServerComponentClient<Database>({ cookies: () => cookieStore }).auth.getSession();
 
-  if (!session) notFound();
+  if (!session) redirect("/login");
 
   // シェフのフォロワー数を取得
   const followersCount = await prisma.userFollower.count({

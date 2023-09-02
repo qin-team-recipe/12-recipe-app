@@ -15,7 +15,7 @@ export const patchMemoCompleteStatus = async (id: number, isCompleted: boolean):
     data: { session },
   } = await createServerActionClient<Database>({ cookies: () => cookieStore }).auth.getSession();
 
-  if (!session) notFound();
+  if (!session) redirect("/login");
 
   try {
     await prisma.memo.update({

@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
-import { notFound } from "next/navigation";
+import { redirect } from "next/navigation";
 
 import { prisma } from "@/src/lib/prisma";
 import { ActionsResult } from "@/src/types/ActionsResult";
@@ -15,7 +15,7 @@ export const deleteRecipe = async (recipeId: string): Promise<ActionsResult> => 
     data: { session },
   } = await createServerActionClient<Database>({ cookies: () => cookieStore }).auth.getSession();
 
-  if (!session) notFound();
+  if (!session) redirect("/login");
 
   try {
     // 物理削除

@@ -12,13 +12,7 @@ import { createRecipeFormSchema } from "@/src/components/create-recipe-form";
 
 export const postRecipe = zact(createRecipeFormSchema)(
   async ({ uid, title, bio, ingredients, urls, servingCount, instructions, recipeImage }): Promise<ActionsResult> => {
-    const supabaseServerClient = createServerActionClient<Database>({ cookies });
-
-    const {
-      data: { session },
-    } = await supabaseServerClient.auth.getSession();
-
-    if (!session) notFound();
+    const user = await getAuthenticatedUser();
 
     try {
       await prisma.recipe.create({

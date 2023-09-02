@@ -1,5 +1,5 @@
 import { cookies } from "next/headers";
-import { notFound } from "next/navigation";
+import { redirect } from "next/navigation";
 
 import { prisma } from "@/src/lib/prisma";
 import { PaginationParams } from "@/src/types/PaginationParams";
@@ -18,7 +18,7 @@ export const getMyRecipes = async (
     data: { session },
   } = await createServerComponentClient<Database>({ cookies: () => cookieStore }).auth.getSession();
 
-  if (!session) notFound();
+  if (!session) redirect("/login");
 
   const myRecipe = await prisma.recipe.findMany({
     where: {

@@ -21,7 +21,7 @@ export const putRecipe = zact(editRecipeFormSchema)(
       data: { session },
     } = await createServerActionClient<Database>({ cookies: () => cookieStore }).auth.getSession();
 
-    if (!session) notFound();
+    if (!session) redirect("/login");
 
     try {
       const existingRecipe = await prisma.recipe.findUnique({

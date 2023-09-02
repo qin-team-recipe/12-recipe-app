@@ -1,5 +1,5 @@
 import { cookies } from "next/headers";
-import { notFound } from "next/navigation";
+import { redirect } from "next/navigation";
 
 import { kInfiniteScrollCount } from "@/src/constants/constants";
 import { prisma } from "@/src/lib/prisma";
@@ -18,7 +18,7 @@ export const getRecipesNewFromFollowedChefs = async (
     data: { session },
   } = await createServerComponentClient<Database>({ cookies: () => cookieStore }).auth.getSession();
 
-  if (!session) notFound();
+  if (!session) redirect("/login");
 
   const followingChefs = await prisma.userFollower.findMany({
     where: {

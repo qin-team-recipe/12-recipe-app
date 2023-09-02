@@ -14,7 +14,7 @@ export const postMemo = async (): Promise<ActionsResult & { id?: number }> => {
     data: { session },
   } = await createServerActionClient<Database>({ cookies: () => cookieStore }).auth.getSession();
 
-  if (!session) notFound();
+  if (!session) redirect("/login");
 
   try {
     const memo = await prisma.memo.create({

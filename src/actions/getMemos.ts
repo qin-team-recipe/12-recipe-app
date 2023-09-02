@@ -1,5 +1,5 @@
 import { cookies } from "next/headers";
-import { notFound } from "next/navigation";
+import { redirect } from "next/navigation";
 
 import { prisma } from "@/src/lib/prisma";
 import { Database } from "@/src/types/SupabaseTypes";
@@ -11,7 +11,7 @@ export const getMemos = async () => {
     data: { session },
   } = await createServerComponentClient<Database>({ cookies: () => cookieStore }).auth.getSession();
 
-  if (!session) notFound();
+  if (!session) redirect("/login");
 
   const memos = await prisma.memo.findMany({
     select: {
