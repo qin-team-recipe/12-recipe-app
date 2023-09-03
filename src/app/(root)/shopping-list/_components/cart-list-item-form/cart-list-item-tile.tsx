@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 
-import { removeCartListItem } from "@/src/actions/cartListItemActions";
+import { deleteCartListItem } from "@/src/actions/deleteCartListItem";
 import { patchCartListItemCompleteStatus } from "@/src/actions/patchCartListItemCompleteStatus";
 import { putCartListItemOrder } from "@/src/actions/putCartListItemOrder";
 import { kToastDuration } from "@/src/constants/constants";
@@ -18,13 +18,13 @@ import { cn } from "../../../../../lib/utils";
 import { CartListItemFormValues } from "./schema";
 
 type Props = {
-  recipeId: string;
+  cartListId: number;
   form: UseFormReturn<CartListItemFormValues>;
   index: number;
   remove: UseFieldArrayRemove;
 };
 
-export const CartListItemTile = ({ recipeId, form, index, remove }: Props) => {
+export const CartListItemTile = ({ cartListId, form, index, remove }: Props) => {
   const [isOpenPopover, setIsOpenPopover] = useState(false);
 
   const {
@@ -96,7 +96,11 @@ export const CartListItemTile = ({ recipeId, form, index, remove }: Props) => {
   }, [form, index, toast]);
 
   const handleDelete = useCallback(async () => {
-    const result = await removeCartListItem(recipeId, form.getValues(`cartListItem.${index}.id`));
+    const result = await deleteCartListItem({
+      cartListId,
+      cartListItemId: form.getValues(`cartListItem.${index}.id`),
+    });
+
     if (result.isSuccess) {
       remove(index);
 
@@ -115,7 +119,7 @@ export const CartListItemTile = ({ recipeId, form, index, remove }: Props) => {
     }
 
     setIsOpenPopover(false);
-  }, [form, index, recipeId, remove, toast]);
+  }, [cartListId, form, index, remove, toast]);
 
   const handleMoveUp = useCallback(async () => {
     const cartListItems = form.getValues("cartListItem");

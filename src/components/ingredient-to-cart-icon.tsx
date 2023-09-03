@@ -1,8 +1,8 @@
 "use client";
 
-import { experimental_useOptimistic as useOptimistic, useState } from "react";
+import { experimental_useOptimistic as useOptimistic } from "react";
 
-import { addCartListItem, removeCartListItem } from "@/src/actions/cartListItemActions";
+import { addCartListItem, removeCartListItem } from "@/src/actions/actionsForCartListItem";
 import { cn } from "@/src/lib/utils";
 import { ShoppingCart } from "lucide-react";
 

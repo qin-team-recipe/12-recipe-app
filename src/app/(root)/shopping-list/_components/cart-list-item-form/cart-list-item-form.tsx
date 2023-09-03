@@ -241,7 +241,7 @@ const CartListItemForm = ({ defaultValues, index, recipe, cartListId, cartListLe
       <Form {...form}>
         <form className="mb-8">
           {fields.map((field, index) => (
-            <CartListItemTile recipeId={recipe.id} form={form} index={index} key={field.id} remove={remove} />
+            <CartListItemTile cartListId={cartListId} form={form} index={index} key={field.id} remove={remove} />
           ))}
         </form>
       </Form>

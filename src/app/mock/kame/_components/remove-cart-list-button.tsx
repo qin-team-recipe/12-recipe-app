@@ -3,7 +3,7 @@
 import { useTransition } from "react";
 import { useRouter } from "next/navigation";
 
-import { removeCartListItem } from "@/src/actions/cartListItemActions";
+import { removeCartListItem } from "@/src/actions/actionsForcartListItem";
 
 import { Button } from "@/src/components/ui/button";
 import Spinner from "@/src/components/ui/spinner";
