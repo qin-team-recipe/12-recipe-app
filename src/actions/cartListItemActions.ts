@@ -130,7 +130,6 @@ export const removeCartListItem = async ({
         },
       });
     } else {
-      console.log("qqqqqqqq")
       // 2つ以上のアイテムがカート内に存在する場合はアイテムのみ削除する
       await prisma.cartListItem.deleteMany({
         where: {

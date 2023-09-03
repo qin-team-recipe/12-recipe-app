@@ -1,9 +1,9 @@
 import { getCartList } from "@/src/actions/getCartList";
 import { getRecipeById } from "@/src/actions/getRecipeById";
 
+import AllIngredientsToCart from "@/src/components/all-ingredients-to-cart";
 import CopyIngredientsToClipboardButton from "@/src/components/copy-ingredients-to-clipboard-button";
-import AllIngredientsToCart from "@/src/app/recipe/[id]/_components/add-all-ingredients-to-cart";
-import IngredientToCartIcon from "@/src/app/recipe/[id]/_components/add-ingredient-to-cart-icon";
+import IngredientToCartIcon from "@/src/components/ingredient-to-cart-icon";
 
 const page = async ({ params }: { params: { id: string } }) => {
   const { Ingredient: ingredients, servingCount, title } = await getRecipeById(params.id);
