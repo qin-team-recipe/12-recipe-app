@@ -15,7 +15,7 @@ export const favoriteRecipe = async (recipeId: string): Promise<ActionsResult> =
     data: { session },
   } = await createServerActionClient<Database>({ cookies: () => cookieStore }).auth.getSession();
 
-  if (!session) redirect("/login");
+  if (!session) redirect("/favorite");
 
   try {
     await prisma.favorite.create({
@@ -43,7 +43,7 @@ export const unFavoriteRecipe = async (recipeId: string): Promise<ActionsResult>
     data: { session },
   } = await createServerActionClient<Database>({ cookies }).auth.getSession();
 
-  if (!session) redirect("/login");
+  if (!session) redirect("/favorite");
 
   try {
     await prisma.favorite.delete({

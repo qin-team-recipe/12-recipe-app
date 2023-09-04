@@ -13,7 +13,7 @@ import CloseButton from "./_components/close-button";
 const page = async ({ searchParams }: { searchParams: { [key: string]: string | undefined } }) => {
   const user = await getAuthenticatedUser();
 
-  if (!user) redirect("/login");
+  if (!user) redirect("/favorite");
 
   let defaultValues: Partial<CreateRecipeFormValues> = {
     uid: user.id,

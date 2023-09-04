@@ -11,7 +11,7 @@ export const getDraftRecipes = async () => {
     data: { session },
   } = await createServerComponentClient<Database>({ cookies: () => cookieStore }).auth.getSession();
 
-  if (!session) redirect("/login");
+  if (!session) redirect("/favorite");
 
   const draftRecipes = await prisma.draftRecipe.findMany({
     where: {

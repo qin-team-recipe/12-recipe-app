@@ -1,7 +1,6 @@
 "use client";
 
-import { useState, useTransition } from "react";
-import Link from "next/link";
+import { useTransition } from "react";
 import { useRouter } from "next/navigation";
 
 import { postUser } from "@/src/actions/postUser";
@@ -24,13 +23,9 @@ type Props = {
 };
 
 const SignUpForm = ({ defaultValues }: Props) => {
-  const [message, setMessage] = useState("");
-  const [isSubmitting, setIsSubmitting] = useState(false);
-
   const router = useRouter();
 
   const supabase = createClientComponentClient<Database>();
-
   const [isPending, startTransition] = useTransition();
 
   const { toast } = useToast();
@@ -41,44 +36,28 @@ const SignUpForm = ({ defaultValues }: Props) => {
     mode: "onChange",
   });
 
-  const onSubmit = (data: SignUpFormValues) => {
-    setIsSubmitting(true);
-
+  const handleSubmit = (formData: SignUpFormValues) => {
     startTransition(async () => {
       try {
-        const { data: responseData, error } = await supabase.auth.signUp({
-          email: data.email,
-          password: data.password,
-          options: {
-            emailRedirectTo: `${location.origin}/auth/callback`,
-            data: {
-              role: ROLE_TYPE.USER,
-            },
-          },
-        });
+        const { data } = await supabase.auth.getSession();
 
-        if (error) {
-          setMessage("エラーが発生しました。" + error.message);
-          toast({
-            variant: "destructive",
-            title: `エラーが発生しました。${error.message}`,
-            duration: kToastDuration,
-          });
-          return;
-        }
+        if (data.session) {
+          const id = data.session.user.id;
+          const result = await postUser({ id, name: formData.name });
 
-        const result = await postUser({ id: responseData.user?.id, name: data.name });
-
-        if (result.isSuccess) {
-          setMessage(
-            "本登録用のURLを記載したメールを送信しました。メールをご確認の上、メール本文中のURLをクリックして、本登録を行ってください。"
-          );
-        } else {
-          toast({
-            variant: "destructive",
-            title: "エラーが発生しました",
-            duration: kToastDuration,
-          });
+          if (result.isSuccess) {
+            toast({
+              variant: "default",
+              title: result.message,
+              duration: kToastDuration,
+            });
+          } else {
+            toast({
+              variant: "destructive",
+              title: "エラーが発生しました",
+              duration: kToastDuration,
+            });
+          }
         }
       } catch (error) {
         toast({
@@ -92,62 +71,45 @@ const SignUpForm = ({ defaultValues }: Props) => {
     });
   };
 
+  const handleSignOut = async () => {
+    const supabase = createClientComponentClient<Database>();
+    await supabase.auth.signOut();
+
+    router.refresh();
+    router.push("/");
+  };
+
   return (
     <>
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="mb-8 grid gap-8">
+        <form onSubmit={form.handleSubmit(handleSubmit)} className="mb-8 grid gap-8">
           <FormField
             control={form.control}
             name="name"
             render={({ field }) => (
               <FormItem className="grid space-y-0">
-                <FormLabel className="mb-1 ml-3 mt-5 text-lg font-bold">名前</FormLabel>
+                <FormLabel className="mb-1 ml-3 mt-5 text-lg font-bold">ニックネーム</FormLabel>
                 <FormControl>
-                  <Input className="w-full rounded-none border-x-0" {...field} />
+                  <Input
+                    className="w-full rounded-none border-x-0 px-4"
+                    placeholder="ニックネームをご入力ください"
+                    {...field}
+                  />
                 </FormControl>
                 <FormMessage className="ml-3" />
               </FormItem>
             )}
           />
-          <FormField
-            control={form.control}
-            name="email"
-            render={({ field }) => (
-              <FormItem className="grid space-y-0">
-                <FormLabel className="mb-1 ml-3 mt-5 text-lg font-bold">メールアドレス</FormLabel>
-                <FormControl>
-                  <Input className="w-full rounded-none border-x-0" {...field} />
-                </FormControl>
-                <FormMessage className="ml-3" />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="password"
-            render={({ field }) => (
-              <FormItem className="grid space-y-0">
-                <FormLabel className="mb-1 ml-3 mt-5 text-lg font-bold">パスワード</FormLabel>
-                <FormControl>
-                  <Input className="w-full rounded-none border-x-0" {...field} />
-                </FormControl>
-                <FormMessage className="ml-3" />
-              </FormItem>
-            )}
-          />
-          <Button variant={"destructive"} className="flex-1 gap-2" type="submit" disabled={isSubmitting}>
-            {isPending && <Spinner />} サインアップ
-          </Button>
+          <div className="flex gap-4 px-4">
+            <Button variant={"destructive"} className="flex-1 gap-2" type="submit">
+              {isPending && <Spinner />} 新規登録
+            </Button>
+            <Button variant={"outlineDestructive"} className="flex-1 gap-2" type="submit" onClick={handleSignOut}>
+              {isPending && <Spinner />} ログアウト
+            </Button>
+          </div>
         </form>
       </Form>
-
-      {message && <div className="my-5 text-center text-sm text-tomato9">{message}</div>}
-
-      <div className="text-center text-sm">
-        <Link href="/login" className="font-bold text-gray-500">
-          ログインはこちら
-        </Link>
-      </div>
     </>
   );
 };

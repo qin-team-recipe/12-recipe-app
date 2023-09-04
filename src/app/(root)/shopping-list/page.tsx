@@ -21,7 +21,6 @@ const page = async () => {
 
   return (
     <>
-      <TopBar centerComponent={<div className="font-bold text-mauve12 md:text-xl">買い物リスト</div>} />
       {/* 自分メモ */}
       <section className="mt-5">
         <MemoForm defaultValues={defaultValues} />

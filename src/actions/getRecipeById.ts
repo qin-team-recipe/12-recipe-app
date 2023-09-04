@@ -11,7 +11,7 @@ export const getRecipeById = async (id: string) => {
     data: { session },
   } = await createServerComponentClient<Database>({ cookies: () => cookieStore }).auth.getSession();
 
-  if (!session) redirect("/login");
+  if (!session) redirect("/favorite");
 
   const recipe = await prisma.recipe.findUnique({
     where: {

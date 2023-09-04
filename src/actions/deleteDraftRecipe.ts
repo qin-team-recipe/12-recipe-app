@@ -19,7 +19,7 @@ export const deleteDraftRecipe = async (id: string): Promise<DeleteDraftRecipeRe
     data: { session },
   } = await createServerActionClient<Database>({ cookies: () => cookieStore }).auth.getSession();
 
-  if (!session) redirect("/login");
+  if (!session) redirect("/favorite");
 
   try {
     // 物理削除

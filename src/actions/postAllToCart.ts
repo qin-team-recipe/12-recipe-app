@@ -15,7 +15,7 @@ export const postAllToCart = async (recipeId: string, ingredientIds: number[]): 
     data: { session },
   } = await createServerActionClient<Database>({ cookies: () => cookieStore }).auth.getSession();
 
-  if (!session) redirect("/login");
+  if (!session) redirect("/favorite");
 
   try {
     const cartList = await prisma.cartList.findFirst({

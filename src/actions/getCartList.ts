@@ -11,7 +11,7 @@ export const getCartList = async () => {
     data: { session },
   } = await createServerComponentClient<Database>({ cookies: () => cookieStore }).auth.getSession();
 
-  if (!session) redirect("/login");
+  if (!session) redirect("/favorite");
 
   const cartList = await prisma.cartList.findMany({
     where: {

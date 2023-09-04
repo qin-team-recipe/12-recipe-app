@@ -24,5 +24,5 @@ export async function GET(request: NextRequest) {
   }
 
   // サインインプロセスが完了した後にリダイレクトするURL
-  return NextResponse.redirect(requestUrl.origin);
+  return NextResponse.redirect(new URL("/signup", request.url));
 }
