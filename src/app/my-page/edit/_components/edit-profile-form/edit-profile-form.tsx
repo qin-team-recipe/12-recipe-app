@@ -130,7 +130,7 @@ const EditProfileForm = ({ defaultValues }: Props) => {
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     try {
-      selectImage(e);
+      selectImage(e.target.files);
     } catch (error) {
       if (error instanceof Error) {
         form.setError("profileImage", { type: "manual", message: error.message });
@@ -168,7 +168,6 @@ const EditProfileForm = ({ defaultValues }: Props) => {
                 <FormLabel className="mb-1 text-lg font-bold">プロフィール画像（任意）</FormLabel>
                 <FormControl>
                   {previewImageURL ? (
-                    // ユーザがプロフィール写真を設定している場合
                     <PreviewImage onClick={clearImage} previewImage={previewImageURL} />
                   ) : (
                     <label htmlFor="file" className="h-[100px] w-[100px]">

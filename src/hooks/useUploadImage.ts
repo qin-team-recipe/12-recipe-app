@@ -5,16 +5,16 @@ export const useUploadImage = (defaultImageURL: string | null) => {
   const [previewImageURL, setPreviewImageURL] = useState<string | null>(defaultImageURL);
 
   // 画像の選択とバリデーション
-  const selectImage = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files;
-
+  const selectImage = useCallback((files: FileList | null) => {
     // ファイルが選択されていない場合
-    if (!file || file?.length == 0) {
+    if (!files || files?.length == 0) {
       throw new Error("画像をアップロードしてください");
     }
 
-    const fileSize = file[0]?.size / 1024 / 1024; // size in MB
-    const fileType = file[0]?.type; // MIME type of the file
+    const file = files[0];
+
+    const fileSize = file?.size / 1024 / 1024; // size in MB
+    const fileType = files[0]?.type; // MIME type of the file
 
     // 画像サイズが2MBを超える場合
     if (fileSize > 2) {
@@ -27,9 +27,9 @@ export const useUploadImage = (defaultImageURL: string | null) => {
     }
 
     // 画像をセット
-    setSelectedImage(file[0]);
+    setSelectedImage(file);
     // 画像のプレビューをセット
-    setPreviewImageURL(URL.createObjectURL(file[0]));
+    setPreviewImageURL(URL.createObjectURL(file));
   }, []);
 
   const clearImage = () => {
