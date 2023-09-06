@@ -18,7 +18,7 @@ export const getRecipesNewFromFollowedChefs = async (
     data: { session },
   } = await createServerComponentClient<Database>({ cookies: () => cookieStore }).auth.getSession();
 
-  if (!session) redirect("/login");
+  if (!session) redirect("/favorite");
 
   const followingChefs = await prisma.userFollower.findMany({
     where: {

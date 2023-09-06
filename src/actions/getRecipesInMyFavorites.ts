@@ -18,7 +18,7 @@ export const getRecipesInMyFavorites = async (
     data: { session },
   } = await createServerComponentClient<Database>({ cookies: () => cookieStore }).auth.getSession();
 
-  if (!session) redirect("/login");
+  if (!session) redirect("/favorite");
 
   const favoriteRecipes = await prisma.favorite.findMany({
     where: {

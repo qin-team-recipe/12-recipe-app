@@ -16,7 +16,7 @@ export const deleteMemoAll = async (): Promise<ActionsResult> => {
     data: { session },
   } = await createServerActionClient<Database>({ cookies: () => cookieStore }).auth.getSession();
 
-  if (!session) redirect("/login");
+  if (!session) redirect("/favorite");
 
   try {
     await prisma.memo.deleteMany({

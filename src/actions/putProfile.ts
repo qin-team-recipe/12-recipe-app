@@ -19,7 +19,7 @@ export const putProfile = zact(editProfileFormSchema)(
       data: { session },
     } = await createServerActionClient<Database>({ cookies: () => cookieStore }).auth.getSession();
 
-    if (!session) redirect("/login");
+    if (!session) redirect("/favorite");
 
     const currentUserLinks = await prisma.userLink.findMany({
       where: {

@@ -11,7 +11,7 @@ export const getCartList = async () => {
     data: { session },
   } = await createServerComponentClient<Database>({ cookies: () => cookieStore }).auth.getSession();
 
-  if (!session) redirect("/login");
+  if (!session) redirect("/favorite");
 
   const cartList = await prisma.cartList.findMany({
     where: {
@@ -21,6 +21,7 @@ export const getCartList = async () => {
       recipe: {
         select: {
           title: true,
+          Ingredient: true,
         },
       },
       CartListItem: {
@@ -30,6 +31,7 @@ export const getCartList = async () => {
           ingredient: {
             select: {
               title: true,
+              id: true,
             },
           },
         },
@@ -40,5 +42,28 @@ export const getCartList = async () => {
     },
   });
 
-  return cartList;
+  const allCartListItems = cartList.flatMap((cart) => cart.CartListItem);
+
+  // 全てのカートアイテムが買い物リストに追加されているかどうかのフラグ
+  const isAllCartListItemCompleted =
+    allCartListItems.length === 0
+      ? false
+      : cartList.every(({ recipe }) =>
+          recipe.Ingredient.every((ingredient) =>
+            allCartListItems.some((cartItem) => cartItem.ingredient?.id === ingredient.id)
+          )
+        );
+
+  // 各材料がユーザーのカートアイテムに追加されているかどうかのフラグ
+  const checkIngredientInCart = (ingredientId: number): boolean => {
+    return cartList.some(({ CartListItem }) =>
+      CartListItem.some((cartListItem) => cartListItem.ingredient?.id === ingredientId)
+    );
+  };
+
+  return {
+    cartList,
+    isAllCartListItemCompleted,
+    checkIngredientInCart,
+  };
 };

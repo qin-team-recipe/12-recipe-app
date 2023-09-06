@@ -1,16 +1,22 @@
 import { FC } from "react";
 
-import { Facebook, Instagram, Link, Twitter, Youtube } from "lucide-react";
+import {
+  IconBrandFacebook,
+  IconBrandInstagram,
+  IconBrandTwitter,
+  IconBrandYoutube,
+  IconLink,
+} from "@tabler/icons-react";
 
-const IconYoutube = () => <Youtube size={20} className="text-mauve12" />;
+const IconYoutube = () => <IconBrandYoutube size={20} className="text-mauve12" />;
 
-const IconInstagram = () => <Instagram size={20} className="text-mauve12" />;
+const IconInstagram = () => <IconBrandInstagram size={20} className="text-mauve12" />;
 
-const IconTwitter = () => <Twitter size={20} className="text-mauve12" />;
+const IconTwitter = () => <IconBrandTwitter size={20} className="text-mauve12" />;
 
-const IconFacebook = () => <Facebook size={20} className="text-mauve12" />;
+const IconFacebook = () => <IconBrandFacebook size={20} className="text-mauve12" />;
 
-const IconLink = () => <Link size={20} className="text-mauve12" />;
+const IconDefaultLink = () => <IconLink size={20} className="text-mauve12" />;
 
 type IconComponentsType = {
   [key: string]: FC;
@@ -21,7 +27,7 @@ const IconComponents: IconComponentsType = {
   instagram: IconInstagram,
   twitter: IconTwitter,
   facebook: IconFacebook,
-  default: IconLink,
+  default: IconDefaultLink,
 };
 
 type Props = {
