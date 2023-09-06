@@ -10,11 +10,10 @@ import TopBar from "@/src/components/layout/top-bar";
 import LinkToIconRenderer from "@/src/components/link-to-icon-renderer";
 import LinkableTabs from "@/src/components/linkable-tabs";
 import NumberUnit from "@/src/components/number-unit";
-import { Avatar, AvatarImage } from "@/src/components/ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "@/src/components/ui/avatar";
 import { Button } from "@/src/components/ui/button";
 import { Command, CommandItem, CommandList } from "@/src/components/ui/command";
 import { Popover, PopoverContent, PopoverTrigger } from "@/src/components/ui/popover";
-import { Separator } from "@/src/components/ui/separator";
 
 import { tabs } from "./_constants/tabs";
 
@@ -31,6 +30,7 @@ const layout = async ({ children }: { children: React.ReactNode }) => {
 
   const visibleLinks = sortedUserLinks.slice(0, 2);
   const moreLinks = sortedUserLinks.slice(2);
+  const avatarFallbackName = user.name.slice(0, 2);
 
   const myRecipes = await getMyRecipes();
 
@@ -75,13 +75,11 @@ const layout = async ({ children }: { children: React.ReactNode }) => {
             <h6>{user.id}</h6>
           </div>
           <Avatar className="h-16 w-16">
-            <AvatarImage
-              // TODO: シェフのアバター画像を表示する
-              src={
-                "https://images.unsplash.com/photo-1577219491135-ce391730fb2c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=80&q=80"
-              }
-              alt={user.name}
-            />
+            {user.profileImage ? (
+              <AvatarImage src={user.profileImage} alt={user.name} />
+            ) : (
+              <AvatarFallback>{avatarFallbackName}</AvatarFallback>
+            )}
           </Avatar>
         </div>
 

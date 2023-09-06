@@ -6,16 +6,13 @@ export const editProfileFormSchema = z.object({
   nickName: z.string().min(1, {
     message: "ニックネームは必須です",
   }),
-
-  // TODO: 画像のバリデーション
-
+  profileImage: z.string().optional(),
   bio: z
     .string()
     .max(160, {
       message: "160文字以内で入力してください",
     })
     .optional(),
-
   urls: z.array(
     z
       .object({
