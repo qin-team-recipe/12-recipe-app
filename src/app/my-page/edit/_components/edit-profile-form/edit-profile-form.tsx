@@ -33,16 +33,9 @@ type Props = {
 const EditProfileForm = ({ defaultValues }: Props) => {
   const { toast } = useToast();
   const router = useRouter();
-  const {
-    image,
-    previewImage: selectedImage,
-    isChangedImage,
-    isHiddenStorageImage,
-    setPreviewImage,
-    onUploadImage,
-    setIsChangedImage,
-    setIsHiddenStorageImage,
-  } = useUploadImage();
+  const { selectedImage, previewImageURL, isChangedImage, selectImage, clearImage } = useUploadImage(
+    defaultValues.profileImage ?? null
+  );
 
   const [isPending, startTransition] = useTransition();
 
@@ -77,12 +70,12 @@ const EditProfileForm = ({ defaultValues }: Props) => {
    */
   const onSubmit = async (formData: z.infer<typeof editProfileFormSchema>) => {
     startTransition(async () => {
-      if (image) {
+      if (selectedImage) {
         // 編集画面でプロフィール画像が選択された場合
         if (formData.profileImage) {
           // supabaseストレージにプロフィール画像が存在する場合、選択した画像で置き換える
           const path = formData.profileImage.split("/").slice(-1)[0];
-          const { error: replaceError } = await supabase.storage.from("user").update(path, image);
+          const { error: replaceError } = await supabase.storage.from("user").update(path, selectedImage);
           // エラーチェック
           if (replaceError) {
             form.setError("profileImage", { type: "manual", message: replaceError.message });
@@ -92,7 +85,7 @@ const EditProfileForm = ({ defaultValues }: Props) => {
           // supabaseストレージに選択した画像をアップロード
           const { data: storageData, error: storageError } = await supabase.storage
             .from("user")
-            .upload(uuidv4(), image);
+            .upload(uuidv4(), selectedImage);
           // エラーチェック
           if (storageError) {
             form.setError("profileImage", { type: "manual", message: storageError.message });
@@ -135,10 +128,9 @@ const EditProfileForm = ({ defaultValues }: Props) => {
     });
   };
 
-  const handleChangeUploadImage = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     try {
-      onUploadImage(e);
-      setIsChangedImage(true);
+      selectImage(e);
     } catch (error) {
       if (error instanceof Error) {
         form.setError("profileImage", { type: "manual", message: error.message });
@@ -175,25 +167,9 @@ const EditProfileForm = ({ defaultValues }: Props) => {
               <FormItem className=" ml-3 grid space-y-0">
                 <FormLabel className="mb-1 text-lg font-bold">プロフィール画像（任意）</FormLabel>
                 <FormControl>
-                  {defaultValues.profileImage && !isHiddenStorageImage ? (
+                  {previewImageURL ? (
                     // ユーザがプロフィール写真を設定している場合
-                    <PreviewImage
-                      onClick={() => {
-                        setIsHiddenStorageImage(true);
-                        setIsChangedImage(false);
-                        setPreviewImage(null);
-                      }}
-                      previewImage={defaultValues.profileImage}
-                    />
-                  ) : selectedImage ? (
-                    // 画像を選択した場合
-                    <PreviewImage
-                      onClick={() => {
-                        setIsChangedImage(false);
-                        setPreviewImage(null);
-                      }}
-                      previewImage={selectedImage}
-                    />
+                    <PreviewImage onClick={clearImage} previewImage={previewImageURL} />
                   ) : (
                     <label htmlFor="file" className="h-[100px] w-[100px]">
                       <input
@@ -201,7 +177,7 @@ const EditProfileForm = ({ defaultValues }: Props) => {
                         id="file"
                         className="hidden"
                         accept="image/*"
-                        onChange={handleChangeUploadImage}
+                        onChange={handleImageChange}
                         {...restFieldProps}
                       />
                       <div className="flex h-full w-full flex-col items-center justify-center gap-2 rounded-xl border border-border text-mauve11 hover:cursor-pointer">
@@ -279,7 +255,7 @@ const EditProfileForm = ({ defaultValues }: Props) => {
             className="flex-1 gap-2"
             type="submit"
             // isPendingを優先してdisabled判定を行うこと
-            disabled={isPending || [isChangedFiled, isChangedImage, isHiddenStorageImage].every((b) => !b)}
+            disabled={isPending || [isChangedFiled, isChangedImage].some((b) => b)}
           >
             {isPending && <Spinner />} 保存する
           </Button>

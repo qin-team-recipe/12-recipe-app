@@ -1,13 +1,11 @@
 import { useCallback, useState } from "react";
 
-export const useUploadImage = () => {
-  const [image, setImage] = useState<File | null>(null);
-  const [previewImage, setPreviewImage] = useState<string | null>(null);
-  const [isChangedImage, setIsChangedImage] = useState(false);
-  const [isHiddenStorageImage, setIsHiddenStorageImage] = useState(false);
+export const useUploadImage = (defaultImageURL: string | null) => {
+  const [selectedImage, setSelectedImage] = useState<File | null>(null);
+  const [previewImageURL, setPreviewImageURL] = useState<string | null>(defaultImageURL);
 
-  // 画像アップロード
-  const onUploadImage = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+  // 画像の選択とバリデーション
+  const selectImage = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files;
 
     // ファイルが選択されていない場合
@@ -29,19 +27,25 @@ export const useUploadImage = () => {
     }
 
     // 画像をセット
-    setImage(file[0]);
+    setSelectedImage(file[0]);
     // 画像のプレビューをセット
-    setPreviewImage(URL.createObjectURL(file[0]));
+    setPreviewImageURL(URL.createObjectURL(file[0]));
   }, []);
 
+  const clearImage = () => {
+    setSelectedImage(null);
+    setPreviewImageURL(null);
+  };
+
+  const isChangedImage = previewImageURL === defaultImageURL;
+
   return {
-    image,
-    previewImage,
+    selectedImage,
+    previewImageURL,
     isChangedImage,
-    isHiddenStorageImage,
-    setPreviewImage,
-    onUploadImage,
-    setIsChangedImage,
-    setIsHiddenStorageImage,
+    setSelectedImage,
+    setPreviewImageURL,
+    selectImage,
+    clearImage,
   };
 };
