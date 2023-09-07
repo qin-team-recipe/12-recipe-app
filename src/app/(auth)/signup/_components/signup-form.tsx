@@ -4,7 +4,7 @@ import { useTransition } from "react";
 import { useRouter } from "next/navigation";
 
 import { postUser } from "@/src/actions/postUser";
-import { kToastDuration, ROLE_TYPE } from "@/src/constants/constants";
+import { kToastDuration } from "@/src/constants/constants";
 import type { Database } from "@/src/types/SupabaseTypes";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
