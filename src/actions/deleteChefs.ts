@@ -57,7 +57,7 @@ export const deleteChefs = async (chefIds: string[]): Promise<ActionsResult> => 
     // TODO: 適切なパスを指定する
     revalidatePath("/admin");
 
-    return { isSuccess: true, message: "指定のシェフを削除しました😟" };
+    return { isSuccess: true, message: "指定のシェフを削除しました🔥" };
   } catch (error) {
     console.log(error);
     return { isSuccess: false, error: "シェフの削除に失敗しました🥲" };

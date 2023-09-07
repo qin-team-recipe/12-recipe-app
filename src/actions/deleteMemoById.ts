@@ -24,7 +24,7 @@ export const deleteMemoById = async (id: number): Promise<ActionsResult> => {
       },
     });
 
-    // 削除したメモの後のメモの順番を更新する
+    // 削除した以降のメモのorderを更新する
     const memos = await prisma.memo.findMany({
       where: {
         userId: session.user.id,

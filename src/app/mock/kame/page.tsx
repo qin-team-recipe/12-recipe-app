@@ -67,7 +67,7 @@ const page = async () => {
           </div>
           {cl.CartListItem.map((item) => (
             <div key={item.id} className="mr-6 flex items-center">
-              <p>{item.ingredient.title}</p>
+              <p>{item.ingredient?.title}</p>
               <RemoveCartListButton recipeId={cl.recipeId} cartListItemId={item.id} />
               <br />
             </div>

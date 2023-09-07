@@ -47,6 +47,7 @@ export const addCartListItem = async ({
           CartListItem: {
             create: {
               ingredientId,
+              order: (await prisma.cartListItem.count({ where: { cartListId: maxDisplayOrder } })) + 1,
             },
           },
         },
@@ -66,6 +67,7 @@ export const addCartListItem = async ({
         data: {
           cartListId: cartList.id,
           ingredientId,
+          order: (await prisma.cartListItem.count({ where: { cartListId: cartList.id } })) + 1,
         },
       });
     }
@@ -139,7 +141,6 @@ export const removeCartListItem = async ({
       });
     }
 
-    // TODO: 適切なパスを指定する
     revalidatePath("/");
 
     return {

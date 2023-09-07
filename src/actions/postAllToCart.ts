@@ -41,6 +41,7 @@ export const postAllToCart = async (recipeId: string, ingredientIds: number[]): 
         data: unAddedIngredientIds.map((ingredientId) => ({
           ingredientId,
           cartListId: cartList.id,
+          order: prisma.cartListItem.count({ where: { cartListId: cartList.id } }) as unknown as number,
         })),
       });
     } else {
@@ -54,8 +55,9 @@ export const postAllToCart = async (recipeId: string, ingredientIds: number[]): 
           displayOrder: maxDisplayOrder,
           CartListItem: {
             createMany: {
-              data: ingredientIds.map((ingredientId) => ({
+              data: ingredientIds.map((ingredientId, index) => ({
                 ingredientId,
+                order: index + 1,
               })),
             },
           },
