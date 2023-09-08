@@ -18,20 +18,19 @@ import { useToast } from "@/src/components/ui/use-toast";
 
 import { signUpFormSchema, SignUpFormValues } from "./schema";
 
-type Props = {
-  defaultValues: SignUpFormValues;
-};
-
-const SignUpForm = ({ defaultValues }: Props) => {
+const SignUpForm = () => {
   const router = useRouter();
 
   const supabase = createClientComponentClient<Database>();
   const [isPending, startTransition] = useTransition();
+  const [isPendingLogout, startTransitionLogout] = useTransition();
 
   const { toast } = useToast();
 
   const form = useForm({
-    defaultValues,
+    defaultValues: {
+      name: "",
+    },
     resolver: zodResolver(signUpFormSchema),
     mode: "onChange",
   });
@@ -54,7 +53,7 @@ const SignUpForm = ({ defaultValues }: Props) => {
           } else {
             toast({
               variant: "destructive",
-              title: "エラーが発生しました",
+              title: result.error,
               duration: kToastDuration,
             });
           }
@@ -62,7 +61,7 @@ const SignUpForm = ({ defaultValues }: Props) => {
       } catch (error) {
         toast({
           variant: "destructive",
-          title: "エラーが発生しました",
+          title: "予期しないエラーが発生しました🥲",
           duration: kToastDuration,
         });
       } finally {
@@ -72,11 +71,18 @@ const SignUpForm = ({ defaultValues }: Props) => {
   };
 
   const handleSignOut = async () => {
-    const supabase = createClientComponentClient<Database>();
-    await supabase.auth.signOut();
-
-    router.refresh();
-    router.push("/");
+    startTransitionLogout(async () => {
+      try {
+        await supabase.auth.signOut();
+        router.push("/");
+      } catch (error) {
+        toast({
+          variant: "destructive",
+          title: "エラーが発生しました🥲",
+          duration: kToastDuration,
+        });
+      }
+    });
   };
 
   return (
@@ -105,7 +111,7 @@ const SignUpForm = ({ defaultValues }: Props) => {
               {isPending && <Spinner />} 新規登録
             </Button>
             <Button variant={"outlineDestructive"} className="flex-1 gap-2" type="submit" onClick={handleSignOut}>
-              {isPending && <Spinner />} ログアウト
+              {isPendingLogout && <Spinner />} ログアウト
             </Button>
           </div>
         </form>

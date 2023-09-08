@@ -13,12 +13,10 @@ const SignUpPage = async () => {
     redirect("/");
   }
 
-  const defaultValues = { name: "" };
-
   return (
     <>
       <TopBar centerComponent={<h1 className="font-bold text-mauve12 md:text-xl">新規登録</h1>} />
-      <SignUpForm defaultValues={defaultValues} />
+      <SignUpForm />
     </>
   );
 };
