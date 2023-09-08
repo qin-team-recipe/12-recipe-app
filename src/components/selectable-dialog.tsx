@@ -11,6 +11,8 @@ import {
   DialogTrigger,
 } from "@/src/components/ui/dialog";
 
+import { useWindowSize } from "../hooks/useWindowSize";
+import { cn } from "../lib/utils";
 import { Button } from "./ui/button";
 import Spinner from "./ui/spinner";
 
@@ -22,6 +24,7 @@ type Props = {
   onCancel?: () => void;
   cancelLabel: string;
   triggerComponent: React.ReactNode;
+  className?: string;
 };
 
 const SelectableDialog = ({
@@ -32,21 +35,27 @@ const SelectableDialog = ({
   cancelLabel,
   onCancel,
   triggerComponent,
+  className,
 }: Props) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const [isPending, startTransition] = useTransition();
 
+  const { isDesktop } = useWindowSize();
+
   return (
     <Dialog open={isOpen} onOpenChange={(open) => setIsOpen(open)}>
-      <DialogTrigger onClick={() => setIsOpen(true)}>{triggerComponent}</DialogTrigger>
+      <DialogTrigger className={cn(className)} onClick={() => setIsOpen(true)}>
+        {triggerComponent}
+      </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle className="self-center">{title}</DialogTitle>
+          <DialogTitle className="self-center text-2xl">{title}</DialogTitle>
         </DialogHeader>
-        <p className="text-center text-sm">{message}</p>
+        <p className="text-center text-lg">{message}</p>
         <DialogFooter className="flex gap-2">
           <Button
+            size={isDesktop ? "sm" : "default"}
             className="flex-1"
             variant="outline"
             onClick={() => {
@@ -58,6 +67,7 @@ const SelectableDialog = ({
             {isPending ? <Spinner /> : confirmLabel}
           </Button>
           <Button
+            size={isDesktop ? "sm" : "default"}
             className="flex-1 border-tomato7 text-tomato11"
             variant="outline"
             onClick={() => {
