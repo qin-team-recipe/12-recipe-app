@@ -1,7 +1,8 @@
 "use client";
 
-import Editor from "@draft-js-plugins/editor";
-import { ContentBlock, convertFromRaw, EditorState } from "draft-js";
+import Image from "@tiptap/extension-image";
+import { EditorContent, useEditor } from "@tiptap/react";
+import { StarterKit } from "@tiptap/starter-kit";
 import { Drawer } from "vaul";
 
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/src/components/ui/dialog";
@@ -16,40 +17,27 @@ type Props = {
 export const RecipeStep = ({ instruction, stepNumber }: Props) => {
   const { isMobile } = useWindowSize();
 
-  const contentState = convertFromRaw(JSON.parse(instruction));
-  const editorState = EditorState.createWithContent(contentState);
-
-  const formatJSONDisplay = (jsonString: any) => {
-    if (!jsonString) {
-      return "";
-    }
-
-    const parsedData = JSON.parse(jsonString);
-    const blocks = parsedData.blocks;
-
-    let displayText = "";
-
-    for (const block of blocks) {
-      if (block.text) {
-        switch (block.type) {
-          case "unstyled":
-            displayText += block.text + "\n";
-            break;
-          case "unordered-list-item":
-            displayText += "• " + block.text + "\n";
-            break;
-          case "ordered-list-item":
-            displayText += `${block.data?.index ? block.data.index + 1 : ""}. ` + block.text + "\n";
-            break;
-          default:
-            displayText += block.text + "\n";
-            break;
-        }
-      }
-    }
-
-    return displayText.trim();
-  };
+  const editor = useEditor({
+    extensions: [
+      StarterKit.configure({
+        // 箇条書き
+        bulletList: {
+          HTMLAttributes: {
+            class: "list-disc pl-4",
+          },
+        },
+        // 番号付き箇条書き
+        orderedList: {
+          HTMLAttributes: {
+            class: "list-decimal pl-4",
+          },
+        },
+      }),
+      Image,
+    ],
+    content: JSON.parse(instruction),
+    editable: false,
+  });
 
   return (
     <div className="flex items-start gap-x-2 border-y p-2">
@@ -59,9 +47,7 @@ export const RecipeStep = ({ instruction, stepNumber }: Props) => {
       {isMobile ? (
         <Drawer.Root shouldScaleBackground>
           <Drawer.Trigger className="w-full">
-            <div className="line-clamp-3 flex-1 text-left leading-snug text-mauve12">
-              {formatJSONDisplay(instruction)}
-            </div>
+            <div className="line-clamp-3 flex-1 text-left leading-snug text-mauve12">{editor?.getText()}</div>
           </Drawer.Trigger>
           <Drawer.Portal className="w-fit">
             <Drawer.Overlay className="fixed inset-0 bg-black/40" />
@@ -72,7 +58,7 @@ export const RecipeStep = ({ instruction, stepNumber }: Props) => {
                   <Drawer.Title className="mb-4 text-2xl">
                     <h2>作り方 {stepNumber}</h2>
                   </Drawer.Title>
-                  <ReadOnlyEditor editorState={editorState} />
+                  <EditorContent editor={editor} readOnly={true} />
                 </div>
               </div>
             </Drawer.Content>
@@ -82,7 +68,7 @@ export const RecipeStep = ({ instruction, stepNumber }: Props) => {
         <Dialog>
           <DialogTrigger className="w-full">
             <button className="line-clamp-3 w-full flex-1 text-left leading-snug text-mauve12">
-              {formatJSONDisplay(instruction)}
+              {editor?.getText()}
             </button>
           </DialogTrigger>
           <DialogContent className="sm:max-w-[424px]">
@@ -90,30 +76,11 @@ export const RecipeStep = ({ instruction, stepNumber }: Props) => {
               <DialogTitle className="text-xl">
                 <h2>作り方 {stepNumber}</h2>
               </DialogTitle>
+              <EditorContent className="p-4" editor={editor} readOnly={true} />
             </DialogHeader>
-            <div className="p-4">
-              <ReadOnlyEditor editorState={editorState} />
-            </div>
           </DialogContent>
         </Dialog>
       )}
     </div>
   );
 };
-
-const ReadOnlyEditor = ({ editorState }: { editorState: EditorState }) => (
-  <Editor
-    editorState={editorState}
-    readOnly
-    blockStyleFn={(block: ContentBlock) => {
-      switch (block.getType()) {
-        case "unordered-list-item":
-          return "list-disc";
-        case "ordered-list-item":
-          return "list-decimal";
-        default:
-          return "";
-      }
-    }}
-  />
-);
