@@ -17,6 +17,7 @@
     "status-local-db": "pnpx supabase status --workdir src",
     "reset-local-db": "pnpx supabase db reset --workdir src",
     "prisma-migrate": "pnpx prisma migrate dev",
+    "prisma-seed": "npx prisma db seed",
     "supabase-types": "pnpx supabase gen --workdir src types typescript --local --schema public > src/types/SupabaseTypes.ts",
     "migrate-and-gen": "pnpm run prisma-migrate && pnpm run supabase-types"
   },
@@ -88,10 +89,12 @@
     "eslint-plugin-tailwindcss": "^3.13.0",
     "prettier": "^2.8.8",
     "prettier-plugin-tailwindcss": "^0.3.0",
-    "prisma": "4.16.2"
+    "prisma": "4.16.2",
+    "ts-node": "^10.9.1"
   },
   "prisma": {
-    "schema": "src/prisma/schema.prisma"
+    "schema": "src/prisma/schema.prisma",
+    "seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} src/prisma/seed/seed.ts"
   },
   "volta": {
     "node": "18.16.0"
