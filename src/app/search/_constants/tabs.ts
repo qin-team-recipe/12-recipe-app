@@ -1,13 +1,12 @@
-import { searchBasePath } from "@/src/constants/routes";
 import { LinkableTab } from "@/src/types/LinkableTab";
 
 export const tabs: LinkableTab[] = [
   {
-    link: `${searchBasePath}/recipes`,
+    link: "/search/recipes",
     value: "レシピ",
   },
   {
-    link: `${searchBasePath}/chefs`,
+    link: "/search/chefs",
     value: "シェフ",
   },
 ];

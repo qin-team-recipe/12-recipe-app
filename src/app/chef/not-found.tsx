@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import ErrorMessage from "@/src/components/error-message";
 
 export const metadata: Metadata = {
-  title: "404 Not Found | シェフ",
+  title: "404 Not Found",
 };
 
 const notFound = () => {

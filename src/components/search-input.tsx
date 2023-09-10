@@ -5,7 +5,6 @@ import { usePathname, useRouter } from "next/navigation";
 
 import { ArrowLeft, Search, X } from "lucide-react";
 
-import { searchBasePath } from "../constants/routes";
 import { Input } from "./ui/input";
 import Spinner from "./ui/spinner";
 
@@ -35,7 +34,7 @@ const SearchInput = () => {
 
         startTransition(() => {
           const newPath =
-            pathname === "/" ? `${searchBasePath}/recipes/?${params.toString()}` : `${pathname}/?${params.toString()}`;
+            pathname === "/" ? `/search/recipes/?${params.toString()}` : `${pathname}/?${params.toString()}`;
 
           router.replace(newPath);
         });
@@ -79,7 +78,7 @@ const SearchInput = () => {
 
   return (
     <div className="flex w-full gap-2">
-      {pathname.includes(searchBasePath) && (
+      {pathname.includes("/search") && (
         <button
           onClick={() => {
             router.replace("/");

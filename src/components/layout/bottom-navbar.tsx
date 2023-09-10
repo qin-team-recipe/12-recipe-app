@@ -1,21 +1,19 @@
 "use client";
 
-import { useMemo } from "react";
-import { usePathname } from "next/navigation";
+import { useSelectedLayoutSegment } from "next/navigation";
 
-import { bottomBarRoutes } from "../../constants/routes";
+import { siteConfig } from "@/src/config/site";
+
 import NavbarItem from "./navbar-item";
 
 const BottomNavbar = () => {
-  const pathname = usePathname();
-
-  const routes = useMemo(() => bottomBarRoutes(pathname), [pathname]);
+  const segment = useSelectedLayoutSegment();
 
   return (
     <div className="fixed bottom-0 z-10 flex w-full translate-y-px justify-around gap-x-2 bg-gray-50 p-2 shadow-extend-y-top md:hidden">
-      {routes.map((route) => (
-        <div key={route.label}>
-          <NavbarItem {...route} />
+      {siteConfig.bottomNav.items.map((item) => (
+        <div key={item.title}>
+          <NavbarItem label={item.title} segment={String(segment || "")} icon={item.icon} href={item.href} />
         </div>
       ))}
     </div>
