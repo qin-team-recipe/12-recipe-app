@@ -13,6 +13,7 @@ const page = () => {
   return (
     <>
       <TopBar centerComponent={<SearchInput />} />
+
       {/* 注目のシェフ */}
       <section className="pt-5">
         <h2 className="pl-4 font-serif text-xl font-bold text-mauve12">注目のシェフ</h2>

@@ -6,9 +6,8 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 import { putRecipe } from "@/src/actions/putRecipe";
-import { cn } from "@/src/lib/utils";
+import { cn, getPlainTextFromJSON } from "@/src/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { convertFromRaw, EditorState } from "draft-js";
 import { Minus, Plus, PlusIcon, X } from "lucide-react";
 import { useFieldArray, useForm } from "react-hook-form";
 import { z } from "zod";
@@ -81,38 +80,6 @@ const EditRecipeForm = ({ defaultValues, navigateTo }: Props) => {
     name: "instructions",
     control: form.control,
   });
-
-  const formatJSONDisplay = (jsonString: any) => {
-    if (!jsonString) {
-      return "";
-    }
-
-    const parsedData = JSON.parse(jsonString);
-    const blocks = parsedData.blocks;
-
-    let displayText = "";
-
-    for (const block of blocks) {
-      if (block.text) {
-        switch (block.type) {
-          case "unstyled":
-            displayText += block.text + " ";
-            break;
-          case "unordered-list-item":
-            displayText += "• " + block.text + " ";
-            break;
-          case "ordered-list-item":
-            displayText += "1. " + block.text + " ";
-            break;
-          default:
-            displayText += block.text + " ";
-            break;
-        }
-      }
-    }
-
-    return displayText.trim();
-  };
 
   const onSubmit = (data: z.infer<typeof editRecipeFormSchema>) => {
     setIsSubmitting(true);
@@ -216,9 +183,6 @@ const EditRecipeForm = ({ defaultValues, navigateTo }: Props) => {
                 key={field.id}
                 name={`instructions.${index}.value`}
                 render={({ field }) => {
-                  const contentState = convertFromRaw(JSON.parse(field.value));
-                  const currentEditorState = EditorState.createWithContent(contentState);
-
                   return (
                     <FormItem className="space-y-0">
                       <FormLabel className={cn("mb-1 ml-3 flex items-center gap-3", index !== 0 && "sr-only")}>
@@ -231,7 +195,7 @@ const EditRecipeForm = ({ defaultValues, navigateTo }: Props) => {
                           </div>
                           <p className="flex h-10 max-w-[800px] items-center self-center overflow-hidden whitespace-nowrap rounded-none border-x-0 border-y px-12">
                             <span className="inline-block max-w-full overflow-hidden">
-                              {formatJSONDisplay(field.value)}
+                              {getPlainTextFromJSON(field.value)}
                             </span>
                           </p>
                           <InstructionMenu
@@ -242,7 +206,7 @@ const EditRecipeForm = ({ defaultValues, navigateTo }: Props) => {
                               removeInstructions,
                               stepOrder,
                               watchedValues,
-                              currentEditorState,
+                              fieldValue: JSON.parse(field.value),
                             }}
                           />
                         </div>
@@ -258,8 +222,6 @@ const EditRecipeForm = ({ defaultValues, navigateTo }: Props) => {
             type="button"
             className="ml-3 mt-2 flex w-fit gap-1 text-tomato9"
             onClick={() => {
-              console.log(instructionsFields.length);
-
               appendInstructions({ value: "", order: instructionsFields.length + 1 });
             }}
           >
