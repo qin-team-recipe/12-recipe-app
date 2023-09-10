@@ -1,3 +1,5 @@
+import { Metadata, ResolvingMetadata } from "next";
+
 import { getChefById } from "@/src/actions/getChefById";
 import { kInfiniteScrollCount } from "@/src/constants/constants";
 
@@ -5,7 +7,30 @@ import LoadMore from "@/src/components/load-more";
 import NoDataDisplay from "@/src/components/no-data-display";
 import RecipeList from "@/src/components/recipe-list";
 
-const page = async ({ params }: { params: { id: string } }) => {
+type PageProps = {
+  params: {
+    id: string;
+  };
+};
+
+export async function generateMetadata({ params }: PageProps, parent: ResolvingMetadata): Promise<Metadata> {
+  const chef = await getChefById({ id: params?.id });
+  if (!chef) {
+    return {};
+  }
+
+  const previousImages = (await parent).openGraph?.images || [];
+
+  return {
+    title: chef.name,
+    description: chef.profile,
+    openGraph: {
+      images: chef.profileImage ? [...previousImages, chef.profileImage] : [...previousImages],
+    },
+  };
+}
+
+const page = async ({ params }: PageProps) => {
   const { Recipe: initialRecipes } = await getChefById({
     id: params?.id,
     limit: kInfiniteScrollCount,
