@@ -3,9 +3,9 @@ import Link from "next/link";
 
 import Spinner from "@/src/components/ui/spinner";
 
-import HorizontalFollowingChefsList from "./_components/horizontal-following-chefs-list";
-import HorizontalNewRecipesList from "./_components/horizontal-new-recipes-list";
-import MyFavoriteRecipesGrid from "./_components/my-favorite-recipes-grid";
+import HorizontalFollowingChefsList from "../_components/horizontal-following-chefs-list";
+import HorizontalNewRecipesList from "../_components/horizontal-new-recipes-list";
+import MyFavoriteRecipesGrid from "../_components/my-favorite-recipes-grid";
 
 const page = async () => {
   return (

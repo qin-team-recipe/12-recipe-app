@@ -3,7 +3,7 @@
 import Image from "next/image";
 
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
-import { IconBrandApple, IconBrandGithub, IconBrandGoogle } from "@tabler/icons-react";
+import { IconBrandGithub } from "@tabler/icons-react";
 
 import { Button } from "@/src/components/ui/button";
 
