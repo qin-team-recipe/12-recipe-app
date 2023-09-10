@@ -17,7 +17,7 @@
     "status-local-db": "pnpx supabase status --workdir src",
     "reset-local-db": "pnpx supabase db reset --workdir src",
     "prisma-migrate": "pnpx prisma migrate dev",
-    "prisma-seed": "npx prisma db seed",
+    "prisma-seed": "pnpx prisma db seed",
     "supabase-types": "pnpx supabase gen --workdir src types typescript --local --schema public > src/types/SupabaseTypes.ts",
     "migrate-and-gen": "pnpm run prisma-migrate && pnpm run supabase-types"
   },
@@ -94,7 +94,7 @@
   },
   "prisma": {
     "schema": "src/prisma/schema.prisma",
-    "seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} src/prisma/seed/seed.ts"
+    "seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} src/prisma/seed/index.ts"
   },
   "volta": {
     "node": "18.16.0"
