@@ -31,15 +31,15 @@ type Props = {
 };
 
 const EditProfileForm = ({ defaultValues }: Props) => {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   const { toast } = useToast();
   const router = useRouter();
-  const { selectedImage, previewImageURL, isChangedImage, selectImage, clearImage } = useUploadImage(
+  const { selectedImage, previewImageURL, isChangedImage, selectImage, clearImage, previousImageURL } = useUploadImage(
     defaultValues.profileImage ?? null
   );
 
   const [isPending, startTransition] = useTransition();
-
-  const supabase = createClientComponentClient<Database>();
 
   const form = useForm<EditFormValues>({
     resolver: zodResolver(editProfileFormSchema),
@@ -64,11 +64,11 @@ const EditProfileForm = ({ defaultValues }: Props) => {
     control: form.control,
   });
 
-  /**
-   * 編集したプロフィール情報でプロフィールを更新する処理
-   * @param formData 編集したプロフィール情報
-   */
   const onSubmit = async (formData: z.infer<typeof editProfileFormSchema>) => {
+    const supabase = createClientComponentClient<Database>();
+
+    setIsSubmitting(true);
+
     startTransition(async () => {
       if (selectedImage) {
         // 編集画面でプロフィール画像が選択された場合
@@ -78,6 +78,7 @@ const EditProfileForm = ({ defaultValues }: Props) => {
           const { error: replaceError } = await supabase.storage.from("user").update(path, selectedImage);
           // エラーチェック
           if (replaceError) {
+            console.error(replaceError);
             form.setError("profileImage", { type: "manual", message: replaceError.message });
             return;
           }
@@ -88,12 +89,23 @@ const EditProfileForm = ({ defaultValues }: Props) => {
             .upload(uuidv4(), selectedImage);
           // エラーチェック
           if (storageError) {
+            console.error(storageError);
             form.setError("profileImage", { type: "manual", message: storageError.message });
             return;
           }
           // ユーザテーブルのプロフィール画像を設定するためにsupabaseストレージのURLを取得する
           const { data: urlData } = supabase.storage.from("user").getPublicUrl(storageData.path);
           formData.profileImage = urlData.publicUrl;
+        }
+
+        if (previousImageURL) {
+          const path = previousImageURL.split("/").slice(-1)[0];
+          const { error: removePreviousError } = await supabase.storage.from("user").remove([path]);
+          if (removePreviousError) {
+            console.error(removePreviousError);
+            form.setError("profileImage", { type: "manual", message: removePreviousError.message });
+            return;
+          }
         }
       } else {
         // プロフィール画像が選択されていない場合
@@ -102,12 +114,14 @@ const EditProfileForm = ({ defaultValues }: Props) => {
           const path = formData.profileImage.split("/").slice(-1)[0];
           const { error: removeError } = await supabase.storage.from("user").remove([path]);
           if (removeError) {
+            console.error(removeError);
             form.setError("profileImage", { type: "manual", message: removeError.message });
             return;
           }
         }
         formData.profileImage = "";
       }
+
       // プロフィールの更新
       const result = await putProfile(formData);
 
@@ -133,6 +147,7 @@ const EditProfileForm = ({ defaultValues }: Props) => {
       selectImage(e.target.files);
     } catch (error) {
       if (error instanceof Error) {
+        console.error(error);
         form.setError("profileImage", { type: "manual", message: error.message });
       }
     }
@@ -160,15 +175,32 @@ const EditProfileForm = ({ defaultValues }: Props) => {
           control={form.control}
           name="profileImage"
           render={({ field }) => {
-            // type="file"のinputタグにvalueを設定すると以下のエラーが発生するためfieldから抽出する
-            // InvalidStateError: Failed to set the 'value' property on 'HTMLInputElement': This input element accepts a filename, which may only be programmatically set to the empty string.
             const { onChange, value, ...restFieldProps } = field;
+
             return (
               <FormItem className=" ml-3 grid space-y-0">
                 <FormLabel className="mb-1 text-lg font-bold">プロフィール画像（任意）</FormLabel>
                 <FormControl>
                   {previewImageURL ? (
-                    <PreviewImage onClick={clearImage} previewImage={previewImageURL} />
+                    <div className="relative h-[100px] w-[100px]">
+                      <Image
+                        width={100}
+                        height={100}
+                        className="h-[100px] w-[100px] rounded-xl border border-border object-cover"
+                        src={previewImageURL}
+                        alt="プロフィール写真"
+                      />
+                      <button
+                        type="button"
+                        className="absolute -right-2 -top-1 z-50"
+                        onClick={() => {
+                          clearImage();
+                          form.setValue("profileImage", "");
+                        }}
+                      >
+                        <Minus className="h-5 w-5 rounded-full bg-tomato9 p-1 text-white" />
+                      </button>
+                    </div>
                   ) : (
                     <label htmlFor="file" className="h-[100px] w-[100px]">
                       <input
@@ -253,8 +285,7 @@ const EditProfileForm = ({ defaultValues }: Props) => {
             variant={"destructive"}
             className="flex-1 gap-2"
             type="submit"
-            // isPendingを優先してdisabled判定を行うこと
-            disabled={isPending || [isChangedFiled, isChangedImage].some((b) => b)}
+            disabled={isPending || !(isChangedFiled || isChangedImage) || isSubmitting}
           >
             {isPending && <Spinner />} 保存する
           </Button>
@@ -274,22 +305,3 @@ const EditProfileForm = ({ defaultValues }: Props) => {
 };
 
 export default EditProfileForm;
-
-type PreviewImageProps = {
-  onClick: () => void;
-  previewImage: string;
-};
-const PreviewImage = ({ onClick, previewImage }: PreviewImageProps) => (
-  <div className="relative h-[100px] w-[100px]">
-    <Image
-      width={100}
-      height={100}
-      className="h-[100px] w-[100px] rounded-xl border border-border object-cover"
-      src={previewImage}
-      alt="プロフィール写真"
-    />
-    <button type="button" className="absolute -right-2 -top-1 z-50" onClick={onClick}>
-      <Minus className="h-5 w-5 rounded-full bg-tomato9 p-1 text-white" />
-    </button>
-  </div>
-);

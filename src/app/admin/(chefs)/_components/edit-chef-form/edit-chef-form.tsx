@@ -7,10 +7,14 @@ import { useRouter } from "next/navigation";
 
 import { putChef } from "@/src/actions/putChef";
 import { kToastDuration } from "@/src/constants/constants";
+import { useUploadImage } from "@/src/hooks/useUploadImage";
 import { cn } from "@/src/lib/utils";
+import { Database } from "@/src/types/SupabaseTypes";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { Minus, Plus, PlusIcon, X } from "lucide-react";
 import { useFieldArray, useForm } from "react-hook-form";
+import { v4 as uuidv4 } from "uuid";
 import { z } from "zod";
 
 import { Button, buttonVariants } from "@/src/components/ui/button";
@@ -28,6 +32,10 @@ type Props = {
 
 const EditChefForm = ({ defaultValues }: Props) => {
   const [imageData, setImageData] = useState("");
+
+  const { selectedImage, previewImageURL, isChangedImage, selectImage, clearImage, previousImageURL } = useUploadImage(
+    defaultValues.profileImage ?? null
+  );
 
   const { toast } = useToast();
 
@@ -47,7 +55,7 @@ const EditChefForm = ({ defaultValues }: Props) => {
     urls: watchedValues.urls.filter((url) => url?.value !== ""),
   };
 
-  const changed = JSON.stringify(cleanedWatchedValues) !== JSON.stringify(defaultValues);
+  const isChangedFiled = JSON.stringify(cleanedWatchedValues) !== JSON.stringify(defaultValues);
 
   const {
     fields: urlsFields,
@@ -58,9 +66,57 @@ const EditChefForm = ({ defaultValues }: Props) => {
     control: form.control,
   });
 
-  const onSubmit = (data: z.infer<typeof editChefFormSchema>) => {
+  const onSubmit = (formData: z.infer<typeof editChefFormSchema>) => {
+    const supabase = createClientComponentClient<Database>();
+
     startTransition(async () => {
-      const result = await putChef(data);
+      if (selectedImage) {
+        // 編集画面でプロフィール画像が選択された場合
+        if (formData.profileImage) {
+          // supabaseストレージにプロフィール画像が存在する場合、選択した画像で置き換える
+          const path = formData.profileImage.split("/").slice(-1)[0];
+          const { error: replaceError } = await supabase.storage.from("chef").update(path, selectedImage);
+          // エラーチェック
+          if (replaceError) {
+            form.setError("profileImage", { type: "manual", message: replaceError.message });
+            return;
+          }
+        } else {
+          // supabaseストレージに選択した画像をアップロード
+          const { data: storageData, error: storageError } = await supabase.storage
+            .from("chef")
+            .upload(uuidv4(), selectedImage);
+          // エラーチェック
+          if (storageError) {
+            form.setError("profileImage", { type: "manual", message: storageError.message });
+            return;
+          }
+          const { data: urlData } = supabase.storage.from("chef").getPublicUrl(storageData.path);
+          formData.profileImage = urlData.publicUrl;
+        }
+
+        if (previousImageURL) {
+          const path = previousImageURL.split("/").slice(-1)[0];
+          const { error: removeError } = await supabase.storage.from("chef").remove([path]);
+
+          if (removeError) {
+            form.setError("profileImage", { type: "manual", message: removeError.message });
+            return;
+          }
+        }
+      } else {
+        if (formData.profileImage) {
+          const path = formData.profileImage.split("/").slice(-1)[0];
+          const { error: removeError } = await supabase.storage.from("chef").remove([path]);
+
+          if (removeError) {
+            form.setError("profileImage", { type: "manual", message: removeError.message });
+            return;
+          }
+        }
+        formData.profileImage = "";
+      }
+      const result = await putChef(formData);
 
       if (result.isSuccess) {
         toast({
@@ -77,6 +133,16 @@ const EditChefForm = ({ defaultValues }: Props) => {
         });
       }
     });
+  };
+
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    try {
+      selectImage(e.target.files);
+    } catch (error) {
+      if (error instanceof Error) {
+        form.setError("profileImage", { type: "manual", message: error.message });
+      }
+    }
   };
 
   return (
@@ -98,42 +164,56 @@ const EditChefForm = ({ defaultValues }: Props) => {
         />
         {/* プロフィール画像 */}
         <FormField
-          // TODO: 画像のバリデーション実装
           control={form.control}
           name="name"
-          render={({ field }) => (
-            <FormItem className=" ml-3 grid w-full space-y-0">
-              <FormLabel className="mb-1 text-lg font-bold">プロフィール画像（任意）</FormLabel>
-              <FormControl>
-                {imageData ? (
-                  <div className="relative">
-                    <button className="absolute" onClick={() => setImageData("")}>
-                      <Minus
-                        className="absolute -top-2 left-[86px] z-50 h-5 w-5 rounded-full bg-primary p-1 text-white"
-                        onClick={() => setImageData("")}
+          render={({ field }) => {
+            const { onChange, value, ...restFieldProps } = field;
+
+            return (
+              <FormItem className=" ml-3 grid w-full space-y-0">
+                <FormLabel className="mb-1 text-lg font-bold">プロフィール画像（任意）</FormLabel>
+                <FormControl>
+                  {previewImageURL ? (
+                    <div className="relative h-[100px] w-[100px]">
+                      <Image
+                        width={100}
+                        height={100}
+                        className="h-[100px] w-[100px] rounded-xl border border-border object-cover"
+                        src={previewImageURL}
+                        alt="プロフィール写真"
                       />
-                    </button>
-                    <Image
-                      width={100}
-                      height={100}
-                      className="h-[100px] w-[100px] rounded-xl border border-border object-cover"
-                      src={imageData}
-                      alt="image"
-                    />
-                  </div>
-                ) : (
-                  <label htmlFor="file">
-                    <input type="file" id="file" className="hidden" accept="image/*" {...form} />
-                    <div className="flex h-[100px] w-[100px] flex-col items-center justify-center gap-2 rounded-xl border border-border text-mauve11 hover:cursor-pointer">
-                      <p className="text-xs">画像を設定</p>
-                      <Plus className="w-5" />
+                      <button
+                        type="button"
+                        className="absolute -right-2 -top-1 z-50"
+                        onClick={() => {
+                          clearImage();
+                          form.setValue("profileImage", "");
+                        }}
+                      >
+                        <Minus className="h-5 w-5 rounded-full bg-tomato9 p-1 text-white" />
+                      </button>
                     </div>
-                  </label>
-                )}
-              </FormControl>
-              <FormMessage className="ml-3" />
-            </FormItem>
-          )}
+                  ) : (
+                    <label htmlFor="file" className="h-[100px] w-[100px]">
+                      <input
+                        type="file"
+                        id="file"
+                        className="hidden"
+                        accept="image/*"
+                        onChange={handleImageChange}
+                        {...restFieldProps}
+                      />
+                      <div className="flex h-full w-full flex-col items-center justify-center gap-2 rounded-xl border border-border text-mauve11 hover:cursor-pointer">
+                        <p className="text-xs">画像を設定</p>
+                        <Plus className="w-5" />
+                      </div>
+                    </label>
+                  )}
+                </FormControl>
+                <FormMessage className="ml-3" />
+              </FormItem>
+            );
+          }}
         />
         {/* 自己紹介 */}
         <FormField
@@ -193,7 +273,12 @@ const EditChefForm = ({ defaultValues }: Props) => {
         </div>
 
         <div className="flex gap-2 px-4">
-          <Button variant={"destructive"} className="flex-1 gap-2" type="submit" disabled={!changed}>
+          <Button
+            variant={"destructive"}
+            className="flex-1 gap-2"
+            type="submit"
+            disabled={isPending || !isChangedFiled || !isChangedImage}
+          >
             {isPending && <Spinner />} 保存する
           </Button>
           <Link

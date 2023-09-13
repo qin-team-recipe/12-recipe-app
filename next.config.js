@@ -19,9 +19,40 @@ const nextConfig = {
   },
   images: {
     disableStaticImages: true,
-    // TODO: 本番環境のドメインを設定する
-    domains: ["localhost", "localhost:54321", "images.unsplash.com", "uploads-ssl.webflow.com"],
+    domains: [
+      "localhost",
+      "localhost:54321",
+      "images.unsplash.com",
+      "uploads-ssl.webflow.com",
+      "https://nrsgpksufzptewzuupky.supabase.co",
+      "avatar.vercel.sh",
+    ],
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "*.supabase.co",
+        port: "",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "*.supabase.com",
+        port: "",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "*.unsplash.com",
+        port: "",
+        pathname: "/**",
+      },
+    ],
   },
 };
+
+if (process.env.NODE_ENV !== "development") {
+  nextConfig.images.loader = "custom";
+  nextConfig.images.loaderFile = "./src/components/supabase-image-loader.tsx";
+}
 
 module.exports = nextConfig;

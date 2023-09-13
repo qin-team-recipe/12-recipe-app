@@ -1,7 +1,7 @@
 import Image from "next/image";
 
 import { getRecipeById } from "@/src/actions/getRecipeById";
-import { sortSiteLinks } from "@/src/lib/utils";
+import { cn, sortSiteLinks } from "@/src/lib/utils";
 import { CircleEllipsis } from "lucide-react";
 
 import LinkToIconRenderer from "@/src/components/link-to-icon-renderer";
@@ -25,6 +25,7 @@ const RecipeHero = async ({ id }: Props) => {
     _count,
     isFavorite,
     user,
+    RecipeImage: recipeImage,
     isPublished,
   } = await getRecipeById(id);
 
@@ -35,20 +36,24 @@ const RecipeHero = async ({ id }: Props) => {
 
   return (
     <>
-      {/* // TODO: 画像を設定する */}
-      <div className="relative aspect-square">
-        <Image
-          src={
-            "https://images.unsplash.com/photo-1595295333158-4742f28fbd85?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80"
-          }
-          sizes="100vw"
-          className="h-auto w-full flex-1 object-cover"
-          alt={title}
-          width={800}
-          height={800}
-        />
-        <div className="absolute left-5 top-5 cursor-pointer stroke-white hover:stroke-mauve2">
-          <RouterBackButton size={32} className="rounded-full bg-[#040013]/[.48] text-mauve1" />
+      <div className={cn(recipeImage[0].recipeImage && "relative aspect-square")}>
+        {recipeImage[0].recipeImage && (
+          <Image
+            src={recipeImage[0].recipeImage}
+            sizes="100vw"
+            className="h-auto w-full object-cover"
+            alt={title}
+            width={160}
+            height={160}
+          />
+        )}
+        <div
+          className={cn(
+            recipeImage[0].recipeImage ? "absolute left-5 top-5" : "pl-4 pt-4",
+            "cursor-pointer stroke-white hover:stroke-mauve2"
+          )}
+        >
+          <RouterBackButton size={32} path="/my-page" className="rounded-full bg-[#040013]/[.48] text-mauve1" />
         </div>
       </div>
       <div className="grid gap-4 p-4">
@@ -83,7 +88,14 @@ const RecipeHero = async ({ id }: Props) => {
           <p className="text-mauve12">{description}</p>
         </div>
         <RecipeInfoStats
-          {...{ recipeId: id, isActive: isFavorite, favoriteCount: _count.likes, userId: user.id, userName: user.name }}
+          {...{
+            recipeId: id,
+            isActive: isFavorite,
+            favoriteCount: _count.likes,
+            userId: user.id,
+            userName: user.name,
+            profileImage: user.profileImage,
+          }}
         />
       </div>
     </>

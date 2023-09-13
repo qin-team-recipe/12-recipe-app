@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState, useTransition } from "react";
+import { useState, useTransition } from "react";
 import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
 
@@ -12,8 +12,6 @@ import { cn, getPlainTextFromJSON } from "@/src/lib/utils";
 import { Database } from "@/src/types/SupabaseTypes";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
-import { EditorProvider, generateHTML, useCurrentEditor, useEditor } from "@tiptap/react";
-import StarterKit from "@tiptap/starter-kit";
 import { useAtom } from "jotai";
 import { Minus, Plus, PlusIcon, X } from "lucide-react";
 import { useFieldArray, useForm } from "react-hook-form";
@@ -107,17 +105,16 @@ const CreateRecipeForm = ({ defaultValues, redirectPath }: Props) => {
 
     startTransition(async () => {
       if (selectedImage) {
-        // supabaseストレージに選択した画像をアップロード
         const { data: storageData, error: storageError } = await supabase.storage
-          .from("user")
+          .from("recipe")
           .upload(uuidv4(), selectedImage);
-        // エラーチェック
+
         if (storageError) {
           form.setError("recipeImage", { type: "manual", message: storageError.message });
           return;
         }
-        // ユーザテーブルのプロフィール画像を設定するためにsupabaseストレージのURLを取得する
-        const { data: urlData } = supabase.storage.from("user").getPublicUrl(storageData.path);
+
+        const { data: urlData } = supabase.storage.from("recipe").getPublicUrl(storageData.path);
         data.recipeImage = urlData.publicUrl;
       }
 
@@ -301,15 +298,25 @@ const CreateRecipeForm = ({ defaultValues, redirectPath }: Props) => {
           control={form.control}
           name="recipeImage"
           render={({ field }) => {
-            // type="file"のinputタグにvalueを設定すると以下のエラーが発生するためfieldから抽出する
-            // InvalidStateError: Failed to set the 'value' property on 'HTMLInputElement': This input element accepts a filename, which may only be programmatically set to the empty string.
             const { onChange, value, ...restFieldProps } = field;
+
             return (
               <FormItem className=" ml-3 grid space-y-0">
-                <FormLabel className="mb-1 text-lg font-bold">プロフィール画像（任意）</FormLabel>
+                <FormLabel className="mb-1 text-lg font-bold">画像（任意）</FormLabel>
                 <FormControl>
                   {previewImageURL ? (
-                    <PreviewImage onClick={clearImage} previewImage={previewImageURL} />
+                    <div className="relative h-[100px] w-[100px]">
+                      <Image
+                        width={100}
+                        height={100}
+                        className="h-[100px] w-[100px] rounded-xl border border-border object-cover"
+                        src={previewImageURL}
+                        alt="プロフィール写真"
+                      />
+                      <button type="button" className="absolute -right-2 -top-1 z-50" onClick={clearImage}>
+                        <Minus className="h-5 w-5 rounded-full bg-tomato9 p-1 text-white" />
+                      </button>
+                    </div>
                   ) : (
                     <label htmlFor="file" className="h-[100px] w-[100px]">
                       <input
@@ -391,12 +398,7 @@ const CreateRecipeForm = ({ defaultValues, redirectPath }: Props) => {
         </div>
 
         <div className="flex px-4">
-          <Button
-            variant={"destructive"}
-            className="flex-1 gap-2"
-            type="submit"
-            disabled={isPending || !form.formState.isValid}
-          >
+          <Button variant={"destructive"} className="flex-1 gap-2" type="submit" disabled={isPending}>
             {isPending && <Spinner />} 保存する
           </Button>
         </div>
@@ -406,22 +408,3 @@ const CreateRecipeForm = ({ defaultValues, redirectPath }: Props) => {
 };
 
 export default CreateRecipeForm;
-
-type PreviewImageProps = {
-  onClick: () => void;
-  previewImage: string;
-};
-const PreviewImage = ({ onClick, previewImage }: PreviewImageProps) => (
-  <div className="relative h-[100px] w-[100px]">
-    <Image
-      width={100}
-      height={100}
-      className="h-[100px] w-[100px] rounded-xl border border-border object-cover"
-      src={previewImage}
-      alt="プロフィール写真"
-    />
-    <button type="button" className="absolute -right-2 -top-1 z-50" onClick={onClick}>
-      <Minus className="h-5 w-5 rounded-full bg-tomato9 p-1 text-white" />
-    </button>
-  </div>
-);

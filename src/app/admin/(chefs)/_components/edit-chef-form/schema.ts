@@ -8,7 +8,7 @@ export const editChefFormSchema = z.object({
     message: "シェフ名は必須です",
   }),
 
-  // TODO: 画像のバリデーション
+  profileImage: z.string().optional(),
 
   bio: z
     .string()

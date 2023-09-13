@@ -6,10 +6,14 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 import { kToastDuration } from "@/src/constants/constants";
+import { useUploadImage } from "@/src/hooks/useUploadImage";
 import { cn } from "@/src/lib/utils";
+import { Database } from "@/src/types/SupabaseTypes";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { Minus, Plus, PlusIcon, X } from "lucide-react";
 import { useFieldArray, useForm } from "react-hook-form";
+import { v4 as uuidv4 } from "uuid";
 import { z } from "zod";
 
 import { Button, buttonVariants } from "@/src/components/ui/button";
@@ -23,8 +27,8 @@ import { createChefFormSchema, CreateChefFormValues } from ".";
 import { postChef } from "../../../../../actions/postChef";
 
 const CreateChefForm = () => {
-  const [imageData, setImageData] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const { selectedImage, previewImageURL, isChangedImage, selectImage, clearImage } = useUploadImage(null);
 
   const { toast } = useToast();
 
@@ -32,11 +36,14 @@ const CreateChefForm = () => {
 
   const [isPending, startTransition] = useTransition();
 
+  const supabase = createClientComponentClient<Database>();
+
   const form = useForm<CreateChefFormValues>({
     resolver: zodResolver(createChefFormSchema),
     defaultValues: {
       name: "",
       bio: "",
+      profileImage: "",
       urls: [
         {
           value: "",
@@ -59,23 +66,65 @@ const CreateChefForm = () => {
     setIsSubmitting(true);
 
     startTransition(async () => {
+      if (selectedImage) {
+        const { data: storageData, error: storageError } = await supabase.storage
+          .from("chef")
+          .upload(uuidv4(), selectedImage);
+
+        if (storageError) {
+          form.setError("profileImage", { type: "manual", message: storageError.message });
+          setIsSubmitting(false);
+          return;
+        }
+
+        const { data: urlData } = supabase.storage.from("chef").getPublicUrl(storageData.path);
+        if (urlData && urlData.publicUrl) {
+          data.profileImage = urlData.publicUrl;
+        } else {
+          form.setError("profileImage", { type: "manual", message: "画像のURLの取得に失敗しました" });
+          setIsSubmitting(false);
+          return;
+        }
+      }
       const result = await postChef(data);
 
       if (result.isSuccess) {
         toast({
           variant: "default",
-          title: "プロフィールを更新しました🎉",
+          title: "シェフの登録が完了しました🎉",
           duration: kToastDuration,
         });
         router.push(`/admin`);
       } else {
         toast({
           variant: "destructive",
-          title: "プロフィールの更新に失敗しました🥲",
+          title: "シェフの登録に失敗しました😢",
           duration: kToastDuration,
         });
       }
     });
+  };
+
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    try {
+      selectImage(e.target.files);
+
+      // 画像が選択されたときに profileImage フィールドの値を更新
+      if (e.target.files && e.target.files[0]) {
+        const file = e.target.files[0];
+        const reader = new FileReader();
+
+        reader.onloadend = () => {
+          form.setValue("profileImage", String(reader.result));
+        };
+
+        reader.readAsDataURL(file);
+      }
+    } catch (error) {
+      if (error instanceof Error) {
+        form.setError("profileImage", { type: "manual", message: error.message });
+      }
+    }
   };
 
   return (
@@ -97,42 +146,55 @@ const CreateChefForm = () => {
         />
         {/* プロフィール画像 */}
         <FormField
-          // TODO: 画像のバリデーション実装
           control={form.control}
-          name="name"
-          render={({ field }) => (
-            <FormItem className=" ml-3 grid w-full space-y-0">
-              <FormLabel className="mb-1 text-lg font-bold">プロフィール画像（任意）</FormLabel>
-              <FormControl>
-                {imageData ? (
-                  <div className="relative">
-                    <button className="absolute" onClick={() => setImageData("")}>
-                      <Minus
-                        className="absolute -top-2 left-[86px] z-50 h-5 w-5 rounded-full bg-primary p-1 text-white"
-                        onClick={() => setImageData("")}
+          name="profileImage"
+          render={({ field }) => {
+            const { onChange, value, ...restFieldProps } = field;
+            return (
+              <FormItem className=" ml-3 grid w-full space-y-0">
+                <FormLabel className="mb-1 text-lg font-bold">プロフィール画像</FormLabel>
+                <FormControl>
+                  {previewImageURL ? (
+                    <div className="relative h-[100px] w-[100px]">
+                      <Image
+                        width={100}
+                        height={100}
+                        className="h-[100px] w-[100px] rounded-xl border border-border object-cover"
+                        src={previewImageURL}
+                        alt="シェフのプロフィール画像"
                       />
-                    </button>
-                    <Image
-                      width={100}
-                      height={100}
-                      className="h-[100px] w-[100px] rounded-xl border border-border object-cover"
-                      src={imageData}
-                      alt="image"
-                    />
-                  </div>
-                ) : (
-                  <label htmlFor="file">
-                    <input type="file" id="file" className="hidden" accept="image/*" {...form} />
-                    <div className="flex h-[100px] w-[100px] flex-col items-center justify-center gap-2 rounded-xl border border-border text-mauve11 hover:cursor-pointer">
-                      <p className="text-xs">画像を設定</p>
-                      <Plus className="w-5" />
+                      <button
+                        type="button"
+                        className="absolute -right-2 -top-1 z-50"
+                        onClick={() => {
+                          clearImage();
+                          form.setValue("profileImage", "");
+                        }}
+                      >
+                        <Minus className="h-5 w-5 rounded-full bg-tomato9 p-1 text-white" />
+                      </button>
                     </div>
-                  </label>
-                )}
-              </FormControl>
-              <FormMessage className="ml-3" />
-            </FormItem>
-          )}
+                  ) : (
+                    <label htmlFor="file" className="h-[100px] w-[100px]">
+                      <input
+                        type="file"
+                        id="file"
+                        className="hidden"
+                        accept="image/*"
+                        onChange={handleImageChange}
+                        {...restFieldProps}
+                      />
+                      <div className="flex h-full w-full flex-col items-center justify-center gap-2 rounded-xl border border-border text-mauve11 hover:cursor-pointer">
+                        <p className="text-xs">画像を設定</p>
+                        <Plus className="w-5" />
+                      </div>
+                    </label>
+                  )}
+                </FormControl>
+                <FormMessage className="ml-3" />
+              </FormItem>
+            );
+          }}
         />
         {/* 自己紹介 */}
         <FormField

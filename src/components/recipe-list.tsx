@@ -1,29 +1,38 @@
-import { getMyRecipes } from "@/src/actions/getMyRecipes";
-
 import RecipeCard from "@/src/components/recipe-card";
 
-import { ResolveReturnType } from "../types/utilityTypes";
-
 type Props = {
-  recipes: ResolveReturnType<typeof getMyRecipes>;
+  recipes: {
+    id: string;
+    _count: {
+      likes: number;
+    };
+    isPublished: boolean;
+    description: string;
+    title: string;
+    RecipeImage: {
+      recipeImage: string;
+    }[];
+  }[];
   path: string;
 };
 
 const RecipeList = ({ recipes, path }: Props) => {
   return (
     <>
-      {recipes.map(({ id, _count, description, title, isPublished, RecipeImage }) => (
-        <li key={id} className="flex flex-col">
-          <RecipeCard
-            path={`/${path}/${id}`}
-            favorites={_count.likes}
-            description={description}
-            isPublished={isPublished}
-            title={title}
-            imageUrl={RecipeImage[0].recipeImage}
-          />
-        </li>
-      ))}
+      {recipes.map(({ id, _count, description, title, isPublished, RecipeImage }) => {
+        return (
+          <li key={id} className="flex flex-col">
+            <RecipeCard
+              path={`/${path}/${id}`}
+              favorites={_count.likes}
+              description={description}
+              isPublished={isPublished}
+              title={title}
+              imageUrl={RecipeImage[0].recipeImage}
+            />
+          </li>
+        );
+      })}
     </>
   );
 };
