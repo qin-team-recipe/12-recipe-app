@@ -45,7 +45,7 @@ const AdminLoginForm = () => {
         if (error) {
           toast({
             variant: "destructive",
-            title: error.message,
+            title: "メールアドレスまたはパスワードが間違っています🥲",
             duration: kToastDuration,
           });
           return;
@@ -56,7 +56,7 @@ const AdminLoginForm = () => {
         if (role === undefined || role !== "ADMIN") {
           toast({
             variant: "destructive",
-            title: "管理者の権限を持つアカウントでログインしてください。",
+            title: "管理者の権限を持つアカウントでログインしてください🥲",
             duration: kToastDuration,
           });
           return;
@@ -66,7 +66,7 @@ const AdminLoginForm = () => {
       } catch (error) {
         toast({
           variant: "destructive",
-          title: "エラーが発生しました。",
+          title: "予期せぬエラーが発生しました🥲",
           duration: kToastDuration,
         });
         return;

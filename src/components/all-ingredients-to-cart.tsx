@@ -1,12 +1,11 @@
 "use client";
 
-import { experimental_useOptimistic as useOptimistic, useState } from "react";
+import { experimental_useOptimistic as useOptimistic } from "react";
 
 import { postAllToCart } from "@/src/actions/postAllToCart";
 import { cn } from "@/src/lib/utils";
 import { ShoppingCart } from "lucide-react";
 
-import { Button } from "@/src/components/ui/button";
 import { useToast } from "@/src/components/ui/use-toast";
 
 type Props = {
