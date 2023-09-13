@@ -28,6 +28,11 @@ export const getChefById = async (
               RecipeImage: true,
             },
           },
+          RecipeImage: {
+            select: {
+              recipeImage: true,
+            },
+          },
         },
         orderBy: {
           createdAt: "desc",

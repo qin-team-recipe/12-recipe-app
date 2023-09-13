@@ -15,7 +15,16 @@ import { editRecipeFormSchema } from "@/src/components/edit-recipe-form";
 import { EditRecipeFormValues } from "@/src/components/edit-recipe-form/schema";
 
 export const putRecipe = zact(editRecipeFormSchema)(
-  async ({ recipeId, title, bio, ingredients, urls, servingCount, instructions }): Promise<ActionsResult> => {
+  async ({
+    recipeId,
+    title,
+    bio,
+    ingredients,
+    urls,
+    servingCount,
+    instructions,
+    recipeImage,
+  }): Promise<ActionsResult> => {
     const cookieStore = cookies();
     const {
       data: { session },
@@ -30,6 +39,7 @@ export const putRecipe = zact(editRecipeFormSchema)(
           Ingredient: true,
           Instruction: true,
           RecipeLink: true,
+          RecipeImage: true,
         },
       });
 
@@ -52,6 +62,31 @@ export const putRecipe = zact(editRecipeFormSchema)(
       // レシピリンクに関する処理
       const { toBeCreatedUrls, toBeDeletedUrls, toBeUpdatedUrls } = processUrls(existingRecipe, urls);
 
+      // レシピ画像に関する処理
+      const existingRecipeImage = existingRecipe.RecipeImage[0]?.recipeImage;
+
+      let recipeImageUpdateData = {};
+      if (recipeImage) {
+        if (existingRecipeImage) {
+          // 既存の画像があり、新しい画像が提供されている場合、既存の画像を更新
+          recipeImageUpdateData = {
+            RecipeImage: {
+              update: {
+                where: { id: existingRecipe.RecipeImage[0].id },
+                data: { recipeImage },
+              },
+            },
+          };
+        } else {
+          // 既存の画像がなく、新しい画像が提供されている場合、新しい画像を追加
+          recipeImageUpdateData = {
+            RecipeImage: {
+              create: { recipeImage },
+            },
+          };
+        }
+      }
+
       await prisma.recipe.update({
         where: {
           id: recipeId,
@@ -60,6 +95,7 @@ export const putRecipe = zact(editRecipeFormSchema)(
           title,
           description: bio,
           servingCount,
+          ...recipeImageUpdateData,
           Ingredient: {
             deleteMany: toBeDeletedIngredients.map((ingredient) => ({ id: ingredient.id })),
             updateMany: toBeUpdatedIngredients.map((ingredient) => ({
