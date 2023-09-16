@@ -19,7 +19,7 @@ import Spinner from "./ui/spinner";
 type Props = {
   title: string;
   message: string;
-  onConfirm: () => void;
+  onConfirm: () => Promise<void>;
   confirmLabel: string;
   onCancel?: () => void;
   cancelLabel: string;
@@ -59,8 +59,9 @@ const SelectableDialog = ({
             className="flex-1"
             variant="outline"
             onClick={() => {
-              startTransition(() => {
-                onConfirm();
+              startTransition(async () => {
+                await onConfirm();
+                setIsOpen(false);
               });
             }}
           >

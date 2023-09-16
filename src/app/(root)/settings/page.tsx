@@ -28,33 +28,47 @@ const Page = async () => {
           </div>
         }
       />
-      <section className="mt-5 px-4">
-        <h2 className="mb-3 text-lg font-bold">利用規約やお問い合わせ</h2>
-        <Link href={"settings/terms"} className="flex h-12 items-center justify-between">
+      <section className="mt-5 px-2">
+        <h2 className="mb-3 px-2 text-lg font-bold">利用規約やお問い合わせ</h2>
+        <Link
+          href={"settings/terms"}
+          className="flex h-12 items-center justify-between rounded-md px-2 hover:bg-mauve4"
+        >
           利用規約
           <ChevronRight size={20} />
         </Link>
-        <Link href={"/privacy_policy"} className="flex h-12 items-center justify-between">
+        <Link
+          href={"/privacy_policy"}
+          className="flex h-12 items-center justify-between rounded-md px-2 hover:bg-mauve4"
+        >
           プライバシーポリシー
           <ChevronRight size={20} />
         </Link>
-        <a href="https://google.com" target="_blank" className="flex h-12 items-center justify-between">
+        <a
+          href="https://google.com"
+          target="_blank"
+          className="flex h-12 items-center justify-between rounded-md px-2 hover:bg-mauve4"
+        >
           会社概要
           <ArrowUpRight size={20} />
         </a>
-        <a href="https://youtube.com" target="_blank" className="flex h-12 items-center justify-between">
+        <a
+          href="https://youtube.com"
+          target="_blank"
+          className="flex h-12 items-center justify-between rounded-md px-2 hover:bg-mauve4"
+        >
           お問い合わせ
           <ArrowUpRight size={20} />
         </a>
       </section>
       {session && (
         <>
-          <section className="mt-5 px-4">
-            <h2 className="mb-3 text-lg font-bold">アカウントの操作</h2>
+          <section className="mt-5 px-2">
+            <h2 className="mb-3 px-2 text-lg font-bold">アカウントの操作</h2>
             <LogoutTile />
           </section>
-          <section className="mt-5 px-4">
-            <h2 className="mb-3 text-lg font-bold">取り消しができない操作</h2>
+          <section className="mt-5 px-2">
+            <h2 className="mb-3 px-2 text-lg font-bold">取り消しができない操作</h2>
             <DeleteUserTile />
           </section>
         </>
