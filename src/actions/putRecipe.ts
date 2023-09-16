@@ -85,6 +85,13 @@ export const putRecipe = zact(editRecipeFormSchema)(
             },
           };
         }
+      } else if (existingRecipeImage) {
+        // ユーザーがレシピ画像を削除した場合
+        recipeImageUpdateData = {
+          RecipeImage: {
+            delete: { id: existingRecipe.RecipeImage[0].id },
+          },
+        };
       }
 
       await prisma.recipe.update({

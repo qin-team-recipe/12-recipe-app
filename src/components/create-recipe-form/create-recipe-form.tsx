@@ -398,7 +398,7 @@ const CreateRecipeForm = ({ defaultValues, redirectPath }: Props) => {
         </div>
 
         <div className="flex px-4">
-          <Button variant={"destructive"} className="flex-1 gap-2" type="submit" disabled={isPending}>
+          <Button variant={"destructive"} className="flex-1 gap-2" type="submit" disabled={isPending || isSubmitting}>
             {isPending && <Spinner />} 保存する
           </Button>
         </div>

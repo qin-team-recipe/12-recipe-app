@@ -59,7 +59,7 @@ const EditRecipeForm = ({ defaultValues, navigateTo }: Props) => {
     instructions: watchedValues.instructions.filter((instruction) => instruction?.value !== ""),
   };
 
-  const changed = JSON.stringify(cleanedWatchedValues) !== JSON.stringify(defaultValues);
+  const isChangedFiled = JSON.stringify(cleanedWatchedValues) !== JSON.stringify(defaultValues);
 
   const {
     fields: urlsFields,
@@ -88,79 +88,71 @@ const EditRecipeForm = ({ defaultValues, navigateTo }: Props) => {
     control: form.control,
   });
 
-  const onSubmit = (formData: z.infer<typeof editRecipeFormSchema>) => {
-    const supabase = createClientComponentClient<Database>();
+  const supabase = createClientComponentClient<Database>();
 
+  const uploadImage = async (image: File) => {
+    const { data: storageData, error: storageError } = await supabase.storage.from("recipe").upload(uuidv4(), image);
+    if (storageError) {
+      throw storageError;
+    }
+    const { data: urlData } = supabase.storage.from("recipe").getPublicUrl(storageData.path);
+    return urlData.publicUrl;
+  };
+
+  const updateImage = async (path: string, image: File) => {
+    const { error: replaceError } = await supabase.storage.from("recipe").update(path, image);
+    if (replaceError) {
+      throw replaceError;
+    }
+  };
+
+  const removeImage = async (url: string) => {
+    const path = url.split("/").slice(-1)[0];
+    const { error: removeError } = await supabase.storage.from("recipe").remove([path]);
+    if (removeError) {
+      throw removeError;
+    }
+  };
+
+  const onSubmit = (formData: z.infer<typeof editRecipeFormSchema>) => {
     setIsSubmitting(true);
 
     startTransition(async () => {
-      if (selectedImage) {
-        if (formData.recipeImage) {
-          // supabaseストレージにプロフィール画像が存在する場合、選択した画像で置き換える
-          const path = formData.recipeImage.split("/").slice(-1)[0];
-          const { error: replaceError } = await supabase.storage.from("recipe").update(path, selectedImage);
-          // エラーチェック
-          if (replaceError) {
-            console.error(replaceError);
-            form.setError("recipeImage", { type: "manual", message: replaceError.message });
-            return;
+      try {
+        if (selectedImage) {
+          if (formData.recipeImage) {
+            await updateImage(formData.recipeImage.split("/").slice(-1)[0], selectedImage);
+          } else {
+            formData.recipeImage = await uploadImage(selectedImage);
           }
-        } else {
-          // supabaseストレージに選択した画像をアップロード
-          const { data: storageData, error: storageError } = await supabase.storage
-            .from("user")
-            .upload(uuidv4(), selectedImage);
-          // エラーチェック
-          if (storageError) {
-            console.error(storageError);
-            form.setError("recipeImage", { type: "manual", message: storageError.message });
-            return;
-          }
-          // ユーザテーブルのプロフィール画像を設定するためにsupabaseストレージのURLを取得する
-          const { data: urlData } = supabase.storage.from("recipe").getPublicUrl(storageData.path);
-          formData.recipeImage = urlData.publicUrl;
         }
 
         if (previousImageURL) {
-          const path = previousImageURL.split("/").slice(-1)[0];
-          const { error: deleteError } = await supabase.storage.from("recipe").remove([path]);
-          // エラーチェック
-          if (deleteError) {
-            console.error(deleteError);
-            form.setError("recipeImage", { type: "manual", message: deleteError.message });
-            return;
-          }
+          await removeImage(previousImageURL);
         }
-      } else {
-        // プロフィール画像が選択されていない場合
-        if (formData.recipeImage) {
-          // 既にプロフィール画像が存在する場合はsupabaseストレージからプロフィール画像を削除
-          const path = formData.recipeImage.split("/").slice(-1)[0];
-          const { error: removeError } = await supabase.storage.from("user").remove([path]);
-          if (removeError) {
-            console.error(removeError);
-            form.setError("recipeImage", { type: "manual", message: removeError.message });
-            return;
-          }
+
+        const result = await putRecipe(formData);
+
+        if (result.isSuccess) {
+          toast({
+            variant: "default",
+            title: result.message,
+            duration: 3000,
+          });
+
+          router.push(navigateTo);
+        } else {
+          toast({
+            variant: "destructive",
+            title: result.error,
+            duration: 3000,
+          });
         }
-        formData.recipeImage = "";
-      }
-      const result = await putRecipe(formData);
-
-      if (result.isSuccess) {
-        toast({
-          variant: "default",
-          title: result.message,
-          duration: 3000,
-        });
-
-        router.push(navigateTo);
-      } else {
-        toast({
-          variant: "destructive",
-          title: result.error,
-          duration: 3000,
-        });
+      } catch (error) {
+        if (error instanceof Error) {
+          console.error(error);
+          form.setError("recipeImage", { type: "manual", message: error.message });
+        }
       }
     });
   };
@@ -416,7 +408,7 @@ const EditRecipeForm = ({ defaultValues, navigateTo }: Props) => {
             variant={"destructive"}
             className="flex-1 gap-2"
             type="submit"
-            disabled={!changed || isPending || isSubmitting}
+            disabled={isPending || (!isChangedFiled && !isChangedImage) || isSubmitting}
           >
             {isPending && <Spinner />} 保存する
           </Button>

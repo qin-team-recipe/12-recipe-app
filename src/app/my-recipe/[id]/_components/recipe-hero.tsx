@@ -27,10 +27,12 @@ const RecipeHero = async ({ id }: Props) => {
 
   const sortedRecipeLinks = sortSiteLinks(recipeLinks.map((value) => value.linkUrl));
 
+  const hasRecipeImage = recipeImage && recipeImage[0] && recipeImage[0].recipeImage;
+
   return (
     <>
-      <div className={cn(recipeImage[0].recipeImage && "relative aspect-square")}>
-        {recipeImage[0].recipeImage && (
+      <div className={cn(hasRecipeImage && "relative aspect-square")}>
+        {hasRecipeImage && (
           <BlurImage
             src={recipeImage[0].recipeImage}
             className="h-auto w-full object-cover"
@@ -44,7 +46,7 @@ const RecipeHero = async ({ id }: Props) => {
         )}
         <div
           className={cn(
-            recipeImage[0].recipeImage ? "absolute left-5 top-5" : "pl-4 pt-4",
+            hasRecipeImage ? "absolute left-5 top-5" : "pl-4 pt-4",
             "cursor-pointer stroke-white hover:stroke-mauve2"
           )}
         >

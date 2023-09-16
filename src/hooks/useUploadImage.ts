@@ -35,9 +35,13 @@ export const useUploadImage = (defaultImageURL: string | null) => {
   );
 
   const clearImage = () => {
-    setPreviewImageURL(previewImageURL || defaultImageURL);
-    setSelectedImage(null);
+    if (previewImageURL) {
+      setPreviousImageURL(previewImageURL);
+    } else {
+      setPreviousImageURL(defaultImageURL);
+    }
     setPreviewImageURL(null);
+    setSelectedImage(null);
   };
 
   const isChangedImage = previewImageURL !== defaultImageURL;

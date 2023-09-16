@@ -31,7 +31,7 @@ type Props = {
 };
 
 const EditChefForm = ({ defaultValues }: Props) => {
-  const [imageData, setImageData] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const { selectedImage, previewImageURL, isChangedImage, selectImage, clearImage, previousImageURL } = useUploadImage(
     defaultValues.profileImage ?? null
@@ -66,71 +66,70 @@ const EditChefForm = ({ defaultValues }: Props) => {
     control: form.control,
   });
 
+  const supabase = createClientComponentClient<Database>();
+
+  const uploadImage = async (image: File) => {
+    const { data: storageData, error: storageError } = await supabase.storage.from("chef").upload(uuidv4(), image);
+    if (storageError) {
+      throw storageError;
+    }
+    const { data: urlData } = supabase.storage.from("chef").getPublicUrl(storageData.path);
+    return urlData.publicUrl;
+  };
+
+  const updateImage = async (path: string, image: File) => {
+    const { error: replaceError } = await supabase.storage.from("chef").update(path, image);
+    if (replaceError) {
+      throw replaceError;
+    }
+  };
+
+  const removeImage = async (url: string) => {
+    const path = url.split("/").slice(-1)[0];
+    const { error: removeError } = await supabase.storage.from("chef").remove([path]);
+    if (removeError) {
+      throw removeError;
+    }
+  };
+
   const onSubmit = (formData: z.infer<typeof editChefFormSchema>) => {
-    const supabase = createClientComponentClient<Database>();
+    setIsSubmitting(true);
 
     startTransition(async () => {
-      if (selectedImage) {
-        // 編集画面でプロフィール画像が選択された場合
-        if (formData.profileImage) {
-          // supabaseストレージにプロフィール画像が存在する場合、選択した画像で置き換える
-          const path = formData.profileImage.split("/").slice(-1)[0];
-          const { error: replaceError } = await supabase.storage.from("chef").update(path, selectedImage);
-          // エラーチェック
-          if (replaceError) {
-            form.setError("profileImage", { type: "manual", message: replaceError.message });
-            return;
+      try {
+        if (selectedImage) {
+          if (formData.profileImage) {
+            await updateImage(formData.profileImage.split("/").slice(-1)[0], selectedImage);
+          } else {
+            formData.profileImage = await uploadImage(selectedImage);
           }
-        } else {
-          // supabaseストレージに選択した画像をアップロード
-          const { data: storageData, error: storageError } = await supabase.storage
-            .from("chef")
-            .upload(uuidv4(), selectedImage);
-          // エラーチェック
-          if (storageError) {
-            form.setError("profileImage", { type: "manual", message: storageError.message });
-            return;
-          }
-          const { data: urlData } = supabase.storage.from("chef").getPublicUrl(storageData.path);
-          formData.profileImage = urlData.publicUrl;
         }
 
         if (previousImageURL) {
-          const path = previousImageURL.split("/").slice(-1)[0];
-          const { error: removeError } = await supabase.storage.from("chef").remove([path]);
-
-          if (removeError) {
-            form.setError("profileImage", { type: "manual", message: removeError.message });
-            return;
-          }
+          await removeImage(previousImageURL);
         }
-      } else {
-        if (formData.profileImage) {
-          const path = formData.profileImage.split("/").slice(-1)[0];
-          const { error: removeError } = await supabase.storage.from("chef").remove([path]);
 
-          if (removeError) {
-            form.setError("profileImage", { type: "manual", message: removeError.message });
-            return;
-          }
+        const result = await putChef(formData);
+
+        if (result.isSuccess) {
+          toast({
+            variant: "default",
+            title: "シェフのプロフィールを更新しました🎉",
+            duration: kToastDuration,
+          });
+          router.push(`/admin`);
+        } else {
+          toast({
+            variant: "destructive",
+            title: "シェフのプロフィールの更新に失敗しました🥲",
+            duration: kToastDuration,
+          });
         }
-        formData.profileImage = "";
-      }
-      const result = await putChef(formData);
-
-      if (result.isSuccess) {
-        toast({
-          variant: "default",
-          title: "プロフィールを更新しました🎉",
-          duration: kToastDuration,
-        });
-        router.push(`/admin`);
-      } else {
-        toast({
-          variant: "destructive",
-          title: "プロフィールの更新に失敗しました🥲",
-          duration: kToastDuration,
-        });
+      } catch (error) {
+        if (error instanceof Error) {
+          console.error(error);
+          form.setError("profileImage", { type: "manual", message: error.message });
+        }
       }
     });
   };
@@ -277,7 +276,7 @@ const EditChefForm = ({ defaultValues }: Props) => {
             variant={"destructive"}
             className="flex-1 gap-2"
             type="submit"
-            disabled={isPending || !isChangedFiled || !isChangedImage}
+            disabled={isPending || !isChangedFiled || !isChangedImage || isSubmitting}
           >
             {isPending && <Spinner />} 保存する
           </Button>

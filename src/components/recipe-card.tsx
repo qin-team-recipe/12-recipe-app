@@ -8,7 +8,7 @@ import BlurImage from "./blur-image";
 
 type Props = {
   path: string;
-  imageUrl?: string;
+  imageUrl?: string | null;
   title: string;
   description: string;
   favorites: number;

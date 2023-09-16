@@ -20,6 +20,7 @@ const RecipeList = ({ recipes, path }: Props) => {
   return (
     <>
       {recipes.map(({ id, _count, description, title, isPublished, RecipeImage }) => {
+        const imageUrl = RecipeImage && RecipeImage.length > 0 ? RecipeImage[0].recipeImage : null;
         return (
           <li key={id} className="flex flex-col">
             <RecipeCard
@@ -28,7 +29,7 @@ const RecipeList = ({ recipes, path }: Props) => {
               description={description}
               isPublished={isPublished}
               title={title}
-              imageUrl={RecipeImage[0].recipeImage}
+              imageUrl={imageUrl}
             />
           </li>
         );
