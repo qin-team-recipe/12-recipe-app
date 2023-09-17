@@ -19,7 +19,6 @@ const CloseButton = () => {
   const [{ isDraft, draftRecipeFormValues }, setIsEditing] = useAtom(recipeFormStateAtom);
 
   return (
-    // TODO: 下書き保存の処理を実装する
     <div className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full text-mauve12">
       {isDraft ? (
         <SelectableDialog

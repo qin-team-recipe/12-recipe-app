@@ -3,9 +3,9 @@ generator client {
 }
 
 datasource db {
-  provider  = "postgresql"
-  url       = env("DATABASE_URL")
-  directUrl = env("DIRECT_URL")
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+  // directUrl = env("DIRECT_URL")
 }
 
 enum RoleType {
@@ -39,7 +39,7 @@ model Recipe {
   title        String
   description  String        @db.Text
   likes        Favorite[]
-  user         User          @relation(fields: [userId], references: [id])
+  user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId       String        @map("user_id")
   servingCount Int           @map("serving_count")
   RecipeImage  RecipeImage[]
@@ -57,7 +57,7 @@ model DraftRecipe {
   id               String             @id @default(cuid())
   title            String?
   description      String?            @db.Text
-  user             User               @relation(fields: [userId], references: [id])
+  user             User               @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId           String             @map("user_id")
   servingCount     Int?               @map("serving_count")
   DraftRecipeImage DraftRecipeImage[]
@@ -161,7 +161,7 @@ model Ingredient {
 /// レシピのお気に入り
 model Favorite {
   id        Int      @id @default(autoincrement())
-  user      User     @relation(fields: [userId], references: [id])
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId    String   @map("user_id")
   recipe    Recipe   @relation(fields: [recipeId], references: [id])
   recipeId  String   @map("recipe_id")
@@ -175,9 +175,9 @@ model Favorite {
 /// ユーザーのフォロー(ユーザーがシェフをフォローする）
 model UserFollower {
   id         Int      @id @default(autoincrement())
-  follower   User     @relation("FollowerToFollowed", fields: [followerId], references: [id])
+  follower   User     @relation("FollowerToFollowed", fields: [followerId], references: [id], onDelete: Cascade)
   followerId String   @map("follower_id")
-  followed   User     @relation("FollowedToFollower", fields: [followedId], references: [id])
+  followed   User     @relation("FollowedToFollower", fields: [followedId], references: [id], onDelete: Cascade)
   followedId String   @map("followed_id")
   createdAt  DateTime @default(now()) @map("created_at") @db.Timestamptz(3)
   updatedAt  DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(3)
@@ -199,7 +199,7 @@ model UserLink {
 /// 自分メモ
 model Memo {
   id          Int      @id @default(autoincrement())
-  user        User     @relation(fields: [userId], references: [id])
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId      String   @map("user_id")
   title       String   @db.Text
   isCompleted Boolean  @default(false)
@@ -212,7 +212,7 @@ model Memo {
 model CartList {
   id           Int            @id @default(autoincrement())
   displayOrder Int            @default(0) @map("display_order")
-  user         User           @relation(fields: [userId], references: [id])
+  user         User           @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId       String         @map("user_id")
   recipe       Recipe         @relation(fields: [recipeId], references: [id], onDelete: Cascade)
   recipeId     String         @map("recipe_id")

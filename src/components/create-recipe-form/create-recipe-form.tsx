@@ -1,15 +1,16 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { useMemo, useState, useTransition } from "react";
 import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
 
 import { postRecipe } from "@/src/actions/postRecipe";
 import { recipeFormStateAtom } from "@/src/atoms/draftRecipeFormValuesAtom";
 import { kToastDuration } from "@/src/constants/constants";
-import { cn } from "@/src/lib/utils";
+import { cn, getPlainTextFromJSON } from "@/src/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ContentState, convertFromRaw, EditorState } from "draft-js";
+import { EditorProvider, generateHTML, useCurrentEditor, useEditor } from "@tiptap/react";
+import StarterKit from "@tiptap/starter-kit";
 import { useAtom } from "jotai";
 import { Minus, Plus, PlusIcon, X } from "lucide-react";
 import { useFieldArray, useForm } from "react-hook-form";
@@ -83,38 +84,6 @@ const CreateRecipeForm = ({ defaultValues, redirectPath }: Props) => {
     name: "instructions",
     control: form.control,
   });
-
-  const formatJSONDisplay = (jsonString: any) => {
-    if (!jsonString) {
-      return "";
-    }
-
-    const parsedData = JSON.parse(jsonString);
-    const blocks = parsedData.blocks;
-
-    let displayText = "";
-
-    for (const block of blocks) {
-      if (block.text) {
-        switch (block.type) {
-          case "unstyled":
-            displayText += block.text + " ";
-            break;
-          case "unordered-list-item":
-            displayText += "• " + block.text + " ";
-            break;
-          case "ordered-list-item":
-            displayText += "1. " + block.text + " ";
-            break;
-          default:
-            displayText += block.text + " ";
-            break;
-        }
-      }
-    }
-
-    return displayText.trim();
-  };
 
   const onSubmit = (data: z.infer<typeof createRecipeFormSchema>) => {
     setIsSubmitting(true);
@@ -252,10 +221,6 @@ const CreateRecipeForm = ({ defaultValues, redirectPath }: Props) => {
                 key={field.id}
                 name={`instructions.${index}.value`}
                 render={({ field }) => {
-                  const currentEditorState = isDraft
-                    ? EditorState.createWithContent(convertFromRaw(JSON.parse(field.value)))
-                    : EditorState.createWithContent(ContentState.createFromText(field.value));
-
                   return (
                     <FormItem className="space-y-0">
                       <FormLabel className={cn("mb-1 ml-3 flex items-center gap-3", index !== 0 && "sr-only")}>
@@ -267,7 +232,7 @@ const CreateRecipeForm = ({ defaultValues, redirectPath }: Props) => {
                             {stepOrder}
                           </div>
                           <p className="line-clamp-1 h-10 w-full overflow-hidden rounded-none border border-x-0 border-input bg-transparent px-12 py-2 leading-loose">
-                            {formatJSONDisplay(field.value)}
+                            {getPlainTextFromJSON(field.value)}
                           </p>
                           <InstructionMenu
                             {...{
@@ -278,7 +243,7 @@ const CreateRecipeForm = ({ defaultValues, redirectPath }: Props) => {
                               watchedValues,
                               setValue,
                               form,
-                              currentEditorState,
+                              fieldValue: isDraft && field.value !== "" ? JSON.parse(field.value) : field.value,
                             }}
                           />
                         </div>

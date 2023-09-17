@@ -6,25 +6,24 @@
     "dev": "env-cmd -f .env.local next dev",
     "dev:prod": "env-cmd -f .env.prod next dev",
     "build:local": "env-cmd -f .env.local next build",
-    "build:prod": "env-cmd -f .env.production next build",
+    "build:prod": "env-cmd -f .env.prod next build",
     "start:local": "env-cmd -f .env.local next start",
-    "start:prod": "env-cmd -f .env.production next start",
+    "start:prod": "env-cmd -f .env.prod next start",
     "lint": "next lint",
     "format": "prettier --write .",
     "preinstall": "npx only-allow pnpm",
     "start-local-db": "pnpx supabase start --workdir src",
     "stop-local-db": "pnpx supabase stop --workdir src",
-    "status-local-db": "pnpx supabase status --workdir src",
-    "reset-local-db": "pnpx supabase db reset --workdir src",
+    "status-local-db": "env-cmd -f .env.local pnpx supabase status --workdir src",
+    "reset-local-db": "env-cmd -f .env.local pnpx supabase db reset --workdir src",
+    "reset-db": "env-cmd -f .env.prod pnpx supabase db reset --workdir src",
     "prisma-migrate": "pnpx prisma migrate dev",
+    "prisma-seed": "pnpx prisma db seed",
     "supabase-types": "pnpx supabase gen --workdir src types typescript --local --schema public > src/types/SupabaseTypes.ts",
-    "migrate-and-gen": "pnpm run prisma-migrate && pnpm run supabase-types"
+    "migrate-and-gen": "env-cmd -f .env.local pnpm run prisma-migrate && pnpm run supabase-types",
+    "migrate-and-gen:prod": "env-cmd -f .env.prod pnpm run prisma-migrate && pnpm run supabase-types"
   },
   "dependencies": {
-    "@draft-js-plugins/anchor": "^4.2.1",
-    "@draft-js-plugins/buttons": "^4.3.3",
-    "@draft-js-plugins/editor": "^4.1.4",
-    "@draft-js-plugins/image": "^4.1.4",
     "@hookform/resolvers": "^3.1.1",
     "@prisma/client": "4.16.2",
     "@radix-ui/react-avatar": "^1.0.3",
@@ -47,6 +46,10 @@
     "@svgr/webpack": "^8.0.1",
     "@tabler/icons-react": "^2.30.0",
     "@tanstack/react-table": "^8.9.3",
+    "@tiptap/extension-image": "^2.1.8",
+    "@tiptap/pm": "^2.1.8",
+    "@tiptap/react": "^2.1.8",
+    "@tiptap/starter-kit": "^2.1.8",
     "@types/node": "20.4.0",
     "@types/react": "18.2.14",
     "@types/react-dom": "18.2.6",
@@ -55,7 +58,6 @@
     "clsx": "^1.2.1",
     "cmdk": "^0.2.0",
     "date-fns": "^2.30.0",
-    "draft-js": "^0.11.7",
     "eslint": "8.41.0",
     "eslint-config-next": "13.4.8",
     "jotai": "^2.2.2",
@@ -79,7 +81,6 @@
   },
   "devDependencies": {
     "@ianvs/prettier-plugin-sort-imports": "^4.1.0",
-    "@types/draft-js": "^0.11.12",
     "@types/prettier": "^2.7.3",
     "@types/uuid": "^9.0.2",
     "@typescript-eslint/parser": "^5.62.0",
@@ -88,10 +89,12 @@
     "eslint-plugin-tailwindcss": "^3.13.0",
     "prettier": "^2.8.8",
     "prettier-plugin-tailwindcss": "^0.3.0",
-    "prisma": "4.16.2"
+    "prisma": "4.16.2",
+    "ts-node": "^10.9.1"
   },
   "prisma": {
-    "schema": "src/prisma/schema.prisma"
+    "schema": "src/prisma/schema.prisma",
+    "seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} src/prisma/seed/index.ts"
   },
   "volta": {
     "node": "18.16.0"

@@ -1,20 +1,19 @@
+"use client";
+
 import { useState } from "react";
 
-import { convertToRaw, EditorState, RichUtils } from "draft-js";
-import { BoldIcon, ChevronDown, ChevronUp, List, ListOrdered, MoreVertical, Pencil, Trash } from "lucide-react";
+import Image from "@tiptap/extension-image";
+import { useEditor } from "@tiptap/react";
+import StarterKit from "@tiptap/starter-kit";
+import { ChevronDown, ChevronUp, MoreVertical, Pencil, Trash } from "lucide-react";
 import { Drawer } from "vaul";
 
 import { Command, CommandItem, CommandList, CommandSeparator } from "@/src/components/ui/command";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/src/components/ui/dialog";
 import { Popover, PopoverContent, PopoverTrigger } from "@/src/components/ui/popover";
 
-import "@draft-js-plugins/image/lib/plugin.css";
-
-import { cn } from "@/src/lib/utils";
-
 import { useWindowSize } from "../hooks/useWindowSize";
 import InstructionEditor from "./instruction-editor";
-import { Button } from "./ui/button";
 
 type Props = {
   stepOrder: number;
@@ -23,7 +22,7 @@ type Props = {
   instructionsFields: any;
   removeInstructions: any;
   form: any;
-  currentEditorState: EditorState;
+  fieldValue: string;
 };
 
 const InstructionMenu = ({
@@ -33,15 +32,41 @@ const InstructionMenu = ({
   instructionsFields,
   removeInstructions,
   form,
-  currentEditorState,
+  fieldValue,
 }: Props) => {
-  const [editorState, setEditorState] = useState(currentEditorState);
   const [isOpenPopover, setIsOpenPopover] = useState(false);
 
   const { isMobile } = useWindowSize();
 
-  const onChange = (value: EditorState) => {
-    setEditorState(value);
+  const editor = useEditor({
+    editorProps: {
+      attributes: {
+        class:
+          "min-h-[80px] w-full rounded-md rounded-br-none rounded-bl-none border border-input bg-transparent px-3 py-2 border-b-0 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 overflow-auto",
+      },
+    },
+    extensions: [
+      StarterKit.configure({
+        orderedList: {
+          HTMLAttributes: {
+            class: "list-decimal pl-4",
+          },
+        },
+        bulletList: {
+          HTMLAttributes: {
+            class: "list-disc pl-4",
+          },
+        },
+      }),
+      Image,
+    ],
+    content: fieldValue,
+  });
+
+  const handleDialogClose = () => {
+    const json = editor?.getJSON();
+    form.setValue(`instructions.${index}.value`, JSON.stringify(json));
+    setIsOpenPopover(false);
   };
 
   return (
@@ -58,11 +83,7 @@ const InstructionMenu = ({
                   shouldScaleBackground
                   onOpenChange={(isOpen) => {
                     if (!isOpen) {
-                      form.setValue(
-                        `instructions.${index}.value`,
-                        JSON.stringify(convertToRaw(editorState.getCurrentContent()))
-                      );
-                      setIsOpenPopover(false);
+                      handleDialogClose();
                     }
                   }}
                 >
@@ -78,9 +99,8 @@ const InstructionMenu = ({
                         <div className="p-4">
                           <Drawer.Title className="mb-4 flex justify-between text-2xl">
                             <h2>作り方 {stepOrder}</h2>
-                            <EditorToolbar {...{ editorState, setEditorState }} />
                           </Drawer.Title>
-                          <InstructionEditor {...{ editorState, onChange, setEditorState }} />
+                          <InstructionEditor editor={editor} />
                         </div>
                       </div>
                     </Drawer.Content>
@@ -90,11 +110,7 @@ const InstructionMenu = ({
                 <Dialog
                   onOpenChange={(isOpen) => {
                     if (!isOpen) {
-                      form.setValue(
-                        `instructions.${index}.value`,
-                        JSON.stringify(convertToRaw(editorState.getCurrentContent()))
-                      );
-                      setIsOpenPopover(false);
+                      handleDialogClose();
                     }
                   }}
                 >
@@ -102,14 +118,13 @@ const InstructionMenu = ({
                     <Pencil className="mr-2 h-4 w-4" />
                     <span>編集する</span>
                   </DialogTrigger>
-                  <DialogContent className="sm:max-w-[424px]">
+                  <DialogContent className="sm:max-w-[400px]">
                     <DialogHeader>
                       <DialogTitle className="flex justify-between">
                         <h2 className="text-xl">作り方 {stepOrder}</h2>
-                        <EditorToolbar {...{ editorState, setEditorState, className: "pr-4" }} />
                       </DialogTitle>
                     </DialogHeader>
-                    <InstructionEditor {...{ editorState, onChange, setEditorState }} />
+                    <InstructionEditor editor={editor} />
                   </DialogContent>
                 </Dialog>
               )}
@@ -145,58 +160,6 @@ const InstructionMenu = ({
 };
 
 export default InstructionMenu;
-
-const EditorToolbar = ({
-  editorState,
-  setEditorState,
-  className,
-}: {
-  editorState: EditorState;
-  setEditorState: React.Dispatch<React.SetStateAction<EditorState>>;
-  className?: string;
-}) => {
-  const toggleStyle = (
-    styleType: "inline" | "block",
-    styleValue: "BOLD" | "ITALIC" | "unordered-list-item" | "ordered-list-item"
-  ) => {
-    if (styleType === "inline") {
-      setEditorState(RichUtils.toggleInlineStyle(editorState, styleValue));
-    } else if (styleType === "block") {
-      setEditorState(RichUtils.toggleBlockType(editorState, styleValue));
-    }
-  };
-
-  return (
-    <div className={cn("flex items-center", className)}>
-      <Button
-        variant={"outline"}
-        type="button"
-        className={cn(editorState.getCurrentInlineStyle().has("BOLD") ? "bg-zinc-100" : "bg-white")}
-        onClick={() => toggleStyle("inline", "BOLD")}
-      >
-        <BoldIcon size={12} />
-      </Button>
-      <Button
-        variant={"outline"}
-        type="button"
-        className={cn(
-          RichUtils.getCurrentBlockType(editorState) === "unordered-list-item" ? "bg-zinc-100" : "bg-white"
-        )}
-        onClick={() => toggleStyle("block", "unordered-list-item")}
-      >
-        <List size={12} />
-      </Button>
-      <Button
-        variant={"outline"}
-        type="button"
-        className={cn(RichUtils.getCurrentBlockType(editorState) === "ordered-list-item" ? "bg-zinc-100" : "bg-white")}
-        onClick={() => toggleStyle("block", "ordered-list-item")}
-      >
-        <ListOrdered size={12} />
-      </Button>
-    </div>
-  );
-};
 
 const MoveInstructionButton = ({
   direction,
