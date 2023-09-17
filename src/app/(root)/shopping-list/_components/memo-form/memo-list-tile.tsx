@@ -1,10 +1,10 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
-import { deleteCartListItem } from "@/src/actions/deleteCartListItem";
-import { patchCartListItemCompleteStatus } from "@/src/actions/patchCartListItemCompleteStatus";
-import { putCartListItemOrder } from "@/src/actions/putCartListItemOrder";
+import { deleteMemoById } from "@/src/actions/deleteMemoById";
+import { patchMemoCompleteStatus } from "@/src/actions/patchMemoCompleteStatus";
+import { patchMemoTitle } from "@/src/actions/patchMemoTitle";
+import { putMemoOrder } from "@/src/actions/putMemoOrder";
 import { kToastDuration } from "@/src/constants/constants";
-import useTileEditingState from "@/src/hooks/useTileEditingState";
 import { Check, ChevronDown, ChevronUp, MoreVertical, Trash } from "lucide-react";
 import { UseFieldArrayRemove, UseFormReturn } from "react-hook-form";
 import TextareaAutosize from "react-textarea-autosize";
@@ -14,39 +14,58 @@ import { FormControl, FormField, FormItem } from "@/src/components/ui/form";
 import { Popover, PopoverContent, PopoverTrigger } from "@/src/components/ui/popover";
 import { useToast } from "@/src/components/ui/use-toast";
 
-import { cn } from "../../../../../../lib/utils";
-import { CartListItemFormValues } from "./schema";
+import { MemoFormValues } from ".";
+import { cn } from "../../../../../lib/utils";
 
 type Props = {
-  cartListId: number;
-  form: UseFormReturn<CartListItemFormValues>;
+  form: UseFormReturn<MemoFormValues>;
   index: number;
   remove: UseFieldArrayRemove;
 };
 
-export const CartListItemTile = ({ cartListId, form, index, remove }: Props) => {
+export const MemoListTile = ({ form, index, remove }: Props) => {
+  const [isEditing, setIsEditing] = useState(false);
+  const [textareaHeight, setTextareaHeight] = useState<number | null>(null);
+  const [isInitialRender, setIsInitialRender] = useState(true);
   const [isOpenPopover, setIsOpenPopover] = useState(false);
 
-  const {
-    isEditing,
-    setIsEditing,
-    isInitialRender,
-    textareaHeight,
-    textareaRef,
-    handleHeightChange,
-    handleTextareaFocus,
-    handleEditTitle,
-  } = useTileEditingState(form, index);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+  const handleHeightChange = useCallback(
+    (height: number) => {
+      if (isEditing || isInitialRender) {
+        setTextareaHeight(height);
+        setIsInitialRender(false);
+      }
+    },
+    [isEditing, isInitialRender]
+  );
+
+  const handleTextareaFocus = (event: React.FocusEvent<HTMLTextAreaElement>) => {
+    const textarea = event.target;
+    if (textarea.value.length > 0) {
+      const length = textarea.value.length;
+      textarea.selectionStart = length;
+      textarea.selectionEnd = length;
+    }
+  };
+
+  const currentMemo = form.getValues(`memo.${index}`);
+
+  const handleEditTitle = useCallback(async () => {
+    setIsEditing(false);
+    await patchMemoTitle(currentMemo.id, currentMemo.text);
+  }, [currentMemo]);
 
   const { toast } = useToast();
 
-  const isChecked = form.getValues(`cartListItem.${index}.isCompleted`);
+  const isChecked = form.getValues(`memo.${index}.isCompleted`);
 
   const handleToggleCompletion = useCallback(async () => {
-    const cartListItemId = form.getValues(`cartListItem.${index}.id`);
-    const result = await patchCartListItemCompleteStatus(cartListItemId, isChecked);
+    const memoId = form.getValues(`memo.${index}.id`);
+    const result = await patchMemoCompleteStatus(memoId, isChecked);
     if (result.isSuccess) {
-      form.setValue(`cartListItem.${index}.isCompleted`, !isChecked);
+      form.setValue(`memo.${index}.isCompleted`, !isChecked);
     } else {
       toast({
         variant: "destructive",
@@ -58,30 +77,30 @@ export const CartListItemTile = ({ cartListId, form, index, remove }: Props) => 
   }, [form, index, isChecked, toast]);
 
   const handleMoveDown = useCallback(async () => {
-    const cartListItems = form.getValues("cartListItem");
-    const target = cartListItems[index];
-    const nextCartListItem = cartListItems[index + 1];
+    const memos = form.getValues("memo");
+    const target = memos[index];
+    const nextMemo = memos[index + 1];
 
-    if (!target?.order || !nextCartListItem?.order) {
+    if (!target?.order || !nextMemo?.order) {
       return;
     }
 
     // orderの更新
     const tempOrder = target.order;
-    target.order = nextCartListItem.order;
-    nextCartListItem.order = tempOrder;
+    target.order = nextMemo.order;
+    nextMemo.order = tempOrder;
 
-    cartListItems[index] = nextCartListItem;
-    cartListItems[index + 1] = target;
+    memos[index] = nextMemo;
+    memos[index + 1] = target;
 
-    form.setValue("cartListItem", cartListItems);
+    form.setValue("memo", memos);
 
-    const nextCartListItemId = form.getValues(`cartListItem.${index + 1}.id`);
-    const currentCartListItemId = form.getValues(`cartListItem.${index}.id`);
+    const nextMemoId = form.getValues(`memo.${index + 1}.id`);
+    const currentMemoId = form.getValues(`memo.${index}.id`);
 
-    const result = await putCartListItemOrder({
-      sourceCartListItemId: nextCartListItemId,
-      targetCartListItemId: currentCartListItemId,
+    const result = await putMemoOrder({
+      sourceMemoId: nextMemoId,
+      targetMemoId: currentMemoId,
     });
 
     if (!result.isSuccess) {
@@ -96,20 +115,16 @@ export const CartListItemTile = ({ cartListId, form, index, remove }: Props) => 
   }, [form, index, toast]);
 
   const handleDelete = useCallback(async () => {
-    const result = await deleteCartListItem({
-      cartListId,
-      cartListItemId: form.getValues(`cartListItem.${index}.id`),
-    });
-
+    const result = await deleteMemoById(form.getValues(`memo.${index}.id`));
     if (result.isSuccess) {
       remove(index);
 
       // 削除した要素のあとの要素のorderを更新する
-      const carts = form.getValues("cartListItem");
-      for (let i = index; i < carts.length; i++) {
-        carts[i].order = i + 1;
+      const memos = form.getValues("memo");
+      for (let i = index; i < memos.length; i++) {
+        memos[i].order = i + 1;
       }
-      form.setValue("cartListItem", carts);
+      form.setValue("memo", memos);
     } else {
       toast({
         variant: "destructive",
@@ -119,33 +134,33 @@ export const CartListItemTile = ({ cartListId, form, index, remove }: Props) => 
     }
 
     setIsOpenPopover(false);
-  }, [cartListId, form, index, remove, toast]);
+  }, [form, index, remove, toast]);
 
   const handleMoveUp = useCallback(async () => {
-    const cartListItems = form.getValues("cartListItem");
-    const target = cartListItems[index];
-    const prevCartListItem = cartListItems[index - 1];
+    const memos = form.getValues("memo");
+    const target = memos[index];
+    const prevMemo = memos[index - 1];
 
-    if (!target?.order || !prevCartListItem?.order) {
+    if (!target?.order || !prevMemo?.order) {
       return;
     }
 
     // orderの更新
     const tempOrder = target.order;
-    target.order = prevCartListItem.order;
-    prevCartListItem.order = tempOrder;
+    target.order = prevMemo.order;
+    prevMemo.order = tempOrder;
 
-    cartListItems[index] = prevCartListItem;
-    cartListItems[index - 1] = target;
+    memos[index] = prevMemo;
+    memos[index - 1] = target;
 
-    form.setValue("cartListItem", cartListItems);
+    form.setValue("memo", memos);
 
-    const prevCartListItemId = form.getValues(`cartListItem.${index - 1}.id`);
-    const currentCartListItemId = form.getValues(`cartListItem.${index}.id`);
+    const prevMemoId = form.getValues(`memo.${index - 1}.id`);
+    const currentMemoId = form.getValues(`memo.${index}.id`);
 
-    const result = await putCartListItemOrder({
-      sourceCartListItemId: prevCartListItemId,
-      targetCartListItemId: currentCartListItemId,
+    const result = await putMemoOrder({
+      sourceMemoId: prevMemoId,
+      targetMemoId: currentMemoId,
     });
 
     if (!result.isSuccess) {
@@ -163,12 +178,12 @@ export const CartListItemTile = ({ cartListId, form, index, remove }: Props) => 
     if (isEditing && textareaRef?.current) {
       textareaRef.current.focus();
     }
-  }, [isEditing, textareaRef]);
+  }, [isEditing]);
 
   return (
     <FormField
       control={form.control}
-      name={`cartListItem.${index}.ingredient`}
+      name={`memo.${index}.text`}
       render={({ field }) => (
         <FormItem className="border-y">
           <FormControl>
@@ -190,14 +205,13 @@ export const CartListItemTile = ({ cartListId, form, index, remove }: Props) => 
                 <TextareaAutosize
                   {...field}
                   minRows={1}
-                  disabled={!form.getValues(`cartListItem.${index}.isCustom`)}
                   ref={textareaRef}
                   value={field.value}
                   onFocus={handleTextareaFocus}
                   onBlur={handleEditTitle}
                   onHeightChange={handleHeightChange}
                   onChange={(event: React.ChangeEvent<HTMLTextAreaElement>) => {
-                    form.setValue(`cartListItem.${index}.ingredient`, event.target.value);
+                    form.setValue(`memo.${index}.text`, event.target.value);
                   }}
                   onKeyDown={async (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
                     if (e.key === "Enter") {
@@ -248,7 +262,7 @@ export const CartListItemTile = ({ cartListId, form, index, remove }: Props) => 
                           </button>
                         </CommandItem>
                       )}
-                      {index !== form.getValues("cartListItem").length - 1 && (
+                      {index !== form.getValues("memo").length - 1 && (
                         <CommandItem className="text-mauve11">
                           <button className="flex w-full" onClick={handleMoveDown}>
                             <ChevronDown className="mr-2 h-4 w-4" />

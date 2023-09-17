@@ -14,7 +14,7 @@ import { Command, CommandItem, CommandList } from "@/src/components/ui/command";
 import { Form } from "@/src/components/ui/form";
 import { Popover, PopoverContent, PopoverTrigger } from "@/src/components/ui/popover";
 import { useToast } from "@/src/components/ui/use-toast";
-import { MemoListTile } from "@/src/app/(root)/(protected)/shopping-list/_components/memo-form/memo-list-tile";
+import { MemoListTile } from "@/src/app/(root)/shopping-list/_components/memo-form/memo-list-tile";
 
 import { memoFormSchema, MemoFormValues } from "./schema";
 
