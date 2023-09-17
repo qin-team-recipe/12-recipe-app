@@ -1,9 +1,7 @@
 import { cookies } from "next/headers";
-import Link from "next/link";
 
 import { Database } from "@/src/types/SupabaseTypes";
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
-import { AlignLeft, UserCircle2 } from "lucide-react";
 
 import TopBar from "@/src/components/layout/top-bar";
 
