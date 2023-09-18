@@ -1,10 +1,8 @@
 import { getMemos } from "@/src/actions/getMemos";
 import { getMyCartList } from "@/src/actions/getMyCartList";
 
-import TopBar from "@/src/components/layout/top-bar";
-
-import { CartListItemForm, CartListItemFormValues } from "./_components/cart-list-item-form";
-import { MemoForm, MemoFormValues } from "./_components/memo-form";
+import { CartListItemForm, CartListItemFormValues } from "../_components/cart-list-item-form";
+import { MemoForm, MemoFormValues } from "../_components/memo-form";
 
 const page = async () => {
   const memos = await getMemos();
