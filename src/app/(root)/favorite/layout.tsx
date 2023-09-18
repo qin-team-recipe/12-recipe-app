@@ -7,7 +7,13 @@ import { AlignLeft, UserCircle2 } from "lucide-react";
 
 import TopBar from "@/src/components/layout/top-bar";
 
-export default async function Layout({ view, login }: { view: React.ReactNode; login: React.ReactNode }) {
+export default async function Layout({
+  authenticated,
+  unauthenticated,
+}: {
+  authenticated: React.ReactNode;
+  unauthenticated: React.ReactNode;
+}) {
   const cookieStore = cookies();
   const {
     data: { session },
@@ -30,7 +36,7 @@ export default async function Layout({ view, login }: { view: React.ReactNode; l
           )
         }
       />
-      {session ? view : login}
+      {session ? authenticated : unauthenticated}
     </>
   );
 }

@@ -5,7 +5,13 @@ import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 
 import TopBar from "@/src/components/layout/top-bar";
 
-export default async function Layout({ view, login }: { view: React.ReactNode; login: React.ReactNode }) {
+export default async function Layout({
+  authenticated,
+  unauthenticated,
+}: {
+  authenticated: React.ReactNode;
+  unauthenticated: React.ReactNode;
+}) {
   const cookieStore = cookies();
   const {
     data: { session },
@@ -14,7 +20,7 @@ export default async function Layout({ view, login }: { view: React.ReactNode; l
   return (
     <>
       <TopBar centerComponent={<h1 className="font-bold text-mauve12 md:text-xl">買い物リスト</h1>} />
-      {session ? view : login}
+      {session ? authenticated : unauthenticated}
     </>
   );
 }

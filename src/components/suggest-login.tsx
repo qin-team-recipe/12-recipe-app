@@ -12,10 +12,10 @@ import { Database } from "../types/SupabaseTypes";
 import { toast } from "./ui/use-toast";
 
 type Props = {
-  page: "Favorite" | "ShoppingList";
+  src: `/images/login${string}.png`;
 };
 
-const SuggestLogin = ({ page }: Props) => {
+const SuggestLogin = ({ src }: Props) => {
   const supabase = createClientComponentClient<Database>();
 
   const handleClick = async (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -40,7 +40,7 @@ const SuggestLogin = ({ page }: Props) => {
   return (
     <div className="flex flex-col items-center justify-center pt-5">
       <div className="mx-auto mb-5">
-        <Image width={200} height={200} src={`/images/login${page}.png`} alt="ログイン画面のイメージ" />
+        <Image width={200} height={200} src={src} alt="ログイン画面のイメージ" />
       </div>
       <p className="mb-3 font-bold text-mauve12">ログインをお願いします</p>
       <p className="mb-3 text-sm text-mauve12">こちらの機能を利用するにはログインが必要です</p>

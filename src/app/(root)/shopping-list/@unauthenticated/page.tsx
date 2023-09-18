@@ -1,7 +1,7 @@
 import SuggestLogin from "@/src/components/suggest-login";
 
 const page = async () => {
-  return <SuggestLogin page="ShoppingList" />;
+  return <SuggestLogin src="/images/loginShoppingList.png" />;
 };
 
 export default page;
