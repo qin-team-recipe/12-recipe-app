@@ -7,7 +7,9 @@ export const createChefFormSchema = z.object({
     message: "シェフ名は必須です",
   }),
 
-  // TODO: 画像のバリデーション
+  profileImage: z.string().min(1, {
+    message: "プロフィール画像は必須です",
+  }),
 
   bio: z
     .string()

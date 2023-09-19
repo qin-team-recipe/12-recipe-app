@@ -4,6 +4,7 @@ import * as React from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
+import { Avatar } from "@radix-ui/react-avatar";
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -18,6 +19,7 @@ import {
 } from "@tanstack/react-table";
 import { Copy, MoreHorizontal, Pencil } from "lucide-react";
 
+import { AvatarFallback, AvatarImage } from "@/src/components/ui/avatar";
 import { Button } from "@/src/components/ui/button";
 import { Checkbox } from "@/src/components/ui/checkbox";
 import { Command, CommandItem, CommandList } from "@/src/components/ui/command";
@@ -60,8 +62,19 @@ export const columns: ColumnDef<Chef>[] = [
   },
   {
     accessorKey: "name",
-    header: () => <div className="whitespace-nowrap text-mauve12">シェフ名</div>,
-    cell: ({ row }) => <div>{row.getValue("name")}</div>,
+    header: () => <div className="whitespace-nowrap text-mauve12">シェフ</div>,
+    cell: ({ row }) => (
+      <div className="flex items-center">
+        <Avatar className="mr-2 h-8 w-8">
+          {row.original.profileImage ? (
+            <AvatarImage src={row.original.profileImage} alt={row.getValue("name")} />
+          ) : (
+            <AvatarFallback>{row.original.name.charAt(0)}</AvatarFallback>
+          )}
+        </Avatar>
+        <div>{row.getValue("name")}</div>
+      </div>
+    ),
   },
   {
     accessorKey: "_count.Recipe",

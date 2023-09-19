@@ -84,7 +84,7 @@ const PopoverMenu = ({ recipeId, isPublished }: Props) => {
                   setIsOpen(false);
                 }}
               >
-                {isPending ? <Spinner /> : <Lock className="mr-2 h-4 w-4" />}
+                {<Lock className="mr-2 h-4 w-4" />}
                 <div className="flex flex-col items-start">
                   <span className="text-sm">{isPublished ? "公開を停止する" : "レシピを限定公開にする"}</span>
                   {!isPublished && <p className="text-xs">URLを知っている方のみ閲覧可能</p>}

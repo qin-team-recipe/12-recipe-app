@@ -1,8 +1,8 @@
-import Image from "next/image";
-
 import { getRecipeById } from "@/src/actions/getRecipeById";
-import { sortSiteLinks } from "@/src/lib/utils";
+import { getBlurDataURL } from "@/src/lib/images";
+import { cn, sortSiteLinks } from "@/src/lib/utils";
 
+import BlurImage from "@/src/components/blur-image";
 import LinkToIconRenderer from "@/src/components/link-to-icon-renderer";
 import RouterBackButton from "@/src/components/router-back-button";
 
@@ -22,25 +22,34 @@ const RecipeHero = async ({ id }: Props) => {
     _count,
     isFavorite,
     isPublished,
+    RecipeImage: recipeImage,
   } = await getRecipeById(id);
 
   const sortedRecipeLinks = sortSiteLinks(recipeLinks.map((value) => value.linkUrl));
 
+  const hasRecipeImage = recipeImage && recipeImage[0] && recipeImage[0].recipeImage;
+
   return (
     <>
-      {/* // TODO: 画像を設定する */}
-      <div className="relative aspect-square">
-        <Image
-          src={
-            "https://images.unsplash.com/photo-1595295333158-4742f28fbd85?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80"
-          }
-          sizes="100vw"
-          className="h-auto w-full object-cover"
-          alt={title}
-          width={160}
-          height={160}
-        />
-        <div className="absolute left-5 top-5 cursor-pointer stroke-white hover:stroke-mauve2">
+      <div className={cn(hasRecipeImage && "relative aspect-square")}>
+        {hasRecipeImage && (
+          <BlurImage
+            src={recipeImage[0].recipeImage}
+            className="h-auto w-full object-cover"
+            alt={title}
+            width={160}
+            height={160}
+            placeholder="blur"
+            priority
+            blurDataURL={await getBlurDataURL(recipeImage[0].recipeImage || "/images/recipe-placeholder.png")}
+          />
+        )}
+        <div
+          className={cn(
+            hasRecipeImage ? "absolute left-5 top-5" : "pl-4 pt-4",
+            "cursor-pointer stroke-white hover:stroke-mauve2"
+          )}
+        >
           <RouterBackButton size={32} path="/my-page" className="rounded-full bg-[#040013]/[.48] text-mauve1" />
         </div>
       </div>

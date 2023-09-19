@@ -1,19 +1,27 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { useRef, useState, useTransition } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
+import "cropperjs/dist/cropper.css";
+
 import { putRecipe } from "@/src/actions/putRecipe";
+import { useUploadImage } from "@/src/hooks/useUploadImage";
 import { cn, getPlainTextFromJSON } from "@/src/lib/utils";
+import { Database } from "@/src/types/SupabaseTypes";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Minus, Plus, PlusIcon, X } from "lucide-react";
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import { Crop, CropIcon, Minus, Plus, PlusIcon, RefreshCw, X } from "lucide-react";
+import Cropper, { type ReactCropperElement } from "react-cropper";
 import { useFieldArray, useForm } from "react-hook-form";
+import { v4 as uuidv4 } from "uuid";
 import { z } from "zod";
 
 import InstructionMenu from "@/src/components/instruction-menu";
 import { Button, buttonVariants } from "@/src/components/ui/button";
+import { Dialog, DialogContent, DialogTrigger } from "@/src/components/ui/dialog";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/src/components/ui/form";
 import { Input } from "@/src/components/ui/input";
 import Spinner from "@/src/components/ui/spinner";
@@ -28,8 +36,13 @@ type Props = {
 };
 
 const EditRecipeForm = ({ defaultValues, navigateTo }: Props) => {
-  const [imageData, setImageData] = useState(defaultValues.recipeImage ?? "");
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const [isOpenCropDialog, setIsOpenCropDialog] = useState(false);
+  const cropperRef = useRef<ReactCropperElement>(null);
+
+  const { selectedImage, previewImageURL, setPreviewImageURL, isChangedImage, clearImage, previousImageURL } =
+    useUploadImage(defaultValues.recipeImage ?? null);
 
   const { toast } = useToast();
 
@@ -52,7 +65,7 @@ const EditRecipeForm = ({ defaultValues, navigateTo }: Props) => {
     instructions: watchedValues.instructions.filter((instruction) => instruction?.value !== ""),
   };
 
-  const changed = JSON.stringify(cleanedWatchedValues) !== JSON.stringify(defaultValues);
+  const isChangedFiled = JSON.stringify(cleanedWatchedValues) !== JSON.stringify(defaultValues);
 
   const {
     fields: urlsFields,
@@ -81,28 +94,100 @@ const EditRecipeForm = ({ defaultValues, navigateTo }: Props) => {
     control: form.control,
   });
 
-  const onSubmit = (data: z.infer<typeof editRecipeFormSchema>) => {
+  const supabase = createClientComponentClient<Database>();
+
+  const uploadImage = async (image: File) => {
+    const { data: storageData, error: storageError } = await supabase.storage.from("recipe").upload(uuidv4(), image);
+    if (storageError) {
+      throw storageError;
+    }
+    const { data: urlData } = supabase.storage.from("recipe").getPublicUrl(storageData.path);
+    return urlData.publicUrl;
+  };
+
+  const updateImage = async (path: string, image: File) => {
+    const { error: replaceError } = await supabase.storage.from("recipe").update(path, image);
+    if (replaceError) {
+      throw replaceError;
+    }
+  };
+
+  const removeImage = async (url: string) => {
+    const path = url.split("/").slice(-1)[0];
+    const { error: removeError } = await supabase.storage.from("recipe").remove([path]);
+    if (removeError) {
+      throw removeError;
+    }
+  };
+
+  const onSubmit = (formData: z.infer<typeof editRecipeFormSchema>) => {
     setIsSubmitting(true);
 
     startTransition(async () => {
-      const result = await putRecipe(data);
+      try {
+        if (selectedImage) {
+          if (formData.recipeImage) {
+            await updateImage(formData.recipeImage.split("/").slice(-1)[0], selectedImage);
+          } else {
+            formData.recipeImage = await uploadImage(selectedImage);
+          }
+        }
 
-      if (result.isSuccess) {
-        toast({
-          variant: "default",
-          title: result.message,
-          duration: 3000,
-        });
+        if (previousImageURL) {
+          await removeImage(previousImageURL);
+        }
 
-        router.push(navigateTo);
-      } else {
-        toast({
-          variant: "destructive",
-          title: result.error,
-          duration: 3000,
-        });
+        const result = await putRecipe(formData);
+
+        if (result.isSuccess) {
+          toast({
+            variant: "default",
+            title: result.message,
+            duration: 3000,
+          });
+
+          router.push(navigateTo);
+        } else {
+          toast({
+            variant: "destructive",
+            title: result.error,
+            duration: 3000,
+          });
+        }
+      } catch (error) {
+        if (error instanceof Error) {
+          console.error(error);
+          form.setError("recipeImage", { type: "manual", message: error.message });
+        }
       }
     });
+  };
+
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    try {
+      const files = e.target.files;
+      if (files && files.length > 0) {
+        const file = files[0];
+        const fileSizeInMB = file.size / (1024 * 1024);
+
+        if (fileSizeInMB > 2) {
+          form.setError("recipeImage", { type: "manual", message: "画像のサイズは2MB以下である必要があります。" });
+          return;
+        }
+
+        const reader = new FileReader();
+        reader.onload = () => {
+          setPreviewImageURL(reader.result as string);
+          form.setError("recipeImage", { type: "manual", message: "" });
+          setIsOpenCropDialog(true);
+        };
+        reader.readAsDataURL(file);
+      }
+    } catch (error) {
+      if (error instanceof Error) {
+        form.setError("recipeImage", { type: "manual", message: error.message });
+      }
+    }
   };
 
   return (
@@ -231,42 +316,120 @@ const EditRecipeForm = ({ defaultValues, navigateTo }: Props) => {
         </div>
         {/* レシピ画像 */}
         <FormField
-          // TODO: 画像のバリデーション実装
           control={form.control}
           name="title"
-          render={({ field }) => (
-            <FormItem className="ml-4 grid w-full space-y-0">
-              <FormLabel className="mb-1 text-lg font-bold">画像（任意）</FormLabel>
-              <FormControl>
-                {imageData ? (
-                  <div className="relative">
-                    <button className="absolute" onClick={() => setImageData("")}>
-                      <Minus
-                        className="absolute -top-2 left-[86px] z-50 h-5 w-5 rounded-full bg-primary p-1 text-white"
-                        onClick={() => setImageData("")}
-                      />
-                    </button>
-                    <Image
-                      width={100}
-                      height={100}
-                      className="h-[100px] w-[100px] rounded-xl border border-border object-cover"
-                      src={imageData}
-                      alt="image"
-                    />
-                  </div>
-                ) : (
-                  <label htmlFor="file">
-                    <input type="file" id="file" className="hidden" accept="image/*" {...form} />
-                    <div className="flex h-[100px] w-[100px] flex-col items-center justify-center gap-2 rounded-xl border border-border text-mauve11 hover:cursor-pointer">
-                      <p className="text-xs">画像を設定</p>
-                      <Plus className="w-5" />
+          render={({ field }) => {
+            const { onChange, value, ...restFieldProps } = field;
+
+            return (
+              <FormItem className=" ml-3 grid space-y-0">
+                <FormLabel className="mb-1 text-lg font-bold">画像（任意）</FormLabel>
+                <FormControl>
+                  {previewImageURL ? (
+                    <div className="flex items-end">
+                      <div className="relative h-[100px] w-[100px]">
+                        <Image
+                          width={100}
+                          height={100}
+                          className="h-[100px] w-[100px] rounded-xl border border-border object-cover"
+                          src={previewImageURL}
+                          alt="プロフィール写真"
+                        />
+                        <button type="button" className="absolute -right-2 -top-1 z-50" onClick={clearImage}>
+                          <Minus className="h-5 w-5 rounded-full bg-tomato9 p-1 text-mauve1" />
+                        </button>
+                      </div>
+                      <Dialog open={isOpenCropDialog} onOpenChange={setIsOpenCropDialog}>
+                        <DialogTrigger asChild>
+                          <Button type="button" variant="outline" size="icon" className="h-7 w-7">
+                            <Crop className="h-4 w-4" aria-hidden="true" />
+                            <span className="sr-only">Crop image</span>
+                          </Button>
+                        </DialogTrigger>
+                        <DialogContent
+                          className="max-h-screen max-w-screen-md overflow-auto px-0"
+                          closeOnOutsideClick={false}
+                        >
+                          <div className="mt-8 grid place-items-center space-y-5">
+                            <div className="flex items-center justify-center">
+                              <Cropper
+                                ref={cropperRef}
+                                className="object-cover"
+                                zoomTo={0.8}
+                                style={{ maxWidth: "100%", maxHeight: "450px", margin: "auto" }}
+                                initialAspectRatio={1 / 1}
+                                aspectRatio={1 / 1}
+                                preview=".img-preview"
+                                src={previewImageURL}
+                                viewMode={1}
+                                minCropBoxHeight={10}
+                                minCropBoxWidth={10}
+                                background={false}
+                                responsive={true}
+                                autoCropArea={1}
+                                guides={true}
+                              />
+                            </div>
+                            <div className="flex w-fit items-center space-x-2">
+                              <Button
+                                aria-label="Crop image"
+                                type="button"
+                                size="sm"
+                                className="h-8"
+                                onClick={() => {
+                                  if (cropperRef.current) {
+                                    const croppedImageDataURL = cropperRef.current.cropper
+                                      .getCroppedCanvas()
+                                      .toDataURL();
+                                    setPreviewImageURL(croppedImageDataURL);
+                                    setIsOpenCropDialog(false);
+
+                                    form.setValue("recipeImage", croppedImageDataURL);
+                                  }
+                                }}
+                              >
+                                <CropIcon size={12} className="mr-2" aria-hidden="true" />
+                                切り取る
+                              </Button>
+                              <Button
+                                aria-label="Reset crop"
+                                type="button"
+                                variant="outline"
+                                size="sm"
+                                className="h-8"
+                                onClick={() => {
+                                  cropperRef.current?.cropper.reset();
+                                }}
+                              >
+                                <RefreshCw size={12} className="mr-2" aria-hidden="true" />
+                                リセット
+                              </Button>
+                            </div>
+                          </div>
+                        </DialogContent>
+                      </Dialog>
                     </div>
-                  </label>
-                )}
-              </FormControl>
-              <FormMessage className="ml-4 pt-1" />
-            </FormItem>
-          )}
+                  ) : (
+                    <label htmlFor="file" className="h-[100px] w-[100px]">
+                      <input
+                        type="file"
+                        id="file"
+                        className="hidden"
+                        accept="image/*"
+                        onChange={handleImageChange}
+                        {...restFieldProps}
+                      />
+                      <div className="flex h-full w-full flex-col items-center justify-center gap-2 rounded-xl border border-border text-mauve11 hover:cursor-pointer">
+                        <p className="text-xs">画像を設定</p>
+                        <Plus className="w-5" />
+                      </div>
+                    </label>
+                  )}
+                </FormControl>
+                <FormMessage className="ml-3" />
+              </FormItem>
+            );
+          }}
         />
         {/* レシピの紹介文 */}
         <FormField
@@ -331,7 +494,7 @@ const EditRecipeForm = ({ defaultValues, navigateTo }: Props) => {
             variant={"destructive"}
             className="flex-1 gap-2"
             type="submit"
-            disabled={!changed || isPending || isSubmitting}
+            disabled={isPending || (!isChangedFiled && !isChangedImage) || isSubmitting}
           >
             {isPending && <Spinner />} 保存する
           </Button>

@@ -18,6 +18,7 @@ const page = async ({ params }: { params: { chefId: string } }) => {
     urls: chef.UserLink.map((link) => {
       return { id: link.id, value: link.url };
     }),
+    profileImage: chef.profileImage ?? undefined,
   };
 
   return (

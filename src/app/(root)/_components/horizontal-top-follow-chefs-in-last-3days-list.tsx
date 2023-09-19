@@ -14,9 +14,7 @@ const HorizontalTopFollowChefsInLast3DaysList = async () => {
             <li key={id} className="mt-2 w-[160px] flex-none">
               <ChefCard
                 path={`/chef/${id}`}
-                imageUrl={
-                  "https://images.unsplash.com/photo-1577219491135-ce391730fb2c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=320&q=80"
-                }
+                imageUrl={profileImage || "/images/chef-placeholder.png"}
                 chefName={name}
               />
             </li>

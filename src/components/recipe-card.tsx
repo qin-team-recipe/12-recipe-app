@@ -3,25 +3,30 @@ import Link from "next/link";
 
 import { Heart } from "lucide-react";
 
+import { getBlurDataURL } from "../lib/images";
+import BlurImage from "./blur-image";
+
 type Props = {
   path: string;
-  imageUrl: string;
+  imageUrl?: string | null;
   title: string;
   description: string;
   favorites: number;
   isPublished: boolean;
 };
 
-const RecipeCard = ({ path, imageUrl, title, description, favorites, isPublished }: Props) => {
+const RecipeCard = async ({ path, imageUrl, title, description, favorites, isPublished }: Props) => {
   return (
     <Link href={path} className="relative">
-      <Image
-        src={imageUrl}
-        sizes="100vw"
+      <BlurImage
+        src={imageUrl || "/images/recipe-placeholder.png"}
         className="h-auto w-full rounded-2xl object-cover"
         alt={title}
         width={160}
         height={160}
+        placeholder="blur"
+        priority
+        blurDataURL={await getBlurDataURL(imageUrl || "/images/recipe-placeholder.png")}
       />
       {favorites > 0 && (
         <div className="absolute right-2 top-2 rounded-2xl bg-[#040013]/[.48] p-2 leading-none text-mauve1">

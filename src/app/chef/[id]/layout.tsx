@@ -5,7 +5,7 @@ import { CircleEllipsis } from "lucide-react";
 import TopBar from "@/src/components/layout/top-bar";
 import LinkToIconRenderer from "@/src/components/link-to-icon-renderer";
 import LinkableTabs from "@/src/components/linkable-tabs";
-import { Avatar, AvatarImage } from "@/src/components/ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "@/src/components/ui/avatar";
 import { Command, CommandItem, CommandList } from "@/src/components/ui/command";
 import { Popover, PopoverContent, PopoverTrigger } from "@/src/components/ui/popover";
 
@@ -22,6 +22,7 @@ const layout = async ({ params, children }: { params: { id: string }; children: 
     isFollowing,
     UserLink: userLinks,
     isMe,
+    profileImage,
     _count,
   } = await getChefById({
     id: params?.id,
@@ -31,6 +32,7 @@ const layout = async ({ params, children }: { params: { id: string }; children: 
 
   const visibleLinks = sortedUserLinks.slice(0, 2);
   const moreLinks = sortedUserLinks.slice(2);
+  const avatarFallbackName = name.slice(0, 2);
 
   return (
     <>
@@ -69,13 +71,11 @@ const layout = async ({ params, children }: { params: { id: string }; children: 
               <h6>{id}</h6>
             </div>
             <Avatar className="h-16 w-16">
-              <AvatarImage
-                // TODO: シェフのアバター画像を表示する
-                src={
-                  "https://images.unsplash.com/photo-1577219491135-ce391730fb2c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=80&q=80"
-                }
-                alt={name}
-              />
+              {profileImage ? (
+                <AvatarImage src={profileImage} alt={name} />
+              ) : (
+                <AvatarFallback>{avatarFallbackName}</AvatarFallback>
+              )}
             </Avatar>
           </div>
           {profile && <p className="text-mauve12">{profile}</p>}

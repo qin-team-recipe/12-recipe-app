@@ -31,15 +31,15 @@ type Props = {
 };
 
 const EditProfileForm = ({ defaultValues }: Props) => {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   const { toast } = useToast();
   const router = useRouter();
-  const { selectedImage, previewImageURL, isChangedImage, selectImage, clearImage } = useUploadImage(
+  const { selectedImage, previewImageURL, isChangedImage, selectImage, clearImage, previousImageURL } = useUploadImage(
     defaultValues.profileImage ?? null
   );
 
   const [isPending, startTransition] = useTransition();
-
-  const supabase = createClientComponentClient<Database>();
 
   const form = useForm<EditFormValues>({
     resolver: zodResolver(editProfileFormSchema),
@@ -64,75 +64,79 @@ const EditProfileForm = ({ defaultValues }: Props) => {
     control: form.control,
   });
 
-  /**
-   * 編集したプロフィール情報でプロフィールを更新する処理
-   * @param formData 編集したプロフィール情報
-   */
-  const onSubmit = async (formData: z.infer<typeof editProfileFormSchema>) => {
-    startTransition(async () => {
-      if (selectedImage) {
-        // 編集画面でプロフィール画像が選択された場合
-        if (formData.profileImage) {
-          // supabaseストレージにプロフィール画像が存在する場合、選択した画像で置き換える
-          const path = formData.profileImage.split("/").slice(-1)[0];
-          const { error: replaceError } = await supabase.storage.from("user").update(path, selectedImage);
-          // エラーチェック
-          if (replaceError) {
-            form.setError("profileImage", { type: "manual", message: replaceError.message });
-            return;
-          }
-        } else {
-          // supabaseストレージに選択した画像をアップロード
-          const { data: storageData, error: storageError } = await supabase.storage
-            .from("user")
-            .upload(uuidv4(), selectedImage);
-          // エラーチェック
-          if (storageError) {
-            form.setError("profileImage", { type: "manual", message: storageError.message });
-            return;
-          }
-          // ユーザテーブルのプロフィール画像を設定するためにsupabaseストレージのURLを取得する
-          const { data: urlData } = supabase.storage.from("user").getPublicUrl(storageData.path);
-          formData.profileImage = urlData.publicUrl;
-        }
-      } else {
-        // プロフィール画像が選択されていない場合
-        if (formData.profileImage) {
-          // 既にプロフィール画像が存在する場合はsupabaseストレージからプロフィール画像を削除
-          const path = formData.profileImage.split("/").slice(-1)[0];
-          const { error: removeError } = await supabase.storage.from("user").remove([path]);
-          if (removeError) {
-            form.setError("profileImage", { type: "manual", message: removeError.message });
-            return;
-          }
-        }
-        formData.profileImage = "";
-      }
-      // プロフィールの更新
-      const result = await putProfile(formData);
+  const supabase = createClientComponentClient<Database>();
 
-      if (result.isSuccess) {
-        toast({
-          variant: "default",
-          title: result.message,
-          duration: kToastDuration,
-        });
-        router.push(`/my-page`);
-      } else {
-        toast({
-          variant: "destructive",
-          title: result.error,
-          duration: kToastDuration,
-        });
+  const uploadImage = async (image: File) => {
+    const { data: storageData, error: storageError } = await supabase.storage.from("user").upload(uuidv4(), image);
+    if (storageError) {
+      throw storageError;
+    }
+    const { data: urlData } = supabase.storage.from("user").getPublicUrl(storageData.path);
+    return urlData.publicUrl;
+  };
+
+  const updateImage = async (path: string, image: File) => {
+    const { error: replaceError } = await supabase.storage.from("user").update(path, image);
+    if (replaceError) {
+      throw replaceError;
+    }
+  };
+
+  const removeImage = async (url: string) => {
+    const path = url.split("/").slice(-1)[0];
+    const { error: removeError } = await supabase.storage.from("user").remove([path]);
+    if (removeError) {
+      throw removeError;
+    }
+  };
+
+  const onSubmit = async (formData: z.infer<typeof editProfileFormSchema>) => {
+    setIsSubmitting(true);
+
+    startTransition(async () => {
+      try {
+        if (selectedImage) {
+          if (formData.profileImage) {
+            await updateImage(formData.profileImage.split("/").slice(-1)[0], selectedImage);
+          } else {
+            formData.profileImage = await uploadImage(selectedImage);
+          }
+        }
+
+        if (previousImageURL) {
+          await removeImage(previousImageURL);
+        }
+
+        const result = await putProfile(formData);
+        if (result.isSuccess) {
+          toast({
+            variant: "default",
+            title: result.message,
+            duration: kToastDuration,
+          });
+          router.push(`/my-page`);
+        } else {
+          toast({
+            variant: "destructive",
+            title: result.error,
+            duration: kToastDuration,
+          });
+        }
+      } catch (error) {
+        if (error instanceof Error) {
+          console.error(error);
+          form.setError("profileImage", { type: "manual", message: error.message });
+        }
       }
     });
   };
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     try {
-      selectImage(e);
+      selectImage(e.target.files);
     } catch (error) {
       if (error instanceof Error) {
+        console.error(error);
         form.setError("profileImage", { type: "manual", message: error.message });
       }
     }
@@ -160,16 +164,32 @@ const EditProfileForm = ({ defaultValues }: Props) => {
           control={form.control}
           name="profileImage"
           render={({ field }) => {
-            // type="file"のinputタグにvalueを設定すると以下のエラーが発生するためfieldから抽出する
-            // InvalidStateError: Failed to set the 'value' property on 'HTMLInputElement': This input element accepts a filename, which may only be programmatically set to the empty string.
             const { onChange, value, ...restFieldProps } = field;
+
             return (
               <FormItem className=" ml-3 grid space-y-0">
                 <FormLabel className="mb-1 text-lg font-bold">プロフィール画像（任意）</FormLabel>
                 <FormControl>
                   {previewImageURL ? (
-                    // ユーザがプロフィール写真を設定している場合
-                    <PreviewImage onClick={clearImage} previewImage={previewImageURL} />
+                    <div className="relative h-[100px] w-[100px]">
+                      <Image
+                        width={100}
+                        height={100}
+                        className="h-[100px] w-[100px] rounded-xl border border-border object-cover"
+                        src={previewImageURL}
+                        alt="プロフィール写真"
+                      />
+                      <button
+                        type="button"
+                        className="absolute -right-2 -top-1 z-50"
+                        onClick={() => {
+                          clearImage();
+                          form.setValue("profileImage", "");
+                        }}
+                      >
+                        <Minus className="h-5 w-5 rounded-full bg-tomato9 p-1 text-white" />
+                      </button>
+                    </div>
                   ) : (
                     <label htmlFor="file" className="h-[100px] w-[100px]">
                       <input
@@ -254,8 +274,7 @@ const EditProfileForm = ({ defaultValues }: Props) => {
             variant={"destructive"}
             className="flex-1 gap-2"
             type="submit"
-            // isPendingを優先してdisabled判定を行うこと
-            disabled={isPending || [isChangedFiled, isChangedImage].some((b) => b)}
+            disabled={isPending || !(isChangedFiled || isChangedImage) || isSubmitting}
           >
             {isPending && <Spinner />} 保存する
           </Button>
@@ -275,22 +294,3 @@ const EditProfileForm = ({ defaultValues }: Props) => {
 };
 
 export default EditProfileForm;
-
-type PreviewImageProps = {
-  onClick: () => void;
-  previewImage: string;
-};
-const PreviewImage = ({ onClick, previewImage }: PreviewImageProps) => (
-  <div className="relative h-[100px] w-[100px]">
-    <Image
-      width={100}
-      height={100}
-      className="h-[100px] w-[100px] rounded-xl border border-border object-cover"
-      src={previewImage}
-      alt="プロフィール写真"
-    />
-    <button type="button" className="absolute -right-2 -top-1 z-50" onClick={onClick}>
-      <Minus className="h-5 w-5 rounded-full bg-tomato9 p-1 text-white" />
-    </button>
-  </div>
-);

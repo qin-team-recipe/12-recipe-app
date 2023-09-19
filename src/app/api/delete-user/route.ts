@@ -2,11 +2,10 @@ import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 
 import { prisma } from "@/src/lib/prisma";
+import { ApiResponse } from "@/src/types/ApiResponse";
 import { Database } from "@/src/types/SupabaseTypes";
 import { createRouteHandlerClient } from "@supabase/auth-helpers-nextjs";
 import { createClient } from "@supabase/supabase-js";
-
-export type ApiResponse = { message: string } | { error: string };
 
 // 退会機能
 export async function POST(req: NextRequest): Promise<NextResponse<ApiResponse>> {

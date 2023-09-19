@@ -65,6 +65,7 @@
     "next": "13.4.8",
     "postcss": "8.4.24",
     "react": "18.2.0",
+    "react-cropper": "^2.3.3",
     "react-day-picker": "^8.8.0",
     "react-dom": "18.2.0",
     "react-hook-form": "^7.45.2",

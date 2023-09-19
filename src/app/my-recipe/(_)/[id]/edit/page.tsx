@@ -27,7 +27,7 @@ const page = async ({ params }: { params: { id: string } }) => {
         name: ingredient.title,
       };
     }),
-    recipeImage: recipeImage[0].recipeImage,
+    recipeImage: recipeImage && recipeImage[0] ? recipeImage[0].recipeImage : undefined,
     instructions: instructions.map((instruction) => {
       return {
         value: String(instruction.stepDescription),

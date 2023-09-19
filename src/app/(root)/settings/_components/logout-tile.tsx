@@ -2,18 +2,43 @@
 
 import { useRouter } from "next/navigation";
 
-import { Database } from "@/src/types/SupabaseTypes";
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import { kToastDuration } from "@/src/constants/constants";
+import { ApiResponse } from "@/src/types/ApiResponse";
 import { LogOut } from "lucide-react";
 
 import SelectableDialog from "@/src/components/selectable-dialog";
+import { useToast } from "@/src/components/ui/use-toast";
 
 const LogoutTile = () => {
+  const { toast } = useToast();
   const router = useRouter();
 
   const handleSignOut = async () => {
-    const supabase = createClientComponentClient<Database>();
-    await supabase.auth.signOut();
+    const response = await fetch("/api/sign-out", {
+      method: "POST",
+    });
+
+    const responseJson: ApiResponse = await response.json();
+
+    if (response.ok) {
+      if ("message" in responseJson) {
+        toast({
+          title: responseJson.message,
+          variant: "default",
+          duration: kToastDuration,
+        });
+        router.refresh();
+        router.push("/");
+      }
+    } else {
+      if ("error" in responseJson) {
+        toast({
+          title: responseJson.error,
+          variant: "destructive",
+          duration: kToastDuration,
+        });
+      }
+    }
 
     router.refresh();
     router.push("/");
@@ -29,7 +54,7 @@ const LogoutTile = () => {
           <LogOut size={20} />
         </div>
       }
-      className="w-full"
+      className="w-full rounded-md px-2 hover:bg-mauve4"
       onConfirm={async () => {
         await handleSignOut();
       }}

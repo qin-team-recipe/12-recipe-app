@@ -1,25 +1,30 @@
 import Image from "next/image";
 import Link from "next/link";
 
+import { getBlurDataURL } from "../lib/images";
+import BlurImage from "./blur-image";
+
 type Props = {
   id: string;
-  imageUrl: string;
+  imageUrl?: string | null;
   chefName: string;
   bio: string | null;
   recipeCount: number;
 };
 
-export const ChefTile = ({ id, imageUrl, chefName, bio, recipeCount }: Props) => {
+export const ChefTile = async ({ id, imageUrl, chefName, bio, recipeCount }: Props) => {
   return (
     <Link href={`/chef/${id}`}>
       <div className="flex gap-x-4">
-        <Image
-          sizes="100vw"
+        <BlurImage
           className="flex-none overflow-hidden rounded-2xl object-cover"
-          src={imageUrl}
+          src={imageUrl || "/images/chef-placeholder.png"}
           alt={chefName}
           width={80}
           height={128}
+          placeholder="blur"
+          priority
+          blurDataURL={await getBlurDataURL(imageUrl || "/images/chef-placeholder.png")}
         />
         <div className="flex flex-col items-start self-center">
           <p className="line-clamp-1 text-xl font-bold text-mauve12">{chefName}</p>

@@ -15,9 +15,10 @@ type Props = {
   favoriteCount: number;
   userId: string;
   userName: string;
+  profileImage: string | null;
 };
 
-const RecipeInfoStats = ({ recipeId, isActive, favoriteCount, userId, userName }: Props) => {
+const RecipeInfoStats = ({ recipeId, isActive, favoriteCount, userId, userName, profileImage }: Props) => {
   const { optimisticState, updateCount } = useOptimisticToggle({
     count: favoriteCount,
     isActive,
@@ -28,7 +29,7 @@ const RecipeInfoStats = ({ recipeId, isActive, favoriteCount, userId, userName }
   return (
     <>
       <div className="flex items-center gap-4">
-        <ProfileLink id={userId} imagePath={"https://github.com/shadcn.png"} name={userName} />
+        <ProfileLink id={userId} imagePath={profileImage} name={userName} />
         <NumberUnit numbers={optimisticState.count} unit={CONSTANTS.FAVORITE} />
       </div>
       <ToggleButton

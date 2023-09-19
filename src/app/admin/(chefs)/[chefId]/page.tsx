@@ -6,7 +6,7 @@ import TopBar from "@/src/components/layout/top-bar";
 import LinkToIconRenderer from "@/src/components/link-to-icon-renderer";
 import RecipeCard from "@/src/components/recipe-card";
 import RouterBackButton from "@/src/components/router-back-button";
-import { Avatar, AvatarImage } from "@/src/components/ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "@/src/components/ui/avatar";
 import { Command, CommandItem, CommandList } from "@/src/components/ui/command";
 import { Popover, PopoverContent, PopoverTrigger } from "@/src/components/ui/popover";
 
@@ -17,6 +17,7 @@ const page = async ({ params }: { params: { chefId: string } }) => {
     profile,
     Recipe: recipes,
     UserLink: userLinks,
+    profileImage,
   } = await getChefById({
     id: params?.chefId,
   });
@@ -25,6 +26,7 @@ const page = async ({ params }: { params: { chefId: string } }) => {
 
   const visibleLinks = sortedUserLinks.slice(0, 2);
   const moreLinks = sortedUserLinks.slice(2);
+  const avatarFallbackName = name.slice(0, 2);
 
   return (
     <>
@@ -63,13 +65,11 @@ const page = async ({ params }: { params: { chefId: string } }) => {
               <h6>{id}</h6>
             </div>
             <Avatar className="h-16 w-16">
-              <AvatarImage
-                // TODO: シェフのアバター画像を表示する
-                src={
-                  "https://images.unsplash.com/photo-1577219491135-ce391730fb2c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=80&q=80"
-                }
-                alt={name}
-              />
+              {profileImage ? (
+                <AvatarImage src={profileImage} alt={name} />
+              ) : (
+                <AvatarFallback>{avatarFallbackName}</AvatarFallback>
+              )}
             </Avatar>
           </div>
           {profile && <p className="text-mauve12">{profile}</p>}

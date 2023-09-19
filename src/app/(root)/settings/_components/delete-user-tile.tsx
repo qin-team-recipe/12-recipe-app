@@ -1,13 +1,14 @@
 "use client";
 
+import { useTransition } from "react";
 import { useRouter } from "next/navigation";
 
 import { kToastDuration } from "@/src/constants/constants";
+import { ApiResponse } from "@/src/types/ApiResponse";
 import { AlertCircle } from "lucide-react";
 
 import SelectableDialog from "@/src/components/selectable-dialog";
 import { useToast } from "@/src/components/ui/use-toast";
-import { ApiResponse } from "@/src/app/api/delete-user/route";
 
 const DeleteUserTile = () => {
   const { toast } = useToast();
@@ -51,7 +52,7 @@ const DeleteUserTile = () => {
           <AlertCircle size={20} />
         </div>
       }
-      className="w-full"
+      className="w-full rounded-md px-2 hover:bg-mauve4"
       onConfirm={handleClick}
       confirmLabel="退会する"
       cancelLabel="キャンセル"
