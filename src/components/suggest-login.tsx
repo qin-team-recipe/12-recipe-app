@@ -14,10 +14,10 @@ import Spinner from "./ui/spinner";
 import { toast } from "./ui/use-toast";
 
 type Props = {
-  src: `/images/login${string}.png`;
+  imageSrc: string;
 };
 
-const SuggestLogin = ({ src }: Props) => {
+const SuggestLogin = ({ imageSrc }: Props) => {
   const [isPending, startTransition] = useTransition();
 
   const supabase = createClientComponentClient<Database>();
@@ -43,7 +43,7 @@ const SuggestLogin = ({ src }: Props) => {
   return (
     <div className="flex flex-col items-center justify-center pt-5">
       <div className="mx-auto mb-5">
-        <Image width={200} height={200} src={src} alt="ログイン画面のイメージ" />
+        <Image width={200} height={200} src={imageSrc} alt="ログイン画面の画像" />
       </div>
       <p className="mb-3 font-bold text-mauve12">ログインをお願いします</p>
       <p className="mb-3 text-sm text-mauve12">こちらの機能を利用するにはログインが必要です</p>
