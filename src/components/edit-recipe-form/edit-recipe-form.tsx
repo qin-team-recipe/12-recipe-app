@@ -171,6 +171,8 @@ const EditRecipeForm = ({ defaultValues, navigateTo }: Props) => {
         const fileSizeInMB = file.size / (1024 * 1024);
 
         if (fileSizeInMB > 2) {
+          console.log("画像のサイズは2MB以下である必要があります。");
+
           form.setError("recipeImage", { type: "manual", message: "画像のサイズは2MB以下である必要があります。" });
           return;
         }
@@ -317,7 +319,7 @@ const EditRecipeForm = ({ defaultValues, navigateTo }: Props) => {
         {/* レシピ画像 */}
         <FormField
           control={form.control}
-          name="title"
+          name="recipeImage"
           render={({ field }) => {
             const { onChange, value, ...restFieldProps } = field;
 
