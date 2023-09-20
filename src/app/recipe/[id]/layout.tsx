@@ -1,6 +1,6 @@
 import LinkableTabs from "@/src/components/linkable-tabs";
+import RecipeHero from "@/src/components/recipe-hero";
 
-import RecipeHero from "./_components/recipe-hero";
 import { tabs } from "./_constants/tabs";
 
 export default function layout({ params, children }: { params: { id: string }; children: React.ReactNode }) {

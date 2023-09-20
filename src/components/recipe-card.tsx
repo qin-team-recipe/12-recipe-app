@@ -1,33 +1,31 @@
-import Image from "next/image";
+"use client";
+
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 import { Heart } from "lucide-react";
 
-import { getBlurDataURL } from "../lib/images";
-import BlurImage from "./blur-image";
-
 type Props = {
   path: string;
-  imageUrl?: string | null;
   title: string;
   description: string;
   favorites: number;
   isPublished: boolean;
+  imageComponent?: React.ReactNode;
 };
 
-const RecipeCard = async ({ path, imageUrl, title, description, favorites, isPublished }: Props) => {
+const RecipeCard = ({ path, title, description, favorites, isPublished, imageComponent }: Props) => {
+  const pathName = usePathname();
+
+  const handleClick = () => {
+    if (pathName.includes("chef")) return;
+
+    sessionStorage.setItem("previousPath", pathName);
+  };
+
   return (
-    <Link href={path} className="relative">
-      <BlurImage
-        src={imageUrl || "/images/recipe-placeholder.png"}
-        className="h-auto w-full rounded-2xl object-cover"
-        alt={title}
-        width={160}
-        height={160}
-        placeholder="blur"
-        priority
-        blurDataURL={await getBlurDataURL(imageUrl || "/images/recipe-placeholder.png")}
-      />
+    <Link href={path} className="relative" onClick={handleClick}>
+      {imageComponent}
       {favorites > 0 && (
         <div className="absolute right-2 top-2 rounded-2xl bg-[#040013]/[.48] p-2 leading-none text-mauve1">
           {isPublished ? (

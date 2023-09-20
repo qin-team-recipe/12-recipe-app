@@ -62,8 +62,7 @@ export const deleteCartListItem = async ({
       });
     }
 
-    // TODO: 適切なパスを指定する
-    revalidatePath("/admin");
+    revalidatePath("/shopping-list");
 
     return { isSuccess: true, message: "指定のカートリストアイテムを削除しました🔥" };
   } catch (error) {

@@ -67,7 +67,7 @@ export const columns: ColumnDef<Chef>[] = [
       <div className="flex items-center">
         <Avatar className="mr-2 h-8 w-8">
           {row.original.profileImage ? (
-            <AvatarImage src={row.original.profileImage} alt={row.getValue("name")} />
+            <AvatarImage className="rounded-full" src={row.original.profileImage} alt={row.getValue("name")} />
           ) : (
             <AvatarFallback>{row.original.name.charAt(0)}</AvatarFallback>
           )}

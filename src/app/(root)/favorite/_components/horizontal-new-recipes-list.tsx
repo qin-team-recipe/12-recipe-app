@@ -1,5 +1,7 @@
 import { getRecipesNewFromFollowedChefs } from "@/src/actions/getRecipesNewFromFollowedChefs";
+import { getBlurDataURL } from "@/src/lib/images";
 
+import BlurImage from "@/src/components/blur-image";
 import NoDataDisplay from "@/src/components/no-data-display";
 import RecipeCard from "@/src/components/recipe-card";
 
@@ -10,19 +12,33 @@ const HorizontalNewRecipesList = async () => {
     <>
       {newRecipesFromFollowingChefs.length > 0 ? (
         <ul className="mt-2 flex w-screen gap-x-2 overflow-x-scroll px-4 md:w-full">
-          {newRecipesFromFollowingChefs.map(({ id, title, description, RecipeImage, _count }) => (
-            <li key={id} className="flex w-[160px] flex-none flex-col">
-              <RecipeCard
-                title={title}
-                description={description}
-                // TODO: 画像を設定する
-                imageUrl="https://images.unsplash.com/photo-1595295333158-4742f28fbd85?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=320&q=80"
-                favorites={_count.likes}
-                path={`/recipe/${id}`}
-                isPublished={true}
-              />
-            </li>
-          ))}
+          {newRecipesFromFollowingChefs.map(async ({ id, title, description, RecipeImage, _count }) => {
+            const imageUrl = RecipeImage[0]?.recipeImage;
+
+            return (
+              <li key={id} className="flex w-[160px] flex-none flex-col">
+                <RecipeCard
+                  title={title}
+                  description={description}
+                  favorites={_count.likes}
+                  path={`/recipe/${id}`}
+                  isPublished={true}
+                  imageComponent={
+                    <BlurImage
+                      src={imageUrl || "/images/recipe-placeholder.png"}
+                      className="h-auto w-full rounded-2xl object-cover"
+                      alt={title}
+                      width={160}
+                      height={160}
+                      placeholder="blur"
+                      priority
+                      blurDataURL={await getBlurDataURL(imageUrl || "/images/recipe-placeholder.png")}
+                    />
+                  }
+                />
+              </li>
+            );
+          })}
         </ul>
       ) : (
         <NoDataDisplay text="まだフォローしているシェフの新着レシピはありません。" />

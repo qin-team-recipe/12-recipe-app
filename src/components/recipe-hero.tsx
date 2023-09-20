@@ -14,9 +14,10 @@ import RecipeInfoStats from "./recipe-info-stats";
 
 type Props = {
   id: string;
+  previousPath?: string;
 };
 
-const RecipeHero = async ({ id }: Props) => {
+const RecipeHero = async ({ id, previousPath }: Props) => {
   const {
     title,
     description,
@@ -53,7 +54,7 @@ const RecipeHero = async ({ id }: Props) => {
             "cursor-pointer stroke-white hover:stroke-mauve2"
           )}
         >
-          <RouterBackButton size={32} path="/my-page" className="rounded-full bg-[#040013]/[.48] text-mauve1" />
+          <RouterBackButton size={32} className="rounded-full bg-[#040013]/[.48] text-mauve1" path={previousPath} />
         </div>
       </div>
       <div className="grid gap-4 p-4">

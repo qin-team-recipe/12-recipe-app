@@ -1,51 +1,23 @@
-import Image from "next/image";
-import Link from "next/link";
+"use client";
 
-import { getBlurDataURL } from "../lib/images";
-import BlurImage from "./blur-image";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 type Props = {
   id: string;
-  imageUrl?: string | null;
-  chefName: string;
-  bio: string | null;
-  recipeCount: number;
+  children: React.ReactNode;
 };
 
-export const ChefTile = async ({ id, imageUrl, chefName, bio, recipeCount }: Props) => {
+export const ChefTile = async ({ id, children }: Props) => {
+  const pathName = usePathname();
+
+  const handleClick = () => {
+    sessionStorage.setItem("previousPath", pathName);
+  };
+
   return (
-    <Link href={`/chef/${id}`}>
-      <div className="flex gap-x-4">
-        <BlurImage
-          className="flex-none overflow-hidden rounded-2xl object-cover"
-          src={imageUrl || "/images/chef-placeholder.png"}
-          alt={chefName}
-          width={80}
-          height={128}
-          placeholder="blur"
-          priority
-          blurDataURL={await getBlurDataURL(imageUrl || "/images/chef-placeholder.png")}
-        />
-        <div className="flex flex-col items-start self-center">
-          <p className="line-clamp-1 text-xl font-bold text-mauve12">{chefName}</p>
-          <p className="mt-2 line-clamp-3 text-mauve11">{bio}</p>
-          <div className="mt-1 flex items-center gap-2">
-            <svg width="16" height="16" viewBox="0 0 18 19" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M3 2.75H9L8.25 9.5H3.75L3 2.75Z" stroke="black" strokeLinecap="round" strokeLinejoin="round" />
-              <path d="M5.25 14H6.75V16.25H5.25V14Z" stroke="black" strokeLinecap="round" strokeLinejoin="round" />
-              <path
-                d="M14.9999 2.75V11.75H11.2499C11.2327 8.98925 11.3879 6.1955 14.9999 2.75Z"
-                stroke="black"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-              <path d="M15 11.75V16.25H14.25V14" stroke="black" strokeLinecap="round" strokeLinejoin="round" />
-              <path d="M6 9.5V14" stroke="black" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
-            <span className="text-mauve11">{recipeCount} レシピ</span>
-          </div>
-        </div>
-      </div>
+    <Link href={`/chef/${id}`} onClick={handleClick}>
+      {children}
     </Link>
   );
 };
