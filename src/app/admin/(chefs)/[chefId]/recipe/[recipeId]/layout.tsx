@@ -15,7 +15,7 @@ export default async function layout({
   params,
   children,
 }: {
-  params: { recipeId: string; id: string };
+  params: { recipeId: string; chefId: string };
   children: React.ReactNode;
 }) {
   const { title, description, RecipeLink: recipeLinks } = await getRecipeById(params?.recipeId);
@@ -29,7 +29,7 @@ export default async function layout({
     <>
       <div className="cursor-pointer stroke-white pl-4 pt-4 hover:stroke-mauve2">
         <RouterBackButton
-          path={`/admin/${params.id}`}
+          path={`/admin/${params.chefId}`}
           size={32}
           className="rounded-full bg-[#040013]/[.48] text-mauve1"
         />
@@ -60,13 +60,13 @@ export default async function layout({
                 </Popover>
               )}
 
-              {<PopoverMenu chefId={params.id} recipeId={params.recipeId} />}
+              {<PopoverMenu chefId={params.chefId} recipeId={params.recipeId} />}
             </div>
           </div>
           <p className="text-mauve12">{description}</p>
         </div>
       </div>
-      <LinkableTabs tabs={tabs({ chefId: params.id, recipeId: params.recipeId })}>{children}</LinkableTabs>
+      <LinkableTabs tabs={tabs({ chefId: params.chefId, recipeId: params.recipeId })}>{children}</LinkableTabs>
     </>
   );
 }

@@ -35,10 +35,12 @@ const RecipeHero = async ({ id, previousPath }: Props) => {
   const visibleLinks = sortedRecipeLinks.slice(0, 2);
   const moreLinks = sortedRecipeLinks.slice(2);
 
+  const hasRecipeImage = recipeImage && recipeImage[0] && recipeImage[0].recipeImage;
+
   return (
     <>
-      <div className={cn(recipeImage[0].recipeImage && "relative aspect-square")}>
-        {recipeImage[0].recipeImage && (
+      <div className={cn(hasRecipeImage && "relative aspect-square")}>
+        {hasRecipeImage && (
           <Image
             src={recipeImage[0].recipeImage}
             sizes="100vw"
@@ -50,7 +52,7 @@ const RecipeHero = async ({ id, previousPath }: Props) => {
         )}
         <div
           className={cn(
-            recipeImage[0].recipeImage ? "absolute left-5 top-5" : "pl-4 pt-4",
+            hasRecipeImage ? "absolute left-5 top-5" : "pl-4 pt-4",
             "cursor-pointer stroke-white hover:stroke-mauve2"
           )}
         >
