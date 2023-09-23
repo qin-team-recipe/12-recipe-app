@@ -27,6 +27,7 @@ import { Input } from "@/src/components/ui/input";
 import { Popover, PopoverContent, PopoverTrigger } from "@/src/components/ui/popover";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/src/components/ui/table";
 
+import LogoutTile from "../login/_components/logout-tile";
 import DeleteChefButton from "./delete-chef-button";
 
 type Chef = {
@@ -189,6 +190,7 @@ export function ChefsDataTable({ data }: { data: Chef[] }) {
 
   return (
     <div className="w-full">
+      <LogoutTile />
       <div className="flex items-center py-4">
         <div className="flex gap-2">
           <Input
