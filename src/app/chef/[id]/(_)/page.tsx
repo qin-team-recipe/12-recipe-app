@@ -57,7 +57,7 @@ const page = async ({ params }: PageProps) => {
     <>
       {initialRecipes.length > 0 ? (
         <LoadMore initialOffset={0} loadMoreAction={loadMoreRecipe}>
-          <RecipeList recipes={initialRecipes} path="recipe" />
+          <RecipeList recipes={initialRecipes} path={`chef/${params.id}/recipe`} />
         </LoadMore>
       ) : (
         <NoDataDisplay text="まだレシピが作成されていません。" />

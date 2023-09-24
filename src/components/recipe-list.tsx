@@ -1,5 +1,8 @@
 import RecipeCard from "@/src/components/recipe-card";
 
+import { getBlurDataURL } from "../lib/images";
+import BlurImage from "./blur-image";
+
 type Props = {
   recipes: {
     id: string;
@@ -19,7 +22,7 @@ type Props = {
 const RecipeList = ({ recipes, path }: Props) => {
   return (
     <>
-      {recipes.map(({ id, _count, description, title, isPublished, RecipeImage }) => {
+      {recipes.map(async ({ id, _count, description, title, isPublished, RecipeImage }) => {
         const imageUrl = RecipeImage && RecipeImage.length > 0 ? RecipeImage[0].recipeImage : null;
         return (
           <li key={id} className="flex flex-col">
@@ -29,7 +32,18 @@ const RecipeList = ({ recipes, path }: Props) => {
               description={description}
               isPublished={isPublished}
               title={title}
-              imageUrl={imageUrl}
+              imageComponent={
+                <BlurImage
+                  src={imageUrl || "/images/recipe-placeholder.png"}
+                  className="h-auto w-full rounded-2xl object-cover"
+                  alt={title}
+                  width={160}
+                  height={160}
+                  placeholder="blur"
+                  priority
+                  blurDataURL={await getBlurDataURL(imageUrl || "/images/recipe-placeholder.png")}
+                />
+              }
             />
           </li>
         );

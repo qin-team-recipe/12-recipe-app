@@ -13,7 +13,7 @@ type Props = {
   id: string;
 };
 
-const RecipeHero = async ({ id }: Props) => {
+const MyRecipeHero = async ({ id }: Props) => {
   const {
     title,
     description,
@@ -68,4 +68,4 @@ const RecipeHero = async ({ id }: Props) => {
   );
 };
 
-export default RecipeHero;
+export default MyRecipeHero;

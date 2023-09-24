@@ -14,9 +14,10 @@ import RecipeInfoStats from "./recipe-info-stats";
 
 type Props = {
   id: string;
+  previousPath?: string;
 };
 
-const RecipeHero = async ({ id }: Props) => {
+const RecipeHero = async ({ id, previousPath }: Props) => {
   const {
     title,
     description,
@@ -34,10 +35,12 @@ const RecipeHero = async ({ id }: Props) => {
   const visibleLinks = sortedRecipeLinks.slice(0, 2);
   const moreLinks = sortedRecipeLinks.slice(2);
 
+  const hasRecipeImage = recipeImage && recipeImage[0] && recipeImage[0].recipeImage;
+
   return (
     <>
-      <div className={cn(recipeImage[0].recipeImage && "relative aspect-square")}>
-        {recipeImage[0].recipeImage && (
+      <div className={cn(hasRecipeImage && "relative aspect-square")}>
+        {hasRecipeImage && (
           <Image
             src={recipeImage[0].recipeImage}
             sizes="100vw"
@@ -49,11 +52,11 @@ const RecipeHero = async ({ id }: Props) => {
         )}
         <div
           className={cn(
-            recipeImage[0].recipeImage ? "absolute left-5 top-5" : "pl-4 pt-4",
+            hasRecipeImage ? "absolute left-5 top-5" : "pl-4 pt-4",
             "cursor-pointer stroke-white hover:stroke-mauve2"
           )}
         >
-          <RouterBackButton size={32} path="/my-page" className="rounded-full bg-[#040013]/[.48] text-mauve1" />
+          <RouterBackButton size={32} className="rounded-full bg-[#040013]/[.48] text-mauve1" path={previousPath} />
         </div>
       </div>
       <div className="grid gap-4 p-4">

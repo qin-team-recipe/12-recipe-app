@@ -57,8 +57,7 @@ export const deleteRecipe = async (recipeId: string): Promise<ActionsResult> => 
       }),
     ]);
 
-    // TODO: 適切なパスを指定する
-    revalidatePath("/mock");
+    revalidatePath("/");
 
     return { isSuccess: true, message: "指定のレシピを削除しました🔥" };
   } catch (error) {

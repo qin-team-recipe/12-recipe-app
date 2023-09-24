@@ -6,8 +6,8 @@ import { useOptimisticToggle } from "@/src/hooks/useOptimisticToggle";
 import ProfileLink from "@/src/components/profile-link";
 import ToggleButton from "@/src/components/toggle-button";
 
-import NumberUnit from "../../../../components/number-unit";
-import { CONSTANTS } from "../../../../constants/constants";
+import { CONSTANTS } from "../constants/constants";
+import NumberUnit from "./number-unit";
 
 type Props = {
   recipeId: string;

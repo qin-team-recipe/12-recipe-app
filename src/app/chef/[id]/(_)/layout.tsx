@@ -9,7 +9,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/src/components/ui/avatar"
 import { Command, CommandItem, CommandList } from "@/src/components/ui/command";
 import { Popover, PopoverContent, PopoverTrigger } from "@/src/components/ui/popover";
 
-import RouterBackButton from "../../../components/router-back-button";
+import RouterBackButton from "../../../../components/router-back-button";
 import UserProfileStats from "./_components/user-profile-stats";
 import { tabs } from "./_constants/tabs";
 

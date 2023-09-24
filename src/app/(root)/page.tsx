@@ -9,6 +9,8 @@ import ChefTiles from "./_components/chef-tiles";
 import HorizontalTopFavoriteRecipesInLast3DaysList from "./_components/horizontal-top-favorite-recipes-in-last-3days-list";
 import HorizontalTopFollowChefsInLast3DaysList from "./_components/horizontal-top-follow-chefs-in-last-3days-list";
 
+export const dynamic = "force-dynamic";
+
 const page = () => {
   return (
     <>

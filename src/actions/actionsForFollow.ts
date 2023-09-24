@@ -34,7 +34,6 @@ export const followChef = async (followedId: string): Promise<ActionsResult> => 
       },
     });
 
-    // TODO: 適切なパスを指定する
     revalidatePath("/");
 
     return {
@@ -77,7 +76,6 @@ export const unFollowChef = async (followedId: string): Promise<ActionsResult> =
       },
     });
 
-    // TODO: 適切なパスを指定する
     revalidatePath("/");
 
     return {
