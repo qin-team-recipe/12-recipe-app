@@ -17,7 +17,7 @@ import { Input } from "@/src/components/ui/input";
 import Spinner from "@/src/components/ui/spinner";
 import { useToast } from "@/src/components/ui/use-toast";
 
-import { loginFormSchema, LoginFormValues } from "./schema";
+import { loginFormSchema } from "./schema";
 
 const AdminLoginForm = () => {
   const router = useRouter();

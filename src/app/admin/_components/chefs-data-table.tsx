@@ -19,8 +19,9 @@ import {
 } from "@tanstack/react-table";
 import { Copy, MoreHorizontal, Pencil } from "lucide-react";
 
+import LogoutDialogTrigger from "@/src/components/logout-dialog-trigger";
 import { AvatarFallback, AvatarImage } from "@/src/components/ui/avatar";
-import { Button } from "@/src/components/ui/button";
+import { Button, buttonVariants } from "@/src/components/ui/button";
 import { Checkbox } from "@/src/components/ui/checkbox";
 import { Command, CommandItem, CommandList } from "@/src/components/ui/command";
 import { Input } from "@/src/components/ui/input";
@@ -189,6 +190,7 @@ export function ChefsDataTable({ data }: { data: Chef[] }) {
 
   return (
     <div className="w-full">
+      <LogoutDialogTrigger trigger={<div className={buttonVariants({ variant: "destructive" })}>ログアウト</div>} />
       <div className="flex items-center py-4">
         <div className="flex gap-2">
           <Input

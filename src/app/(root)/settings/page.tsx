@@ -6,6 +6,7 @@ import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { ArrowLeft, ArrowUpRight, ChevronRight, LogOut } from "lucide-react";
 
 import TopBar from "@/src/components/layout/top-bar";
+import LogoutDialogTrigger from "@/src/components/logout-dialog-trigger";
 
 import DeleteUserTile from "./_components/delete-user-tile";
 import LogoutTile from "./_components/logout-tile";
@@ -65,7 +66,16 @@ const Page = async () => {
         <>
           <section className="mt-5 px-2">
             <h2 className="mb-3 px-2 text-lg font-bold">アカウントの操作</h2>
-            <LogoutTile />
+            {/* <LogoutTile /> */}
+            <LogoutDialogTrigger
+              trigger={
+                <div className="flex h-12 items-center justify-between rounded-md px-2 hover:bg-mauve4">
+                  ログアウト
+                  <LogOut size={20} />
+                </div>
+              }
+              className="w-full"
+            />
           </section>
           <section className="mt-5 px-2">
             <h2 className="mb-3 px-2 text-lg font-bold">取り消しができない操作</h2>
