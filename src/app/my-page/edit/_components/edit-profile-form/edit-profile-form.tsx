@@ -1,20 +1,19 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { useTransition } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
+import { uploadImage } from "@/src/actions/actionsForUploadImage";
 import { putProfile } from "@/src/actions/putProfile";
 import { kToastDuration } from "@/src/constants/constants";
-import { useUploadImage } from "@/src/hooks/useUploadImage";
 import { cn } from "@/src/lib/utils";
 import { Database } from "@/src/types/SupabaseTypes";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { Minus, Plus, PlusIcon, X } from "lucide-react";
 import { useFieldArray, useForm } from "react-hook-form";
-import { v4 as uuidv4 } from "uuid";
 import { z } from "zod";
 
 import { Button, buttonVariants } from "@/src/components/ui/button";
@@ -31,13 +30,8 @@ type Props = {
 };
 
 const EditProfileForm = ({ defaultValues }: Props) => {
-  const [isSubmitting, setIsSubmitting] = useState(false);
-
   const { toast } = useToast();
   const router = useRouter();
-  const { selectedImage, previewImageURL, isChangedImage, selectImage, clearImage, previousImageURL } = useUploadImage(
-    defaultValues.profileImage ?? null
-  );
 
   const [isPending, startTransition] = useTransition();
 
@@ -64,16 +58,21 @@ const EditProfileForm = ({ defaultValues }: Props) => {
     control: form.control,
   });
 
+  const selectedImage = form.watch("selectedImage");
+  const profileImageUrl = form.watch("profileImageUrl");
+  const previewImageURL = selectedImage === undefined ? profileImageUrl : URL.createObjectURL(selectedImage);
+  const isChangedImage = previewImageURL !== profileImageUrl;
+
   const supabase = createClientComponentClient<Database>();
 
-  const uploadImage = async (image: File) => {
-    const { data: storageData, error: storageError } = await supabase.storage.from("user").upload(uuidv4(), image);
-    if (storageError) {
-      throw storageError;
-    }
-    const { data: urlData } = supabase.storage.from("user").getPublicUrl(storageData.path);
-    return urlData.publicUrl;
-  };
+  // const uploadImage = async (image: File) => {
+  //   const { data: storageData, error: storageError } = await supabase.storage.from("user").upload(uuidv4(), image);
+  //   if (storageError) {
+  //     throw storageError;
+  //   }
+  //   const { data: urlData } = supabase.storage.from("user").getPublicUrl(storageData.path);
+  //   return urlData.publicUrl;
+  // };
 
   const updateImage = async (path: string, image: File) => {
     const { error: replaceError } = await supabase.storage.from("user").update(path, image);
@@ -91,20 +90,28 @@ const EditProfileForm = ({ defaultValues }: Props) => {
   };
 
   const onSubmit = async (formData: z.infer<typeof editProfileFormSchema>) => {
-    setIsSubmitting(true);
-
+    console.log("formData", formData);
     startTransition(async () => {
       try {
-        if (selectedImage) {
-          if (formData.profileImage) {
-            await updateImage(formData.profileImage.split("/").slice(-1)[0], selectedImage);
+        if (formData.selectedImage) {
+          if (formData.profileImageUrl !== null && formData.profileImageUrl !== "") {
+            await updateImage(formData.profileImageUrl.split("/").slice(-1)[0], formData.selectedImage);
           } else {
-            formData.profileImage = await uploadImage(selectedImage);
+            console.log(formData);
+            // ファイルオブジェクトのシリアライズ処理
+            const formDataForFile = new FormData();
+            formDataForFile.append("selectedImage", formData.selectedImage);
+            const result = await uploadImage(formDataForFile);
+            if (!result.isSuccess) {
+              form.setError("selectedImage", { type: "manual", message: result.error });
+              return;
+            }
+            formData.profileImageUrl = result.storageUrl;
           }
         }
 
-        if (previousImageURL) {
-          await removeImage(previousImageURL);
+        if (isChangedImage && formData.profileImageUrl) {
+          await removeImage(formData.profileImageUrl);
         }
 
         const result = await putProfile(formData);
@@ -125,21 +132,14 @@ const EditProfileForm = ({ defaultValues }: Props) => {
       } catch (error) {
         if (error instanceof Error) {
           console.error(error);
-          form.setError("profileImage", { type: "manual", message: error.message });
+          form.setError("profileImageUrl", { type: "manual", message: error.message });
         }
       }
     });
   };
 
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    try {
-      selectImage(e.target.files);
-    } catch (error) {
-      if (error instanceof Error) {
-        console.error(error);
-        form.setError("profileImage", { type: "manual", message: error.message });
-      }
-    }
+  const clearImage = () => {
+    form.setValue("selectedImage", undefined);
   };
 
   return (
@@ -162,10 +162,8 @@ const EditProfileForm = ({ defaultValues }: Props) => {
         {/* プロフィール画像 */}
         <FormField
           control={form.control}
-          name="profileImage"
+          name="selectedImage"
           render={({ field }) => {
-            const { onChange, value, ...restFieldProps } = field;
-
             return (
               <FormItem className=" ml-3 grid space-y-0">
                 <FormLabel className="mb-1 text-lg font-bold">プロフィール画像（任意）</FormLabel>
@@ -179,14 +177,7 @@ const EditProfileForm = ({ defaultValues }: Props) => {
                         src={previewImageURL}
                         alt="プロフィール写真"
                       />
-                      <button
-                        type="button"
-                        className="absolute -right-2 -top-1 z-50"
-                        onClick={() => {
-                          clearImage();
-                          form.setValue("profileImage", "");
-                        }}
-                      >
+                      <button type="button" className="absolute -right-2 -top-1 z-50" onClick={clearImage}>
                         <Minus className="h-5 w-5 rounded-full bg-tomato9 p-1 text-white" />
                       </button>
                     </div>
@@ -197,8 +188,7 @@ const EditProfileForm = ({ defaultValues }: Props) => {
                         id="file"
                         className="hidden"
                         accept="image/*"
-                        onChange={handleImageChange}
-                        {...restFieldProps}
+                        onChange={(e) => field.onChange(e.target.files ? e.target.files[0] : null)}
                       />
                       <div className="flex h-full w-full flex-col items-center justify-center gap-2 rounded-xl border border-border text-mauve11 hover:cursor-pointer">
                         <p className="text-xs">画像を設定</p>
@@ -274,7 +264,7 @@ const EditProfileForm = ({ defaultValues }: Props) => {
             variant={"destructive"}
             className="flex-1 gap-2"
             type="submit"
-            disabled={isPending || !(isChangedFiled || isChangedImage) || isSubmitting}
+            disabled={isPending || [isChangedFiled, isChangedImage].some((b) => b) ? false : true}
           >
             {isPending && <Spinner />} 保存する
           </Button>
