@@ -1,5 +1,3 @@
-import LogoutTile from "./login/_components/logout-tile";
-
 export const metadata = {
   title: "管理画面",
 };

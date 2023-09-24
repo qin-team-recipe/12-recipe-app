@@ -6,10 +6,14 @@ import { kToastDuration } from "@/src/constants/constants";
 import { ApiResponse } from "@/src/types/ApiResponse";
 
 import SelectableDialog from "@/src/components/selectable-dialog";
-import { Button } from "@/src/components/ui/button";
 import { useToast } from "@/src/components/ui/use-toast";
 
-const LogoutTile = () => {
+type Props = {
+  trigger: React.ReactNode;
+  className?: string;
+};
+
+const LogoutDialogTrigger = ({ trigger, className }: Props) => {
   const { toast } = useToast();
   const router = useRouter();
 
@@ -46,13 +50,10 @@ const LogoutTile = () => {
 
   return (
     <SelectableDialog
+      className={className}
       title="確認"
       message="ログアウトしますか？"
-      triggerComponent={
-        <Button variant="destructive" className="flex-1 gap-2">
-          ログアウト
-        </Button>
-      }
+      triggerComponent={trigger}
       onConfirm={async () => {
         await handleSignOut();
       }}
@@ -62,4 +63,4 @@ const LogoutTile = () => {
   );
 };
 
-export default LogoutTile;
+export default LogoutDialogTrigger;
