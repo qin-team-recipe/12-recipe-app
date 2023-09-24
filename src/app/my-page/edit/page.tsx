@@ -17,7 +17,8 @@ const page = async () => {
     urls: user.UserLink.map((link) => {
       return { id: link.id, value: link.url };
     }),
-    profileImage: user.profileImage ?? undefined,
+    selectedImage: undefined,
+    profileImageUrl: user.profileImage,
   };
 
   return (

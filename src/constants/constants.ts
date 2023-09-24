@@ -51,3 +51,5 @@ export const kInfiniteScrollCount = 10;
 export const ROLE_TYPE = {
   USER: "USER",
 } as const;
+
+export const IMAGE_TYPES = ["image/jpeg", "image/png"];
