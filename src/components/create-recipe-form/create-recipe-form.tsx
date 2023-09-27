@@ -11,15 +11,12 @@ import { recipeFormStateAtom } from "@/src/atoms/draftRecipeFormValuesAtom";
 import { kToastDuration } from "@/src/constants/constants";
 import { useUploadImage } from "@/src/hooks/useUploadImage";
 import { cn, getPlainTextFromJSON } from "@/src/lib/utils";
-import { Database } from "@/src/types/SupabaseTypes";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { useAtom } from "jotai";
 import { Crop, CropIcon, Minus, Plus, PlusIcon, RefreshCw, X } from "lucide-react";
 import Cropper, { type ReactCropperElement } from "react-cropper";
 import { useFieldArray, useForm } from "react-hook-form";
 import useDeepCompareEffect from "use-deep-compare-effect";
-import { v4 as uuidv4 } from "uuid";
 import { z } from "zod";
 
 import InstructionMenu from "@/src/components/instruction-menu";
@@ -44,7 +41,7 @@ const CreateRecipeForm = ({ defaultValues, redirectPath }: Props) => {
   const [isOpenCropDialog, setIsOpenCropDialog] = useState(false);
   const cropperRef = useRef<ReactCropperElement>(null);
 
-  const { selectedImage, previewImageURL, setPreviewImageURL, clearImage } = useUploadImage(null);
+  const { selectedImage, previewImageURL, setPreviewImageURL, uploadImage, clearImage } = useUploadImage(null);
   const router = useRouter();
 
   const searchParams = useSearchParams();
@@ -64,8 +61,6 @@ const CreateRecipeForm = ({ defaultValues, redirectPath }: Props) => {
   const [_, setDraftRecipeFormValues] = useAtom(recipeFormStateAtom);
 
   const { setValue, watch, handleSubmit } = form;
-
-  const supabase = createClientComponentClient<Database>();
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     try {
@@ -127,35 +122,32 @@ const CreateRecipeForm = ({ defaultValues, redirectPath }: Props) => {
     setIsSubmitting(true);
 
     startTransition(async () => {
-      if (selectedImage) {
-        const { data: storageData, error: storageError } = await supabase.storage
-          .from("recipe")
-          .upload(uuidv4(), selectedImage);
-
-        if (storageError) {
-          form.setError("recipeImage", { type: "manual", message: storageError.message });
-          return;
+      try {
+        if (selectedImage) {
+          data.recipeImage = await uploadImage(selectedImage, "user");
         }
 
-        const { data: urlData } = supabase.storage.from("recipe").getPublicUrl(storageData.path);
-        data.recipeImage = urlData.publicUrl;
-      }
+        const result = await postRecipe(data);
 
-      const result = await postRecipe(data);
-
-      if (result.isSuccess) {
-        toast({
-          variant: "default",
-          title: result.message,
-          duration: kToastDuration,
-        });
-        router.push(redirectPath);
-      } else {
-        toast({
-          variant: "destructive",
-          title: result.error,
-          duration: kToastDuration,
-        });
+        if (result.isSuccess) {
+          toast({
+            variant: "default",
+            title: result.message,
+            duration: kToastDuration,
+          });
+          router.push(redirectPath);
+        } else {
+          toast({
+            variant: "destructive",
+            title: result.error,
+            duration: kToastDuration,
+          });
+        }
+      } catch (error) {
+        if (error instanceof Error) {
+          console.error(error);
+          form.setError("recipeImage", { type: "manual", message: error.message });
+        }
       }
     });
   };
