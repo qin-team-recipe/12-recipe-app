@@ -9,12 +9,9 @@ import { putProfile } from "@/src/actions/putProfile";
 import { kToastDuration } from "@/src/constants/constants";
 import { useUploadImage } from "@/src/hooks/useUploadImage";
 import { cn } from "@/src/lib/utils";
-import { Database } from "@/src/types/SupabaseTypes";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { Minus, Plus, PlusIcon, X } from "lucide-react";
 import { useFieldArray, useForm } from "react-hook-form";
-import { v4 as uuidv4 } from "uuid";
 import { z } from "zod";
 
 import { Button, buttonVariants } from "@/src/components/ui/button";
@@ -35,9 +32,17 @@ const EditProfileForm = ({ defaultValues }: Props) => {
 
   const { toast } = useToast();
   const router = useRouter();
-  const { selectedImage, previewImageURL, isChangedImage, selectImage, clearImage, previousImageURL } = useUploadImage(
-    defaultValues.profileImage ?? null
-  );
+  const {
+    selectedImage,
+    previewImageURL,
+    isChangedImage,
+    selectImage,
+    clearImage,
+    uploadImage,
+    updateImage,
+    removeImage,
+    previousImageURL,
+  } = useUploadImage(defaultValues.profileImage ?? null);
 
   const [isPending, startTransition] = useTransition();
 
@@ -64,32 +69,6 @@ const EditProfileForm = ({ defaultValues }: Props) => {
     control: form.control,
   });
 
-  const supabase = createClientComponentClient<Database>();
-
-  const uploadImage = async (image: File) => {
-    const { data: storageData, error: storageError } = await supabase.storage.from("user").upload(uuidv4(), image);
-    if (storageError) {
-      throw storageError;
-    }
-    const { data: urlData } = supabase.storage.from("user").getPublicUrl(storageData.path);
-    return urlData.publicUrl;
-  };
-
-  const updateImage = async (path: string, image: File) => {
-    const { error: replaceError } = await supabase.storage.from("user").update(path, image);
-    if (replaceError) {
-      throw replaceError;
-    }
-  };
-
-  const removeImage = async (url: string) => {
-    const path = url.split("/").slice(-1)[0];
-    const { error: removeError } = await supabase.storage.from("user").remove([path]);
-    if (removeError) {
-      throw removeError;
-    }
-  };
-
   const onSubmit = async (formData: z.infer<typeof editProfileFormSchema>) => {
     setIsSubmitting(true);
 
@@ -97,14 +76,14 @@ const EditProfileForm = ({ defaultValues }: Props) => {
       try {
         if (selectedImage) {
           if (formData.profileImage) {
-            await updateImage(formData.profileImage.split("/").slice(-1)[0], selectedImage);
+            await updateImage(formData.profileImage.split("/").slice(-1)[0], selectedImage, "user");
           } else {
-            formData.profileImage = await uploadImage(selectedImage);
+            formData.profileImage = await uploadImage(selectedImage, "user");
           }
         }
 
         if (previousImageURL) {
-          await removeImage(previousImageURL);
+          await removeImage(previousImageURL, "user");
         }
 
         const result = await putProfile(formData);

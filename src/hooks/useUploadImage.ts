@@ -1,9 +1,15 @@
 import { useCallback, useState } from "react";
 
+import { Database } from "@/src/types/SupabaseTypes";
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import { v4 as uuidv4 } from "uuid";
+
 export const useUploadImage = (defaultImageURL: string | null) => {
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const [previewImageURL, setPreviewImageURL] = useState<string | null>(defaultImageURL);
   const [previousImageURL, setPreviousImageURL] = useState<string | null>(null);
+
+  const supabase = createClientComponentClient<Database>();
 
   // 画像の選択とバリデーション
   const selectImage = useCallback(
@@ -44,6 +50,30 @@ export const useUploadImage = (defaultImageURL: string | null) => {
     setSelectedImage(null);
   };
 
+  const uploadImage = async (image: File, stringId: string) => {
+    const { data: storageData, error: storageError } = await supabase.storage.from(stringId).upload(uuidv4(), image);
+    if (storageError) {
+      throw storageError;
+    }
+    const { data: urlData } = supabase.storage.from(stringId).getPublicUrl(storageData.path);
+    return urlData.publicUrl;
+  };
+
+  const updateImage = async (path: string, image: File, stringId: string) => {
+    const { error: replaceError } = await supabase.storage.from(stringId).update(path, image);
+    if (replaceError) {
+      throw replaceError;
+    }
+  };
+
+  const removeImage = async (url: string, stringId: string) => {
+    const path = url.split("/").slice(-1)[0];
+    const { error: removeError } = await supabase.storage.from(stringId).remove([path]);
+    if (removeError) {
+      throw removeError;
+    }
+  };
+
   const isChangedImage = previewImageURL !== defaultImageURL;
 
   return {
@@ -54,6 +84,9 @@ export const useUploadImage = (defaultImageURL: string | null) => {
     setPreviewImageURL,
     selectImage,
     clearImage,
+    uploadImage,
+    updateImage,
+    removeImage,
     previousImageURL,
   };
 };
