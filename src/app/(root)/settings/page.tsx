@@ -1,6 +1,8 @@
 import { cookies } from "next/headers";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 
+import { getAuthenticatedUser } from "@/src/actions/getAuthenticatedUser";
 import { Database } from "@/src/types/SupabaseTypes";
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { ArrowLeft, ArrowUpRight, ChevronRight, LogOut } from "lucide-react";
@@ -16,6 +18,10 @@ const Page = async () => {
   const {
     data: { session },
   } = await createServerComponentClient<Database>({ cookies: () => cookieStore }).auth.getSession();
+
+  const user = await getAuthenticatedUser();
+
+  if (!user) redirect("/favorite");
 
   return (
     <>
@@ -79,7 +85,7 @@ const Page = async () => {
           </section>
           <section className="mt-5 px-2">
             <h2 className="mb-3 px-2 text-lg font-bold">取り消しができない操作</h2>
-            <DeleteUserTile />
+            <DeleteUserTile userName={user.name} />
           </section>
         </>
       )}
