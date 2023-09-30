@@ -9,19 +9,30 @@
 - UI コンポーネント: [shadcn/ui](https://ui.shadcn.com/)
 
 
-### ８月の主な進捗
+### 9月の主な進捗
 
-- 管理画面の実装
-  - シェフの作成・編集・削除
-  - シェフのレシピの作成・編集・削除
-  - table は[ shadcn/ui の Table コンポーネント](https://ui.shadcn.com/docs/components/table)を使用
+- 認証周り
+  - OAuth(Github)での認証
+  - `admin` パスへは管理者権限をもつユーザーのみアクセス可能
+  - `Parallel Routes` による条件付きルーティングを実装
+  - `Route Handlers`を利用して、ログアウト・退会処理を実装
 
-- レシピカードの無限スクロール（主に以下２点で実現）
-  - 次に読み込むデータの開始位置を示すオフセットを useRef で管理 
-  - Server Actions で jsxを返す
+<img width="351" alt="スクリーンショット 2023-09-30 13 19 04" src="https://github.com/qin-team-recipe/12-recipe-app/assets/63396451/a437c7ac-2d81-42e8-9f3c-4b0ef2f05e9e">
+
+---
+
+- 画像周り
+  - プロフィール・レシピ・シェフの画像をアップロード対応
+  - Blur 効果を利用した画像のローディング
+    - Imageコンポーネントの`onLoadingComplete`プロパティを使用
+    - Imageコンポーネントの`onError`プロパティを使用して、画像のロードに失敗したときのエラーハンドリングも対応
+  - レシピ画像にはクロッピング機能を実装
+    - [react-cropper](https://www.npmjs.com/package/react-cropper)を利用
  
-- フォロー・アンフォロー & レシピのお気に入り追加・削除で楽観的更新
-  - [useOptimistic](https://nextjs.org/docs/app/building-your-application/data-fetching/server-actions#enhancements)を使用
+https://github.com/qin-team-recipe/12-recipe-app/assets/63396451/6f6c7690-76ff-404a-a8d0-d772359d8f96
 
-- 自分メモのUI・機能実装
-  - [react-textarea-autosize](https://www.npmjs.com/package/react-textarea-autosize)を使用
+---
+
+- その他
+  - リッチテキストエディタのリファクタ( [tiptap](https://www.npmjs.com/package/@tiptap/react) を利用)
+
