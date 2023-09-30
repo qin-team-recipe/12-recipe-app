@@ -22,7 +22,7 @@ import { Input } from "@/src/components/ui/input";
 import Spinner from "@/src/components/ui/spinner";
 import { useToast } from "@/src/components/ui/use-toast";
 
-const DeleteUserTile = ({ userName }: { userName: string }) => {
+const DeleteUserTile = () => {
   const { toast } = useToast();
   const router = useRouter();
 
@@ -32,7 +32,7 @@ const DeleteUserTile = ({ userName }: { userName: string }) => {
 
   const { isDesktop } = useWindowSize();
 
-  const [inputUserName, setInputUserName] = useState("");
+  const [inputValue, setInputValue] = useState("");
 
   const handleClickDeleteUser = async () => {
     const response = await fetch("/api/delete-user", {
@@ -73,12 +73,12 @@ const DeleteUserTile = ({ userName }: { userName: string }) => {
         <DialogHeader>
           <DialogTitle className="self-center text-2xl">本当に退会しますか？</DialogTitle>
         </DialogHeader>
-        <p className="text-center text-lg">名前を記入してください</p>
+        <p className="text-center text-lg">deleteを記入してください</p>
         <Input
           className="w-full rounded-md border px-4"
-          placeholder={userName}
-          value={inputUserName}
-          onChange={(e) => setInputUserName(e.target.value)}
+          placeholder="delete"
+          value={inputValue}
+          onChange={(e) => setInputValue(e.target.value)}
         />
         <DialogFooter className="flex gap-2">
           <Button
@@ -91,7 +91,7 @@ const DeleteUserTile = ({ userName }: { userName: string }) => {
                 setIsOpen(false);
               });
             }}
-            disabled={userName !== inputUserName}
+            disabled={"delete" !== inputValue}
           >
             {isPending ? <Spinner /> : "退会する"}
           </Button>
