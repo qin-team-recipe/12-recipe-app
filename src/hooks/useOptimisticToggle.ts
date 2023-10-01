@@ -32,13 +32,21 @@ export const useOptimisticToggle = ({ count, isActive, activeAction, inactiveAct
 
     const action = isActive ? inactiveAction : activeAction;
 
-    const result = await action(id);
+    try {
+      const result = await action(id);
 
-    if (!result.isSuccess) {
+      if (!result.isSuccess) {
+        setOptimisticState(currentState);
+        toast({
+          variant: "destructive",
+          title: result.error,
+        });
+      }
+    } catch (error) {
       setOptimisticState(currentState);
       toast({
         variant: "destructive",
-        title: result.error,
+        title: "エラーが発生しました🥲",
       });
     }
   };
