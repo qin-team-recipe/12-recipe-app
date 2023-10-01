@@ -34,5 +34,8 @@ https://github.com/qin-team-recipe/12-recipe-app/assets/63396451/6f6c7690-76ff-4
 ---
 
 - その他
+  - 楽観的更新のフォールバック処理対応 
   - リッチテキストエディタのリファクタ( [tiptap](https://www.npmjs.com/package/@tiptap/react) を利用)
+
+ https://github.com/qin-team-recipe/12-recipe-app/assets/63396451/1560859f-42e8-4dac-bd32-03eb9988542a
 
