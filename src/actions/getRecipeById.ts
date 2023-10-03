@@ -1,5 +1,5 @@
 import { cookies } from "next/headers";
-import { notFound, redirect } from "next/navigation";
+import { notFound } from "next/navigation";
 
 import { prisma } from "@/src/lib/prisma";
 import { Database } from "@/src/types/SupabaseTypes";
@@ -10,8 +10,6 @@ export const getRecipeById = async (id: string) => {
   const {
     data: { session },
   } = await createServerComponentClient<Database>({ cookies: () => cookieStore }).auth.getSession();
-
-  if (!session) redirect("/favorite");
 
   const recipe = await prisma.recipe.findUnique({
     where: {
@@ -52,18 +50,20 @@ export const getRecipeById = async (id: string) => {
 
   if (!user) throw new Error(`ユーザーが見つかりませんでした🥲 ID:${recipe?.userId}`);
 
-  const isFavorite = Boolean(
-    await prisma.favorite.findUnique({
-      where: {
-        userId_recipeId: {
-          recipeId: id,
-          userId: session.user.id,
-        },
-      },
-    })
-  );
+  const isFavorite = session
+    ? Boolean(
+        await prisma.favorite.findUnique({
+          where: {
+            userId_recipeId: {
+              recipeId: id,
+              userId: session.user.id,
+            },
+          },
+        })
+      )
+    : false;
 
-  const isMe = recipe.userId === session.user.id;
+  const isMe = session ? recipe.userId === session.user.id : false;
 
   return {
     ...recipe,

@@ -1,5 +1,5 @@
 import { cookies } from "next/headers";
-import { notFound, redirect } from "next/navigation";
+import { notFound } from "next/navigation";
 
 import { prisma } from "@/src/lib/prisma";
 import { Database } from "@/src/types/SupabaseTypes";
@@ -62,8 +62,6 @@ export const getChefById = async (
     data: { session },
   } = await createServerComponentClient<Database>({ cookies: () => cookieStore }).auth.getSession();
 
-  if (!session) redirect("/favorite");
-
   // シェフのフォロワー数を取得
   const followersCount = await prisma.userFollower.count({
     where: {
@@ -72,19 +70,21 @@ export const getChefById = async (
   });
 
   // 現在のユーザーがシェフをフォローしているかどうかを確認
-  const isFollowing = Boolean(
-    await prisma.userFollower.findUnique({
-      where: {
-        followerId_followedId: {
-          followerId: session.user.id,
-          followedId: id,
-        },
-      },
-    })
-  );
+  const isFollowing = session
+    ? Boolean(
+        await prisma.userFollower.findUnique({
+          where: {
+            followerId_followedId: {
+              followerId: session.user.id,
+              followedId: id,
+            },
+          },
+        })
+      )
+    : false;
 
   // 取得するシェフが自分自身であるかどうかを確認
-  const isMe = session.user.id === chef.id;
+  const isMe = session ? session.user.id === chef.id : false;
 
   return {
     ...chef,
