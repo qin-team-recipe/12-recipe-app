@@ -1,6 +1,6 @@
 "use client";
 
-import { useTransition } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 
 import { kToastDuration } from "@/src/constants/constants";
@@ -8,11 +8,14 @@ import { ApiResponse } from "@/src/types/ApiResponse";
 import { AlertCircle } from "lucide-react";
 
 import SelectableDialog from "@/src/components/selectable-dialog";
+import { Input } from "@/src/components/ui/input";
 import { useToast } from "@/src/components/ui/use-toast";
 
 const DeleteUserTile = () => {
   const { toast } = useToast();
   const router = useRouter();
+
+  const [inputValue, setInputValue] = useState("");
 
   const handleClick = async () => {
     const response = await fetch("/api/delete-user", {
@@ -55,8 +58,17 @@ const DeleteUserTile = () => {
       className="w-full rounded-md px-2 hover:bg-mauve4"
       onConfirm={handleClick}
       confirmLabel="退会する"
+      confirmDisabled={"delete" !== inputValue}
       cancelLabel="キャンセル"
-    />
+    >
+      <p className="text-center text-lg">deleteを記入してください</p>
+      <Input
+        className="w-full rounded-md border px-4"
+        placeholder="delete"
+        value={inputValue}
+        onChange={(e) => setInputValue(e.target.value)}
+      />
+    </SelectableDialog>
   );
 };
 

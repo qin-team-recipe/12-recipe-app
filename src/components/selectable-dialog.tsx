@@ -24,6 +24,8 @@ type Props = {
   onCancel?: () => void;
   cancelLabel: string;
   triggerComponent: React.ReactNode;
+  children?: React.ReactNode;
+  confirmDisabled?: boolean;
   className?: string;
 };
 
@@ -35,6 +37,8 @@ const SelectableDialog = ({
   cancelLabel,
   onCancel,
   triggerComponent,
+  children,
+  confirmDisabled = false,
   className,
 }: Props) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -53,6 +57,7 @@ const SelectableDialog = ({
           <DialogTitle className="self-center text-2xl">{title}</DialogTitle>
         </DialogHeader>
         <p className="text-center text-lg">{message}</p>
+        {children}
         <DialogFooter className="flex gap-2">
           <Button
             size={isDesktop ? "sm" : "default"}
@@ -64,6 +69,7 @@ const SelectableDialog = ({
                 setIsOpen(false);
               });
             }}
+            disabled={confirmDisabled}
           >
             {isPending ? <Spinner /> : confirmLabel}
           </Button>
