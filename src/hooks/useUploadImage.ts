@@ -2,6 +2,7 @@ import { useCallback, useState } from "react";
 
 import { Database } from "@/src/types/SupabaseTypes";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import NSFWFilter from "nsfw-filter";
 import { v4 as uuidv4 } from "uuid";
 
 export const useUploadImage = (defaultImageURL: string | null) => {
@@ -13,7 +14,7 @@ export const useUploadImage = (defaultImageURL: string | null) => {
 
   // 画像の選択とバリデーション
   const selectImage = useCallback(
-    (files: FileList | null) => {
+    async (files: FileList | null) => {
       // ファイルが選択されていない場合
       if (!files || files?.length == 0) {
         throw new Error("画像をアップロードしてください");
@@ -31,6 +32,11 @@ export const useUploadImage = (defaultImageURL: string | null) => {
 
       if (fileType !== "image/jpeg" && fileType !== "image/png") {
         throw new Error("画像はjpgまたはpng形式である必要があります。");
+      }
+
+      const isSafe = await NSFWFilter.isSafe(file);
+      if (!isSafe) {
+        throw new Error("画像に不適切なコンテンツが含まれています。");
       }
 
       setPreviousImageURL(previewImageURL || defaultImageURL);

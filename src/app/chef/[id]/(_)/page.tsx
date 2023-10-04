@@ -16,7 +16,10 @@ type PageProps = {
 export async function generateMetadata({ params }: PageProps, parent: ResolvingMetadata): Promise<Metadata> {
   const chef = await getChefById({ id: params?.id });
   if (!chef) {
-    return {};
+    return {
+      title: "シェフが見つかりませんでした",
+      description: "シェフが見つかりませんでした",
+    };
   }
 
   const previousImages = (await parent).openGraph?.images || [];

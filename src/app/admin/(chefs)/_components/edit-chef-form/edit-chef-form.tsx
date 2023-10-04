@@ -134,9 +134,9 @@ const EditChefForm = ({ defaultValues }: Props) => {
     });
   };
 
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     try {
-      selectImage(e.target.files);
+      await selectImage(e.target.files);
     } catch (error) {
       if (error instanceof Error) {
         form.setError("profileImage", { type: "manual", message: error.message });

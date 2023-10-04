@@ -49,12 +49,12 @@ export const RecipeStep = ({ instruction, stepNumber }: Props) => {
           <Drawer.Trigger className="w-full">
             <div className="line-clamp-3 flex-1 text-left leading-snug text-mauve12">{editor?.getText()}</div>
           </Drawer.Trigger>
-          <Drawer.Portal className="w-fit">
+          <Drawer.Portal>
             <Drawer.Overlay className="fixed inset-0 bg-black/40" />
             <Drawer.Content className="fixed inset-x-0 bottom-0 z-50 flex flex-col rounded-t-[10px] bg-mauve1 px-2">
               <div className="flex-1 rounded-t-[10px] bg-white p-4">
                 <div className="mx-auto mb-8 h-1.5 w-12 shrink-0 rounded-full bg-zinc-300" />
-                <div className="p-4">
+                <div className="p-2">
                   <Drawer.Title className="mb-4 text-2xl">
                     <h2>作り方 {stepNumber}</h2>
                   </Drawer.Title>

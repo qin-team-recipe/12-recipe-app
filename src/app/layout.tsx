@@ -21,7 +21,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="ja" className={cn(inter.className)}>
+    <html lang="ja" className={cn(inter.className)} suppressHydrationWarning>
       <body className="min-h-screen md:mr-0 md:flex md:justify-center">
         {children}
         <Toaster />

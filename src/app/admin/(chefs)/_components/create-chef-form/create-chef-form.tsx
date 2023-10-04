@@ -105,9 +105,9 @@ const CreateChefForm = () => {
     });
   };
 
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     try {
-      selectImage(e.target.files);
+      await selectImage(e.target.files);
 
       // 画像が選択されたときに profileImage フィールドの値を更新
       if (e.target.files && e.target.files[0]) {

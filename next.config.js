@@ -18,7 +18,6 @@ const nextConfig = {
     return config;
   },
   images: {
-    disableStaticImages: true,
     domains: [
       "localhost",
       "localhost:54321",
@@ -49,10 +48,5 @@ const nextConfig = {
     ],
   },
 };
-
-if (process.env.NODE_ENV !== "development") {
-  nextConfig.images.loader = "custom";
-  nextConfig.images.loaderFile = "./src/components/supabase-image-loader.tsx";
-}
 
 module.exports = nextConfig;
